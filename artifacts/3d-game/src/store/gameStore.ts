@@ -23,6 +23,7 @@ export interface GameState {
   month: number;
   gameStarted: boolean;
   transitioning: boolean;
+  phoneOpen: boolean;
 
   cash: number;
   savings: number;
@@ -43,6 +44,8 @@ export interface GameState {
   furnitureOwned: string[];
   lastLifeEvent: string | null;
 
+  setPhoneOpen: (v: boolean) => void;
+  togglePhone: () => void;
   startGame: (appearance: CharacterAppearance) => void;
   setStage: (stage: number) => void;
   setTransitioning: (v: boolean) => void;
@@ -94,6 +97,7 @@ const INITIAL_STATE = {
   month: 1,
   gameStarted: false,
   transitioning: false,
+  phoneOpen: false,
   cash: 5800,
   savings: 3500,
   creditScore: 635,
@@ -117,6 +121,7 @@ const TRANSIENT_FIELDS: (keyof GameState)[] = [
   'activeDialogue',
   'playerPosition',
   'targetPosition',
+  'phoneOpen',
 ];
 
 export const useGameStore = create<GameState>()(
@@ -124,6 +129,8 @@ export const useGameStore = create<GameState>()(
     (set) => ({
       ...INITIAL_STATE,
 
+      setPhoneOpen: (v) => set({ phoneOpen: v }),
+      togglePhone: () => set((s) => ({ phoneOpen: !s.phoneOpen })),
       startGame: (appearance) => set({ gameStarted: true, characterAppearance: appearance }),
       setStage: (stage) => set({ stage, completedInteractions: [], transitioning: false }),
       setTransitioning: (v) => set({ transitioning: v }),

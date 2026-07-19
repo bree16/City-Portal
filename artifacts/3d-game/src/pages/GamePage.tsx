@@ -8,6 +8,7 @@ import { SpeechBubble } from '@/components/SpeechBubble';
 import { SceneTransition } from '@/components/SceneTransition';
 import { AchievementToast } from '@/components/AchievementToast';
 import { AudioManager } from '@/components/AudioManager';
+import { SmartPhone } from '@/components/SmartPhone';
 import { IsometricCamera } from '@/components/IsometricCamera';
 import { GroundPlane } from '@/components/GroundPlane';
 import { PlayerCharacter } from '@/components/characters/PlayerCharacter';
@@ -223,6 +224,7 @@ export default function GamePage() {
           </Canvas>
         </div>
         <SpeechBubble />
+        <SmartPhone />
         <SceneTransition />
         <AchievementToast
           isVisible={!!activeToast}

@@ -1,4 +1,4 @@
-import { Home, Volume2, VolumeX } from 'lucide-react';
+import { Home, Volume2, VolumeX, Smartphone } from 'lucide-react';
 import { useGameStore } from '@/store/gameStore';
 import { useAudioControls } from '@/components/AudioManager';
 
@@ -14,7 +14,7 @@ const STAGE_NAMES = [
 ];
 
 export function GameHUD() {
-  const { stage, month, cash, savings, creditScore, resetGame, characterAppearance } = useGameStore();
+  const { stage, month, cash, savings, creditScore, resetGame, characterAppearance, togglePhone, phoneOpen } = useGameStore();
   const { muted, toggleMute } = useAudioControls();
 
   const playerName = characterAppearance.name?.trim() || 'Player';
@@ -161,6 +161,36 @@ export function GameHUD() {
           </button>
         </div>
       </div>
+
+      {/* Phone button — fixed bottom-right */}
+      <button
+        onClick={togglePhone}
+        title="Open Phone"
+        style={{
+          position: 'fixed',
+          bottom: 24,
+          right: 20,
+          zIndex: 35,
+          width: 52,
+          height: 52,
+          borderRadius: '50%',
+          background: phoneOpen ? '#D4A843' : 'rgba(13,43,94,0.92)',
+          border: `2px solid ${phoneOpen ? '#D4A843' : 'rgba(255,255,255,0.18)'}`,
+          boxShadow: phoneOpen
+            ? '0 0 0 4px rgba(212,168,67,0.3), 0 8px 24px rgba(0,0,0,0.4)'
+            : '0 4px 20px rgba(0,0,0,0.5)',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: phoneOpen ? '#0D2B5E' : '#fff',
+          backdropFilter: 'blur(12px)',
+          transition: 'all 0.2s',
+          pointerEvents: 'auto',
+        }}
+      >
+        <Smartphone size={22} />
+      </button>
 
       {/* Stage progress dots */}
       <div
