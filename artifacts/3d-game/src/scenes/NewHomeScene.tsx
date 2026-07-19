@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Html } from '@react-three/drei';
 import { useGameStore } from '@/store/gameStore';
+import { PottedPlant, TallPlant, WallArt, Curtains } from '@/components/decor/DecorKit';
 import { motion } from 'framer-motion';
 
 const FURNITURE_SLOTS = [
@@ -172,6 +173,36 @@ export default function NewHomeScene() {
         <boxGeometry args={[20, 0.16, 0.12]} />
         <meshStandardMaterial color="#EDE8E0" roughness={0.8} />
       </mesh>
+
+      {/* ── Decor: moving-day warmth ── */}
+      {/* Curtains framing the back windows (windows at z=-7.85) */}
+      <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#B08968" />
+      <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#B08968" />
+      {/* Wall art on right wall (faces -x), away from door/slots */}
+      <WallArt position={[9.85, 2.9, -3]} rotation={[0, -Math.PI / 2, 0]} color="#5B8B8B" w={1.3} h={0.95} />
+      {/* Welcoming plants in corners */}
+      <TallPlant position={[-8.5, 0, -6.5]} scale={1.0} />
+      <PottedPlant position={[8.5, 0, -6.5]} scale={1.05} />
+      {/* Moving-day boxes — stacked cardboard clutter near corner */}
+      <group position={[8.2, 0, -4]}>
+        {[
+          { p: [0, 0.35, 0] as [number, number, number], s: [0.7, 0.7, 0.7] as [number, number, number] },
+          { p: [0.75, 0.3, 0.2] as [number, number, number], s: [0.6, 0.6, 0.6] as [number, number, number] },
+          { p: [0.1, 0.95, 0.05] as [number, number, number], s: [0.55, 0.5, 0.55] as [number, number, number] },
+        ].map((b, i) => (
+          <group key={i}>
+            <mesh position={b.p} castShadow>
+              <boxGeometry args={b.s} />
+              <meshStandardMaterial color="#C9A876" roughness={0.95} />
+            </mesh>
+            {/* Tape strip */}
+            <mesh position={[b.p[0], b.p[1] + b.s[1] / 2 + 0.001, b.p[2]]} rotation={[-Math.PI / 2, 0, 0]}>
+              <planeGeometry args={[0.1, b.s[2]]} />
+              <meshStandardMaterial color="#B08A5A" roughness={0.9} />
+            </mesh>
+          </group>
+        ))}
+      </group>
 
       {/* Furniture slots */}
       {FURNITURE_SLOTS.map((slot) => {

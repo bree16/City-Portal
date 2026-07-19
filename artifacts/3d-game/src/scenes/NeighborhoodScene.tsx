@@ -6,6 +6,7 @@ import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
 import { homes } from '@/data/homes';
+import { Bush, FlowerBed, TallPlant } from '@/components/decor/DecorKit';
 
 const HOUSE_COLORS = ['#D4B896', '#7BA7BC', '#BC9B7A', '#96BC7B'];
 const ROOF_COLORS = ['#8B4513', '#2C3E50', '#6B3A2A', '#2D4A1E'];
@@ -37,7 +38,11 @@ export default function NeighborhoodScene() {
   return (
     <group>
       <SceneObstacles
-        circles={homes.map((_, idx) => ({ x: -15 + idx * 10, z: -2.5, r: 3.4 }))}
+        circles={[
+          ...homes.map((_, idx) => ({ x: -15 + idx * 10, z: -2.5, r: 3.4 })),
+          // Ornamental TallPlant at each home's yard corner (local [3.6,0,0.2])
+          ...homes.map((_, idx) => ({ x: -15 + idx * 10 + 3.6, z: -2.3, r: 0.5 })),
+        ]}
         bounds={{ minX: -27, maxX: 27, minZ: -6.5, maxZ: 9 }}
       />
       {/* Grass — PBR */}
@@ -61,6 +66,19 @@ export default function NeighborhoodScene() {
           <planeGeometry args={[2.5, 0.18]} />
           <meshStandardMaterial color="#FFD700" roughness={0.6} />
         </mesh>
+      ))}
+
+      {/* Scattered darker grass patches for ground variation */}
+      {([[-20, -4], [-10, -5], [0, -4.5], [10, -5], [20, -4], [-5, 1], [15, 1]] as [number, number][]).map(([x, z], i) => (
+        <mesh key={`gp-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.006, z]} receiveShadow>
+          <circleGeometry args={[1.2 + (i % 3) * 0.4, 14]} />
+          <meshStandardMaterial color={i % 2 ? '#4C7E42' : '#548648'} roughness={1} />
+        </mesh>
+      ))}
+
+      {/* Corner bushes between the lots along the sidewalk verge */}
+      {([-20, -10, 0, 10, 20] as number[]).map((x, i) => (
+        <Bush key={`vb-${x}`} position={[x, 0, 1.6]} scale={0.7 + (i % 3) * 0.15} color={i % 2 ? '#3A7A3A' : '#4A8C4A'} />
       ))}
 
       {/* Sky backdrop */}
@@ -151,7 +169,31 @@ export default function NeighborhoodScene() {
                 <boxGeometry args={[0.28, 0.18, 0.18]} />
                 <meshStandardMaterial color="#0D2B5E" roughness={0.5} metalness={0.2} />
               </mesh>
+              {/* Red flag */}
+              <mesh position={[0.16, 0.95, 0]} castShadow>
+                <boxGeometry args={[0.04, 0.14, 0.02]} />
+                <meshStandardMaterial color="#C0392B" roughness={0.6} />
+              </mesh>
             </group>
+
+            {/* Foundation shrubs flanking the front door (small, off walkway) */}
+            <Bush position={[-1.5, 0, 2.5]} scale={0.75} color={idx % 2 ? '#3A7A3A' : '#4A8C4A'} />
+            <Bush position={[1.5, 0, 2.5]} scale={0.75} color={idx % 2 ? '#4A8C4A' : '#3A7A3A'} />
+
+            {/* Flower beds under the front windows */}
+            <FlowerBed position={[-1.8, 0, 2.55]} w={1.3} d={0.5} />
+            <FlowerBed position={[1.8, 0, 2.55]} w={1.3} d={0.5} />
+
+            {/* A potted ornamental plant by the corner of the yard */}
+            <TallPlant position={[3.6, 0, 0.2]} scale={0.85} />
+
+            {/* Stepping-stone path from sidewalk toward the door */}
+            {[3.2, 4.0, 4.8, 5.6].map((z, i) => (
+              <mesh key={`path-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.012, z]} receiveShadow>
+                <circleGeometry args={[0.45, 12]} />
+                <meshStandardMaterial color="#B0A890" roughness={0.9} />
+              </mesh>
+            ))}
 
             {/* Listing card */}
             {viewingHome === home.id && (

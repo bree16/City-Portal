@@ -5,6 +5,14 @@ import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
 import { selectLifeEvent, shouldEventFire } from '@/data/lifeEvents';
+import {
+  PottedPlant,
+  WallArt,
+  Curtains,
+  FloorLamp,
+  BookRow,
+  WallClock,
+} from '@/components/decor/DecorKit';
 
 const LANDLORD: NPCDef = {
   id: 'landlord',
@@ -59,6 +67,8 @@ export default function ApartmentScene() {
           { x: 5, z: 1.5, r: 0.95 },    // desk
           { x: -4.5, z: -4.5, r: 1.7 }, // kitchen counter
           { x: -5.5, z: 1.5, r: 0.5 },  // piggy bank
+          { x: 6.4, z: -3.4, r: 0.55 }, // floor lamp
+          { x: -6.2, z: -1.5, r: 0.45 },// potted plant (left wall)
         ]}
         bounds={{ minX: -6.4, maxX: 6.4, minZ: -5.4, maxZ: 5.4 }}
       />
@@ -270,6 +280,46 @@ export default function ApartmentScene() {
         <planeGeometry args={[3.5, 3]} />
         <meshStandardMaterial color="#8B6B8B" roughness={0.95} />
       </mesh>
+
+      {/* ── Decor: cozy-but-modest touches ────────────────────── */}
+      {/* Curtains flanking the window on the back wall (window at x=-2) */}
+      <Curtains position={[-2, 1.65, -5.75]} width={2.9} height={2.6} color="#B08968" />
+      {/* Framed art on back wall, right of window */}
+      <WallArt position={[3, 2.4, -5.88]} rotation={[0, 0, 0]} color="#5A8FA8" w={1.0} h={0.75} />
+      {/* Wall clock on right wall, facing inward */}
+      <WallClock position={[6.88, 3.0, -1]} rotation={[0, -Math.PI / 2, 0]} />
+      {/* Floor lamp in cozy corner near sofa */}
+      <FloorLamp position={[6.4, 0, -3.4]} />
+      {/* Potted plant against the left wall */}
+      <PottedPlant position={[-6.2, 0, -1.5]} scale={1.05} />
+      {/* Small potted plant on coffee table */}
+      <PottedPlant position={[-2.3, 0.28, -2]} scale={0.45} leafColor="#3A8A3A" potColor="#8B5A2B" />
+      {/* Books stacked on the TV stand */}
+      <BookRow position={[2.5, 0.7, -5.35]} count={4} />
+      {/* Kitchenette clutter — bowl of fruit & a kettle on the counter */}
+      <group position={[-4.5, 1.14, -4.35]}>
+        <mesh castShadow>
+          <cylinderGeometry args={[0.16, 0.11, 0.09, 12]} />
+          <meshStandardMaterial color="#E8DCC0" roughness={0.7} />
+        </mesh>
+        {[[-0.05, 0, 0.02], [0.06, 0, -0.03], [0, 0, 0.06]].map((p, i) => (
+          <mesh key={i} position={[p[0], 0.09, p[2]]} castShadow>
+            <sphereGeometry args={[0.055, 8, 6]} />
+            <meshStandardMaterial color={i === 0 ? '#E74C3C' : i === 1 ? '#F1C40F' : '#E67E22'} roughness={0.6} />
+          </mesh>
+        ))}
+      </group>
+      {/* Kettle on counter */}
+      <group position={[-5.6, 1.14, -4.4]}>
+        <mesh position={[0, 0.13, 0]} castShadow>
+          <cylinderGeometry args={[0.12, 0.14, 0.24, 10]} />
+          <meshStandardMaterial color="#4A4A52" roughness={0.35} metalness={0.6} />
+        </mesh>
+        <mesh position={[0.14, 0.16, 0]} rotation={[0, 0, -0.6]} castShadow>
+          <cylinderGeometry args={[0.02, 0.03, 0.14, 6]} />
+          <meshStandardMaterial color="#3A3A42" roughness={0.4} metalness={0.5} />
+        </mesh>
+      </group>
 
       {/* Landlord NPC */}
       <NPCCharacter npc={LANDLORD} onClick={() => openDialogue('landlord')} />

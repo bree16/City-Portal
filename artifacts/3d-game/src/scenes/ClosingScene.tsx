@@ -3,6 +3,7 @@ import { Html } from '@react-three/drei';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
+import { PottedPlant, TallPlant, WallArt, WallClock } from '@/components/decor/DecorKit';
 import confetti from 'canvas-confetti';
 
 const NOTARY: NPCDef = {
@@ -183,6 +184,19 @@ export default function ClosingScene() {
           </mesh>
         ))}
       </group>
+
+      {/* ── Decor: formal closing office ── */}
+      {/* Wall clock on back wall (faces +z) */}
+      <WallClock position={[3.5, 3.0, -6.85]} rotation={[Math.PI / 2, 0, 0]} />
+      {/* Wall art on left wall (faces +x) */}
+      <WallArt position={[-8.85, 3.0, 2]} rotation={[0, Math.PI / 2, 0]} color="#0D2B5E" w={1.4} h={1.0} />
+      {/* Wall art on right wall (faces -x) */}
+      <WallArt position={[8.85, 3.0, -2]} rotation={[0, -Math.PI / 2, 0]} color="#0A8F7E" w={1.3} h={1.0} />
+      {/* Tall plants flanking corners */}
+      <TallPlant position={[-7.8, 0, 5.5]} scale={1.05} />
+      <TallPlant position={[7.8, 0, 5.5]} scale={1.05} />
+      {/* Potted plant near bookshelf */}
+      <PottedPlant position={[-7.5, 0, -5]} scale={1.1} />
 
       <NPCCharacter npc={NOTARY} onClick={() => openDialogue('notary')} />
 

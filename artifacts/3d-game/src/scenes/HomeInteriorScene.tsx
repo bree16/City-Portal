@@ -6,6 +6,7 @@ import { InteractionZone } from '@/components/InteractionZone';
 import { SceneObstacles } from '@/components/SceneObstacles';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
+import { PottedPlant, TallPlant, WallArt, Rug, Bookshelf, FloorLamp, Bush, FlowerBed } from '@/components/decor/DecorKit';
 import { homes } from '@/data/homes';
 
 // ── Per-home theme data ──────────────────────────────────────────
@@ -264,6 +265,10 @@ export default function HomeInteriorScene() {
           { x: -5.5, z: -1.5, r: 1.7 },  // bed
           { x: -7.2, z: 0.5, r: 0.7 },   // dresser
           { x: 0, z: -5.5, r: 0.7 },     // patio table
+          // ── Added decor obstacles (theme-varied) ──
+          { x: 3.6, z: 7, r: 0.7 },      // tall plant by front entry
+          { x: -4.4, z: -0.4, r: 0.6 },  // bedroom corner floor lamp
+          ...(theme.hasFireplace ? [{ x: -4.5, z: 5, r: 0.7 }] : [{ x: -4.5, z: 5.4, r: 0.65 }]), // bookshelf / plant by living wall
         ]}
         bounds={{ minX: -7.6, maxX: 7.6, minZ: -7.6, maxZ: 8.4 }}
       />
@@ -552,6 +557,37 @@ export default function HomeInteriorScene() {
           <pointLight position={[lx, 2.5, lz]} intensity={0.7} color="#FFE87A" distance={8} decay={2} />
         </group>
       ))}
+
+      {/* ── DECOR (theme-varied per home) ── */}
+      {/* Living-room area rug — accent-tinted per theme */}
+      <Rug
+        position={[-1.5, 0.006, 1.5]}
+        w={4.0} d={3.0}
+        color={theme.accentColor}
+        border={theme.floorColor}
+      />
+      {/* Wall art on the left living-room wall (x=-5, faces +x) */}
+      <WallArt position={[-4.9, 1.9, 1.5]} rotation={[0, Math.PI / 2, 0]} color={theme.accentColor} w={1.2} h={0.9} />
+      {/* Second wall art on back-left wall (z=-2, faces +z) */}
+      <WallArt position={[-3.5, 1.9, -1.9]} rotation={[0, 0, 0]} color={theme.accentColor} w={1.0} h={0.75} />
+      {/* Tall plant by the front entry (obstacle registered) */}
+      <TallPlant position={[3.6, 0, 7]} scale={1.0} />
+      {/* Floor lamp in bedroom corner (obstacle registered) */}
+      <FloorLamp position={[-4.4, 0, -0.4]} />
+      {/* Home 1: cozy bookshelf beside the fireplace; others: leafy plant */}
+      {theme.hasFireplace ? (
+        <Bookshelf position={[-4.7, 0, 5]} rotation={[0, 0, 0]} color={theme.accentColor} />
+      ) : (
+        <PottedPlant position={[-4.5, 0, 5.4]} scale={1.15} leafColor="#2D7A2D" />
+      )}
+      {/* Home 3 (modern): sleek accent plant on the kitchen island end */}
+      {theme.hasKitchenIsland && (
+        <PottedPlant position={[4.5, 1.04, 1.2]} scale={0.7} potColor="#DADADA" leafColor="#3A8A3A" />
+      )}
+      {/* Backyard greenery — flowers + bushes vary by theme */}
+      <FlowerBed position={[3.5, 0.04, -5]} w={1.6} d={0.6} />
+      <Bush position={[-3.5, 0, -6.5]} scale={1.1} color="#3A7A3A" />
+      <Bush position={[-2.2, 0, -6.6]} scale={0.85} color="#4A8A4A" />
 
       {/* ── CLICKABLE FEATURE PROPS ── */}
       {Object.entries(theme.features).flatMap(([, props]) =>

@@ -4,6 +4,11 @@ import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
 import { homes } from '@/data/homes';
+import {
+  TallPlant,
+  WallArt,
+  WallClock,
+} from '@/components/decor/DecorKit';
 
 const SELLER: NPCDef = {
   id: 'seller',
@@ -158,6 +163,15 @@ export default function NegotiationScene() {
           <meshStandardMaterial color="#2D7A2D" roughness={0.9} />
         </mesh>
       </group>
+
+      {/* ── Decor: professional conference feel ───────────────── */}
+      {/* Tall plant in the opposite corner to balance the existing one */}
+      <TallPlant position={[7, 0, -5]} scale={1.1} />
+      {/* Framed art on side walls, facing inward */}
+      <WallArt position={[-8.85, 3.0, -2]} rotation={[0, Math.PI / 2, 0]} color="#3A5F7A" w={1.3} h={0.9} />
+      <WallArt position={[8.85, 3.0, -2]} rotation={[0, -Math.PI / 2, 0]} color="#5A7A5A" w={1.3} h={0.9} />
+      {/* Subtle wall clock on back wall, beside the house photo */}
+      <WallClock position={[4, 3.0, -6.88]} rotation={[0, 0, 0]} />
 
       <NPCCharacter npc={SELLER} onClick={() => openDialogue('seller')} />
 

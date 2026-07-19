@@ -3,6 +3,12 @@ import { Html } from '@react-three/drei';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
+import {
+  TallPlant,
+  WallArt,
+  WallClock,
+  SideTable,
+} from '@/components/decor/DecorKit';
 
 const LOAN_OFFICER: NPCDef = {
   id: 'loanOfficer',
@@ -200,6 +206,23 @@ export default function BankScene() {
           </Html>
         </group>
       ))}
+
+      {/* ── Decor: professional, polished touches ─────────────── */}
+      {/* Tall plants flanking the entrance corners */}
+      <TallPlant position={[-9, 0, 6.5]} scale={1.1} />
+      <TallPlant position={[9, 0, 6.5]} scale={1.1} />
+      {/* Framed art on side walls, facing inward */}
+      <WallArt position={[-9.85, 3.0, -3]} rotation={[0, Math.PI / 2, 0]} color="#2C5F7A" w={1.3} h={0.9} />
+      <WallArt position={[9.85, 3.0, -3]} rotation={[0, -Math.PI / 2, 0]} color="#3A6B8A" w={1.3} h={0.9} />
+      {/* Wall clock above the bank sign area, right of it */}
+      <WallClock position={[4.5, 3.6, -7.82]} rotation={[0, 0, 0]} />
+      {/* Waiting-area side table with magazines/mug between chairs */}
+      <SideTable position={[0, 0, 3.5]} color="#5A4A3A" />
+      {/* Magazine on the side table */}
+      <mesh position={[-0.08, 0.94, 3.55]} rotation={[-Math.PI / 2, 0, 0.3]} castShadow>
+        <boxGeometry args={[0.28, 0.36, 0.02]} />
+        <meshStandardMaterial color="#D4A843" roughness={0.8} />
+      </mesh>
 
       {/* Loan Officer NPC */}
       <NPCCharacter npc={LOAN_OFFICER} onClick={() => openDialogue('loanOfficer')} />

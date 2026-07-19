@@ -2,6 +2,13 @@ import { Html } from '@react-three/drei';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
+import {
+  PottedPlant,
+  TallPlant,
+  WallArt,
+  FloorLamp,
+  Rug,
+} from '@/components/decor/DecorKit';
 
 const COUNSELOR: NPCDef = {
   id: 'counselor',
@@ -218,6 +225,18 @@ export default function CounselorOfficeScene() {
           <meshStandardMaterial color="#2D7A2D" roughness={0.9} />
         </mesh>
       </group>
+
+      {/* ── Decor: warm, welcoming office ─────────────────────── */}
+      {/* Accent rug under the visitor chairs */}
+      <Rug position={[2, 0.02, 0.2]} w={3.2} d={2.4} color="#8A6A4A" border="#6A4A2A" />
+      {/* Tall plant in the far corner */}
+      <TallPlant position={[-7, 0, -6] as [number, number, number]} scale={1.05} />
+      {/* Extra small plant atop the filing cabinet */}
+      <PottedPlant position={[6, 1.3, -4]} scale={0.5} leafColor="#3A8A3A" potColor="#8B5A2B" />
+      {/* Framed art on left wall, facing inward */}
+      <WallArt position={[-7.85, 3.0, 1]} rotation={[0, Math.PI / 2, 0]} color="#0A8F7E" w={1.2} h={0.85} />
+      {/* Warm floor lamp beside the bookshelf corner */}
+      <FloorLamp position={[-7, 0, -1] as [number, number, number]} shadeColor="#F2E4C4" lightColor="#FFDDA0" />
 
       {/* Counselor NPC */}
       <NPCCharacter npc={COUNSELOR} onClick={() => openDialogue('counselor')} />

@@ -4,6 +4,7 @@ import { SceneObstacles } from '@/components/SceneObstacles';
 import { useGameStore } from '@/store/gameStore';
 import { buildings, buildingRequiredStage } from '@/data/buildings';
 import type { BuildingDef } from '@/data/buildings';
+import { Bush, FlowerBed } from '@/components/decor/DecorKit';
 
 /* ── Reusable primitives ──────────────────────────────────────── */
 
@@ -126,10 +127,21 @@ function BuildingExterior({ b, status, onEnter }: {
           <cylinderGeometry args={[1.0, 1.1, 0.3, 12]} />
           <meshStandardMaterial color="#A0A8B0" roughness={0.5} />
         </mesh>
+        {/* Water surface */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.3, 0]}>
+          <circleGeometry args={[0.95, 16]} />
+          <meshStandardMaterial color="#5FA8D3" roughness={0.15} metalness={0.4} emissive="#2C6B9E" emissiveIntensity={0.25} />
+        </mesh>
         <mesh position={[0, 0.38, 0]}>
           <cylinderGeometry args={[0.08, 0.08, 0.5, 8]} />
           <meshStandardMaterial color="#B8C0CC" metalness={0.4} roughness={0.4} />
         </mesh>
+        {/* Bushes & flower beds around the park edges */}
+        {([[-4, -3.5], [4, -3.5], [-4, 3.5], [4, 3.5]] as [number, number][]).map(([x, z], i) => (
+          <Bush key={`pb-${i}`} position={[x, 0, z]} scale={1.1 + (i % 2) * 0.2} color={i % 2 ? '#3A7A3A' : '#4A8C4A'} />
+        ))}
+        <FlowerBed position={[-1.6, 0, 3.3]} w={1.8} d={0.6} />
+        <FlowerBed position={[1.6, 0, 3.3]} w={1.8} d={0.6} />
         <Html position={[0, 3.5, 0]} center distanceFactor={14}>
           <div style={{ background: 'rgba(13,43,94,0.88)', padding: '4px 10px', borderRadius: 8, fontSize: 11, fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', fontFamily: 'Inter,sans-serif' }}>
             {b.icon} {b.name}
@@ -265,13 +277,18 @@ export default function CityMapScene() {
   return (
     <group>
       <SceneObstacles
-        circles={buildings
-          .filter((b) => b.id !== 'park')
-          .map((b) => ({
-            x: b.cityPos[0],
-            z: b.cityPos[2],
-            r: Math.max(b.footprint[0], b.footprint[1]) / 2 + 0.5,
-          }))}
+        circles={[
+          ...buildings
+            .filter((b) => b.id !== 'park')
+            .map((b) => ({
+              x: b.cityPos[0],
+              z: b.cityPos[2],
+              r: Math.max(b.footprint[0], b.footprint[1]) / 2 + 0.5,
+            })),
+          // Roadside benches
+          { x: -8, z: 4.7, r: 0.9 },
+          { x: 6, z: 4.7, r: 0.9 },
+        ]}
         bounds={{ minX: -33, maxX: 33, minZ: -33, maxZ: 33 }}
       />
       {/* === GROUND === */}
@@ -338,6 +355,32 @@ export default function CityMapScene() {
       ))}
       {([-26, -20, -12, 2, 14, 22, 28] as number[]).map((x) => (
         <Tree key={`ts-${x}`} position={[x, 0, 6.5]} />
+      ))}
+
+      {/* ─── Roadside benches (small footprint, off the walkway) ─── */}
+      <Bench position={[-8, 0, 4.7]} />
+      <Bench position={[6, 0, 4.7]} />
+
+      {/* ─── Bushes lining the grass verge between sidewalk and trees ─── */}
+      {([-24, -18, -6, 8, 18, 26] as number[]).map((x, i) => (
+        <Bush key={`bn-${x}`} position={[x, 0, -5.5]} scale={0.9 + (i % 3) * 0.15} color={i % 2 ? '#3A7A3A' : '#4A8C4A'} />
+      ))}
+      {([-24, -18, -6, 8, 18, 26] as number[]).map((x, i) => (
+        <Bush key={`bs-${x}`} position={[x, 0, 4.9]} scale={0.9 + ((i + 1) % 3) * 0.15} color={i % 2 ? '#4A8C4A' : '#3A7A3A'} />
+      ))}
+
+      {/* ─── Flower beds brightening the verges ─── */}
+      <FlowerBed position={[-15, 0, -5.6]} w={1.8} d={0.6} />
+      <FlowerBed position={[11, 0, -5.6]} w={1.8} d={0.6} />
+      <FlowerBed position={[-11, 0, 4.9]} w={1.8} d={0.6} />
+      <FlowerBed position={[16, 0, 4.9]} w={1.8} d={0.6} />
+
+      {/* ─── Scattered darker grass patches for ground variation ─── */}
+      {([[-28, -11], [-19, 10], [24, -12], [15, 11], [-6, -12], [29, 9]] as [number, number][]).map(([x, z], i) => (
+        <mesh key={`gp-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.008, z]} receiveShadow>
+          <circleGeometry args={[1.4 + (i % 3) * 0.5, 14]} />
+          <meshStandardMaterial color={i % 2 ? '#4A7C3E' : '#527F44'} roughness={1} />
+        </mesh>
       ))}
 
       {/* ─── Buildings ─── */}
