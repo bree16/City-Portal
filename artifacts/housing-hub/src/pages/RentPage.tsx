@@ -1,51 +1,79 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, BedDouble, Bath, Info, Search, Filter } from 'lucide-react';
+import { MapPin, BedDouble, Bath, Info, Search, ShieldCheck, Home, AlertCircle, Maximize } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
+import rent1 from '@assets/generated_images/rent_1.jpg';
+import rent2 from '@assets/generated_images/rent_2.jpg';
+import rent3 from '@assets/generated_images/rent_3.jpg';
+import rent4 from '@assets/generated_images/rent_4.jpg';
+import rent5 from '@assets/generated_images/rent_5.jpg';
+import rent6 from '@assets/generated_images/rent_6.jpg';
 
 export default function RentPage() {
-  const [searchTerm, setSearchTerm] = useState('');
-
+  const [searchTerm, setSearchTerm] = useState('All');
+  
   const listings = [
-    { id: 1, name: "Oyster Point Apartments", price: "$1,200", beds: 2, baths: 1, hood: "Oyster Point", type: "Affordable", img: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800" },
-    { id: 2, name: "Denbigh Village Townhomes", price: "$1,450", beds: 3, baths: 2, hood: "Denbigh", type: "Market Rate", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800" },
-    { id: 3, name: "Hilton Historical Lofts", price: "$950", beds: 1, baths: 1, hood: "Hilton Village", type: "Income Restricted", img: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=800" },
-    { id: 4, name: "Southeast Community Flats", price: "$800", beds: 2, baths: 1, hood: "Southeast", type: "Subsidized", img: "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&q=80&w=800" },
-    { id: 5, name: "City Center Residences", price: "$1,600", beds: 2, baths: 2, hood: "Oyster Point", type: "Market Rate", img: "https://images.unsplash.com/photo-1502672260266-1c1c24240f57?auto=format&fit=crop&q=80&w=800" },
-    { id: 6, name: "Warwick Boulevard Apartments", price: "$1,100", beds: 1, baths: 1, hood: "Denbigh", type: "Affordable", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=800" },
+    { id: 1, name: "Riverside Commons", price: "$950", beds: 2, baths: 1, sqft: "780 sqft", hood: "Hilton Village", img: rent1 },
+    { id: 2, name: "Oak Tree Apartments", price: "$1,100", beds: 3, baths: 2, sqft: "1,050 sqft", hood: "Denbigh", img: rent2 },
+    { id: 3, name: "Harbor View Lofts", price: "$1,350", beds: 1, baths: 1, sqft: "620 sqft", hood: "Oyster Point", img: rent3 },
+    { id: 4, name: "Sunset Gardens", price: "$875", beds: 2, baths: 1, sqft: "840 sqft", hood: "Southeast", img: rent4 },
+    { id: 5, name: "Colonial Heights", price: "$1,200", beds: 3, baths: 2, sqft: "1,200 sqft", hood: "Denbigh", img: rent5 },
+    { id: 6, name: "Beacon Place", price: "$1,450", beds: 2, baths: 2, sqft: "950 sqft", hood: "Hilton Village", img: rent6 },
   ];
 
-  const filteredListings = listings.filter(l => 
-    l.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    l.hood.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredListings = searchTerm === 'All' 
+    ? listings 
+    : listings.filter(l => l.hood === searchTerm);
 
   return (
-    <div className="flex flex-col w-full pt-20 bg-muted/30 min-h-screen">
+    <div className="flex flex-col w-full pt-20 bg-muted/20 min-h-screen">
       {/* Hero */}
-      <section className="bg-primary text-white py-16 lg:py-24 text-center px-4 relative">
+      <section className="bg-primary text-white py-16 lg:py-24 text-center px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0B2146] to-[#0D2B5E] z-0"></div>
         <div className="container mx-auto max-w-4xl relative z-10">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Find Your Next Home in Newport News</h1>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto mb-10">
-            Browse affordable rentals, subsidized housing, and market-rate apartments across the city.
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">Find Your Next Rental in Newport News</h1>
+          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-12 leading-relaxed">
+            Explore affordable rentals, learn your rights, and access emergency assistance.
           </p>
           
           {/* Search Bar */}
-          <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto bg-white p-2 rounded-2xl sm:rounded-full shadow-xl">
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <Input 
-                placeholder="Search by neighborhood or complex name..." 
-                className="pl-12 h-12 rounded-xl sm:rounded-full border-none focus-visible:ring-0 text-foreground bg-transparent"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <Button className="h-12 px-8 rounded-xl sm:rounded-full bg-accent hover:bg-accent/90 text-white font-bold">
-              Search Rentals
+          <div className="flex flex-col md:flex-row gap-3 max-w-4xl mx-auto bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/20 shadow-xl">
+            <Select value={searchTerm} onValueChange={setSearchTerm}>
+              <SelectTrigger className="h-12 bg-white text-foreground border-none">
+                <SelectValue placeholder="Neighborhood" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Neighborhoods</SelectItem>
+                <SelectItem value="Hilton Village">Hilton Village</SelectItem>
+                <SelectItem value="Denbigh">Denbigh</SelectItem>
+                <SelectItem value="Oyster Point">Oyster Point</SelectItem>
+                <SelectItem value="Southeast">Southeast</SelectItem>
+              </SelectContent>
+            </Select>
+            <Input 
+              placeholder="Max rent ($)" 
+              type="number"
+              className="h-12 bg-white text-foreground border-none"
+            />
+            <Select>
+              <SelectTrigger className="h-12 bg-white text-foreground border-none">
+                <SelectValue placeholder="Beds" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Any Beds</SelectItem>
+                <SelectItem value="1">1+ Beds</SelectItem>
+                <SelectItem value="2">2+ Beds</SelectItem>
+                <SelectItem value="3">3+ Beds</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button className="h-12 px-8 bg-accent hover:bg-accent/90 text-white font-bold">
+              <Search className="w-5 h-5 mr-2" /> Search
             </Button>
           </div>
         </div>
@@ -53,13 +81,8 @@ export default function RentPage() {
 
       {/* Listings */}
       <section className="py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-bold text-primary">Available Rentals ({filteredListings.length})</h2>
-            <Button variant="outline" className="gap-2 rounded-full border-border bg-white text-foreground">
-              <Filter className="w-4 h-4" /> Filters
-            </Button>
-          </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <h2 className="text-2xl font-bold text-primary mb-8">Featured Rentals</h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredListings.map((listing, i) => (
@@ -69,65 +92,202 @@ export default function RentPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
               >
-                <Card className="overflow-hidden border-border/50 shadow-sm hover:shadow-lg transition-all duration-300 bg-white group cursor-pointer">
-                  <div className="relative h-48 overflow-hidden">
+                <Card className="overflow-hidden border-border/50 shadow-sm hover:shadow-lg transition-all duration-300 bg-white group flex flex-col h-full">
+                  <div className="relative h-56 overflow-hidden">
                     <img src={listing.img} alt={listing.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     <div className="absolute top-4 left-4">
-                      <Badge variant="secondary" className="bg-white/90 text-primary backdrop-blur-sm font-semibold shadow-sm">
-                        {listing.type}
+                      <Badge className="bg-secondary text-primary hover:bg-secondary font-bold shadow-sm">
+                        {listing.hood}
                       </Badge>
                     </div>
                   </div>
-                  <CardContent className="p-5">
+                  <CardContent className="p-6 flex flex-col flex-1">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-bold text-lg text-primary line-clamp-1">{listing.name}</h3>
-                      <span className="font-extrabold text-accent text-lg">{listing.price}<span className="text-sm text-muted-foreground font-normal">/mo</span></span>
+                      <h3 className="font-bold text-xl text-primary">{listing.name}</h3>
                     </div>
-                    <div className="flex items-center gap-1.5 text-muted-foreground text-sm mb-4">
-                      <MapPin className="w-4 h-4" /> {listing.hood}
-                    </div>
-                    <div className="flex gap-4 pt-4 border-t border-border">
-                      <div className="flex items-center gap-2 text-sm text-foreground/80 font-medium">
-                        <BedDouble className="w-4 h-4 text-muted-foreground" /> {listing.beds} Beds
+                    <div className="font-extrabold text-accent text-2xl mb-4">{listing.price}<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
+                    
+                    <div className="grid grid-cols-3 gap-2 mb-6">
+                      <div className="flex flex-col items-center justify-center p-2 bg-muted rounded-lg text-sm font-medium">
+                        <BedDouble className="w-4 h-4 mb-1 text-primary" /> {listing.beds} Bed
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-foreground/80 font-medium">
-                        <Bath className="w-4 h-4 text-muted-foreground" /> {listing.baths} Baths
+                      <div className="flex flex-col items-center justify-center p-2 bg-muted rounded-lg text-sm font-medium">
+                        <Bath className="w-4 h-4 mb-1 text-primary" /> {listing.baths} Bath
+                      </div>
+                      <div className="flex flex-col items-center justify-center p-2 bg-muted rounded-lg text-sm font-medium">
+                        <Maximize className="w-4 h-4 mb-1 text-primary" /> {listing.sqft}
                       </div>
                     </div>
+                    
+                    <Button variant="outline" className="w-full mt-auto border-primary/20 text-primary hover:bg-primary hover:text-white transition-colors">
+                      View Details
+                    </Button>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
             
             {filteredListings.length === 0 && (
-              <div className="col-span-full text-center py-20 text-muted-foreground">
-                No listings found matching "{searchTerm}". Try another search.
+              <div className="col-span-full text-center py-20 text-muted-foreground bg-white rounded-2xl border border-border">
+                No listings found matching your criteria. Try adjusting your filters.
               </div>
             )}
           </div>
         </div>
       </section>
 
-      {/* Tenant Resources */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-primary mb-10 text-center">Tenant Rights & Resources</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { title: "Eviction Prevention", desc: "Legal assistance and emergency funding if you are facing eviction." },
-              { title: "Tenant Rights Guide", desc: "Understand your rights regarding maintenance, leases, and security deposits." },
-              { title: "Housing Choice Vouchers", desc: "Learn about the Section 8 program and how to join the waitlist." }
-            ].map((res, i) => (
-              <Card key={i} className="bg-muted border-none shadow-none">
-                <CardContent className="p-6">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                    <Info className="w-5 h-5 text-primary" />
+      {/* Section 8 */}
+      <section className="py-20 bg-primary text-white">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <Home className="w-12 h-12 text-secondary mx-auto mb-6" />
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Housing Choice Voucher Program (Section 8)</h2>
+          <p className="text-lg text-white/80 leading-relaxed mb-10">
+            The NNRHA administers vouchers that help low-income families afford private market rentals. The program pays a portion of your rent directly to the landlord, while you pay the remaining affordable portion.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-6 text-left mb-10">
+            <div className="bg-white/10 p-6 rounded-xl border border-white/20 backdrop-blur-sm">
+              <h3 className="font-bold text-secondary mb-2">Eligibility Basics</h3>
+              <ul className="list-disc list-inside space-y-2 text-white/80 text-sm">
+                <li>Income must be below 50% of the Area Median Income</li>
+                <li>Must be a US citizen or eligible immigrant</li>
+                <li>Background checks required for all adults</li>
+              </ul>
+            </div>
+            <div className="bg-white/10 p-6 rounded-xl border border-white/20 backdrop-blur-sm">
+              <h3 className="font-bold text-secondary mb-2">Current Status</h3>
+              <p className="text-white/80 text-sm mb-4">The waitlist periodically opens for new applications. Check current status below.</p>
+              <Button className="w-full bg-secondary hover:bg-secondary/90 text-primary font-bold">
+                Waitlist Open — Apply Now
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Emergency Assistance */}
+      <section className="py-20 bg-accent text-white">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="flex flex-col md:flex-row items-center gap-10">
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-4">
+                <AlertCircle className="w-8 h-8 text-white" />
+                <h2 className="text-3xl font-bold">Emergency Rental Assistance</h2>
+              </div>
+              <p className="text-white/90 text-lg mb-8">
+                For residents facing eviction or an inability to pay rent due to sudden financial hardship. Immediate help is available.
+              </p>
+              <div className="space-y-4">
+                {[
+                  { name: "COVID-19 Relief Funds", note: "For pandemic-related income loss" },
+                  { name: "CARES Act Programs", note: "Federal emergency support" },
+                  { name: "Local Emergency Funds", note: "City-funded eviction prevention" }
+                ].map((fund, i) => (
+                  <div key={i} className="bg-white p-4 rounded-xl flex items-center justify-between shadow-lg">
+                    <div>
+                      <h4 className="font-bold text-primary">{fund.name}</h4>
+                      <p className="text-sm text-muted-foreground">{fund.note}</p>
+                    </div>
+                    <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-white shrink-0">
+                      Apply Now
+                    </Button>
                   </div>
-                  <h3 className="font-bold text-lg text-primary mb-2">{res.title}</h3>
-                  <p className="text-muted-foreground text-sm mb-4">{res.desc}</p>
-                  <Button variant="link" className="p-0 text-accent font-semibold h-auto">Read More →</Button>
-                </CardContent>
-              </Card>
+                ))}
+              </div>
+            </div>
+            <div className="w-full md:w-1/3 bg-white text-center p-8 rounded-2xl shadow-2xl">
+              <h3 className="text-xl font-bold text-primary mb-2">Facing Eviction?</h3>
+              <p className="text-muted-foreground text-sm mb-6">Call our crisis hotline immediately.</p>
+              <div className="text-3xl font-extrabold text-accent mb-6">(757) 933-2311</div>
+              <Button className="w-full bg-primary hover:bg-primary/90 text-white h-12">Call Now</Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Rights & Tips */}
+      <section className="py-20 bg-muted/20">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="grid md:grid-cols-2 gap-12">
+            
+            <div>
+              <h2 className="text-3xl font-bold text-primary mb-8">Tenant Rights & Resources</h2>
+              <div className="space-y-4">
+                {[
+                  { title: "Know Your Rights", desc: "Understanding the Virginia Residential Landlord and Tenant Act.", icon: ShieldCheck },
+                  { title: "How to Handle Disputes", desc: "Mediation services and legal aid contacts for landlord issues.", icon: Info },
+                  { title: "Eviction Prevention", desc: "Steps to take if you receive a pay-or-quit notice.", icon: AlertCircle }
+                ].map((card, i) => (
+                  <Card key={i} className="bg-white border-border/50 shadow-sm hover:shadow-md transition-shadow">
+                    <CardContent className="p-5 flex items-start gap-4">
+                      <div className="p-3 bg-primary/5 rounded-lg text-primary shrink-0">
+                        <card.icon className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-foreground mb-1">{card.title}</h4>
+                        <p className="text-sm text-muted-foreground mb-2">{card.desc}</p>
+                        <a href="#" className="text-sm font-semibold text-accent hover:underline">Learn More →</a>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold text-primary mb-8">Rental Search Tips</h2>
+              <Accordion type="single" collapsible className="w-full bg-white p-6 rounded-2xl border border-border">
+                {[
+                  { q: "Start with your budget", a: "Aim to spend no more than 30% of your gross monthly income on rent and utilities combined." },
+                  { q: "Understand the lease", a: "Always read the entire lease before signing. Ask questions about fees, notice periods, and maintenance responsibilities." },
+                  { q: "Check utilities included", a: "A cheaper rent might actually cost more if no utilities are included. Verify what you're responsible for paying." },
+                  { q: "Inspect before signing", a: "Walk through the exact unit you will be renting, not just a model, and document any existing damage." },
+                  { q: "Know your rights before you sign", a: "Familiarize yourself with state tenant laws regarding security deposits and habitability." }
+                ].map((faq, i) => (
+                  <AccordionItem key={i} value={`tip-${i}`} className="border-border">
+                    <AccordionTrigger className="text-left font-semibold text-foreground hover:text-accent hover:no-underline py-4">
+                      {faq.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground leading-relaxed">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+            
+          </div>
+        </div>
+      </section>
+
+      {/* Counseling CTA */}
+      <section className="py-12 bg-white border-y border-border">
+        <div className="container mx-auto px-4 max-w-4xl flex flex-col md:flex-row items-center justify-between gap-6 bg-muted/50 p-8 rounded-2xl">
+          <div>
+            <h2 className="text-2xl font-bold text-primary mb-2">Talk to a Rental Counselor</h2>
+            <p className="text-muted-foreground">Free, confidential help navigating your rental search and understanding leases.</p>
+          </div>
+          <Button className="bg-primary hover:bg-primary/90 text-white h-12 px-8 rounded-lg font-bold shrink-0">
+            Schedule a Session
+          </Button>
+        </div>
+      </section>
+
+      {/* Partners */}
+      <section className="py-16 bg-muted/10">
+        <div className="container mx-auto px-4 text-center">
+          <h3 className="text-xl font-bold text-muted-foreground mb-8">Our Community Partners</h3>
+          <div className="flex flex-wrap justify-center gap-4">
+            {[
+              { name: "NNRHA", tag: "Housing Authority" },
+              { name: "Virginia Housing", tag: "State Finance" },
+              { name: "United Way", tag: "Social Services" },
+              { name: "Habitat for Humanity", tag: "Affordable Builds" },
+              { name: "Legal Aid Society", tag: "Tenant Defense" }
+            ].map((p, i) => (
+              <div key={i} className="bg-white border border-border px-6 py-4 rounded-xl shadow-sm min-w-[200px]">
+                <div className="font-bold text-primary">{p.name}</div>
+                <div className="text-xs text-muted-foreground uppercase tracking-wider">{p.tag}</div>
+              </div>
             ))}
           </div>
         </div>

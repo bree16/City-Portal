@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { ChatWidget } from '@/components/ChatWidget';
 
 // Pages
 import Home from '@/pages/Home';
@@ -13,6 +14,9 @@ import RentPage from '@/pages/RentPage';
 import NeighborhoodsPage from '@/pages/NeighborhoodsPage';
 import AssistancePage from '@/pages/AssistancePage';
 import ContactPage from '@/pages/ContactPage';
+import ResourcesPage from '@/pages/ResourcesPage';
+import EventsPage from '@/pages/EventsPage';
+import SuccessStoriesPage from '@/pages/SuccessStoriesPage';
 import NotFound from '@/pages/not-found';
 
 const queryClient = new QueryClient();
@@ -23,6 +27,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       <Navbar />
       <main className="flex-1 flex flex-col">{children}</main>
       <Footer />
+      <ChatWidget />
     </div>
   );
 }
@@ -36,6 +41,9 @@ function Router() {
         <Route path="/rent" component={RentPage} />
         <Route path="/neighborhoods" component={NeighborhoodsPage} />
         <Route path="/assistance" component={AssistancePage} />
+        <Route path="/resources" component={ResourcesPage} />
+        <Route path="/events" component={EventsPage} />
+        <Route path="/success-stories" component={SuccessStoriesPage} />
         <Route path="/contact" component={ContactPage} />
         <Route component={NotFound} />
       </Switch>

@@ -27,8 +27,14 @@ export function Navbar() {
     { label: 'Buy', href: '/buy' },
     { label: 'Rent', href: '/rent' },
     { label: 'Neighborhoods', href: '/neighborhoods' },
-    { label: 'Resources', href: '/assistance' },
+    { label: 'Resources', href: '/resources' },
     { label: 'Contact', href: '/contact' },
+  ];
+
+  const mobileLinks = [
+    ...navLinks,
+    { label: 'Events', href: '/events' },
+    { label: 'Success Stories', href: '/success-stories' },
   ];
 
   return (
@@ -57,20 +63,26 @@ export function Navbar() {
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-8">
               <div className="flex gap-6">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`text-sm font-medium transition-colors hover:text-accent ${
-                      isScrolled || !isHomepage
-                        ? location === link.href ? 'text-accent' : 'text-foreground/80'
-                        : 'text-white/90 hover:text-white'
-                    }`}
-                    data-testid={`link-nav-${link.label.toLowerCase()}`}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                {navLinks.map((link) => {
+                  const isActive = location === link.href || (link.href === '/resources' && location === '/assistance');
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`text-sm transition-colors relative py-1 ${
+                        isScrolled || !isHomepage
+                          ? isActive ? 'text-accent font-semibold' : 'text-foreground/80 hover:text-accent font-medium'
+                          : isActive ? 'text-white font-semibold' : 'text-white/90 hover:text-white font-medium'
+                      }`}
+                      data-testid={`link-nav-${link.label.toLowerCase()}`}
+                    >
+                      {link.label}
+                      {isActive && (
+                        <span className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full ${isScrolled || !isHomepage ? 'bg-accent' : 'bg-white'}`}></span>
+                      )}
+                    </Link>
+                  );
+                })}
               </div>
               <Button asChild className="bg-accent hover:bg-accent/90 text-white rounded-full px-6 font-medium shadow-sm transition-transform hover:-translate-y-0.5">
                 <Link href="/buy">Get Started</Link>
@@ -100,25 +112,28 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-white pt-24 px-6 flex flex-col md:hidden"
+            className="fixed inset-0 z-40 bg-white pt-24 px-6 flex flex-col md:hidden overflow-y-auto"
           >
-            <div className="flex flex-col gap-6 text-lg font-medium">
+            <div className="flex flex-col gap-4 text-lg font-medium pb-8">
               <Link
                 href="/"
-                className={`py-2 border-b border-border ${location === '/' ? 'text-accent' : 'text-foreground'}`}
+                className={`py-3 border-b border-border flex items-center ${location === '/' ? 'text-accent font-semibold' : 'text-foreground'}`}
               >
                 Home
               </Link>
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`py-2 border-b border-border ${location === link.href ? 'text-accent' : 'text-foreground'}`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <Button asChild className="mt-4 bg-accent hover:bg-accent/90 text-white w-full rounded-full h-12 text-base">
+              {mobileLinks.map((link) => {
+                const isActive = location === link.href || (link.href === '/resources' && location === '/assistance');
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`py-3 border-b border-border flex items-center ${isActive ? 'text-accent font-semibold' : 'text-foreground'}`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+              <Button asChild className="mt-6 bg-accent hover:bg-accent/90 text-white w-full rounded-full h-14 text-lg font-bold shadow-lg">
                 <Link href="/buy">Get Started</Link>
               </Button>
             </div>

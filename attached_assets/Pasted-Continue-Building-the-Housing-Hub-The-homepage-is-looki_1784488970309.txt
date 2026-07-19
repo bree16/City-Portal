@@ -1,0 +1,444 @@
+Continue Building the Housing Hub
+
+The homepage is looking excellent. Do not redesign the homepage. Instead, continue expanding the project into a realistic multi-page website.
+
+Overall Goal
+
+This should feel like a real digital Housing Hub for the City of Newport News that helps users accomplish tasks quickly. The design should remain clean, modern, responsive, and user-focused.
+
+Do not overcrowd the homepage. Move detailed information into its own dedicated pages.
+
+Navigation
+
+Keep the navigation bar exactly as it is.
+
+Home
+
+Buy
+
+Rent
+
+Neighborhoods
+
+Resources
+
+Contact
+
+Get Started
+
+Buy Page
+
+Expand this into a complete page.
+
+Include:
+
+Hero
+
+Buying your first home starts here.
+
+Small explanation about becoming a homeowner in Newport News.
+
+Large "Start Your Journey" button.
+
+Homebuyer Roadmap
+
+Step 1
+
+Check affordability
+
+↓
+
+Step 2
+
+Meet with a Housing Counselor
+
+↓
+
+Step 3
+
+Take Homebuyer Education
+
+↓
+
+Step 4
+
+Find Down Payment Assistance
+
+↓
+
+Step 5
+
+Purchase Your Home
+
+Homebuyer Assistance Programs
+
+Create cards for
+
+First-Time Buyer Programs
+
+Down Payment Assistance
+
+Housing Counseling
+
+Credit Preparation
+
+Financial Education
+
+Mortgage Resources
+
+Each card should have
+
+Learn More button
+
+FAQ
+
+Who qualifies?
+
+How much money do I need?
+
+Can I buy with bad credit?
+
+What grants exist?
+
+Rent Page
+
+Create a dedicated rental assistance page.
+
+Include
+
+Rental Listings
+
+Affordable Housing
+
+Housing Choice Voucher Information (placeholder)
+
+Emergency Rental Assistance
+
+Tenant Rights
+
+Rental Counseling
+
+Rental Search Tips
+
+Community Partners
+
+Include a "Find Rental Resources" section.
+
+Neighborhoods Page
+
+Turn this into a Zillow-inspired experience.
+
+Keep the existing cards but expand.
+
+Each neighborhood should include
+
+Image
+
+Average home price
+
+Walkability
+
+Schools
+
+Parks
+
+Restaurants
+
+Short description
+
+View Neighborhood button
+
+Eventually include a map placeholder.
+
+Resources Page
+
+Organize everything into categories.
+
+Do NOT dump dozens of links together.
+
+Create modern cards.
+
+Categories
+
+🏠 Homeownership
+
+🏢 Renting
+
+💰 Financial Assistance
+
+⚖ Fair Housing
+
+🏚 Homelessness Prevention
+
+👨‍👩‍👧 Family Resources
+
+🎓 Education
+
+📞 Counseling
+
+Each card opens to a detailed page or expandable section.
+
+Contact Page
+
+Include
+
+Contact form
+
+Office address
+
+Phone number
+
+Email
+
+Office hours
+
+Google Maps placeholder
+
+Emergency Housing numbers
+
+Housing Counselor request form
+
+Affordability Calculator
+
+Expand the calculator.
+
+Allow users to adjust
+
+Monthly income
+
+Target home price
+
+Interest rate
+
+Down payment
+
+Taxes
+
+Insurance
+
+Display
+
+Estimated monthly payment
+
+Debt-to-income ratio
+
+Buying recommendation
+
+Suggested programs
+
+Show a comparison between
+
+Renting
+
+vs
+
+Buying
+
+AI Housing Assistant
+
+Create a floating chat button.
+
+The assistant is only a demonstration.
+
+Suggested prompts
+
+Can I qualify for assistance?
+
+How do I buy my first home?
+
+Where should I live?
+
+What grants are available?
+
+How do I contact a counselor?
+
+Events Page
+
+Expand Community Events.
+
+Include
+
+Calendar layout
+
+Upcoming Workshops
+
+Financial Literacy
+
+Neighborhood Cleanups
+
+Housing Fairs
+
+Homebuyer Classes
+
+Allow filtering by
+
+Workshop
+
+Volunteer
+
+Education
+
+Community
+
+Success Stories
+
+Create a page for resident testimonials.
+
+Each story includes
+
+Photo placeholder
+
+Name
+
+Neighborhood
+
+Short story
+
+Program used
+
+Statistics
+
+Create an impact section.
+
+Examples
+
+2,400+ Families Assisted
+
+$18 Million Housing Aid Distributed
+
+340 Affordable Housing Units
+
+92% Satisfaction Rating
+
+25+ Community Partners
+
+Display with animated counters.
+
+Mobile Design
+
+Ensure every page works beautifully on mobile devices.
+
+Cards should stack.
+
+Navigation collapses into a hamburger menu.
+
+Buttons should remain large and touch-friendly.
+
+Footer
+
+Expand the footer into a professional government-style footer.
+
+Include:
+
+About Newport News
+
+Short description.
+
+Quick Links
+
+Buy a Home
+
+Rent
+
+Neighborhoods
+
+Resources
+
+Contact
+
+Events
+
+FAQ
+
+Social Media
+
+Facebook
+
+Instagram
+
+LinkedIn
+
+YouTube
+
+Contact
+
+2400 Washington Avenue
+
+Newport News, VA 23607
+
+757-933-2311
+
+Email
+
+Office Hours
+
+Accessibility
+
+Privacy Policy
+
+Terms
+
+Use Official Newport News Housing Information
+
+Create a section within Resources called Official Newport News Housing Resources. Organize the information into expandable cards or accordions instead of a long list.
+
+Include content based on the official Newport News Housing Resources page, such as:
+
+Strategic Housing Initiatives Plan (SHIP)
+Explain that SHIP is the City's long-term housing roadmap.
+Mention its focus on housing affordability, redevelopment, neighborhood stability, homeownership opportunities, and partnerships with developers and community organizations.
+Add buttons:
+Learn About SHIP
+Read SHIP (Placeholder)
+Homeownership & Housing
+
+Include cards for:
+
+Virginia Housing
+Newport News Redevelopment & Housing Authority (NNRHA)
+Newport News Choice Neighborhood
+Virginia Housing & Community Development Corporation
+Virginia Peninsula REALTORS®
+Housing Assistance
+
+Organize assistance into cards:
+
+Housing Counseling
+Fair Housing
+Emergency Housing
+Homeless Prevention
+Housing Crisis Resources
+Community Action Programs
+Veteran Housing Assistance
+United Way 211
+Housing Opportunities Made Equal (HOME)
+Helpful Services
+
+Include cards for:
+
+Find a Housing Counselor
+Homebuyer Education
+Human Services
+Property Information
+Taxes
+Permits
+Solid Waste
+Bill Pay
+Jobs
+
+Each card should have a short description and a Learn More button. Use placeholder links where necessary.
+
+Design Improvements
+
+Keep the same visual style but enhance the experience:
+
+Add subtle page transition animations.
+Add smooth scrolling.
+Animate statistics when they enter the viewport.
+Add hover animations to cards.
+Highlight the active navigation page.
+Use consistent spacing and typography across all pages.
+Maintain accessibility with high color contrast and readable fonts.
+One Important Rule
+
+Do not place all of this information on the homepage. The homepage should remain clean and focused on helping users get started quickly. Detailed information, official housing resources, and program descriptions should live on their own dedicated pages so the experience feels organized and easy to navigate.

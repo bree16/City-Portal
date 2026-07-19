@@ -4,12 +4,14 @@ import { motion } from 'framer-motion';
 import { 
   Home, Building2, Calculator, MapPin, 
   GraduationCap, HandHeart, ArrowRight, Star,
-  Calendar, MapPin as MapPinIcon, Users
+  Calendar, MapPin as MapPinIcon, Users, DollarSign, Percent, Banknote
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from '@/components/ui/badge';
 import heroIllustration from '@assets/generated_images/hero_illustration.png';
 import hiltonImage from '@assets/generated_images/hilton_village.jpg';
 import denbighImage from '@assets/generated_images/denbigh.jpg';
@@ -17,29 +19,48 @@ import oysterImage from '@assets/generated_images/oyster_point.jpg';
 import southeastImage from '@assets/generated_images/southeast.jpg';
 
 export default function HomePage() {
-  const [income, setIncome] = useState([6000]);
-  const [downPayment, setDownPayment] = useState([20]);
-  const [homePrice, setHomePrice] = useState([250000]);
+  // Calculator States
+  const [calcTab, setCalcTab] = useState("buy");
+  const [income, setIncome] = useState([5500]);
+  const [homePrice, setHomePrice] = useState([220000]);
+  const [interestRate, setInterestRate] = useState([6.8]);
+  const [downPayment, setDownPayment] = useState([10]);
+  const [taxes, setTaxes] = useState([200]);
+  const [insurance, setInsurance] = useState([100]);
+  const [monthlyRent, setMonthlyRent] = useState([1500]);
 
-  // Rough calculation
-  const loanAmount = homePrice[0] * (1 - downPayment[0] / 100);
-  const interestRate = 0.065;
-  const monthlyRate = interestRate / 12;
+  // Buy Math
+  const dpAmount = homePrice[0] * (downPayment[0] / 100);
+  const loanAmount = homePrice[0] - dpAmount;
+  const rateMonth = (interestRate[0] / 100) / 12;
   const numPayments = 30 * 12;
-  const monthlyMortgage = loanAmount > 0 ? (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1) : 0;
+  const monthlyPi = loanAmount > 0 && rateMonth > 0 
+    ? (loanAmount * rateMonth * Math.pow(1 + rateMonth, numPayments)) / (Math.pow(1 + rateMonth, numPayments) - 1) 
+    : 0;
   
-  const taxesAndIns = 400; // estimated
-  const totalMonthly = monthlyMortgage + taxesAndIns;
-  const maxAffordable = income[0] * 0.28; // 28% rule
+  const totalMonthly = monthlyPi + taxes[0] + insurance[0];
+  const dti = (totalMonthly / income[0]) * 100;
+  
+  // DTI logic
+  let dtiColor = "bg-green-100 text-green-800 border-green-200";
+  let verdict = "You appear ready to buy";
+  if (dti > 43) {
+    dtiColor = "bg-red-100 text-red-800 border-red-200";
+    verdict = "Consider rental options";
+  } else if (dti > 36) {
+    dtiColor = "bg-yellow-100 text-yellow-800 border-yellow-200";
+    verdict = "You may qualify with assistance";
+  }
 
-  const isAffordable = totalMonthly <= maxAffordable;
+  // 5 Year Comparison Math
+  const fiveYearRent = monthlyRent[0] * 60;
+  const fiveYearBuyCosts = (taxes[0] + insurance[0] + (monthlyPi * 0.8)) * 60; // rough est of unrecoverable costs
 
   return (
     <div className="flex flex-col w-full">
       {/* 1. Hero Section */}
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-primary text-white">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0B2146] to-accent/80 z-0"></div>
-        {/* Subtle animated pattern could go here */}
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
             <motion.div 
@@ -105,8 +126,8 @@ export default function HomePage() {
               { icon: Building2, title: "Find Rental Resources", desc: "Browse affordable rentals and subsidized housing", href: "/rent" },
               { icon: Calculator, title: "Can I Afford It?", desc: "Use our affordability calculator to plan your budget", href: "#calculator" },
               { icon: MapPin, title: "Explore Neighborhoods", desc: "Discover communities that match your lifestyle", href: "/neighborhoods" },
-              { icon: GraduationCap, title: "First-Time Buyer Programs", desc: "Special grants and loan assistance for first-timers", href: "/assistance" },
-              { icon: HandHeart, title: "Housing Assistance", desc: "Emergency help, vouchers, and support programs", href: "/assistance" }
+              { icon: GraduationCap, title: "First-Time Buyer Programs", desc: "Special grants and loan assistance for first-timers", href: "/resources" },
+              { icon: HandHeart, title: "Housing Assistance", desc: "Emergency help, vouchers, and support programs", href: "/resources" }
             ].map((card, i) => (
               <motion.div
                 key={card.title}
@@ -158,88 +179,199 @@ export default function HomePage() {
 
       {/* 3. Affordability Calculator */}
       <section id="calculator" className="py-24 bg-gradient-to-br from-white to-muted relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-semibold mb-6">
-                <Calculator className="w-4 h-4" /> Try our tools
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">Wondering if buying a home is possible?</h2>
-              <p className="text-lg text-muted-foreground mb-8">
-                Use our simple calculator to estimate your buying power. We take into account standard rates to give you a realistic picture of what you might afford in Newport News.
-              </p>
-              <ul className="space-y-4 mb-8">
-                {['Compare renting vs. owning costs', 'Understand down payment impacts', 'See if you qualify for assistance grants'].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center shrink-0 mt-0.5">
-                      <ArrowRight className="w-3.5 h-3.5 text-accent" />
-                    </div>
-                    <span className="text-foreground/80 font-medium">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Affordability Calculator</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Plan your budget and see what housing options are within your reach in Newport News.
+            </p>
+          </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <Card className="shadow-xl border-border/50">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold text-primary mb-8 text-center border-b border-border pb-6">Affordability Estimate</h3>
-                  
-                  <div className="space-y-8">
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center">
-                        <label className="text-sm font-medium text-foreground">Monthly Household Income</label>
-                        <span className="font-semibold text-primary">${income[0].toLocaleString()}</span>
-                      </div>
-                      <Slider value={income} onValueChange={setIncome} max={20000} min={1000} step={100} className="w-full" />
-                    </div>
+          <Card className="shadow-2xl border-border/50 bg-white overflow-hidden">
+            <Tabs value={calcTab} onValueChange={setCalcTab} className="w-full">
+              <div className="flex border-b border-border bg-muted/30">
+                <TabsList className="w-full h-16 bg-transparent p-0 rounded-none border-none grid grid-cols-2 gap-0">
+                  <TabsTrigger 
+                    value="buy" 
+                    className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-accent data-[state=active]:text-accent data-[state=active]:bg-white text-base font-bold"
+                  >
+                    Buying Power
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="compare" 
+                    className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-accent data-[state=active]:text-accent data-[state=active]:bg-white text-base font-bold"
+                  >
+                    Rent vs. Buy
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+
+              {/* Buying Power Tab */}
+              <TabsContent value="buy" className="p-0 m-0">
+                <div className="grid lg:grid-cols-5 gap-0">
+                  {/* Inputs */}
+                  <div className="lg:col-span-3 p-8 lg:p-10 space-y-8">
                     
                     <div className="space-y-4">
                       <div className="flex justify-between items-center">
-                        <label className="text-sm font-medium text-foreground">Target Home Price</label>
-                        <span className="font-semibold text-primary">${homePrice[0].toLocaleString()}</span>
+                        <label className="text-sm font-bold text-foreground">Monthly Gross Income</label>
+                        <div className="relative">
+                          <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                          <Input 
+                            type="number" 
+                            value={income[0]} 
+                            onChange={(e) => setIncome([Number(e.target.value)])}
+                            className="w-32 pl-8 font-bold text-primary bg-muted/50 border-none" 
+                          />
+                        </div>
                       </div>
-                      <Slider value={homePrice} onValueChange={setHomePrice} max={600000} min={50000} step={5000} className="w-full" />
+                      <Slider value={income} onValueChange={setIncome} max={20000} min={1000} step={100} />
                     </div>
 
                     <div className="space-y-4">
                       <div className="flex justify-between items-center">
-                        <label className="text-sm font-medium text-foreground">Down Payment ({downPayment[0]}%)</label>
-                        <span className="font-semibold text-primary">${(homePrice[0] * downPayment[0] / 100).toLocaleString()}</span>
+                        <label className="text-sm font-bold text-foreground">Target Home Price</label>
+                        <div className="relative">
+                          <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                          <Input 
+                            type="number" 
+                            value={homePrice[0]} 
+                            onChange={(e) => setHomePrice([Number(e.target.value)])}
+                            className="w-32 pl-8 font-bold text-primary bg-muted/50 border-none" 
+                          />
+                        </div>
                       </div>
-                      <Slider value={downPayment} onValueChange={setDownPayment} max={50} min={0} step={1} className="w-full" />
+                      <Slider value={homePrice} onValueChange={setHomePrice} max={600000} min={50000} step={1000} />
                     </div>
 
-                    <div className="pt-6 border-t border-border bg-muted/50 -mx-8 -mb-8 p-8 rounded-b-xl">
-                      <div className="flex justify-between items-end mb-6">
-                        <div>
-                          <p className="text-sm text-muted-foreground font-medium mb-1">Est. Monthly Payment</p>
-                          <div className="text-4xl font-extrabold text-primary">${Math.round(totalMonthly).toLocaleString()}</div>
-                          <p className="text-xs text-muted-foreground mt-1">Includes est. taxes & insurance</p>
+                    <div className="grid grid-cols-2 gap-8">
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                          <label className="text-sm font-bold text-foreground">Down Payment</label>
+                          <div className="relative">
+                            <Input 
+                              type="number" 
+                              value={downPayment[0]} 
+                              onChange={(e) => setDownPayment([Number(e.target.value)])}
+                              className="w-20 pr-8 font-bold text-primary bg-muted/50 border-none text-right" 
+                            />
+                            <Percent className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                          </div>
                         </div>
-                        <div className={`px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 ${isAffordable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                          {isAffordable ? 'Looks Good!' : 'Might be tight'}
+                        <Slider value={downPayment} onValueChange={setDownPayment} max={30} min={0} step={1} />
+                      </div>
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                          <label className="text-sm font-bold text-foreground">Interest Rate</label>
+                          <div className="relative">
+                            <Input 
+                              type="number" 
+                              value={interestRate[0]} 
+                              onChange={(e) => setInterestRate([Number(e.target.value)])}
+                              className="w-20 pr-8 font-bold text-primary bg-muted/50 border-none text-right" 
+                            />
+                            <Percent className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                          </div>
+                        </div>
+                        <Slider value={interestRate} onValueChange={setInterestRate} max={10} min={3} step={0.1} />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-8 pt-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-muted-foreground">Monthly Taxes</label>
+                        <Input type="number" value={taxes[0]} onChange={e => setTaxes([Number(e.target.value)])} className="bg-muted/50 border-none" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-muted-foreground">Monthly Insurance</label>
+                        <Input type="number" value={insurance[0]} onChange={e => setInsurance([Number(e.target.value)])} className="bg-muted/50 border-none" />
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Results Panel */}
+                  <div className="lg:col-span-2 bg-primary text-white p-8 lg:p-10 flex flex-col justify-center">
+                    <h3 className="text-lg font-bold text-white/80 mb-6">Estimated Breakdown</h3>
+                    
+                    <div className="mb-8">
+                      <p className="text-sm font-medium text-secondary mb-1 uppercase tracking-wider">Est. Monthly Payment</p>
+                      <div className="text-5xl font-extrabold mb-2">${Math.round(totalMonthly).toLocaleString()}</div>
+                      <p className="text-sm text-white/60">P&I + Taxes + Insurance</p>
+                    </div>
+
+                    <div className="space-y-4 border-t border-white/10 pt-6 mb-8">
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/80">Down Payment Amount</span>
+                        <span className="font-bold">${Math.round(dpAmount).toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-white/80">Debt-to-Income (DTI)</span>
+                        <span className="font-bold">{dti.toFixed(1)}%</span>
+                      </div>
+                    </div>
+
+                    <div className={`p-4 rounded-xl border ${dtiColor} mb-8`}>
+                      <div className="font-bold mb-1">{verdict}</div>
+                      <div className="text-sm opacity-90">Based on standard lending rules.</div>
+                    </div>
+
+                    {(dti > 36 || income[0] < 4000) && (
+                      <div className="space-y-3 mb-8">
+                        <p className="text-xs font-bold uppercase tracking-wider text-secondary">Suggested Programs</p>
+                        <div className="flex flex-wrap gap-2">
+                          <Badge className="bg-white/20 hover:bg-white/30 text-white border-none">Down Payment Assistance</Badge>
+                          <Badge className="bg-white/20 hover:bg-white/30 text-white border-none">First-Time Buyer Grants</Badge>
                         </div>
                       </div>
-                      <Button asChild className="w-full h-12 bg-primary hover:bg-primary/90 text-white rounded-lg text-base">
-                        <Link href="/buy">Connect with a Counselor</Link>
-                      </Button>
+                    )}
+
+                    <Button asChild className="w-full bg-secondary hover:bg-secondary/90 text-primary font-bold h-12 mt-auto">
+                      <Link href="/contact">Talk to a Counselor</Link>
+                    </Button>
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* Compare Tab */}
+              <TabsContent value="compare" className="p-0 m-0">
+                <div className="p-8 lg:p-12 text-center">
+                  <div className="max-w-md mx-auto mb-10 space-y-4">
+                    <label className="text-lg font-bold text-foreground">Current Monthly Rent</label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                      <Input 
+                        type="number" 
+                        value={monthlyRent[0]} 
+                        onChange={(e) => setMonthlyRent([Number(e.target.value)])}
+                        className="h-14 pl-12 font-bold text-xl text-primary bg-muted/50 border-none" 
+                      />
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
+
+                  <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <div className="p-8 rounded-2xl bg-muted/50 border border-border">
+                      <h4 className="text-lg font-bold text-primary mb-2">5-Year Cost of Renting</h4>
+                      <div className="text-4xl font-extrabold text-accent mb-4">${fiveYearRent.toLocaleString()}</div>
+                      <p className="text-sm text-muted-foreground">This is money you will never see again.</p>
+                    </div>
+                    
+                    <div className="p-8 rounded-2xl bg-primary text-white border border-primary">
+                      <h4 className="text-lg font-bold mb-2">5-Year Cost of Buying</h4>
+                      <div className="text-4xl font-extrabold text-secondary mb-4">${Math.round(fiveYearBuyCosts).toLocaleString()}</div>
+                      <p className="text-sm text-white/80">Estimated unrecoverable costs (taxes, insurance, interest).</p>
+                    </div>
+                  </div>
+                  
+                  <p className="mt-8 text-muted-foreground font-medium">
+                    {fiveYearBuyCosts < fiveYearRent 
+                      ? "Buying looks more favorable over 5 years based on these estimates." 
+                      : "Renting might be cheaper in the short term, but buying builds equity over time."}
+                  </p>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </Card>
         </div>
       </section>
 
@@ -283,100 +415,6 @@ export default function HomePage() {
                     </div>
                   </div>
                 </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Events */}
-      <section className="py-24 bg-muted">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Community Events & Workshops</h2>
-            <p className="text-muted-foreground text-lg">Join us to learn more about housing opportunities, financial wellness, and community engagement.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              { title: "Homebuyer Workshop", date: "AUG 5", fullDate: "August 5, 2026", loc: "City Hall, Room 204", desc: "Learn the step-by-step process of buying your first home." },
-              { title: "Financial Literacy Seminar", date: "AUG 12", fullDate: "August 12, 2026", loc: "Online (Zoom)", desc: "Build the financial foundation to qualify for a mortgage." },
-              { title: "Neighborhood Cleanup", date: "AUG 19", fullDate: "August 19, 2026", loc: "Hilton Village Park", desc: "Join neighbors to beautify our community spaces." },
-              { title: "Housing Fair", date: "SEP 3", fullDate: "September 3, 2026", loc: "Convention Center", desc: "Meet lenders, landlords, and housing counselors." }
-            ].map((event, i) => (
-              <motion.div
-                key={event.title}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-              >
-                <Card className="flex flex-row overflow-hidden hover:shadow-lg transition-shadow border-none bg-white">
-                  <div className="w-24 bg-primary text-white flex flex-col items-center justify-center p-4 text-center shrink-0">
-                    <span className="text-sm font-bold text-secondary uppercase tracking-wider">{event.date.split(' ')[0]}</span>
-                    <span className="text-3xl font-extrabold">{event.date.split(' ')[1]}</span>
-                  </div>
-                  <CardContent className="p-6 flex flex-col justify-center flex-1">
-                    <h3 className="text-xl font-bold text-primary mb-2">{event.title}</h3>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground mb-3 font-medium">
-                      <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-accent" /> {event.fullDate}</span>
-                      <span className="hidden sm:inline text-border">•</span>
-                      <span className="flex items-center gap-1.5"><MapPinIcon className="w-4 h-4 text-accent" /> {event.loc}</span>
-                    </div>
-                    <p className="text-foreground/80 text-sm">{event.desc}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-          <div className="mt-12 text-center">
-            <Button variant="outline" className="rounded-full px-8 bg-transparent border-primary/20 text-primary hover:bg-primary/5">View Full Calendar</Button>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Testimonials */}
-      <section className="py-24 bg-white relative overflow-hidden">
-        {/* Decorative background blob */}
-        <div className="absolute top-0 right-0 -mr-40 -mt-40 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 -ml-40 -mb-40 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"></div>
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Stories from Newport News</h2>
-            <p className="text-muted-foreground text-lg">Hear from real residents who have used our programs to find their home.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { name: "Marcus T.", role: "Denbigh resident", quote: "I never thought homeownership was possible at 26, but the First-Time Buyer program made it happen.", initials: "MT", color: "bg-primary" },
-              { name: "Jasmine R.", role: "Southeast community", quote: "The rental assistance helped my family through a really hard time. The process was easy and the team was kind.", initials: "JR", color: "bg-accent" },
-              { name: "Devon S.", role: "Oyster Point", quote: "The affordability calculator helped me realize I was closer to buying than I thought. Game changer.", initials: "DS", color: "bg-secondary" }
-            ].map((t, i) => (
-              <motion.div
-                key={t.name}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.15 }}
-              >
-                <Card className="h-full border-border/50 shadow-sm bg-white hover:shadow-md transition-shadow">
-                  <CardContent className="p-8 flex flex-col h-full">
-                    <div className="flex gap-1 mb-6 text-secondary">
-                      {[...Array(5)].map((_, idx) => <Star key={idx} className="w-5 h-5 fill-current" />)}
-                    </div>
-                    <p className="text-foreground/90 italic text-lg leading-relaxed flex-1 mb-8">"{t.quote}"</p>
-                    <div className="flex items-center gap-4 mt-auto pt-6 border-t border-border">
-                      <div className={`w-12 h-12 rounded-full ${t.color} text-white flex items-center justify-center font-bold text-lg shadow-inner`}>
-                        {t.initials}
-                      </div>
-                      <div>
-                        <div className="font-bold text-primary">{t.name}</div>
-                        <div className="text-sm text-muted-foreground">{t.role}</div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
               </motion.div>
             ))}
           </div>

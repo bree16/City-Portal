@@ -1,0 +1,614 @@
+CONTINUE BUILDING THE PROJECT (DO NOT REDESIGN)
+
+The current website is exactly the direction I want. Do not redesign the homepage or existing UI. Keep the current branding, layout, colors, typography, and overall design language.
+
+Instead, expand the project into a complete, production-quality prototype based on our team's research for the Newport News Department of Housing & Neighborhood Services.
+
+The goal is to create a Housing Hub that is organized around what users are trying to accomplish, not government departments.
+
+IMPORTANT DESIGN RULE
+
+Do NOT overcrowd the homepage.
+
+The homepage should stay clean and act as the entry point into the Housing Hub.
+
+Detailed information should live inside its own pages.
+
+Every navigation item should feel like a complete experience.
+
+Add a New Page: "Housing Journey"
+
+This should become one of the most important pages.
+
+Headline:
+
+Where Are You on Your Housing Journey?
+
+Subtitle:
+
+Select where you are today and we'll guide you to the right resources.
+
+Display five large clickable cards:
+
+🏢 I'm Renting
+
+🏡 I Want to Buy My First Home
+
+🏠 I Already Own a Home
+
+🔨 I Need Repairs
+
+🚨 I Need Emergency Housing Help
+
+Each card should navigate to a dedicated page with resources specific to that stage.
+
+The purpose is to organize information by user goals instead of city departments.
+
+Expand the Buy Page
+
+Keep the current design.
+
+Add:
+
+Homebuyer Roadmap
+
+Step 1
+
+Check affordability
+
+↓
+
+Step 2
+
+Meet a Housing Counselor
+
+↓
+
+Step 3
+
+Take Homebuyer Education
+
+↓
+
+Step 4
+
+Find Down Payment Assistance
+
+↓
+
+Step 5
+
+Purchase Your Home
+
+Create sections for
+
+• First-Time Buyer Programs
+
+• Down Payment Assistance
+
+• Housing Counseling
+
+• Mortgage Resources
+
+• Credit Preparation
+
+• Financial Education
+
+Include FAQs.
+
+Expand the Rent Page
+
+Include
+
+Affordable Rentals
+
+Rental Assistance
+
+Housing Choice Voucher Information
+
+Tenant Rights
+
+Rental Counseling
+
+Affordable Housing Communities
+
+Emergency Rental Help
+
+Rental Search Tips
+
+Expand Neighborhoods
+
+Keep existing cards.
+
+Expand each neighborhood.
+
+Include
+
+Photo
+
+Average Home Price
+
+Average Rent
+
+Walkability
+
+Schools
+
+Restaurants
+
+Parks
+
+Shopping
+
+Commute Time
+
+Lifestyle Description
+
+Nearby Major Employers
+
+Future placeholder for interactive map.
+
+NEW PAGE
+Why Newport News?
+
+Instead of only talking about housing, help users understand why they should live here.
+
+Include sections for
+
+Local Attractions
+
+Restaurants
+
+Entertainment
+
+Parks
+
+Museums
+
+Noland Trail
+
+Waterfront
+
+Shopping
+
+Arts
+
+Community Events
+
+Major Employers
+
+Include cards for
+
+Newport News Shipbuilding
+
+Government Careers
+
+Healthcare
+
+Manufacturing
+
+Education
+
+Technology
+
+Each should have a Learn More button.
+
+Why People Love Living Here
+
+Display testimonials from residents.
+
+NEW FEATURE
+Commute Explorer
+
+Allow users to compare
+
+Neighborhood
+
+↓
+
+Average commute
+
+↓
+
+Nearby employers
+
+↓
+
+Nearby shopping
+
+↓
+
+Nearby schools
+
+This can be a prototype with placeholder data.
+
+Improve the Affordability Calculator
+
+Keep the existing calculator.
+
+Expand it.
+
+Allow users to adjust
+
+Monthly Income
+
+Home Price
+
+Interest Rate
+
+Down Payment
+
+Taxes
+
+Insurance
+
+HOA Fees
+
+Display
+
+Estimated Monthly Payment
+
+Debt-to-Income Ratio
+
+Buying Recommendation
+
+Estimated Monthly Rent
+
+Buying vs Renting Comparison
+
+Suggested Assistance Programs
+
+NEW FEATURE
+Program Eligibility Quiz
+
+This should feel interactive.
+
+Ask questions like
+
+Are you a first-time homebuyer?
+
+Household income?
+
+Household size?
+
+Veteran?
+
+Current renter?
+
+Current Newport News resident?
+
+Age group?
+
+After answering,
+
+display
+
+"You may qualify for..."
+
+Example cards
+
+First-Time Homebuyer Program
+
+Housing Counseling
+
+Down Payment Assistance
+
+Virginia Housing
+
+NNRHA Resources
+
+This is only a prototype.
+
+NEW FEATURE
+Smart Search
+
+Place a search bar near the top of the homepage.
+
+Placeholder text
+
+"What are you looking for?"
+
+Suggested searches
+
+Rental Assistance
+
+First-Time Buyer
+
+Housing Counselor
+
+Neighborhoods
+
+Emergency Housing
+
+Grants
+
+Home Repairs
+
+The search does not need backend functionality.
+
+NEW FEATURE
+AI Housing Assistant
+
+Create a floating chat icon.
+
+The chatbot is only a demonstration.
+
+Suggested prompts
+
+Can I qualify for assistance?
+
+How do I buy my first home?
+
+What neighborhood fits my budget?
+
+How do I contact a counselor?
+
+What grants are available?
+
+NEW PAGE
+Official Newport News Housing Resources
+
+Create an organized Resources page.
+
+DO NOT display dozens of hyperlinks.
+
+Instead create expandable cards or accordions.
+
+Sections
+
+🏛 Strategic Housing Initiatives Plan (SHIP)
+
+Explain in simple language.
+
+Mention
+
+Housing affordability
+
+Redevelopment
+
+Neighborhood stability
+
+Homeownership
+
+Housing preservation
+
+Partnerships
+
+Buttons
+
+Learn More
+
+Read SHIP
+
+🏠 Homeownership
+
+Virginia Housing
+
+NNRHA
+
+Homebuyer Education
+
+Housing Counseling
+
+Mortgage Resources
+
+🏢 Renting
+
+Affordable Rentals
+
+Tenant Rights
+
+Housing Choice Voucher
+
+Rental Assistance
+
+Affordable Housing Communities
+
+🚨 Emergency Housing
+
+Housing Crisis Hotline
+
+Homeless Prevention
+
+Veteran Housing
+
+Emergency Assistance
+
+Community Action
+
+⚖ Fair Housing
+
+HOME of Virginia
+
+Virginia Fair Housing Office
+
+HUD
+
+Legal Resources
+
+👨‍👩‍👧 Family Resources
+
+Human Services
+
+United Way 211
+
+Resources757
+
+Community Action Programs
+
+🏛 City Services
+
+Jobs
+
+Property Information
+
+Taxes
+
+Permits
+
+Solid Waste
+
+Bill Pay
+
+Each card should include
+
+Icon
+
+Short explanation
+
+Learn More button
+
+NEW PAGE
+Community Partners
+
+Display partner organizations.
+
+Virginia Housing
+
+NNRHA
+
+HUD
+
+HOME of Virginia
+
+Virginia Peninsula REALTORS®
+
+Community Organizations
+
+Banks
+
+Local Businesses
+
+Housing Counselors
+
+Explain how each partner supports residents.
+
+NEW PAGE
+Events
+
+Expand the existing Events section.
+
+Display
+
+Upcoming Workshops
+
+Homebuyer Classes
+
+Financial Literacy
+
+Housing Fair
+
+Neighborhood Cleanup
+
+Volunteer Opportunities
+
+Use a calendar layout.
+
+Allow category filtering.
+
+NEW PAGE
+Success Stories
+
+Expand testimonials.
+
+Each story should include
+
+Photo placeholder
+
+Name
+
+Neighborhood
+
+Program Used
+
+Short personal story
+
+Accessibility
+
+Add an Accessibility menu.
+
+Include
+
+Increase Text Size
+
+High Contrast Mode
+
+Language Translation Placeholder
+
+Keyboard Navigation Support
+
+Screen Reader Friendly Labels
+
+Accessibility Statement
+
+Statistics
+
+Keep the current statistics section.
+
+Add smooth counting animations.
+
+Include
+
+Families Assisted
+
+Housing Aid Distributed
+
+Affordable Housing Units
+
+Community Partners
+
+Resident Satisfaction
+
+Footer
+
+Expand the footer.
+
+Include
+
+Quick Links
+
+Housing Resources
+
+Community Partners
+
+City Services
+
+Contact Information
+
+Office Hours
+
+Social Media
+
+Accessibility
+
+Privacy Policy
+
+Emergency Numbers
+
+User Experience
+
+Every page should answer a real user question.
+
+Examples
+
+Can I buy a home?
+
+Can I afford a home?
+
+Where should I live?
+
+What help is available?
+
+Who should I contact?
+
+How do I get started?
+
+Final Goal
+
+This project should feel less like a government website and more like a modern digital service similar to Zillow, Rocket Mortgage, or Airbnb.
+
+The focus is not adding more information.
+
+The focus is making existing housing information easier to find, easier to understand, and easier to use, especially for first-time homebuyers, renters, and younger adults.
+
+Keep all existing styling and branding while expanding the site into a polished, interactive prototype suitable for presenting to the Newport News Department of Housing & Neighborhood Services.

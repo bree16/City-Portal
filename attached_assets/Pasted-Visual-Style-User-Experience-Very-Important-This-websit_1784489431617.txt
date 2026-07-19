@@ -1,0 +1,150 @@
+Visual Style & User Experience (Very Important)
+
+This website should not feel like a traditional government website.
+
+Instead, design it as a modern digital experience that younger adults (ages 18–35) would actually enjoy using.
+
+Take inspiration from the visual quality and user experience of companies like:
+
+Zillow
+Airbnb
+Rocket Mortgage
+Apple
+Notion
+Spotify
+Chase Bank
+Modern fintech apps
+
+The website should immediately feel welcoming, exciting, and easy to explore—not corporate, outdated, or text-heavy.
+
+Design Requirements
+Avoid plain white pages with long paragraphs.
+Break information into visually appealing cards, sections, and interactive elements.
+Use bold headlines and short descriptions.
+Create an experience that encourages users to explore instead of simply reading.
+Modern UI Elements
+
+Include:
+
+Large hero images
+Beautiful illustrations
+Animated icons
+Hover effects on every card
+Smooth page transitions
+Scroll animations
+Animated statistics
+Rounded cards
+Glassmorphism where appropriate
+Soft shadows
+Modern gradients
+Clean spacing
+Micro-interactions on buttons
+Smooth loading animations
+
+The site should feel polished and premium.
+
+Color Palette
+
+Avoid dull government colors.
+
+Instead use an energetic but professional palette.
+
+Primary Colors
+
+Navy Blue
+Deep Teal
+White
+
+Accent Colors
+
+Gold
+Sky Blue
+Emerald Green
+
+Use gradients sparingly throughout the site.
+
+Buttons should have subtle hover animations.
+
+Cards should slightly elevate when hovered.
+
+Typography
+
+Use modern fonts such as:
+
+Poppins
+Inter
+
+Use large headings and generous spacing.
+
+Avoid walls of text.
+
+Every section should be easy to scan in under 10 seconds.
+
+Homepage Experience
+
+When someone lands on the homepage they should immediately think:
+
+"This doesn't feel like a government website."
+
+Instead it should feel like a modern digital service.
+
+Use full-width hero sections.
+
+High-quality images.
+
+Large buttons.
+
+Interactive cards.
+
+Small animations.
+
+Scrolling should feel smooth and engaging.
+
+Make the Website Feel Alive
+
+Add subtle animations throughout the website.
+
+Examples:
+
+Cards lift slightly on hover.
+Icons animate when hovered.
+Buttons have ripple or glow effects.
+Statistics count upward when scrolling into view.
+Sections fade or slide into view while scrolling.
+Background shapes move subtly for depth.
+Floating illustrations or decorative graphics create energy without becoming distracting.
+
+Animations should be smooth, professional, and enhance usability.
+
+Appeal to Younger Adults
+
+Remember that the primary audience includes Gen Z and Millennials.
+
+Design decisions should prioritize:
+
+Mobile-first experience
+Fast access to information
+Large, touch-friendly buttons
+Visual storytelling
+Interactive tools
+Personalized recommendations
+Clean layouts with minimal clicks
+
+Avoid making the website feel like users are navigating government departments.
+
+Instead, make it feel like they are using a modern app that helps them accomplish their goals.
+
+Keep It Professional
+
+Although the website should feel exciting and modern, it must still maintain credibility and trust because it represents a city government.
+
+The final product should strike a balance between:
+
+Professional
+Friendly
+Modern
+Accessible
+Innovative
+Community-focused
+
+The goal is for users to feel confident, welcomed, and excited about exploring housing opportunities in Newport News.
