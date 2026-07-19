@@ -11,9 +11,11 @@ import { ResultsCard } from '@/components/ResultsCard';
 import { AudioManager } from '@/components/AudioManager';
 import { SmartPhone } from '@/components/SmartPhone';
 import { LifeEventModal } from '@/components/LifeEventModal';
+import { CityExitButton } from '@/components/CityExitButton';
 import { IsometricCamera } from '@/components/IsometricCamera';
 import { GroundPlane } from '@/components/GroundPlane';
 import { PlayerCharacter } from '@/components/characters/PlayerCharacter';
+import CityMapScene from '@/scenes/CityMapScene';
 
 import ApartmentScene from '@/scenes/ApartmentScene';
 import CounselorOfficeScene from '@/scenes/CounselorOfficeScene';
@@ -23,35 +25,40 @@ import BankScene from '@/scenes/BankScene';
 import ClosingScene from '@/scenes/ClosingScene';
 import NewHomeScene from '@/scenes/NewHomeScene';
 
-const SCENES: Record<number, React.ComponentType> = {
-  1: ApartmentScene,
-  2: CounselorOfficeScene,
-  3: NeighborhoodScene,
-  4: NegotiationScene,
-  5: BankScene,
-  6: ClosingScene,
-  7: NewHomeScene,
+// ── Location → interior scene ────────────────────────────────────
+const LOCATION_SCENES: Record<string, React.ComponentType> = {
+  apartment:   ApartmentScene,
+  counselor:   CounselorOfficeScene,
+  realestate:  NeighborhoodScene,
+  negotiation: NegotiationScene,
+  bank:        BankScene,
+  closing:     ClosingScene,
+  newhome:     NewHomeScene,
 };
 
-// Per-scene lighting + environment config
-const SCENE_CONFIG: Record<number, {
-  ambient: number;
-  ambientColor: string;
-  keyColor: string;
-  keyIntensity: number;
-  keyPos: [number, number, number];
-  fillColor: string;
-  fillIntensity: number;
-  rimColor: string;
-  rimIntensity: number;
-  fogColor: string;
-  fogNear: number;
-  fogFar: number;
+// ── Lighting configs ─────────────────────────────────────────────
+type LightCfg = {
+  ambient: number; ambientColor: string;
+  keyColor: string; keyIntensity: number; keyPos: [number, number, number];
+  fillColor: string; fillIntensity: number;
+  rimColor: string; rimIntensity: number;
+  fogColor: string; fogNear: number; fogFar: number;
   envPreset: 'apartment' | 'city' | 'park' | 'lobby' | 'warehouse' | 'forest';
-  accentColor: string;
-  accentPos: [number, number, number];
-}> = {
-  1: { // Apartment — warm golden hour
+  accentColor: string; accentPos: [number, number, number];
+};
+
+const CITY_CFG: LightCfg = {
+  ambient: 0.75, ambientColor: '#E8F4FF',
+  keyColor: '#FFF8E1', keyIntensity: 2.0, keyPos: [30, 28, 20],
+  fillColor: '#C8E8FF', fillIntensity: 0.8,
+  rimColor: '#FFD700', rimIntensity: 0.35,
+  fogColor: '#D4E8F8', fogNear: 45, fogFar: 100,
+  envPreset: 'park',
+  accentColor: '#FFE680', accentPos: [0, 14, -10],
+};
+
+const INTERIOR_CFG: Record<string, LightCfg> = {
+  apartment: {
     ambient: 0.45, ambientColor: '#FFF5E0',
     keyColor: '#FFD580', keyIntensity: 1.4, keyPos: [8, 14, 6],
     fillColor: '#FFE4B5', fillIntensity: 0.5,
@@ -60,7 +67,7 @@ const SCENE_CONFIG: Record<number, {
     envPreset: 'apartment',
     accentColor: '#FFB347', accentPos: [-6, 5, -4],
   },
-  2: { // Counselor office — professional daylight
+  counselor: {
     ambient: 0.5, ambientColor: '#F0F4FF',
     keyColor: '#FFFFFF', keyIntensity: 1.3, keyPos: [10, 16, 8],
     fillColor: '#D0E8FF', fillIntensity: 0.45,
@@ -69,7 +76,7 @@ const SCENE_CONFIG: Record<number, {
     envPreset: 'lobby',
     accentColor: '#B0D0FF', accentPos: [0, 6, -4],
   },
-  3: { // Neighborhood — bright outdoor sun
+  realestate: {
     ambient: 0.7, ambientColor: '#E8F4FF',
     keyColor: '#FFF8E1', keyIntensity: 2.2, keyPos: [20, 22, 15],
     fillColor: '#C8E8FF', fillIntensity: 0.8,
@@ -78,7 +85,7 @@ const SCENE_CONFIG: Record<number, {
     envPreset: 'park',
     accentColor: '#FFE680', accentPos: [0, 12, -10],
   },
-  4: { // Negotiation — dramatic boardroom
+  negotiation: {
     ambient: 0.35, ambientColor: '#FFF0E0',
     keyColor: '#FFD080', keyIntensity: 1.5, keyPos: [6, 14, 4],
     fillColor: '#FFF5D0', fillIntensity: 0.35,
@@ -87,7 +94,7 @@ const SCENE_CONFIG: Record<number, {
     envPreset: 'lobby',
     accentColor: '#FFB347', accentPos: [-6, 8, -5],
   },
-  5: { // Bank — cool fluorescent
+  bank: {
     ambient: 0.6, ambientColor: '#EEF4FF',
     keyColor: '#E8F0FF', keyIntensity: 1.8, keyPos: [0, 18, 0],
     fillColor: '#D0E8FF', fillIntensity: 0.6,
@@ -96,7 +103,7 @@ const SCENE_CONFIG: Record<number, {
     envPreset: 'city',
     accentColor: '#8AB0FF', accentPos: [5, 6, 0],
   },
-  6: { // Closing — warm celebratory
+  closing: {
     ambient: 0.5, ambientColor: '#FFF8E8',
     keyColor: '#FFD96A', keyIntensity: 1.6, keyPos: [8, 15, 6],
     fillColor: '#FFE8A0', fillIntensity: 0.5,
@@ -105,7 +112,7 @@ const SCENE_CONFIG: Record<number, {
     envPreset: 'apartment',
     accentColor: '#FFD700', accentPos: [0, 8, -4],
   },
-  7: { // New home — bright airy
+  newhome: {
     ambient: 0.55, ambientColor: '#FFF9F0',
     keyColor: '#FFEDAA', keyIntensity: 1.5, keyPos: [8, 16, 8],
     fillColor: '#FFE8D0', fillIntensity: 0.45,
@@ -116,12 +123,12 @@ const SCENE_CONFIG: Record<number, {
   },
 };
 
-function SceneLighting({ stage }: { stage: number }) {
-  const cfg = SCENE_CONFIG[stage] ?? SCENE_CONFIG[1];
+// ── Sub-components ───────────────────────────────────────────────
+
+function SceneLighting({ cfg }: { cfg: LightCfg }) {
   return (
     <>
       <ambientLight intensity={cfg.ambient} color={cfg.ambientColor} />
-      {/* Key light */}
       <directionalLight
         position={cfg.keyPos}
         intensity={cfg.keyIntensity}
@@ -135,41 +142,41 @@ function SceneLighting({ stage }: { stage: number }) {
         shadow-camera-top={28}
         shadow-camera-bottom={-28}
       />
-      {/* Fill light */}
       <pointLight position={[-12, 10, -8]} intensity={cfg.fillIntensity} color={cfg.fillColor} />
-      {/* Rim light */}
       <pointLight position={[0, 2, 12]} intensity={cfg.rimIntensity} color={cfg.rimColor} />
-      {/* Accent */}
       <pointLight position={cfg.accentPos} intensity={0.4} color={cfg.accentColor} />
     </>
   );
 }
 
-function FogLayer({ stage }: { stage: number }) {
-  const cfg = SCENE_CONFIG[stage] ?? SCENE_CONFIG[1];
-  return <fog attach="fog" args={[cfg.fogColor, cfg.fogNear, cfg.fogFar]} />;
-}
+function SceneContents() {
+  const currentLocation = useGameStore((s) => s.currentLocation);
+  const isCity = currentLocation === 'city';
+  const cfg = isCity ? CITY_CFG : (INTERIOR_CFG[currentLocation] ?? INTERIOR_CFG['apartment']);
+  const InteriorScene = LOCATION_SCENES[currentLocation];
 
-function SceneContents({ stage }: { stage: number }) {
-  const Scene = SCENES[stage] ?? ApartmentScene;
-  const cfg = SCENE_CONFIG[stage] ?? SCENE_CONFIG[1];
   return (
     <>
-      <FogLayer stage={stage} />
-      <SceneLighting stage={stage} />
+      <fog attach="fog" args={[cfg.fogColor, cfg.fogNear, cfg.fogFar]} />
+      <SceneLighting cfg={cfg} />
       <Environment preset={cfg.envPreset} backgroundIntensity={0} />
-      <GroundPlane />
+      <GroundPlane size={isCity ? 80 : 60} />
       <PlayerCharacter />
-      <Scene />
+      {isCity
+        ? <CityMapScene />
+        : InteriorScene
+          ? <InteriorScene />
+          : null /* unknown location — render nothing rather than wrong scene */
+      }
       <IsometricCamera />
       <EffectComposer>
         <Bloom
           luminanceThreshold={0.35}
           luminanceSmoothing={0.9}
-          intensity={0.7}
+          intensity={isCity ? 0.4 : 0.7}
           mipmapBlur
         />
-        <Vignette offset={0.38} darkness={0.55} />
+        <Vignette offset={0.38} darkness={isCity ? 0.3 : 0.55} />
       </EffectComposer>
     </>
   );
@@ -183,7 +190,7 @@ function formatTitle(id: string): string {
 }
 
 export default function GamePage() {
-  const { stage, achievements, showResultsCard, setShowResultsCard } = useGameStore();
+  const { achievements, showResultsCard, setShowResultsCard } = useGameStore();
   const prevAchievements = useRef<string[]>([]);
   const [toastQueue, setToastQueue] = useState<string[]>([]);
   const [activeToast, setActiveToast] = useState<string | null>(null);
@@ -222,12 +229,13 @@ export default function GamePage() {
             style={{ width: '100%', height: '100%' }}
             gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
           >
-            <SceneContents stage={stage} />
+            <SceneContents />
           </Canvas>
         </div>
         <SpeechBubble />
         <SmartPhone />
         <LifeEventModal />
+        <CityExitButton />
         <SceneTransition />
         <AchievementToast
           isVisible={!!activeToast}

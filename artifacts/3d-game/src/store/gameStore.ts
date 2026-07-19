@@ -49,8 +49,10 @@ export interface GameState {
   careerId: string | null;
   pendingLifeEvent: LifeEvent | null;
   lifeEventLog: string[];
+  currentLocation: string; // 'city' | buildingId
 
   setPhoneOpen: (v: boolean) => void;
+  setCurrentLocation: (id: string) => void;
   togglePhone: () => void;
   setCareer: (id: string, monthlyIncome: number, bonus: { type: 'cash' | 'savings' | 'creditScore'; amount: number }) => void;
   setPendingLifeEvent: (event: LifeEvent | null) => void;
@@ -127,6 +129,7 @@ const INITIAL_STATE = {
   careerId: null,
   pendingLifeEvent: null,
   lifeEventLog: [] as string[],
+  currentLocation: 'apartment', // new games start inside the apartment
 };
 
 // Fields that should not be persisted (runtime-only state)
@@ -146,6 +149,7 @@ export const useGameStore = create<GameState>()(
 
       setPhoneOpen: (v) => set({ phoneOpen: v }),
       togglePhone: () => set((s) => ({ phoneOpen: !s.phoneOpen })),
+      setCurrentLocation: (id) => set({ currentLocation: id }),
       setCareer: (id, income, bonus) =>
         set((s) => {
           const base: Partial<GameState> = { careerId: id, monthlyIncome: income };
@@ -172,7 +176,14 @@ export const useGameStore = create<GameState>()(
           return next;
         }),
       startGame: (appearance) => set({ gameStarted: true, characterAppearance: appearance }),
-      setStage: (stage) => set({ stage, completedInteractions: [], transitioning: false }),
+      // Advancing stage returns the player to the city — except stage 7 (New Home) which is
+      // a special location outside the city map and loads directly into the NewHomeScene.
+      setStage: (stage) => set({
+        stage,
+        completedInteractions: [],
+        transitioning: false,
+        currentLocation: stage === 7 ? 'newhome' : 'city',
+      }),
       setTransitioning: (v) => set({ transitioning: v }),
       setPlayerTarget: (pos) => set({ targetPosition: pos }),
       setPlayerPosition: (pos) => set({ playerPosition: pos }),
@@ -216,7 +227,7 @@ export const useGameStore = create<GameState>()(
     }),
     {
       name: 'path-to-home-game-state',
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => {
         const persisted = { ...state } as Record<string, unknown>;
@@ -240,6 +251,12 @@ export const useGameStore = create<GameState>()(
             s.careerId = stage > 1 ? 'government' : null;
           }
           if (!Array.isArray(s.lifeEventLog)) s.lifeEventLog = [];
+        }
+        if (fromVersion < 3) {
+          // v2 → v3: add currentLocation. Existing saves go to city so player can explore.
+          if (!s.currentLocation) {
+            s.currentLocation = 'city';
+          }
         }
         return s;
       },
