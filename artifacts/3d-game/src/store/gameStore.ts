@@ -59,6 +59,12 @@ export interface GameState {
   improvementsOwned: string[];
   pendingMaintenance: MaintenanceEvent | null; // transient
 
+  // Audio preferences — persisted with the save so they survive clearing localStorage-only keys
+  audioVolume: number; // 0–1
+  audioMuted: boolean;
+  setAudioVolume: (level: number) => void;
+  setAudioMuted: (muted: boolean) => void;
+
   setPhoneOpen: (v: boolean) => void;
   setCurrentLocation: (id: string) => void;
   markRoomVisited: (homeId: string, room: string) => void;
@@ -152,6 +158,8 @@ const INITIAL_STATE = {
   improvementsOwned: [] as string[],
 };
 
+export const DEFAULT_VOLUME = 0.6;
+
 // Fields that should not be persisted (runtime-only state)
 const TRANSIENT_FIELDS: (keyof GameState)[] = [
   'transitioning',
@@ -168,6 +176,11 @@ export const useGameStore = create<GameState>()(
     (set) => ({
       ...INITIAL_STATE,
       pendingMaintenance: null,
+      audioVolume: DEFAULT_VOLUME,
+      audioMuted: false,
+
+      setAudioVolume: (level) => set({ audioVolume: Math.max(0, Math.min(1, level)) }),
+      setAudioMuted: (muted) => set({ audioMuted: muted }),
 
       setPhoneOpen: (v) => set({ phoneOpen: v }),
       togglePhone: () => set((s) => ({ phoneOpen: !s.phoneOpen })),
@@ -294,11 +307,12 @@ export const useGameStore = create<GameState>()(
           cash: Math.max(0, s.cash - price),
         })),
       setShowResultsCard: (v) => set({ showResultsCard: v }),
+      // Reset gameplay state, but preserve audio preferences
       resetGame: () => set({ ...INITIAL_STATE }),
     }),
     {
       name: 'path-to-home-game-state',
-      version: 5,
+      version: 6,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => {
         const persisted = { ...state } as Record<string, unknown>;
@@ -338,6 +352,22 @@ export const useGameStore = create<GameState>()(
           if (typeof s.homeValue !== 'number') s.homeValue = 0;
           if (typeof s.mortgageBalance !== 'number') s.mortgageBalance = 0;
           if (!Array.isArray(s.improvementsOwned)) s.improvementsOwned = [];
+        }
+        if (fromVersion < 6) {
+          // v5 → v6: audio prefs move into the save. Seed from the legacy
+          // localStorage key so existing players keep their volume.
+          if (typeof s.audioVolume !== 'number') {
+            let vol = DEFAULT_VOLUME;
+            try {
+              const legacy = localStorage.getItem('gameAudioVolume');
+              if (legacy !== null) {
+                const parsed = parseFloat(legacy);
+                if (!isNaN(parsed)) vol = Math.max(0, Math.min(1, parsed));
+              }
+            } catch (_) { /* localStorage unavailable */ }
+            s.audioVolume = vol;
+          }
+          if (typeof s.audioMuted !== 'boolean') s.audioMuted = false;
         }
         return s;
       },

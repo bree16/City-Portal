@@ -3,12 +3,11 @@
  * All sounds are synthesized; no external audio files required.
  */
 
+import { useGameStore, DEFAULT_VOLUME } from '@/store/gameStore';
+
 export type SoundEffect = 'click' | 'dialogue' | 'coin' | 'achievement' | 'fanfare';
 
 // ─── Singleton audio engine ────────────────────────────────────────────────
-
-const VOLUME_KEY = 'gameAudioVolume';
-const DEFAULT_VOLUME = 0.6;
 
 class GameAudioEngine {
   private ctx: AudioContext | null = null;
@@ -19,10 +18,13 @@ class GameAudioEngine {
   private _volume: number;
 
   constructor() {
-    // Restore persisted volume (0–1)
-    const stored = localStorage.getItem(VOLUME_KEY);
-    this._volume = stored !== null ? Math.max(0, Math.min(1, parseFloat(stored))) : DEFAULT_VOLUME;
+    // Restore persisted audio prefs from the game save (gameStore persists
+    // them alongside stage, cash, etc.). The persist middleware rehydrates
+    // synchronously from localStorage, so this is safe at construction time.
+    const { audioVolume, audioMuted } = useGameStore.getState();
+    this._volume = typeof audioVolume === 'number' ? Math.max(0, Math.min(1, audioVolume)) : DEFAULT_VOLUME;
     if (isNaN(this._volume)) this._volume = DEFAULT_VOLUME;
+    this._muted = audioMuted === true;
   }
 
   // Lazy-init — must be triggered by a user gesture first
@@ -49,6 +51,7 @@ class GameAudioEngine {
 
   setMuted(val: boolean) {
     this._muted = val;
+    useGameStore.getState().setAudioMuted(val);
     if (this.masterGain) {
       // Smooth ramp to avoid clicks
       const ctx = this.ctx!;
@@ -62,7 +65,7 @@ class GameAudioEngine {
 
   setVolume(level: number) {
     this._volume = Math.max(0, Math.min(1, level));
-    localStorage.setItem(VOLUME_KEY, String(this._volume));
+    useGameStore.getState().setAudioVolume(this._volume);
     if (this.masterGain && !this._muted) {
       const ctx = this.ctx!;
       this.masterGain.gain.cancelScheduledValues(ctx.currentTime);
@@ -71,6 +74,7 @@ class GameAudioEngine {
     // If volume is raised while muted, auto-unmute
     if (this._volume > 0 && this._muted) {
       this._muted = false;
+      useGameStore.getState().setAudioMuted(false);
       if (this.masterGain) {
         const ctx = this.ctx!;
         this.masterGain.gain.cancelScheduledValues(ctx.currentTime);
