@@ -57,7 +57,7 @@ const FURNITURE_SLOTS = [
 ];
 
 export default function NewHomeScene() {
-  const { cash, furnitureOwned, buyFurniture, addAchievement, setShowResultsCard } = useGameStore();
+  const { cash, furnitureOwned, buyFurniture, addAchievement, setShowResultsCard, setStage, setTransitioning } = useGameStore();
   const [activeSlot, setActiveSlot] = useState<string | null>(null);
   const [purchaseCount, setPurchaseCount] = useState(0);
   const [tip, setTip] = useState<string | null>(null);
@@ -253,7 +253,36 @@ export default function NewHomeScene() {
         </div>
       </Html>
 
-      {/* View Your Journey button — always visible in new home stage */}
+      {/* Begin Home Life button — primary CTA after furniture */}
+      <Html position={[0, 5.2, 7]} center distanceFactor={14}>
+        <motion.button
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.5, type: 'spring', stiffness: 260, damping: 20 }}
+          onClick={() => {
+            setTransitioning(true);
+            setTimeout(() => { setStage(8); setTransitioning(false); }, 1400);
+          }}
+          style={{
+            padding: '14px 32px',
+            borderRadius: 50,
+            background: 'linear-gradient(135deg, #D4A843 0%, #F5C842 100%)',
+            color: '#0D2B5E',
+            fontWeight: 800,
+            fontSize: 15,
+            border: 'none',
+            cursor: 'pointer',
+            fontFamily: 'Inter, sans-serif',
+            boxShadow: '0 8px 32px rgba(212,168,67,0.55)',
+            whiteSpace: 'nowrap',
+            letterSpacing: '0.02em',
+          }}
+        >
+          🏡 Begin Home Life →
+        </motion.button>
+      </Html>
+
+      {/* View Your Journey button */}
       <Html position={[0, 3.8, 7]} center distanceFactor={14}>
         <motion.button
           initial={{ opacity: 0, scale: 0.8 }}

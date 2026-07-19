@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { LifeEvent } from '@/data/lifeEvents';
+import type { MaintenanceEvent } from '@/data/maintenanceEvents';
 
 export type HairstyleId = 'short' | 'medium' | 'locs' | 'curly' | 'ponytail' | 'fade';
 export type AccessoryId = 'glasses' | 'earrings' | 'hat';
@@ -49,14 +50,25 @@ export interface GameState {
   careerId: string | null;
   pendingLifeEvent: LifeEvent | null;
   lifeEventLog: string[];
-  currentLocation: string; // 'city' | buildingId | 'home_tour'
+  currentLocation: string; // 'city' | buildingId | 'home_tour' | 'homelife'
   tourProgress: Record<string, string[]>; // homeId → visited room names
+
+  // Home Life (Stage 8) state
+  homeValue: number;
+  mortgageBalance: number;
+  improvementsOwned: string[];
+  pendingMaintenance: MaintenanceEvent | null; // transient
 
   setPhoneOpen: (v: boolean) => void;
   setCurrentLocation: (id: string) => void;
   markRoomVisited: (homeId: string, room: string) => void;
   startHomeTour: (homeId: number) => void;
   startNegotiation: () => void;
+  initHomeLife: (homePrice: number) => void;
+  setPendingMaintenance: (event: MaintenanceEvent | null) => void;
+  applyMaintenance: (fix: boolean) => void;
+  buyImprovement: (id: string, cost: number, valuePct: number) => void;
+  advanceHomeMonth: () => void;
   togglePhone: () => void;
   setCareer: (id: string, monthlyIncome: number, bonus: { type: 'cash' | 'savings' | 'creditScore'; amount: number }) => void;
   setPendingLifeEvent: (event: LifeEvent | null) => void;
@@ -135,6 +147,9 @@ const INITIAL_STATE = {
   lifeEventLog: [] as string[],
   currentLocation: 'apartment', // new games start inside the apartment
   tourProgress: {} as Record<string, string[]>,
+  homeValue: 0,
+  mortgageBalance: 0,
+  improvementsOwned: [] as string[],
 };
 
 // Fields that should not be persisted (runtime-only state)
@@ -145,12 +160,14 @@ const TRANSIENT_FIELDS: (keyof GameState)[] = [
   'targetPosition',
   'phoneOpen',
   'pendingLifeEvent',
+  'pendingMaintenance',
 ];
 
 export const useGameStore = create<GameState>()(
   persist(
     (set) => ({
       ...INITIAL_STATE,
+      pendingMaintenance: null,
 
       setPhoneOpen: (v) => set({ phoneOpen: v }),
       togglePhone: () => set((s) => ({ phoneOpen: !s.phoneOpen })),
@@ -164,6 +181,46 @@ export const useGameStore = create<GameState>()(
       startHomeTour: (homeId) => set({ currentLocation: 'home_tour', selectedHomeId: homeId }),
       // Moves directly to negotiation without triggering the city routing in setStage
       startNegotiation: () => set({ currentLocation: 'negotiation', stage: 4, completedInteractions: [] }),
+      // Home Life (Stage 8) actions
+      initHomeLife: (homePrice) =>
+        set((s) => {
+          if (s.homeValue > 0) return {}; // already initialized — don't overwrite
+          return {
+            homeValue: homePrice,
+            mortgageBalance: Math.round(homePrice * 0.90),
+          };
+        }),
+      setPendingMaintenance: (event) => set({ pendingMaintenance: event }),
+      applyMaintenance: (fix) =>
+        set((s) => {
+          if (!s.pendingMaintenance) return {};
+          if (fix) {
+            return { cash: Math.max(0, s.cash - s.pendingMaintenance.cost), pendingMaintenance: null };
+          }
+          // Defer: home value decreases by valueImpact fraction
+          return {
+            homeValue: Math.round(s.homeValue * (1 - s.pendingMaintenance.valueImpact)),
+            pendingMaintenance: null,
+          };
+        }),
+      buyImprovement: (id, cost, valuePct) =>
+        set((s) => ({
+          improvementsOwned: s.improvementsOwned.includes(id)
+            ? s.improvementsOwned
+            : [...s.improvementsOwned, id],
+          cash: Math.max(0, s.cash - cost),
+          homeValue: Math.round(s.homeValue * (1 + valuePct)),
+        })),
+      advanceHomeMonth: () =>
+        set((s) => {
+          const net = s.monthlyIncome - s.monthlyExpenses;
+          const principalPaid = 200; // simplified principal reduction per month
+          return {
+            month: s.month + 1,
+            cash: Math.max(0, s.cash + net),
+            mortgageBalance: Math.max(0, s.mortgageBalance - principalPaid),
+          };
+        }),
       setCareer: (id, income, bonus) =>
         set((s) => {
           const base: Partial<GameState> = { careerId: id, monthlyIncome: income };
@@ -196,7 +253,7 @@ export const useGameStore = create<GameState>()(
         stage,
         completedInteractions: [],
         transitioning: false,
-        currentLocation: stage === 7 ? 'newhome' : 'city',
+        currentLocation: stage === 7 ? 'newhome' : stage === 8 ? 'homelife' : 'city',
       }),
       setTransitioning: (v) => set({ transitioning: v }),
       setPlayerTarget: (pos) => set({ targetPosition: pos }),
@@ -241,7 +298,7 @@ export const useGameStore = create<GameState>()(
     }),
     {
       name: 'path-to-home-game-state',
-      version: 4,
+      version: 5,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => {
         const persisted = { ...state } as Record<string, unknown>;
@@ -275,6 +332,12 @@ export const useGameStore = create<GameState>()(
         if (fromVersion < 4) {
           // v3 → v4: add tourProgress for home walkthroughs.
           if (!s.tourProgress) s.tourProgress = {};
+        }
+        if (fromVersion < 5) {
+          // v4 → v5: add Home Life fields.
+          if (typeof s.homeValue !== 'number') s.homeValue = 0;
+          if (typeof s.mortgageBalance !== 'number') s.mortgageBalance = 0;
+          if (!Array.isArray(s.improvementsOwned)) s.improvementsOwned = [];
         }
         return s;
       },

@@ -17,6 +17,7 @@ import { GroundPlane } from '@/components/GroundPlane';
 import { PlayerCharacter } from '@/components/characters/PlayerCharacter';
 import CityMapScene from '@/scenes/CityMapScene';
 import HomeInteriorScene from '@/scenes/HomeInteriorScene';
+import HomeLifeScene from '@/scenes/HomeLifeScene';
 
 import ApartmentScene from '@/scenes/ApartmentScene';
 import CounselorOfficeScene from '@/scenes/CounselorOfficeScene';
@@ -36,6 +37,7 @@ const LOCATION_SCENES: Record<string, React.ComponentType> = {
   bank:        BankScene,
   closing:     ClosingScene,
   newhome:     NewHomeScene,
+  homelife:    HomeLifeScene,
 };
 
 // ── Lighting configs ─────────────────────────────────────────────
@@ -131,6 +133,15 @@ const INTERIOR_CFG: Record<string, LightCfg> = {
     fogColor: '#FFF8F0', fogNear: 28, fogFar: 70,
     envPreset: 'apartment',
     accentColor: '#FFD96A', accentPos: [-4, 6, -4],
+  },
+  homelife: {
+    ambient: 0.6, ambientColor: '#FFF9F0',
+    keyColor: '#FFE8B0', keyIntensity: 1.7, keyPos: [10, 18, 10],
+    fillColor: '#FFE8D0', fillIntensity: 0.55,
+    rimColor: '#87CEEB', rimIntensity: 0.28,
+    fogColor: '#FFF8F0', fogNear: 30, fogFar: 72,
+    envPreset: 'apartment',
+    accentColor: '#FFD700', accentPos: [-4, 7, -4],
   },
 };
 

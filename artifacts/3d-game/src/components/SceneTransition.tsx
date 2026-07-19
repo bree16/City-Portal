@@ -10,6 +10,7 @@ const STAGE_NAMES = [
   'Mortgage Approval',
   'Closing Day',
   'Move In!',
+  'Home Life',
 ];
 
 const STAGE_SUBTITLES = [
@@ -21,9 +22,10 @@ const STAGE_SUBTITLES = [
   'Get approved for your mortgage',
   'Sign the papers and get your keys!',
   'Furnish and decorate your new home!',
+  'Build equity and grow your wealth',
 ];
 
-const STAGE_ICONS = ['', '🏠', '📋', '🏘️', '🤝', '🏦', '🎉', '🛋️'];
+const STAGE_ICONS = ['', '🏠', '📋', '🏘️', '🤝', '🏦', '🎉', '🛋️', '🏡'];
 
 export function SceneTransition() {
   const { transitioning, stage } = useGameStore();
@@ -65,7 +67,7 @@ export function SceneTransition() {
                 marginBottom: 12,
               }}
             >
-              Stage {stage} of 7
+              {stage === 8 ? 'Stage 8 — Post-Purchase' : `Stage ${stage} of 7`}
             </div>
             <div style={{ fontSize: 36, fontWeight: 800, color: '#fff', marginBottom: 12 }}>
               {STAGE_NAMES[stage]}

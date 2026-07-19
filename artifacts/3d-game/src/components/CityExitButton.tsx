@@ -4,8 +4,9 @@ import { findBuilding } from '@/data/buildings';
 export function CityExitButton() {
   const { currentLocation, setTransitioning, setCurrentLocation, setPlayerTarget } = useGameStore();
 
-  // Only show when inside a building or home tour (not in city itself)
-  if (currentLocation === 'city') return null;
+  // Only show when inside a building or home tour.
+  // Hide for city (no button needed) and homelife (Stage 8 is post-purchase, no city return).
+  if (currentLocation === 'city' || currentLocation === 'homelife') return null;
 
   // Home tour: go back to the Real Estate Office (listing cards), not the city map
   const isTour = currentLocation === 'home_tour';
