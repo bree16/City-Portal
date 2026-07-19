@@ -52,9 +52,9 @@ export default function AssistancePage() {
           <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/20">
             <HandHeart className="w-8 h-8 text-secondary" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">We're Here to Help</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Newport News Has Your Back</h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
-            Newport News offers a variety of programs to ensure all residents have access to safe, affordable, and stable housing.
+            No one faces a housing challenge alone here. From emergency help to long-term programs, our community has resources for every situation.
           </p>
         </div>
       </section>

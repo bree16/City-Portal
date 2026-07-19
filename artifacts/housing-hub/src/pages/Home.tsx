@@ -162,8 +162,8 @@ export default function HomePage() {
       <section id="programs" className="py-24 bg-muted">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">How can we help you today?</h2>
-            <p className="text-muted-foreground text-lg">Whether you're looking to buy your first home or need rental assistance, we have resources designed for you.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Your Newport News. Your Future.</h2>
+            <p className="text-muted-foreground text-lg">Whether you're planting roots, looking for your next home, or need a helping hand — Newport News has resources built around you.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -183,7 +183,7 @@ export default function HomePage() {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
                 <Link href={card.href} className="block group h-full">
-                  <Card className="h-full border-transparent shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 overflow-hidden group-hover:border-accent/20 bg-white">
+                  <Card className="h-full border-transparent border-l-4 border-l-accent shadow-sm hover:shadow-lg hover:-translate-y-1 hover:bg-accent/5 transition-all duration-300 overflow-hidden group-hover:border-accent/20 bg-white">
                     <CardContent className="p-8 flex flex-col h-full">
                       <div className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mb-6 text-accent group-hover:bg-accent group-hover:text-white transition-colors duration-300">
                         <card.icon className="w-7 h-7" />
@@ -205,7 +205,7 @@ export default function HomePage() {
       {/* Stats Bar */}
       <section className="bg-primary py-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.03)_50%,rgba(255,255,255,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px]"></div>
-        <div className="container relative z-10 mx-auto px-4">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="container relative z-10 mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10">
             {[
               { num: "2,400+", label: "Families Assisted" },
@@ -220,7 +220,7 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* 3. Affordability Calculator */}
@@ -472,8 +472,10 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 bg-primary text-white text-center">
-        <div className="container mx-auto px-4 max-w-3xl">
+      <section className="py-20 relative text-white text-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary/80 z-0"></div>
+        <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_30%_50%,_#0A8F7E_0%,_transparent_60%)] z-0"></div>
+        <div className="container relative z-10 mx-auto px-4 max-w-3xl">
           <h2 className="text-3xl md:text-5xl font-bold mb-6">Ready to find your next home?</h2>
           <p className="text-xl text-white/80 mb-10">Whether you want to buy, rent, or need assistance, we're here to help guide you.</p>
           <Button asChild size="lg" className="bg-secondary hover:bg-secondary/90 text-primary font-bold rounded-full px-10 h-16 text-lg shadow-xl shadow-secondary/20 transition-transform hover:scale-105">

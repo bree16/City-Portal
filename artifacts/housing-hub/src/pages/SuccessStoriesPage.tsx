@@ -103,7 +103,7 @@ export default function SuccessStoriesPage() {
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">Stories from Newport News</h1>
           <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-            Real people, real journeys — find inspiration in how neighbors found their path home.
+            Your neighbors found their path home in Newport News. Here are their stories.
           </p>
         </div>
       </section>

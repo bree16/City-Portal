@@ -57,14 +57,15 @@ export default function JourneyPage() {
                 initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}}
                 transition={{delay: i * 0.1, duration: 0.5}} viewport={{once:true}}>
                 <Link href={card.href}>
-                  <div className="group bg-white rounded-2xl p-8 shadow-sm border border-border/50 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer h-full flex flex-col border-l-4 border-l-accent" data-testid={`card-journey-${i}`}>
+                  <div className="group relative bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-border/50 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer h-auto md:h-full flex flex-col border-l-4 border-l-accent" data-testid={`card-journey-${i}`}>
+                    <div className="absolute top-4 right-4 w-7 h-7 rounded-full bg-gray-100 text-xs font-bold text-gray-400 flex items-center justify-center">0{i+1}</div>
                     <div className="flex items-start justify-between mb-4">
-                      <div className="p-3 rounded-xl bg-primary/10">
+                      <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10">
                         <card.icon className="w-8 h-8 text-primary" />
                       </div>
-                      <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all" />
+                      <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all mt-1" />
                     </div>
-                    <h2 className="text-xl font-bold text-primary mb-3">{card.title}</h2>
+                    <h2 className="text-xl font-bold text-primary mb-3 pr-6">{card.title}</h2>
                     <p className="text-muted-foreground leading-relaxed flex-1">{card.desc}</p>
                   </div>
                 </Link>
@@ -77,14 +78,15 @@ export default function JourneyPage() {
               initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}}
               transition={{delay: 0.4, duration: 0.5}} viewport={{once:true}}>
               <Link href={journeyCards[4].href}>
-                <div className="group bg-white rounded-2xl p-8 shadow-sm border border-border/50 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer flex flex-col border-l-4 border-l-accent" data-testid="card-journey-4">
+                <div className="group relative bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-border/50 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer flex flex-col border-l-4 border-l-accent" data-testid="card-journey-4">
+                  <div className="absolute top-4 right-4 w-7 h-7 rounded-full bg-gray-100 text-xs font-bold text-gray-400 flex items-center justify-center">05</div>
                   <div className="flex items-start justify-between mb-4">
-                    <div className="p-3 rounded-xl bg-primary/10">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10">
                       <AlertTriangle className="w-8 h-8 text-primary" />
                     </div>
-                    <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all" />
+                    <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all mt-1" />
                   </div>
-                  <h2 className="text-xl font-bold text-primary mb-3">{journeyCards[4].title}</h2>
+                  <h2 className="text-xl font-bold text-primary mb-3 pr-6">{journeyCards[4].title}</h2>
                   <p className="text-muted-foreground leading-relaxed">{journeyCards[4].desc}</p>
                 </div>
               </Link>
@@ -97,7 +99,7 @@ export default function JourneyPage() {
       <section className="py-16 bg-accent/10 border-t border-accent/20">
         <div className="container mx-auto px-4 text-center max-w-2xl">
           <h2 className="text-2xl font-bold text-primary mb-3">Not Sure Where to Start?</h2>
-          <p className="text-muted-foreground mb-6">Take our 2-minute eligibility quiz to find programs that match your exact situation.</p>
+          <p className="text-muted-foreground mb-6">Answer 7 quick questions and we'll match you to the programs, counselors, and resources that fit your life.</p>
           <Link href="/quiz">
             <button className="bg-accent text-white px-8 py-3 rounded-full font-semibold hover:bg-accent/90 transition-colors inline-flex items-center gap-2" data-testid="button-take-quiz">
               Take the Quiz <ArrowRight className="w-4 h-4" />

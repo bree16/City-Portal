@@ -36,10 +36,10 @@ export default function RentPage() {
       {/* Hero */}
       <section className="bg-primary text-white py-16 lg:py-24 text-center px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0B2146] to-[#0D2B5E] z-0"></div>
-        <div className="container mx-auto max-w-4xl relative z-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="container mx-auto max-w-4xl relative z-10">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">Find Your Next Rental in Newport News</h1>
           <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-12 leading-relaxed">
-            Explore affordable rentals, learn your rights, and access emergency assistance.
+            Find a place that feels like home. Newport News has affordable rentals, strong tenant protections, and neighbors who look out for each other.
           </p>
           
           {/* Search Bar */}
@@ -76,13 +76,13 @@ export default function RentPage() {
               <Search className="w-5 h-5 mr-2" /> Search
             </Button>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Listings */}
       <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <h2 className="text-2xl font-bold text-primary mb-8">Featured Rentals</h2>
+          <h2 className="text-2xl font-bold text-primary mb-8">Rentals Across Newport News</h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredListings.map((listing, i) => (
@@ -210,7 +210,7 @@ export default function RentPage() {
           <div className="grid md:grid-cols-2 gap-12">
             
             <div>
-              <h2 className="text-3xl font-bold text-primary mb-8">Tenant Rights & Resources</h2>
+              <h2 className="text-3xl font-bold text-primary mb-8">Know Your Rights as a Neighbor</h2>
               <div className="space-y-4">
                 {[
                   { title: "Know Your Rights", desc: "Understanding the Virginia Residential Landlord and Tenant Act.", icon: ShieldCheck },

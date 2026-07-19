@@ -97,10 +97,11 @@ export default function WhyNewportNewsPage() {
       <section className="py-20 bg-primary text-white relative">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/10 mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 flex items-center justify-center gap-3">
               <Shield className="w-8 h-8 text-secondary" />
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Proudly Military-Friendly</h2>
+              Proudly Military-Friendly
+            </h2>
+            <div className="w-16 h-1 bg-yellow-400 mx-auto mt-3 mb-6 rounded-full" />
             <p className="text-lg text-white/80 max-w-3xl mx-auto">Newport News is home to thousands of active duty service members, veterans, and their families. We're here to support your housing journey.</p>
           </div>
 
@@ -222,7 +223,7 @@ export default function WhyNewportNewsPage() {
                   <button key={hood} onClick={() => setSelectedNeighborhood(hood)}
                     className={`px-5 py-2.5 rounded-full font-medium transition-all ${
                       selectedNeighborhood === hood 
-                      ? 'bg-primary text-white shadow-md' 
+                      ? 'bg-primary text-white shadow-md scale-105' 
                       : 'bg-white border border-border text-foreground hover:border-primary/30 hover:bg-muted/50'
                     }`}>
                     {hood}
@@ -244,8 +245,8 @@ export default function WhyNewportNewsPage() {
                       initial={{opacity:0, x:20}} animate={{opacity:1, x:0}} exit={{opacity:0, x:-20}} transition={{delay: i*0.05}}
                       className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm border border-border/40">
                       <div className="font-medium text-primary">{route.dest}</div>
-                      <div className="flex items-center gap-2 text-accent bg-accent/10 px-3 py-1.5 rounded-lg font-bold text-sm">
-                        <Car className="w-4 h-4" /> {route.mins} mins
+                      <div className="flex items-center gap-2 text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-lg text-sm">
+                        <Car className="w-5 h-5 text-accent" /> <span className="text-2xl font-bold text-primary">{route.mins}</span> mins
                       </div>
                     </motion.div>
                   ))}
@@ -270,14 +271,14 @@ export default function WhyNewportNewsPage() {
               { text: "I came for a job and stayed for the lifestyle. Newport News is growing fast and it feels exciting to be part of it.", name: "Priya L.", hood: "Oyster Point", initials: "PL" }
             ].map((test, i) => (
               <motion.div key={i} initial={{opacity:0,y:20}} whileInView={{opacity:1,y:0}} transition={{delay: i*0.1}} viewport={{once:true}}
-                className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 relative">
-                <div className="text-secondary text-4xl font-serif absolute top-6 left-6 opacity-30">"</div>
-                <p className="text-lg text-white/90 italic relative z-10 mb-8 pt-4 leading-relaxed">"{test.text}"</p>
+                className="bg-white rounded-2xl p-8 border border-border/50 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative text-foreground">
+                <div className="text-6xl text-accent/20 font-serif leading-none mb-2 select-none">“</div>
+                <p className="text-lg italic relative z-10 mb-8 pt-2 leading-relaxed">"{test.text}"</p>
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-secondary text-primary font-bold flex items-center justify-center text-lg">{test.initials}</div>
+                  <div className="w-12 h-12 rounded-full bg-[#D4A843] text-primary font-bold flex items-center justify-center text-lg shadow-inner">{test.initials}</div>
                   <div>
-                    <div className="font-bold">{test.name}</div>
-                    <div className="text-sm text-white/60">{test.hood}</div>
+                    <div className="font-bold text-primary">{test.name}</div>
+                    <div className="text-sm text-muted-foreground">{test.hood}</div>
                   </div>
                 </div>
               </motion.div>

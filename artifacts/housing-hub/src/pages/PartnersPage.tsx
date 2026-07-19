@@ -47,7 +47,7 @@ export default function PartnersPage() {
         <div className="container mx-auto px-4 max-w-3xl">
           <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}}>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Community Partners</h1>
-            <p className="text-xl text-white/80">Together, we're expanding housing access across Newport News.</p>
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">Newport News is stronger because of its community. These organizations work alongside the city to make housing accessible, equitable, and welcoming for everyone.</p>
           </motion.div>
         </div>
       </section>

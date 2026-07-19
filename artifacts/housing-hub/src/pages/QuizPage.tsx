@@ -81,7 +81,7 @@ export default function QuizPage() {
                 <div className="space-y-3">
                   {steps[step].opts.map(opt => (
                     <button key={opt} onClick={() => select(opt)}
-                      className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 flex items-center justify-between group ${answers[step] === opt ? 'border-accent bg-accent/5 text-accent font-semibold' : 'border-border/50 bg-white hover:border-accent/40 hover:bg-muted text-foreground'}`}
+                      className={`w-full text-left p-4 min-h-[56px] rounded-xl border-2 transition-all duration-200 flex items-center justify-between group ${answers[step] === opt ? 'border-accent bg-accent/5 text-accent font-semibold' : 'border-border/50 bg-white hover:border-accent/40 hover:bg-muted text-foreground'}`}
                       data-testid={`quiz-option-${opt.replace(/\s+/g,'-').toLowerCase()}`}>
                       <span>{opt}</span>
                       {answers[step] === opt && <CheckCircle2 className="w-5 h-5 text-accent shrink-0" />}
@@ -102,35 +102,39 @@ export default function QuizPage() {
                 </div>
               </motion.div>
             ) : (
-              <motion.div key="results" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} className="p-6 md:p-10">
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent/10 mb-4">
-                    <CheckCircle2 className="w-8 h-8 text-accent" />
+              <motion.div key="results" initial={{opacity:0,y:20}} animate={{opacity:1,y:0}}>
+                <div className="bg-gradient-to-r from-accent to-accent/80 text-white p-6 md:p-8 flex items-center gap-4 border-b">
+                  <div className="bg-white/20 p-3 rounded-full">
+                    <CheckCircle2 className="w-8 h-8 text-white" />
                   </div>
-                  <h2 className="text-2xl font-bold text-primary mb-2">You May Qualify For...</h2>
-                  <p className="text-muted-foreground">Based on your answers, here are programs that may help you:</p>
+                  <div>
+                    <h2 className="text-2xl font-bold mb-1">Great news!</h2>
+                    <p className="text-white/90">Here are programs matched to your answers</p>
+                  </div>
                 </div>
-                <div className="space-y-4 mb-8">
-                  {results.map((r, i) => (
-                    <div key={i} className="flex items-start gap-4 p-4 bg-muted/50 rounded-xl border border-border/40" data-testid={`result-card-${i}`}>
-                      <div className="p-2 rounded-lg bg-primary/10 shrink-0"><r.icon className="w-5 h-5 text-primary" /></div>
-                      <div className="flex-1">
-                        <div className="font-semibold text-primary mb-1">{r.name}</div>
-                        <div className="text-sm text-muted-foreground">{r.desc}</div>
+                <div className="p-6 md:p-10">
+                  <div className="space-y-4 mb-8">
+                    {results.map((r, i) => (
+                      <div key={i} className="flex items-start gap-4 p-4 bg-gradient-to-r from-accent/5 to-transparent rounded-xl border border-border/40 border-l-4 border-l-accent" data-testid={`result-card-${i}`}>
+                        <div className="p-2 rounded-lg bg-primary/10 shrink-0"><r.icon className="w-5 h-5 text-primary" /></div>
+                        <div className="flex-1">
+                          <div className="font-semibold text-primary mb-1">{r.name}</div>
+                          <div className="text-sm text-muted-foreground">{r.desc}</div>
+                        </div>
+                        <Link href="/resources"><button className="text-accent text-sm font-medium hover:underline shrink-0">Learn More</button></Link>
                       </div>
-                      <Link href="/resources"><button className="text-accent text-sm font-medium hover:underline shrink-0">Learn More</button></Link>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Link href="/contact" className="flex-1">
-                    <button className="w-full bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-colors" data-testid="button-talk-counselor">
-                      Talk to a Counselor About These Results
+                    ))}
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link href="/contact" className="flex-1">
+                      <button className="w-full bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-colors" data-testid="button-talk-counselor">
+                        Talk to a Counselor About These Results
+                      </button>
+                    </Link>
+                    <button onClick={reset} className="flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-border/50 text-muted-foreground hover:bg-muted transition-colors font-medium" data-testid="button-retake-quiz">
+                      <RotateCcw className="w-4 h-4" /> Retake Quiz
                     </button>
-                  </Link>
-                  <button onClick={reset} className="flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-border/50 text-muted-foreground hover:bg-muted transition-colors font-medium" data-testid="button-retake-quiz">
-                    <RotateCcw className="w-4 h-4" /> Retake Quiz
-                  </button>
+                  </div>
                 </div>
               </motion.div>
             )}

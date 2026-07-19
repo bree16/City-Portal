@@ -50,7 +50,7 @@ export default function NeighborhoodsPage() {
         <div className="container mx-auto max-w-4xl relative z-10">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">Discover Newport News Neighborhoods</h1>
           <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
-            Find the community that fits your lifestyle, budget, and future.
+            Four distinct neighborhoods. One welcoming city. Explore the community that feels like home.
           </p>
         </div>
       </section>
@@ -125,12 +125,13 @@ export default function NeighborhoodsPage() {
             {/* Map Placeholder */}
             <div>
               <h2 className="text-2xl font-bold text-primary mb-6">Explore the Map</h2>
-              <div className="w-full h-[400px] bg-primary/5 border border-primary/20 rounded-2xl flex flex-col items-center justify-center gap-4 overflow-hidden relative">
+              <div className="w-full h-[400px] bg-accent/5 border border-accent/20 rounded-2xl flex flex-col items-center justify-center gap-4 overflow-hidden relative">
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_#0A8F7E_2px,_transparent_2px)] bg-[length:24px_24px] z-0"></div>
                 <MapPin className="w-12 h-12 text-accent z-10" />
-                <h3 className="font-bold text-primary text-xl z-10">Interactive Map Coming Soon</h3>
-                <a href="#" className="text-accent font-semibold hover:underline z-10">
-                  View on Google Maps
-                </a>
+                <div className="text-center z-10 px-4">
+                  <h3 className="font-bold text-primary text-xl mb-2">Interactive Neighborhood Map</h3>
+                  <p className="text-muted-foreground text-sm max-w-sm mx-auto">A full interactive map is in development. For now, explore each neighborhood below.</p>
+                </div>
               </div>
             </div>
 

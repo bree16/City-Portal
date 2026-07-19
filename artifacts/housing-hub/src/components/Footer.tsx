@@ -5,7 +5,8 @@ import { SiFacebook, SiInstagram, SiYoutube } from 'react-icons/si';
 
 export function Footer() {
   return (
-    <footer className="bg-primary text-white pt-16 pb-8 border-t border-white/10">
+    <footer className="bg-primary text-white pt-16 pb-8 border-t-4 border-accent relative">
+      <div className="absolute top-0 left-0 right-0 border-t border-white/10" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Column 1 - About */}
@@ -39,7 +40,7 @@ export function Footer() {
 
           {/* Column 2 - Quick Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-6 text-white border-b border-white/10 pb-2 inline-block">Quick Links</h3>
+            <h3 className="tracking-widest text-xs uppercase text-white/50 mb-6 border-b border-white/10 pb-2 inline-block">Quick Links</h3>
             <ul className="space-y-3">
               <li><Link href="/buy" className="text-white/70 hover:text-accent transition-colors text-sm">Buy a Home</Link></li>
               <li><Link href="/rent" className="text-white/70 hover:text-accent transition-colors text-sm">Rent</Link></li>
@@ -53,7 +54,7 @@ export function Footer() {
 
           {/* Column 3 - Housing Resources */}
           <div>
-            <h3 className="font-semibold text-lg mb-6 text-white border-b border-white/10 pb-2 inline-block">Housing Resources</h3>
+            <h3 className="tracking-widest text-xs uppercase text-white/50 mb-6 border-b border-white/10 pb-2 inline-block">Housing Resources</h3>
             <ul className="space-y-3">
               <li><a href="#" className="text-white/70 hover:text-accent transition-colors text-sm">Virginia Housing</a></li>
               <li><a href="#" className="text-white/70 hover:text-accent transition-colors text-sm">NNRHA</a></li>
@@ -68,7 +69,7 @@ export function Footer() {
 
           {/* Column 4 - Contact */}
           <div>
-            <h3 className="font-semibold text-lg mb-6 text-white border-b border-white/10 pb-2 inline-block">Contact Us</h3>
+            <h3 className="tracking-widest text-xs uppercase text-white/50 mb-6 border-b border-white/10 pb-2 inline-block">Contact Us</h3>
             <ul className="space-y-3 text-white/70 text-sm">
               <li>2400 Washington Avenue</li>
               <li>Newport News, VA 23607</li>

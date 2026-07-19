@@ -56,7 +56,7 @@ export function Navbar() {
                 <Home className="w-6 h-6" />
               </div>
               <span className={`font-bold text-xl tracking-tight transition-colors ${
-                isScrolled || !isHomepage || isMobileMenuOpen ? 'text-primary' : 'text-white'
+                isScrolled || !isHomepage || isMobileMenuOpen ? 'bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent' : 'bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent'
               }`}>
                 Housing Hub
               </span>
@@ -119,7 +119,7 @@ export function Navbar() {
             <div className="flex flex-col gap-4 text-lg font-medium pb-8">
               <Link
                 href="/"
-                className={`py-3 border-b border-border flex items-center ${location === '/' ? 'text-accent font-semibold' : 'text-foreground'}`}
+                className={`py-4 text-lg font-medium border-b border-border flex items-center ${location === '/' ? 'text-accent font-semibold' : 'text-foreground'}`}
               >
                 Home
               </Link>
@@ -129,13 +129,13 @@ export function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`py-3 border-b border-border flex items-center ${isActive ? 'text-accent font-semibold' : 'text-foreground'}`}
+                    className={`py-4 text-lg font-medium border-b border-border flex items-center ${isActive ? 'text-accent font-semibold' : 'text-foreground'}`}
                   >
                     {link.label}
                   </Link>
                 );
               })}
-              <Button asChild className="mt-6 bg-accent hover:bg-accent/90 text-white w-full rounded-full h-14 text-lg font-bold shadow-lg">
+              <Button asChild className="mt-6 bg-accent hover:bg-accent/90 text-white w-full text-center py-4 text-lg rounded-2xl h-auto font-bold shadow-lg">
                 <Link href="/buy">Get Started</Link>
               </Button>
             </div>

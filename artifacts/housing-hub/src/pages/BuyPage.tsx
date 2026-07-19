@@ -17,7 +17,7 @@ export default function BuyPage() {
             <span className="text-secondary font-bold tracking-wider uppercase text-sm mb-4 block">Homeownership</span>
             <h1 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight">Buying Your First Home Starts Here</h1>
             <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-10">
-              We'll guide you every step of the way — from checking your credit to closing day.
+              From dream to keys — Newport News has programs, counselors, and neighbors ready to help you get there.
             </p>
             <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-white rounded-full h-14 px-10 text-lg font-bold shadow-xl shadow-accent/20 transition-transform hover:scale-105">
               <a href="#roadmap">Start Your Journey</a>
@@ -73,7 +73,7 @@ export default function BuyPage() {
       <section className="py-24 bg-muted/30 border-y border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Homebuyer Assistance Programs</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Programs Built for Newport News Buyers</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">Explore financial products and educational resources tailored for residents.</p>
           </div>
 

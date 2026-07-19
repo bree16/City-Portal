@@ -162,9 +162,9 @@ export default function ResourcesPage() {
       <section className="bg-primary text-white py-16 lg:py-24 text-center px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0B2146] to-accent/80 z-0"></div>
         <div className="container mx-auto max-w-4xl relative z-10">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Housing Resources</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Everything You Need in One Place</h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
-            Everything you need in one place. Browse official programs, community partners, and helpful services.
+            Browse programs, organizations, and community services — organized around what matters to you, not what department runs it.
           </p>
         </div>
       </section>
@@ -225,10 +225,11 @@ export default function ResourcesPage() {
               <motion.div
                 key={res.title}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05, duration: 0.4 }}
               >
-                <Card className="h-full border-border/50 shadow-sm hover:shadow-md transition-all duration-300 bg-white group flex flex-col">
+                <Card className="h-full border-l-4 border-l-accent border-border/50 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 bg-white group flex flex-col">
                   <CardContent className="p-6 flex flex-col h-full">
                     <div className="flex items-start justify-between mb-4">
                       <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-accent">
