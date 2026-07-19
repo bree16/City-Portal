@@ -7,6 +7,7 @@ import { GameHUD } from '@/components/GameHUD';
 import { SpeechBubble } from '@/components/SpeechBubble';
 import { SceneTransition } from '@/components/SceneTransition';
 import { AchievementToast } from '@/components/AchievementToast';
+import { AudioManager } from '@/components/AudioManager';
 import { IsometricCamera } from '@/components/IsometricCamera';
 import { GroundPlane } from '@/components/GroundPlane';
 import { PlayerCharacter } from '@/components/characters/PlayerCharacter';
@@ -200,33 +201,35 @@ export default function GamePage() {
   }, [activeToast, toastQueue]);
 
   return (
-    <div
-      style={{
-        width: '100vw',
-        height: '100dvh',
-        overflow: 'hidden',
-        background: '#0D2B5E',
-        position: 'relative',
-      }}
-    >
-      <GameHUD />
-      <div style={{ position: 'absolute', top: 72, left: 0, right: 0, bottom: 0 }}>
-        <Canvas
-          shadows
-          camera={{ position: [13, 11, 13], fov: 44 }}
-          style={{ width: '100%', height: '100%' }}
-          gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
-        >
-          <SceneContents stage={stage} />
-        </Canvas>
+    <AudioManager>
+      <div
+        style={{
+          width: '100vw',
+          height: '100dvh',
+          overflow: 'hidden',
+          background: '#0D2B5E',
+          position: 'relative',
+        }}
+      >
+        <GameHUD />
+        <div style={{ position: 'absolute', top: 72, left: 0, right: 0, bottom: 0 }}>
+          <Canvas
+            shadows
+            camera={{ position: [13, 11, 13], fov: 44 }}
+            style={{ width: '100%', height: '100%' }}
+            gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
+          >
+            <SceneContents stage={stage} />
+          </Canvas>
+        </div>
+        <SpeechBubble />
+        <SceneTransition />
+        <AchievementToast
+          isVisible={!!activeToast}
+          title={activeToast ? formatTitle(activeToast) : ''}
+          onClose={() => setActiveToast(null)}
+        />
       </div>
-      <SpeechBubble />
-      <SceneTransition />
-      <AchievementToast
-        isVisible={!!activeToast}
-        title={activeToast ? formatTitle(activeToast) : ''}
-        onClose={() => setActiveToast(null)}
-      />
-    </div>
+    </AudioManager>
   );
 }

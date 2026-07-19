@@ -1,5 +1,6 @@
-import { Home } from 'lucide-react';
+import { Home, Volume2, VolumeX } from 'lucide-react';
 import { useGameStore } from '@/store/gameStore';
+import { useAudioControls } from '@/components/AudioManager';
 
 const STAGE_NAMES = [
   '',
@@ -14,6 +15,7 @@ const STAGE_NAMES = [
 
 export function GameHUD() {
   const { stage, month, cash, savings, creditScore, resetGame } = useGameStore();
+  const { muted, toggleMute } = useAudioControls();
 
   return (
     <div
@@ -100,6 +102,25 @@ export function GameHUD() {
               {creditScore}
             </span>
           </div>
+          <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.2)' }} />
+          {/* Mute toggle */}
+          <button
+            onClick={toggleMute}
+            title={muted ? 'Unmute' : 'Mute'}
+            style={{
+              background: muted ? 'rgba(212,168,67,0.18)' : 'rgba(255,255,255,0.10)',
+              border: muted ? '1px solid rgba(212,168,67,0.5)' : '1px solid transparent',
+              color: muted ? '#D4A843' : 'rgba(255,255,255,0.65)',
+              padding: '3px 6px',
+              borderRadius: 6,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              transition: 'all 0.15s',
+            }}
+          >
+            {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+          </button>
           <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.2)' }} />
           <button
             onClick={resetGame}
