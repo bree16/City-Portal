@@ -195,8 +195,8 @@ function HousingApp() {
         return (
           <div key={h.id} style={{
             borderRadius: 12, overflow: 'hidden',
-            border: selected ? '2px solid #D4A843' : '2px solid rgba(255,255,255,0.08)',
-            background: selected ? 'rgba(212,168,67,0.08)' : 'rgba(255,255,255,0.05)',
+            border: selected ? '2px solid var(--gold)' : '1px solid rgba(255,255,255,0.1)',
+            background: selected ? 'rgba(212,168,67,0.1)' : 'rgba(255,255,255,0.06)',
           }}>
             {/* Color swatch header */}
             <div style={{ height: 48, background: h.color, display: 'flex', alignItems: 'center', padding: '0 12px', gap: 8 }}>
@@ -221,12 +221,9 @@ function HousingApp() {
               </div>
               <button
                 onClick={() => { setSelectedHome(h.id); setPhoneOpen(false); }}
+                className={selected ? 'glass-btn-primary' : 'glass-btn'}
                 style={{
-                  width: '100%', padding: '8px', borderRadius: 8,
-                  background: selected ? '#D4A843' : '#0D2B5E',
-                  color: selected ? '#0D2B5E' : '#fff',
-                  border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 12,
-                  fontFamily: 'Inter, sans-serif',
+                  width: '100%', padding: '8px', fontWeight: 700, fontSize: 12,
                 }}
               >
                 {selected ? '✓ Selected — Go Negotiate' : 'Select This Home'}
@@ -360,19 +357,32 @@ export function SmartPhone() {
               width: 360,
               maxHeight: '88dvh',
               borderRadius: 44,
-              background: '#0e0e16',
-              boxShadow: '0 0 0 2px #2a2a3a, 0 32px 80px rgba(0,0,0,0.7)',
+              background: '#0b0b12',
+              boxShadow: '0 0 0 2px rgba(255,255,255,0.08), 0 0 0 4px #1a1a24, 0 32px 80px rgba(0,0,0,0.7)',
+              padding: 6,
               display: 'flex',
               flexDirection: 'column',
               overflow: 'hidden',
               fontFamily: 'Inter, sans-serif',
             }}
           >
+            <div
+              className="glass-panel-strong"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+                borderRadius: 38,
+                background: 'var(--glass-bg-strong)',
+                flex: 1,
+                minHeight: 0,
+              }}
+            >
             {/* Notch + status bar */}
-            <div style={{ background: '#0e0e16', padding: '14px 20px 0', position: 'relative', flexShrink: 0 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11, color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>
+            <div style={{ padding: '14px 20px 0', position: 'relative', flexShrink: 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11, color: 'var(--glass-text-dim)', fontWeight: 600 }}>
                 <span>9:41</span>
-                <div style={{ width: 100, height: 22, borderRadius: 11, background: '#1a1a2e', position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 10 }} />
+                <div style={{ width: 100, height: 22, borderRadius: 11, background: 'rgba(0,0,0,0.5)', position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 10 }} />
                 <span>●●● 📶 🔋</span>
               </div>
             </div>
@@ -388,21 +398,23 @@ export function SmartPhone() {
                 <>
                   <button
                     onClick={() => setActiveApp(null)}
-                    style={{ background: 'rgba(255,255,255,0.08)', border: 'none', color: '#fff', borderRadius: 8, padding: '4px 10px', cursor: 'pointer', fontSize: 12, fontFamily: 'Inter, sans-serif' }}
+                    className="glass-btn"
+                    style={{ padding: '4px 10px', fontSize: 12 }}
                   >
                     ← Home
                   </button>
-                  <span style={{ fontSize: 14, fontWeight: 700, color: '#fff' }}>{APP_LABELS[activeApp]}</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--glass-text)' }}>{APP_LABELS[activeApp]}</span>
                 </>
               ) : (
                 <>
                   <span style={{ fontSize: 18 }}>📱</span>
-                  <span style={{ fontSize: 14, fontWeight: 700, color: '#fff', flex: 1 }}>My Phone</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--glass-text)', flex: 1 }}>My Phone</span>
                 </>
               )}
               <button
                 onClick={() => { setPhoneOpen(false); setActiveApp(null); }}
-                style={{ marginLeft: 'auto', background: 'rgba(255,255,255,0.08)', border: 'none', color: 'rgba(255,255,255,0.6)', borderRadius: 8, padding: '4px 10px', cursor: 'pointer', fontSize: 12, fontFamily: 'Inter, sans-serif' }}
+                className="glass-btn"
+                style={{ marginLeft: 'auto', padding: '4px 10px', fontSize: 12 }}
               >
                 ✕
               </button>
@@ -422,23 +434,20 @@ export function SmartPhone() {
                         <button
                           key={id}
                           onClick={() => setActiveApp(id)}
+                          className="phone-app-tile"
                           style={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
                             padding: '14px 8px', borderRadius: 18,
-                            background: color,
-                            border: 'none', cursor: 'pointer',
-                            boxShadow: `0 4px 16px ${color}55`,
-                            transition: 'transform 0.12s',
+                            background: `linear-gradient(150deg, ${color} 0%, ${color}99 100%)`,
+                            fontFamily: 'Inter, sans-serif',
                           }}
-                          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.07)'; }}
-                          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)'; }}
                         >
                           <span style={{ fontSize: 28 }}>{icon}</span>
                           <span style={{ fontSize: 10, fontWeight: 700, color: '#fff', fontFamily: 'Inter, sans-serif' }}>{label}</span>
                         </button>
                       ))}
                     </div>
-                    <div style={{ marginTop: 20, padding: '12px 14px', borderRadius: 14, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', fontSize: 11, color: 'rgba(255,255,255,0.45)', lineHeight: 1.5 }}>
+                    <div style={{ marginTop: 20, padding: '12px 14px', borderRadius: 14, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, color: 'var(--glass-text-dim)', lineHeight: 1.5 }}>
                       💡 Your phone tracks your entire homebuying journey. Check it anytime for tips and progress.
                     </div>
                   </motion.div>
@@ -449,6 +458,7 @@ export function SmartPhone() {
             {/* Home indicator */}
             <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 14px', flexShrink: 0 }}>
               <div style={{ width: 100, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.25)' }} />
+            </div>
             </div>
           </motion.div>
         </>

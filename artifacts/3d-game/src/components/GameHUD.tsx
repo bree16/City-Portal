@@ -40,22 +40,17 @@ function MiniMap({ playerPosition }: { playerPosition: [number, number, number] 
 
   return (
     <div
+      className="glass-panel glass-anim-in"
       style={{
         position: 'fixed',
-        top: 72,
+        top: 76,
         right: 12,
         zIndex: 32,
-        background: 'rgba(13,43,94,0.9)',
-        border: '1px solid rgba(255,255,255,0.15)',
-        borderRadius: 10,
-        padding: 6,
-        backdropFilter: 'blur(10px)',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
-        marginTop: 4,
+        padding: 8,
         pointerEvents: 'none',
       }}
     >
-      <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4, textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 5, textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>
         City Map
       </div>
       <svg width={MAP_W} height={MAP_H} style={{ display: 'block', overflow: 'visible' }}>
@@ -107,6 +102,7 @@ function ObjectiveCard({ stage }: { stage: number }) {
 
   return (
     <div
+      className="glass-chip glass-anim-in"
       style={{
         position: 'fixed',
         bottom: 28,
@@ -116,24 +112,19 @@ function ObjectiveCard({ stage }: { stage: number }) {
         display: 'flex',
         alignItems: 'center',
         gap: 8,
-        padding: '7px 16px',
-        borderRadius: 20,
-        background: 'rgba(13,43,94,0.92)',
-        border: '1px solid rgba(212,168,67,0.35)',
-        color: '#fff',
-        fontSize: 12,
+        padding: '8px 18px',
+        borderColor: 'rgba(212,168,67,0.35)',
+        fontSize: 13,
         fontWeight: 600,
         fontFamily: 'Inter, sans-serif',
-        backdropFilter: 'blur(12px)',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
         pointerEvents: 'none',
         whiteSpace: 'nowrap',
         maxWidth: '90vw',
       }}
     >
       <span>{obj.icon}</span>
-      <span style={{ color: '#D4A843', fontWeight: 700, marginRight: 2 }}>Next:</span>
-      <span style={{ color: 'rgba(255,255,255,0.85)' }}>{obj.text}</span>
+      <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: 0.6, marginRight: 2 }}>Next</span>
+      <span style={{ color: 'var(--glass-text)' }}>{obj.text}</span>
     </div>
   );
 }
@@ -163,37 +154,34 @@ export function GameHUD() {
     >
       {/* ── Main bar ── */}
       <div
+        className="glass-panel"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '8px 16px',
-          background: 'rgba(13,43,94,0.92)',
-          backdropFilter: 'blur(12px)',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          margin: '10px 12px 0',
           pointerEvents: 'auto',
         }}
       >
         {/* Logo + player name */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ background: '#fff', padding: 5, borderRadius: 8 }}>
-            <Home size={16} color="#0A8F7E" />
+          <div style={{ background: 'var(--teal-grad)', padding: 6, borderRadius: 10, display: 'flex', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3)' }}>
+            <Home size={16} color="#fff" />
           </div>
-          <div style={{ lineHeight: 1.2 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#fff' }}>Newport News</div>
-            <div style={{ fontSize: 10, fontWeight: 700, color: '#D4A843' }}>Housing Hub</div>
+          <div style={{ lineHeight: 1.25 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--glass-text)' }}>Newport News</div>
+            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: 0.8 }}>Housing Hub</div>
           </div>
           <div
+            className="glass-chip"
             style={{
               marginLeft: 6,
-              padding: '2px 10px',
-              borderRadius: 12,
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.14)',
+              padding: '4px 12px',
               fontSize: 11,
               fontWeight: 700,
-              color: 'rgba(255,255,255,0.75)',
-              maxWidth: 120,
+              color: 'var(--glass-text-dim)',
+              maxWidth: 130,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -204,18 +192,19 @@ export function GameHUD() {
         </div>
 
         {/* Center: location + stage + month */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.55)', fontWeight: 600 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
+          <div style={{ fontSize: 10, color: 'var(--glass-text-dim)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.6 }}>
             {isCity ? '🗺️ Newport News City' : `📍 Month ${month} of 36`}
           </div>
           <div
             style={{
-              padding: '2px 12px',
-              borderRadius: 20,
-              background: isCity ? '#0A8F7E' : '#D4A843',
-              color: '#0D2B5E',
+              padding: '3px 14px',
+              borderRadius: 999,
+              background: isCity ? 'var(--teal-grad)' : 'var(--gold-grad)',
+              color: 'var(--ink)',
               fontSize: 11,
               fontWeight: 800,
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.35)',
             }}
           >
             {isCity ? 'Open City' : `Stage ${stage}: ${STAGE_NAMES[stage]}`}
@@ -224,57 +213,55 @@ export function GameHUD() {
 
         {/* Stats */}
         <div
+          className="glass-chip"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 10,
-            background: 'rgba(0,0,0,0.25)',
-            borderRadius: 12,
-            padding: '6px 14px',
-            fontSize: 12,
+            gap: 12,
+            padding: '6px 16px',
+            fontSize: 13,
             fontWeight: 700,
-            color: '#fff',
+            color: 'var(--glass-text)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <span>💰</span>
             <span>${cash.toLocaleString()}</span>
           </div>
-          <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.2)' }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.16)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <span>🏦</span>
-            <span style={{ color: '#0A8F7E' }}>${savings.toLocaleString()}</span>
+            <span style={{ color: 'var(--teal)' }}>${savings.toLocaleString()}</span>
           </div>
-          <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.2)' }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.16)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <span>📊</span>
             <span style={{ color: creditScore >= 650 ? '#4ade80' : '#fbbf24' }}>
               {creditScore}
             </span>
           </div>
-          <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.2)' }} />
+          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.16)' }} />
           {/* Volume controls: mute toggle + slider */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <button
               onClick={toggleMute}
               title={muted ? 'Unmute' : 'Mute'}
+              className="glass-btn"
               style={{
-                background: muted ? 'rgba(212,168,67,0.18)' : 'rgba(255,255,255,0.10)',
-                border: muted ? '1px solid rgba(212,168,67,0.5)' : '1px solid transparent',
-                color: muted ? '#D4A843' : 'rgba(255,255,255,0.65)',
-                padding: '3px 6px',
-                borderRadius: 6,
-                cursor: 'pointer',
+                ...(muted
+                  ? { background: 'rgba(212,168,67,0.18)', borderColor: 'rgba(212,168,67,0.5)', color: 'var(--gold)' }
+                  : { color: 'var(--glass-text-dim)' }),
+                padding: '4px 7px',
+                borderRadius: 8,
                 display: 'flex',
                 alignItems: 'center',
-                transition: 'all 0.15s',
               }}
             >
               {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
             </button>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.5)', width: 28, textAlign: 'right', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                   Music
                 </span>
                 <input
@@ -294,7 +281,7 @@ export function GameHUD() {
                 />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.5)', width: 28, textAlign: 'right', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                   SFX
                 </span>
                 <input
@@ -315,19 +302,16 @@ export function GameHUD() {
               </div>
             </div>
           </div>
-          <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.2)' }} />
+          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.16)' }} />
           <button
             onClick={resetGame}
+            className="glass-btn"
             style={{
-              background: 'rgba(255,255,255,0.12)',
-              border: 'none',
-              color: 'rgba(255,255,255,0.6)',
               fontSize: 10,
               fontWeight: 700,
-              padding: '2px 8px',
-              borderRadius: 6,
-              cursor: 'pointer',
-              fontFamily: 'Inter, sans-serif',
+              textTransform: 'uppercase',
+              letterSpacing: 0.5,
+              padding: '4px 10px',
             }}
           >
             Restart
@@ -335,16 +319,13 @@ export function GameHUD() {
           <button
             onClick={() => setShowQuitConfirm(true)}
             title="Quit to Menu"
+            className="glass-btn"
             style={{
-              background: 'rgba(255,255,255,0.12)',
-              border: 'none',
-              color: 'rgba(255,255,255,0.6)',
               fontSize: 10,
               fontWeight: 700,
-              padding: '2px 8px',
-              borderRadius: 6,
-              cursor: 'pointer',
-              fontFamily: 'Inter, sans-serif',
+              textTransform: 'uppercase',
+              letterSpacing: 0.5,
+              padding: '4px 10px',
               display: 'flex',
               alignItems: 'center',
               gap: 4,
@@ -359,11 +340,12 @@ export function GameHUD() {
       {/* ── Quit confirmation dialog ── */}
       {showQuitConfirm && (
         <div
+          className="glass-anim-fade"
           style={{
             position: 'fixed',
             inset: 0,
             zIndex: 60,
-            background: 'rgba(0,0,0,0.55)',
+            background: 'rgba(2,8,24,0.55)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -374,39 +356,31 @@ export function GameHUD() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
+            className="glass-panel-strong glass-sheen glass-anim-in"
             style={{
-              background: 'rgba(13,43,94,0.97)',
-              border: '1px solid rgba(212,168,67,0.4)',
-              borderRadius: 16,
               padding: '24px 28px',
               maxWidth: 340,
               width: '90%',
-              boxShadow: '0 12px 48px rgba(0,0,0,0.6)',
               fontFamily: 'Inter, sans-serif',
               textAlign: 'center',
             }}
           >
             <div style={{ fontSize: 28, marginBottom: 8 }}>🚪</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: '#fff', marginBottom: 6 }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--glass-text)', marginBottom: 8 }}>
               Quit to Menu?
             </div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', lineHeight: 1.5, marginBottom: 18 }}>
+            <div style={{ fontSize: 13, color: 'var(--glass-text-dim)', lineHeight: 1.5, marginBottom: 20 }}>
               You'll return to the character screen. Your progress is saved automatically, so you can continue later — or start fresh.
             </div>
             <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
               <button
                 onClick={() => setShowQuitConfirm(false)}
+                className="glass-btn"
                 style={{
                   flex: 1,
-                  padding: '9px 0',
-                  borderRadius: 10,
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  background: 'rgba(255,255,255,0.08)',
-                  color: '#fff',
-                  fontSize: 12,
+                  padding: '10px 0',
+                  fontSize: 13,
                   fontWeight: 700,
-                  cursor: 'pointer',
-                  fontFamily: 'Inter, sans-serif',
                 }}
               >
                 Keep Playing
@@ -416,17 +390,12 @@ export function GameHUD() {
                   setShowQuitConfirm(false);
                   quitToMenu();
                 }}
+                className="glass-btn-primary"
                 style={{
                   flex: 1,
-                  padding: '9px 0',
-                  borderRadius: 10,
-                  border: 'none',
-                  background: '#D4A843',
-                  color: '#0D2B5E',
-                  fontSize: 12,
+                  padding: '10px 0',
+                  fontSize: 13,
                   fontWeight: 800,
-                  cursor: 'pointer',
-                  fontFamily: 'Inter, sans-serif',
                 }}
               >
                 Quit to Menu
@@ -439,12 +408,15 @@ export function GameHUD() {
       {/* ── Stage progress dots (hidden in city view) ── */}
       {!isCity && (
         <div
+          className="glass-chip glass-anim-in"
           style={{
             display: 'flex',
             justifyContent: 'center',
+            alignItems: 'center',
             gap: 6,
-            padding: '5px 0',
-            background: 'rgba(13,43,94,0.75)',
+            padding: '6px 14px',
+            margin: '8px auto 0',
+            width: 'fit-content',
           }}
         >
           {[1, 2, 3, 4, 5, 6, 7].map((s) => (
@@ -455,7 +427,7 @@ export function GameHUD() {
                 width: s === stage ? 22 : 8,
                 borderRadius: 3,
                 background:
-                  s < stage ? '#0A8F7E' : s === stage ? '#D4A843' : 'rgba(255,255,255,0.18)',
+                  s < stage ? 'var(--teal)' : s === stage ? 'var(--gold)' : 'rgba(255,255,255,0.18)',
                 transition: 'all 0.3s',
               }}
             />
@@ -467,6 +439,7 @@ export function GameHUD() {
       <button
         onClick={togglePhone}
         title="Open Phone"
+        className={phoneOpen ? 'glass-btn-primary' : 'glass-btn'}
         style={{
           position: 'fixed',
           bottom: 24,
@@ -475,18 +448,13 @@ export function GameHUD() {
           width: 52,
           height: 52,
           borderRadius: '50%',
-          background: phoneOpen ? '#D4A843' : 'rgba(13,43,94,0.92)',
-          border: `2px solid ${phoneOpen ? '#D4A843' : 'rgba(255,255,255,0.18)'}`,
-          boxShadow: phoneOpen
-            ? '0 0 0 4px rgba(212,168,67,0.3), 0 8px 24px rgba(0,0,0,0.4)'
-            : '0 4px 20px rgba(0,0,0,0.5)',
-          cursor: 'pointer',
+          ...(phoneOpen
+            ? { boxShadow: '0 0 0 4px rgba(212,168,67,0.3), 0 8px 24px rgba(2,8,24,0.45), inset 0 1px 0 rgba(255,255,255,0.4)' }
+            : {}),
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: phoneOpen ? '#0D2B5E' : '#fff',
-          backdropFilter: 'blur(12px)',
-          transition: 'all 0.2s',
+          color: phoneOpen ? 'var(--ink)' : 'var(--glass-text)',
           pointerEvents: 'auto',
         }}
       >
@@ -507,21 +475,19 @@ export function GameHUD() {
         >
           <button
             onClick={() => setLogExpanded((v) => !v)}
+            className="glass-chip"
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: 6,
-              padding: '6px 12px',
-              borderRadius: 20,
-              background: 'rgba(13,43,94,0.92)',
-              border: '1px solid rgba(255,255,255,0.15)',
-              color: 'rgba(255,255,255,0.7)',
+              padding: '7px 14px',
+              color: 'var(--glass-text-dim)',
               fontSize: 11,
               fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: 0.5,
               cursor: 'pointer',
-              backdropFilter: 'blur(12px)',
               fontFamily: 'Inter, sans-serif',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
             }}
           >
             📋 Life Events
@@ -529,29 +495,25 @@ export function GameHUD() {
           </button>
           {logExpanded && (
             <div
+              className="glass-panel glass-anim-in"
               style={{
                 position: 'absolute',
                 bottom: '100%',
                 left: 0,
-                marginBottom: 6,
+                marginBottom: 8,
                 minWidth: 200,
-                background: 'rgba(13,43,94,0.96)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: 12,
-                padding: '10px 12px',
-                backdropFilter: 'blur(12px)',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+                padding: '12px 14px',
               }}
             >
-              <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
                 Recent Events
               </div>
               {lifeEventLog.map((title, i) => (
                 <div
                   key={i}
                   style={{
-                    fontSize: 11,
-                    color: i === 0 ? '#D4A843' : 'rgba(255,255,255,0.55)',
+                    fontSize: 12,
+                    color: i === 0 ? 'var(--gold)' : 'var(--glass-text-dim)',
                     padding: '4px 0',
                     borderBottom: i < lifeEventLog.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
                     fontWeight: i === 0 ? 700 : 400,

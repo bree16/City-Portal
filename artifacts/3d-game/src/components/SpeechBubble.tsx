@@ -61,40 +61,24 @@ export function SpeechBubble() {
         }}
       >
         <div
+          className="glass-panel-strong glass-sheen"
           style={{
-            background: '#fff',
-            borderRadius: 20,
             padding: 20,
-            boxShadow: '0 12px 48px rgba(0,0,0,0.25)',
-            border: '3px solid #0D2B5E',
             position: 'relative',
           }}
         >
-          {/* Triangle pointer */}
+          {/* Glass pointer — small rotated square */}
           <div
             style={{
               position: 'absolute',
-              top: -14,
+              top: -7,
               left: '50%',
-              transform: 'translateX(-50%)',
-              width: 0,
-              height: 0,
-              borderLeft: '13px solid transparent',
-              borderRight: '13px solid transparent',
-              borderBottom: '14px solid #0D2B5E',
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              top: -10,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: 0,
-              height: 0,
-              borderLeft: '11px solid transparent',
-              borderRight: '11px solid transparent',
-              borderBottom: '12px solid #fff',
+              width: 14,
+              height: 14,
+              transform: 'translateX(-50%) rotate(45deg)',
+              background: 'rgba(21, 38, 76, 0.9)',
+              borderTop: '1px solid rgba(255,255,255,0.14)',
+              borderLeft: '1px solid rgba(255,255,255,0.14)',
             }}
           />
 
@@ -105,24 +89,25 @@ export function SpeechBubble() {
                 width: 36,
                 height: 36,
                 borderRadius: '50%',
-                background: line.speaker === 'You' ? '#D4A843' : '#0A8F7E',
+                background: line.speaker === 'You' ? 'var(--gold-grad)' : 'var(--teal-grad)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#fff',
+                color: line.speaker === 'You' ? 'var(--ink)' : '#fff',
                 fontWeight: 800,
                 fontSize: 16,
                 flexShrink: 0,
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3)',
               }}
             >
               {line.speaker === 'You' ? playerName.charAt(0).toUpperCase() : line.speaker.charAt(0)}
             </div>
 
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: line.speaker === 'You' ? '#D4A843' : '#0A8F7E', marginBottom: 4 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: line.speaker === 'You' ? 'var(--gold)' : 'var(--teal)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.6 }}>
                 {line.speaker === 'You' ? playerName : line.speaker}
               </div>
-              <p style={{ fontSize: 14, color: '#1a1a2e', lineHeight: 1.55, margin: 0 }}>
+              <p style={{ fontSize: 14, color: 'var(--glass-text)', lineHeight: 1.55, margin: 0 }}>
                 {displayText}
               </p>
               {displayTip && (
@@ -131,10 +116,10 @@ export function SpeechBubble() {
                     marginTop: 10,
                     padding: '8px 12px',
                     borderRadius: 10,
-                    background: 'rgba(212,168,67,0.1)',
-                    borderLeft: '3px solid #D4A843',
+                    background: 'rgba(212,168,67,0.12)',
+                    border: 'var(--glass-border-gold)',
                     fontSize: 12,
-                    color: '#8B6914',
+                    color: 'var(--gold)',
                     lineHeight: 1.4,
                   }}
                 >
@@ -153,7 +138,7 @@ export function SpeechBubble() {
                     width: i === activeDialogue.lineIndex ? 16 : 6,
                     height: 6,
                     borderRadius: 3,
-                    background: i <= activeDialogue.lineIndex ? '#0D2B5E' : '#ddd',
+                    background: i <= activeDialogue.lineIndex ? 'var(--gold)' : 'rgba(255,255,255,0.2)',
                     transition: 'all 0.2s',
                   }}
                 />
@@ -161,17 +146,10 @@ export function SpeechBubble() {
             </div>
             <button
               onClick={handleNext}
+              className={isLast ? 'glass-btn-primary' : 'glass-btn-accent'}
               style={{
                 padding: '8px 20px',
-                borderRadius: 10,
-                background: isLast ? '#D4A843' : '#0D2B5E',
-                color: isLast ? '#0D2B5E' : '#fff',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: 700,
                 fontSize: 13,
-                fontFamily: 'Inter, sans-serif',
-                transition: 'opacity 0.15s',
               }}
             >
               {isLast ? 'Got it!' : 'Continue →'}

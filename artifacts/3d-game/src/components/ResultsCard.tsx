@@ -85,30 +85,28 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
           }}
         >
           <motion.div
+            className="glass-panel-strong glass-sheen"
             initial={{ scale: 0.85, y: 40, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.85, y: 40, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 260, damping: 22, delay: 0.1 }}
             style={{
-              background: 'linear-gradient(145deg, #0D2B5E 0%, #0A1F44 60%, #061533 100%)',
-              borderRadius: 24,
               maxWidth: 540,
               width: '100%',
-              boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,168,67,0.3)',
               overflow: 'hidden',
               fontFamily: 'Inter, sans-serif',
             }}
           >
             {/* Header band */}
             <div style={{
-              background: 'linear-gradient(90deg, #D4A843 0%, #F0C865 50%, #D4A843 100%)',
+              background: 'var(--gold-grad)',
               padding: '10px 24px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
-              <span style={{ fontSize: 12, fontWeight: 800, color: '#0D2B5E', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--ink)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                 Newport News Housing Hub
               </span>
-              <span style={{ fontSize: 11, color: '#0D2B5E', fontWeight: 700 }}>
+              <span style={{ fontSize: 11, color: 'var(--ink)', fontWeight: 700 }}>
                 Path to Your First Home
               </span>
             </div>
@@ -120,30 +118,30 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                 {/* Character */}
                 <div style={{
                   flexShrink: 0,
-                  background: 'rgba(212,168,67,0.08)',
+                  background: 'rgba(212,168,67,0.1)',
                   borderRadius: 16,
                   padding: '12px 10px 6px',
-                  border: '1px solid rgba(212,168,67,0.2)',
+                  border: 'var(--glass-border-gold)',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
                 }}>
                   <MiniCharacter {...characterAppearance} />
-                  <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>Your Player</span>
+                  <span style={{ fontSize: 10, color: 'var(--glass-text-dim)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.6 }}>Your Player</span>
                 </div>
 
                 {/* Title block */}
                 <div style={{ flex: 1, paddingTop: 8 }}>
-                  <div style={{ fontSize: 11, color: '#0A8F7E', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>
+                  <div style={{ fontSize: 11, color: 'var(--teal)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>
                     🎉 Journey Complete!
                   </div>
-                  <div style={{ fontSize: 22, fontWeight: 900, color: '#fff', lineHeight: 1.2, marginBottom: 8 }}>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: 'var(--glass-text)', lineHeight: 1.2, marginBottom: 8 }}>
                     You're a Newport News Homeowner!
                   </div>
                   <div style={{
-                    background: 'rgba(10,143,126,0.12)', borderRadius: 10, padding: '8px 12px',
-                    border: '1px solid rgba(10,143,126,0.3)',
+                    background: 'rgba(10,143,126,0.14)', borderRadius: 10, padding: '8px 12px',
+                    border: '1px solid rgba(20,184,161,0.3)',
                   }}>
-                    <div style={{ fontSize: 13, fontWeight: 800, color: '#D4A843' }}>{home.name}</div>
-                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', marginTop: 2 }}>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--gold)' }}>{home.name}</div>
+                    <div style={{ fontSize: 12, color: 'var(--glass-text-dim)', marginTop: 2 }}>
                       {home.neighborhood} · ${home.price.toLocaleString()}
                     </div>
                   </div>
@@ -167,21 +165,20 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
               {/* Achievements */}
               {earnedAchievements.length > 0 && (
                 <div style={{ marginBottom: 22 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>
                     Achievements Earned
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                     {earnedAchievements.map((id) => {
                       const meta = ACHIEVEMENT_META[id];
                       return (
-                        <div key={id} style={{
-                          background: 'rgba(212,168,67,0.12)',
-                          border: '1px solid rgba(212,168,67,0.35)',
-                          borderRadius: 20, padding: '5px 12px',
+                        <div key={id} className="glass-chip" style={{
+                          border: 'var(--glass-border-gold)',
+                          padding: '5px 12px',
                           display: 'flex', alignItems: 'center', gap: 6,
                         }}>
                           <span style={{ fontSize: 14 }}>{meta.icon}</span>
-                          <span style={{ fontSize: 11, fontWeight: 700, color: '#D4A843' }}>{meta.label}</span>
+                          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--gold)' }}>{meta.label}</span>
                         </div>
                       );
                     })}
@@ -191,12 +188,12 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
 
               {/* Screenshot tip */}
               <div style={{
-                background: 'rgba(10,143,126,0.1)', borderRadius: 10, padding: '8px 14px',
-                border: '1px solid rgba(10,143,126,0.2)', marginBottom: 18,
+                background: 'rgba(20,184,161,0.12)', borderRadius: 10, padding: '8px 14px',
+                border: '1px solid rgba(20,184,161,0.25)', marginBottom: 18,
                 display: 'flex', alignItems: 'center', gap: 8,
               }}>
                 <span style={{ fontSize: 16 }}>📸</span>
-                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', lineHeight: 1.4 }}>
+                <span style={{ fontSize: 11, color: 'var(--glass-text-dim)', lineHeight: 1.4 }}>
                   Take a screenshot to share your homebuying journey!
                 </span>
               </div>
@@ -205,16 +202,10 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
               <div style={{ display: 'flex', gap: 10 }}>
                 <button
                   onClick={handlePlayAgain}
+                  className="glass-btn"
                   style={{
-                    flex: 1, padding: '12px 16px', borderRadius: 12,
-                    background: 'rgba(255,255,255,0.08)',
-                    border: '1px solid rgba(255,255,255,0.15)',
-                    color: '#fff', fontWeight: 700, fontSize: 13,
-                    cursor: 'pointer', fontFamily: 'Inter, sans-serif',
-                    transition: 'background 0.2s',
+                    flex: 1, padding: '12px 16px', fontWeight: 700, fontSize: 13,
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.14)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
                 >
                   🔄 Play Again
                 </button>
@@ -222,17 +213,12 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                   href="/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="glass-btn-primary"
                   style={{
-                    flex: 1.4, padding: '12px 16px', borderRadius: 12,
-                    background: 'linear-gradient(90deg, #D4A843, #F0C865)',
-                    color: '#0D2B5E', fontWeight: 800, fontSize: 13,
-                    cursor: 'pointer', fontFamily: 'Inter, sans-serif',
+                    flex: 1.4, padding: '12px 16px', fontSize: 13,
                     textDecoration: 'none', textAlign: 'center',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'filter 0.2s',
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(1.08)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(1)'; }}
                 >
                   🏠 Visit Newport News Housing Hub
                 </a>
@@ -250,16 +236,16 @@ function StatBox({ icon, label, value, subValue, valueColor }: {
 }) {
   return (
     <div style={{
-      background: 'rgba(255,255,255,0.04)',
+      background: 'rgba(255,255,255,0.06)',
       borderRadius: 12, padding: '12px 14px',
-      border: '1px solid rgba(255,255,255,0.07)',
+      border: '1px solid rgba(255,255,255,0.1)',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
         <span style={{ fontSize: 14 }}>{icon}</span>
-        <span style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</span>
+        <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</span>
       </div>
-      <div style={{ fontSize: 16, fontWeight: 800, color: valueColor ?? '#fff' }}>{value}</div>
-      {subValue && <div style={{ fontSize: 11, color: valueColor ?? 'rgba(255,255,255,0.5)', fontWeight: 600, marginTop: 2 }}>{subValue}</div>}
+      <div style={{ fontSize: 16, fontWeight: 800, color: valueColor ?? 'var(--glass-text)' }}>{value}</div>
+      {subValue && <div style={{ fontSize: 11, color: valueColor ?? 'var(--glass-text-dim)', fontWeight: 600, marginTop: 2 }}>{subValue}</div>}
     </div>
   );
 }

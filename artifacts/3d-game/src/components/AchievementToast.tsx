@@ -22,18 +22,19 @@ export function AchievementToast({ isVisible, title, onClose }: AchievementToast
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: 50, x: 20 }}
-          animate={{ opacity: 1, y: 0, x: 0 }}
-          exit={{ opacity: 0, y: 50, x: 20 }}
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 bg-navy-900 border-2 border-gold-500 rounded-xl shadow-2xl"
-          style={{ backgroundColor: '#0D2B5E', borderColor: '#D4A843' }}
+          initial={{ opacity: 0, y: 50, x: 20, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 50, x: 20, scale: 0.96 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+          className="glass-panel fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3"
+          style={{ borderColor: 'rgba(212, 168, 67, 0.38)', fontFamily: 'Inter, sans-serif' }}
         >
-          <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gold-500/20 text-gold-500" style={{ color: '#D4A843', backgroundColor: 'rgba(212, 168, 67, 0.2)' }}>
+          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ color: 'var(--gold)', backgroundColor: 'rgba(212, 168, 67, 0.18)' }}>
             <Trophy className="w-5 h-5" />
           </div>
           <div>
-            <p className="text-xs text-gold-500 font-bold uppercase tracking-wider" style={{ color: '#D4A843' }}>Achievement Unlocked</p>
-            <p className="text-sm font-semibold text-white">{title}</p>
+            <p style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: 1 }}>Achievement Unlocked</p>
+            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--glass-text)' }}>{title}</p>
           </div>
         </motion.div>
       )}
