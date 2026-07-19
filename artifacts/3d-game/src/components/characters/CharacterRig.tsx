@@ -19,6 +19,8 @@ interface CharacterRigProps {
   emote?: 'none' | 'wave';
   /** Bigger, happier smile (creator preview). */
   bigSmile?: boolean;
+  /** Deterministic phase offset (seconds) so multiple rigs don't idle in sync. */
+  idlePhase?: number;
 }
 
 function shade(hex: string, mult: number): string {
@@ -233,6 +235,7 @@ export function CharacterRig({
   scale = 1,
   emote = 'none',
   bigSmile = false,
+  idlePhase = 0,
 }: CharacterRigProps) {
   const groupRef = useRef<THREE.Group>(null);
   const bodyGroupRef = useRef<THREE.Group>(null);
@@ -255,7 +258,7 @@ export function CharacterRig({
   const pantsDark = useMemo(() => shade(pantsColor, 0.7), [pantsColor]);
 
   useFrame(({ clock }) => {
-    const t = clock.elapsedTime;
+    const t = clock.elapsedTime + idlePhase;
 
     if (isMoving) {
       const w = t * 8.5;

@@ -19,7 +19,7 @@ const AGENTS: Array<Omit<NPCDef, 'position' | 'rotation'>> = [
 ];
 
 export default function NeighborhoodScene() {
-  const { openDialogue, setSelectedHome, startNegotiation, startHomeTour, setTransitioning } = useGameStore();
+  const { openDialogue, setSelectedHome, startNegotiation, startHomeTour, setTransitioning, addAchievement } = useGameStore();
   const [viewingHome, setViewingHome] = useState<number | null>(null);
 
   // Go straight to the negotiation table (skip tour)
@@ -106,7 +106,7 @@ export default function NeighborhoodScene() {
 
       {homes.map((home, idx) => {
         const x = -15 + idx * 10;
-        const agentNpc: NPCDef = { ...AGENTS[idx], position: [x, 0, 2], rotation: [0, Math.PI, 0] };
+        const agentNpc: NPCDef = { ...AGENTS[idx], position: [x, 0, 2], rotation: [0, Math.PI, 0], important: true };
 
         return (
           <group key={home.id} position={[x, 0, -2.5]}>

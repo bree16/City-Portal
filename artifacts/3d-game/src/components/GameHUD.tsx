@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Home, Volume2, VolumeX, Smartphone, ChevronUp, ChevronDown, LogOut } from 'lucide-react';
 import { useGameStore } from '@/store/gameStore';
 import { useAudioControls } from '@/components/AudioManager';
+import { getAudioEngine } from '@/hooks/useGameAudio';
 import { buildings } from '@/data/buildings';
 
 // ── Constants ────────────────────────────────────────────────────
@@ -304,7 +305,7 @@ export function GameHUD() {
           </div>
           <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.16)' }} />
           <button
-            onClick={resetGame}
+            onClick={() => { getAudioEngine().play('click'); resetGame(); }}
             className="glass-btn"
             style={{
               fontSize: 10,
@@ -317,7 +318,7 @@ export function GameHUD() {
             Restart
           </button>
           <button
-            onClick={() => setShowQuitConfirm(true)}
+            onClick={() => { getAudioEngine().play('click'); setShowQuitConfirm(true); }}
             title="Quit to Menu"
             className="glass-btn"
             style={{
@@ -374,7 +375,7 @@ export function GameHUD() {
             </div>
             <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
               <button
-                onClick={() => setShowQuitConfirm(false)}
+                onClick={() => { getAudioEngine().play('click'); setShowQuitConfirm(false); }}
                 className="glass-btn"
                 style={{
                   flex: 1,
@@ -387,6 +388,7 @@ export function GameHUD() {
               </button>
               <button
                 onClick={() => {
+                  getAudioEngine().play('click');
                   setShowQuitConfirm(false);
                   quitToMenu();
                 }}
@@ -437,7 +439,7 @@ export function GameHUD() {
 
       {/* ── Phone button — fixed bottom-right ── */}
       <button
-        onClick={togglePhone}
+        onClick={() => { getAudioEngine().play('click'); togglePhone(); }}
         title="Open Phone"
         className={phoneOpen ? 'glass-btn-primary' : 'glass-btn'}
         style={{

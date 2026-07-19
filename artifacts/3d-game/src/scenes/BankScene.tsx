@@ -20,6 +20,7 @@ const LOAN_OFFICER: NPCDef = {
   pantsColor: '#2C2C2C',
   position: [0, 0, -2.9],
   rotation: [0, 0, 0],
+  important: true,
 };
 
 const DOCS = [

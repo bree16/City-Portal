@@ -20,6 +20,7 @@ const COUNSELOR: NPCDef = {
   pantsColor: '#1A3A6B',
   position: [2, 0, -2.5],
   rotation: [0, Math.PI, 0],
+  important: true,
 };
 
 const TASKS = [

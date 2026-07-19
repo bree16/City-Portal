@@ -42,12 +42,12 @@ export const stageDialogue: { [stage: number]: NpcDialogue } = {
       },
       {
         speaker: 'Housing Counselor',
-        text: 'Your debt-to-income ratio should be under 43%. With $3,800 income, that\'s max $1,634/month in total debt payments.',
+        text: 'Keep your debt-to-income ratio under 43%. With $3,800 income, that\'s max $1,634/month in debt payments.',
         tip: 'DTI = total monthly debt ÷ gross monthly income × 100',
       },
       {
         speaker: 'Housing Counselor',
-        text: 'Newport News has a HOME Program offering up to $14,500 in down payment assistance for qualifying buyers!',
+        text: 'Newport News\'s HOME Program offers up to $14,500 in down payment assistance for qualifying buyers!',
         tip: 'Income limits apply. Ask about the first-generation homebuyer bonus.',
       },
       {
@@ -75,7 +75,7 @@ export const stageDialogue: { [stage: number]: NpcDialogue } = {
     agent_h: [
       {
         speaker: 'Agent Maya',
-        text: 'Welcome to Hilton Village! This charming colonial is $245,000. Historic neighborhood, great schools rated 4.2/5!',
+        text: 'Welcome to Hilton Village! This colonial is $245,000. Historic area, schools rated 4.2/5!',
         tip: 'Location affects resale value more than almost any other factor.',
       },
       {
@@ -87,7 +87,7 @@ export const stageDialogue: { [stage: number]: NpcDialogue } = {
     agent_d: [
       {
         speaker: 'Agent Marcus',
-        text: 'Denbigh is a great value neighborhood! This ranch home is $198,000 — payment just $1,089/month.',
+        text: 'Denbigh is great value! This ranch home is $198,000 — just $1,089/month.',
         tip: 'Starter homes often appreciate faster percentage-wise than luxury homes.',
       },
     ],
@@ -101,7 +101,7 @@ export const stageDialogue: { [stage: number]: NpcDialogue } = {
     agent_s: [
       {
         speaker: 'Agent James',
-        text: 'Southeast is our most affordable option at $168,000 — lowest payment at $924/month. Great investment potential!',
+        text: 'Southeast is most affordable at $168,000 — lowest payment, $924/month. Great potential!',
         tip: 'Buying in an up-and-coming neighborhood can yield strong equity growth.',
       },
     ],
@@ -109,17 +109,17 @@ export const stageDialogue: { [stage: number]: NpcDialogue } = {
     tour_npc: [
       {
         speaker: 'Agent',
-        text: "Welcome! Take your time exploring each room. Click the teal markers to discover highlights — they affect resale value and your daily life.",
+        text: "Welcome! Explore each room and click the teal markers to find highlights that affect resale value.",
         tip: "A home tour should take 30–45 minutes. Rushing is one of the most common buyer mistakes.",
       },
       {
         speaker: 'Agent',
-        text: "Notice how natural light fills this space. Lighting is one of the top factors buyers mention after moving in — and one of the hardest to change.",
+        text: "Notice the natural light. Lighting is a top factor buyers love — and one of the hardest to change.",
         tip: "If possible, visit a home at different times of day to see how light changes throughout.",
       },
       {
         speaker: 'Agent',
-        text: "Remember — you're buying the bones of a home, not the décor. Cosmetic changes are cheap. Structural issues are expensive. Always budget for an inspection!",
+        text: "You're buying the bones, not the décor. Cosmetic fixes are cheap, structural ones aren't — always get an inspection!",
         tip: "A home inspection costs $300–$500 and can reveal issues worth tens of thousands to fix.",
       },
     ],

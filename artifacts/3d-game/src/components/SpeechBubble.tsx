@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useGameStore } from '@/store/gameStore';
 import { stageDialogue } from '@/data/dialogue';
+import { getAudioEngine } from '@/hooks/useGameAudio';
 
 /** Replace {name} and {pronoun}/{pronouns} tokens in dialogue text with the player's values. */
 function interpolate(text: string, name: string, pronouns: string): string {
@@ -31,6 +32,7 @@ export function SpeechBubble() {
   const displayTip = line.tip ? interpolate(line.tip, playerName, playerPronouns) : undefined;
 
   const handleNext = () => {
+    getAudioEngine().play('click');
     if (isLast) {
       completeInteraction(activeDialogue.npcId);
       closeDialogue();

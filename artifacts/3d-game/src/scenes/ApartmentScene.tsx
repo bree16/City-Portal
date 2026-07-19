@@ -24,6 +24,7 @@ const LANDLORD: NPCDef = {
   pantsColor: '#2C2C2C',
   position: [4.5, 0, -2.5],
   rotation: [0, Math.PI + 0.5, 0],
+  important: true,
 };
 
 export default function ApartmentScene() {

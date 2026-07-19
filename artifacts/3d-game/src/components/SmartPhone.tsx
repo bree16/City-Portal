@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '@/store/gameStore';
 import { homes } from '@/data/homes';
+import { getAudioEngine } from '@/hooks/useGameAudio';
 
 type AppId = 'budget' | 'credit' | 'housing' | 'documents' | 'achievements';
 
@@ -18,6 +19,7 @@ const ACHIEVEMENT_DEFS = [
   { id: 'credit_champion', icon: '🌟', label: 'Credit Champ',   desc: 'Improved your credit' },
   { id: 'deal_maker',      icon: '🤝', label: 'Deal Maker',     desc: 'Negotiated your offer' },
   { id: 'first_mortgage',  icon: '📋', label: 'Pre-Approved',   desc: 'Got mortgage approval' },
+  { id: 'house_hunter',    icon: '🔍', label: 'House Hunter',   desc: 'Chose your home' },
   { id: 'homeowner',       icon: '🏡', label: 'Homeowner',      desc: 'Closed on your home' },
   { id: 'dream_home',      icon: '✨', label: 'Dream Home',     desc: 'Furnished your home' },
 ];
@@ -397,7 +399,7 @@ export function SmartPhone() {
               {activeApp ? (
                 <>
                   <button
-                    onClick={() => setActiveApp(null)}
+                    onClick={() => { getAudioEngine().play('click'); setActiveApp(null); }}
                     className="glass-btn"
                     style={{ padding: '4px 10px', fontSize: 12 }}
                   >
@@ -412,7 +414,7 @@ export function SmartPhone() {
                 </>
               )}
               <button
-                onClick={() => { setPhoneOpen(false); setActiveApp(null); }}
+                onClick={() => { getAudioEngine().play('click'); setPhoneOpen(false); setActiveApp(null); }}
                 className="glass-btn"
                 style={{ marginLeft: 'auto', padding: '4px 10px', fontSize: 12 }}
               >
@@ -433,7 +435,7 @@ export function SmartPhone() {
                       {APPS.map(({ id, icon, label, color }) => (
                         <button
                           key={id}
-                          onClick={() => setActiveApp(id)}
+                          onClick={() => { getAudioEngine().play('click'); setActiveApp(id); }}
                           className="phone-app-tile"
                           style={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,

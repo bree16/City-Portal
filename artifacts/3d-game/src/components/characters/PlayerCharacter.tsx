@@ -4,6 +4,9 @@ import * as THREE from 'three';
 import { useGameStore } from '@/store/gameStore';
 import { CharacterRig } from './CharacterRig';
 import { resolveCollisions } from '@/lib/obstacles';
+import { getAudioEngine } from '@/hooks/useGameAudio';
+
+const FOOTSTEP_INTERVAL = 0.32; // seconds of movement between footstep sounds
 
 const MAX_SPEED = 3.4; // units/sec
 const ACCEL_DAMP = 9; // higher = snappier acceleration
@@ -18,6 +21,7 @@ export function PlayerCharacter() {
   const speedRef = useRef(0);
   const stuckTimer = useRef(0);
   const groupRef = useRef<THREE.Group>(null);
+  const footstepAccum = useRef(0);
 
   useFrame((_, rawDt) => {
     const dt = Math.min(rawDt, 0.05);
@@ -53,6 +57,17 @@ export function PlayerCharacter() {
       posRef.current.set(rx, 0, rz);
       isMovingRef.current = actualStep > 0.002;
       setPlayerPosition([rx, 0, rz]);
+
+      // Throttled footstep sounds while actually moving
+      if (isMovingRef.current) {
+        footstepAccum.current += dt;
+        if (footstepAccum.current >= FOOTSTEP_INTERVAL) {
+          footstepAccum.current = 0;
+          getAudioEngine().play('footstep');
+        }
+      } else {
+        footstepAccum.current = FOOTSTEP_INTERVAL; // ready to step immediately when moving resumes
+      }
     } else {
       // Precise arrival: snap exactly onto the target, no overshoot.
       if (dist > 0 && isMovingRef.current) {
@@ -62,6 +77,7 @@ export function PlayerCharacter() {
       isMovingRef.current = false;
       speedRef.current = 0;
       stuckTimer.current = 0;
+      footstepAccum.current = FOOTSTEP_INTERVAL; // reset so first step on next move plays right away
     }
 
     if (groupRef.current) {

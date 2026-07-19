@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const ACHIEVEMENT_META: Record<string, { label: string; icon: string }> = {
   budget_master:   { label: 'Budget Master',     icon: '💰' },
   first_mortgage:  { label: 'Mortgage Ready',    icon: '📋' },
+  house_hunter:    { label: 'House Hunter',       icon: '🔍' },
   credit_champion: { label: 'Credit Champion',   icon: '⭐' },
   deal_maker:      { label: 'Deal Maker',        icon: '🤝' },
   homeowner:       { label: 'New Homeowner',     icon: '🔑' },

@@ -198,7 +198,16 @@ export const useGameStore = create<GameState>()(
         }),
       startHomeTour: (homeId) => set({ currentLocation: 'home_tour', selectedHomeId: homeId }),
       // Moves directly to negotiation without triggering the city routing in setStage
-      startNegotiation: () => set({ currentLocation: 'negotiation', stage: 4, completedInteractions: [] }),
+      startNegotiation: () =>
+        set((s) => ({
+          currentLocation: 'negotiation',
+          stage: 4,
+          completedInteractions: [],
+          // Route-agnostic milestone: entering negotiation means a home was chosen
+          achievements: s.achievements.includes('house_hunter')
+            ? s.achievements
+            : [...s.achievements, 'house_hunter'],
+        })),
       // Home Life (Stage 8) actions
       initHomeLife: (homePrice) =>
         set((s) => {

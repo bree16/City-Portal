@@ -113,6 +113,22 @@ export function AudioManager({ children }: { children: React.ReactNode }) {
     prevAchLen.current = achievements.length;
   }, [achievements, engine]);
 
+  // ── Pending life event → notification ping ────────────────────────────────
+  const pendingLifeEvent = useGameStore((s) => s.pendingLifeEvent);
+  const prevLifeEventKey = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!pendingLifeEvent) {
+      prevLifeEventKey.current = null;
+      return;
+    }
+    const key = pendingLifeEvent.title;
+    if (key !== prevLifeEventKey.current) {
+      engine.play('notification');
+      prevLifeEventKey.current = key;
+    }
+  }, [pendingLifeEvent, engine]);
+
   // ── Dialogue open → pop sound ─────────────────────────────────────────────
   const activeDialogue = useGameStore((s) => s.activeDialogue);
   const prevDialogueKey = useRef<string | null>(null);

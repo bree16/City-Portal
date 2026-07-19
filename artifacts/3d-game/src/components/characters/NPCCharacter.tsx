@@ -1,5 +1,9 @@
+import { useMemo, useRef, useState } from 'react';
 import { Html } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 import { useGameStore } from '@/store/gameStore';
+import { getAudioEngine } from '@/hooks/useGameAudio';
 import { CharacterRig } from './CharacterRig';
 
 export type NPCDef = {
@@ -12,6 +16,8 @@ export type NPCDef = {
   pantsColor: string;
   position: [number, number, number];
   rotation?: [number, number, number];
+  /** Marks a quest-critical NPC so they get the gold ring + "!" marker. */
+  important?: boolean;
 };
 
 interface NPCCharacterProps {
@@ -19,25 +25,149 @@ interface NPCCharacterProps {
   onClick?: () => void;
 }
 
+/** Deterministic 0..1 hash from a string (no Math.random in render). */
+function hashId(id: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  // Convert to unsigned then normalise to 0..1
+  return (h >>> 0) / 4294967295;
+}
+
 export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
   const { activeDialogue } = useGameStore();
   const isActive = activeDialogue?.npcId === npc.id;
+  const emphasized = isActive || npc.important === true;
+
+  // Deterministic per-NPC constants derived from the id hash.
+  const { idlePhase, gestureCycle, gestureOffset } = useMemo(() => {
+    const h = hashId(npc.id);
+    return {
+      idlePhase: h * 12, // seconds of desync between idle timers
+      gestureCycle: 9 + h * 5, // ~9-14s between gestures
+      gestureOffset: h * 14, // stagger when the first gesture fires
+    };
+  }, [npc.id]);
+
+  const rigGroupRef = useRef<THREE.Group>(null);
+  const ringRef = useRef<THREE.Mesh>(null);
+  const ringMatRef = useRef<THREE.MeshBasicMaterial>(null);
+  const markerRef = useRef<THREE.Group>(null);
+
+  // Gesture emote — React state so CharacterRig re-renders with the new prop.
+  // Only flips at cycle boundaries (~twice per 9-14s), so re-renders are rare.
+  const [emote, setEmote] = useState<'none' | 'wave'>('none');
+  const emoteRef = useRef<'none' | 'wave'>('none');
+
+  useFrame(({ clock, camera }) => {
+    const t = clock.elapsedTime;
+
+    // ── Occasional gesture: brief wave on a slow deterministic cycle ──
+    const phase = (t + gestureOffset) % gestureCycle;
+    // Wave (or gesture while dialogue is active) for the first ~1.6s of each cycle.
+    const nextEmote: 'none' | 'wave' = isActive || phase < 1.6 ? 'wave' : 'none';
+    if (emoteRef.current !== nextEmote) {
+      emoteRef.current = nextEmote;
+      setEmote(nextEmote);
+    }
+
+    // ── Facing behavior: gently turn toward the camera when in dialogue ──
+    if (rigGroupRef.current) {
+      const cam = camera.position;
+      // Angle from the NPC's world position toward the camera on the XZ plane.
+      const targetY = isActive
+        ? Math.atan2(cam.x - npc.position[0], cam.z - npc.position[2])
+        : 0;
+      rigGroupRef.current.rotation.y = THREE.MathUtils.lerp(
+        rigGroupRef.current.rotation.y,
+        targetY,
+        0.04
+      );
+    }
+
+    // ── Quest emphasis: pulsing gold ring ──
+    if (emphasized) {
+      if (ringRef.current) {
+        const s = 0.5 + Math.sin(t * 2 + idlePhase) * 0.06;
+        ringRef.current.scale.set(s, s, s);
+      }
+      if (ringMatRef.current) {
+        ringMatRef.current.opacity = 0.35 + (Math.sin(t * 2 + idlePhase) + 1) * 0.15;
+      }
+      // Bobbing "!" marker above the head.
+      if (markerRef.current) {
+        markerRef.current.position.y = 2.55 + Math.sin(t * 2.5 + idlePhase) * 0.08;
+        markerRef.current.rotation.y = t * 0.8;
+      }
+    }
+  });
 
   return (
     <group position={npc.position} rotation={npc.rotation ?? [0, 0, 0]}>
-      <CharacterRig
-        skinTone={npc.skinTone}
-        hairColor={npc.hairColor}
-        shirtColor={npc.shirtColor}
-        pantsColor={npc.pantsColor}
-        isIdle={true}
-      />
+      <group ref={rigGroupRef}>
+        <CharacterRig
+          skinTone={npc.skinTone}
+          hairColor={npc.hairColor}
+          shirtColor={npc.shirtColor}
+          pantsColor={npc.pantsColor}
+          isIdle={true}
+          idlePhase={idlePhase}
+          emote={emote}
+          bigSmile={isActive}
+        />
+      </group>
+
+      {/* Quest emphasis: softly pulsing gold ring on the ground */}
+      {emphasized && (
+        <mesh ref={ringRef} position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[0.55, 0.7, 48]} />
+          <meshBasicMaterial
+            ref={ringMatRef}
+            color="#D4A843"
+            transparent
+            opacity={0.45}
+            side={THREE.DoubleSide}
+            depthWrite={false}
+          />
+        </mesh>
+      )}
+
+      {/* Quest emphasis: bobbing gold "!" marker above the head */}
+      {emphasized && (
+        <group ref={markerRef} position={[0, 2.55, 0]}>
+          {/* Stem */}
+          <mesh position={[0, 0.09, 0]} castShadow>
+            <capsuleGeometry args={[0.045, 0.16, 4, 10]} />
+            <meshStandardMaterial
+              color="#D4A843"
+              emissive="#D4A843"
+              emissiveIntensity={0.6}
+              roughness={0.3}
+              metalness={0.4}
+            />
+          </mesh>
+          {/* Dot */}
+          <mesh position={[0, -0.11, 0]} castShadow>
+            <sphereGeometry args={[0.05, 12, 10]} />
+            <meshStandardMaterial
+              color="#D4A843"
+              emissive="#D4A843"
+              emissiveIntensity={0.6}
+              roughness={0.3}
+              metalness={0.4}
+            />
+          </mesh>
+        </group>
+      )}
 
       {/* Invisible click hitbox */}
       <mesh
         position={[0, 0.9, 0]}
         onClick={(e) => {
           e.stopPropagation();
+          getAudioEngine().play('click');
           onClick?.();
         }}
       >
@@ -45,7 +175,7 @@ export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
         <meshStandardMaterial transparent opacity={0} />
       </mesh>
 
-      {/* Name label above head */}
+      {/* Name label above head — glass look */}
       <Html
         position={[0, 2.2, 0]}
         center
@@ -55,20 +185,31 @@ export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
       >
         <div
           style={{
-            background: isActive ? '#D4A843' : '#0D2B5E',
-            color: '#fff',
+            background: isActive
+              ? 'rgba(20, 26, 40, 0.82)'
+              : 'rgba(13, 18, 30, 0.68)',
+            color: isActive ? '#F5D97A' : '#fff',
             padding: '3px 10px',
-            borderRadius: 8,
+            borderRadius: 10,
             fontSize: 11,
             fontWeight: 700,
             whiteSpace: 'nowrap',
             fontFamily: 'Inter, sans-serif',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-            border: isActive ? '2px solid #fff' : '1px solid rgba(255,255,255,0.2)',
+            boxShadow: isActive
+              ? '0 2px 12px rgba(212,168,67,0.35)'
+              : '0 2px 8px rgba(0,0,0,0.4)',
+            border: isActive
+              ? '1.5px solid #D4A843'
+              : '1px solid rgba(255,255,255,0.18)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             cursor: 'pointer',
             pointerEvents: 'auto',
           }}
-          onClick={() => onClick?.()}
+          onClick={() => {
+            getAudioEngine().play('click');
+            onClick?.();
+          }}
         >
           {npc.name}
         </div>

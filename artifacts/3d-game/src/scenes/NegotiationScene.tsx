@@ -20,6 +20,7 @@ const SELLER: NPCDef = {
   pantsColor: '#2C2C2C',
   position: [2, 0, -1.5],
   rotation: [0, Math.PI, 0],
+  important: true,
 };
 
 export default function NegotiationScene() {

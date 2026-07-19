@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Html } from '@react-three/drei';
 import { useGameStore } from '@/store/gameStore';
+import { getAudioEngine } from '@/hooks/useGameAudio';
 import { PottedPlant, TallPlant, WallArt, Curtains } from '@/components/decor/DecorKit';
 import { motion } from 'framer-motion';
 
@@ -73,6 +74,7 @@ export default function NewHomeScene() {
   const handleBuy = (slotId: string, itemId: string, price: number) => {
     if (cash >= price && !furnitureOwned.includes(itemId)) {
       buyFurniture(itemId, price);
+      getAudioEngine().play('coin');
       const newCount = purchaseCount + 1;
       setPurchaseCount(newCount);
       setActiveSlot(null);
@@ -80,7 +82,10 @@ export default function NewHomeScene() {
         setTip(FINANCIAL_TIPS[Math.floor(newCount / 2) % FINANCIAL_TIPS.length]);
         setTimeout(() => setTip(null), 6000);
       }
-      if (furnitureOwned.length + 1 >= 5) addAchievement('dream_home');
+      if (furnitureOwned.length + 1 >= 5) {
+        addAchievement('dream_home');
+        getAudioEngine().play('celebration');
+      }
     }
   };
 
@@ -215,13 +220,13 @@ export default function NewHomeScene() {
                 <meshStandardMaterial color={placed.color} roughness={0.9} />
               </mesh>
             ) : (
-              <mesh position={[0, 0.06, 0]} onClick={(e) => { e.stopPropagation(); setActiveSlot(activeSlot === slot.id ? null : slot.id); }}>
+              <mesh position={[0, 0.06, 0]} onClick={(e) => { e.stopPropagation(); if (activeSlot !== slot.id) getAudioEngine().play('click'); setActiveSlot(activeSlot === slot.id ? null : slot.id); }}>
                 <boxGeometry args={[slot.size[0] + 0.2, 0.12, slot.size[2] + 0.2]} />
                 <meshStandardMaterial color="#D4A843" transparent opacity={0.45} emissive="#D4A843" emissiveIntensity={0.8} roughness={0.5} />
               </mesh>
             )}
             <Html position={[0, placed ? slot.size[1] + 0.55 : 0.55, 0]} center distanceFactor={10}>
-              <div onClick={() => { if (!placed) setActiveSlot(activeSlot === slot.id ? null : slot.id); }} style={{
+              <div onClick={() => { if (!placed) { if (activeSlot !== slot.id) getAudioEngine().play('click'); setActiveSlot(activeSlot === slot.id ? null : slot.id); } }} style={{
                 background: placed ? '#0A8F7E' : '#D4A843',
                 color: placed ? '#fff' : '#0D2B5E',
                 fontSize: 10, padding: '3px 10px', borderRadius: 6,

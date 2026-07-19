@@ -5,7 +5,17 @@
 
 import { useGameStore, DEFAULT_VOLUME } from '@/store/gameStore';
 
-export type SoundEffect = 'click' | 'dialogue' | 'coin' | 'achievement' | 'fanfare';
+export type SoundEffect =
+  | 'click'
+  | 'dialogue'
+  | 'coin'
+  | 'achievement'
+  | 'fanfare'
+  | 'footstep'
+  | 'sign'
+  | 'door'
+  | 'notification'
+  | 'celebration';
 
 // ─── Singleton audio engine ────────────────────────────────────────────────
 
@@ -121,7 +131,44 @@ class GameAudioEngine {
       case 'coin':       return this._playCoin(ctx);
       case 'achievement':return this._playAchievement(ctx);
       case 'fanfare':    return this._playFanfare(ctx);
+      case 'footstep':   return this._playFootstep(ctx);
+      case 'sign':       return this._playSign(ctx);
+      case 'door':       return this._playDoor(ctx);
+      case 'notification':return this._playNotification(ctx);
+      case 'celebration':return this._playCelebration(ctx);
     }
+  }
+
+  /** Short filtered noise burst helper for percussive/textured SFX. */
+  private _noiseBurst(
+    ctx: AudioContext,
+    startOffset: number,
+    duration: number,
+    peakGain: number,
+    filter: { type: BiquadFilterType; freq: number; q?: number }
+  ) {
+    const frames = Math.max(1, Math.floor(ctx.sampleRate * duration));
+    const buffer = ctx.createBuffer(1, frames, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < frames; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    const biquad = ctx.createBiquadFilter();
+    biquad.type = filter.type;
+    biquad.frequency.value = filter.freq;
+    if (filter.q !== undefined) biquad.Q.value = filter.q;
+    const gain = ctx.createGain();
+    src.connect(biquad);
+    biquad.connect(gain);
+    gain.connect(this.sfxGain!);
+    const t = ctx.currentTime + startOffset;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(peakGain, t + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+    src.start(t);
+    src.stop(t + duration + 0.01);
   }
 
   private _tone(
@@ -180,6 +227,61 @@ class GameAudioEngine {
       // Harmony a third up
       this._tone(ctx, freq * 1.26, i * 0.16, 0.55, 0.12, 'sine');
     });
+  }
+
+  private _playFootstep(ctx: AudioContext) {
+    // Very quiet low thump + tiny filtered noise scuff
+    const freq = 90 + Math.random() * 50; // 90–140Hz
+    this._tone(ctx, freq, 0, 0.07, 0.06, 'sine');
+    this._noiseBurst(ctx, 0, 0.04, 0.02, { type: 'lowpass', freq: 700 });
+  }
+
+  private _playSign(ctx: AudioContext) {
+    // Paper-signing scratch: brief bandpassed noise burst + faint descending tone pair
+    this._noiseBurst(ctx, 0,    0.09, 0.14, { type: 'bandpass', freq: 2600, q: 1.5 });
+    this._noiseBurst(ctx, 0.10, 0.07, 0.10, { type: 'bandpass', freq: 3200, q: 1.5 });
+    this._tone(ctx, 520, 0,    0.10, 0.05, 'sine');
+    this._tone(ctx, 420, 0.09, 0.10, 0.05, 'sine');
+  }
+
+  private _playDoor(ctx: AudioContext) {
+    // Soft low thunk...
+    this._tone(ctx, 120, 0, 0.12, 0.16, 'sine');
+    this._noiseBurst(ctx, 0, 0.06, 0.06, { type: 'lowpass', freq: 400 });
+    // ...followed by a creak-ish rising tone
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.connect(gain);
+    gain.connect(this.sfxGain!);
+    const t = ctx.currentTime + 0.05;
+    osc.frequency.setValueAtTime(240, t);
+    osc.frequency.linearRampToValueAtTime(360, t + 0.28);
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.05, t + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+    osc.start(t);
+    osc.stop(t + 0.32);
+  }
+
+  private _playNotification(ctx: AudioContext) {
+    // Gentle two-note ping (distinct from dialogue's rising pair)
+    this._tone(ctx, 784, 0,    0.16, 0.16, 'triangle');
+    this._tone(ctx, 1046, 0.11, 0.22, 0.14, 'triangle');
+  }
+
+  private _playCelebration(ctx: AudioContext) {
+    // Bright sparkly ascending arpeggio (~1.2s), distinct from fanfare
+    const notes = [523, 659, 784, 1047, 1319, 1568];
+    notes.forEach((freq, i) => {
+      this._tone(ctx, freq, i * 0.11, 0.5, 0.2, 'triangle');
+      // Sparkle shimmer an octave up, very faint
+      this._tone(ctx, freq * 2, i * 0.11 + 0.02, 0.35, 0.06, 'sine');
+    });
+    // Final held sparkle chord
+    this._tone(ctx, 1047, 0.66, 0.55, 0.14, 'sine');
+    this._tone(ctx, 1319, 0.66, 0.55, 0.1, 'sine');
+    this._tone(ctx, 1568, 0.66, 0.55, 0.08, 'sine');
   }
 
   // ── Ambient music ─────────────────────────────────────────────────────────

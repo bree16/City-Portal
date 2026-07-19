@@ -1,10 +1,49 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Html } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
+import { getAudioEngine } from '@/hooks/useGameAudio';
 import { PottedPlant, TallPlant, WallArt, WallClock } from '@/components/decor/DecorKit';
 import confetti from 'canvas-confetti';
+
+/** Golden key that floats and spins above the table during the keys handoff. */
+function FloatingKey() {
+  const groupRef = useRef<THREE.Group>(null);
+  useFrame(({ clock }) => {
+    const t = clock.elapsedTime;
+    if (groupRef.current) {
+      groupRef.current.position.y = 1.9 + Math.sin(t * 1.6) * 0.12;
+      groupRef.current.rotation.y = t * 1.4;
+    }
+  });
+  return (
+    <group ref={groupRef} position={[0, 1.9, 0]}>
+      {/* Shaft */}
+      <mesh castShadow rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.05, 0.05, 0.8, 12]} />
+        <meshStandardMaterial color="#F5C842" metalness={0.9} roughness={0.15} emissive="#D4A843" emissiveIntensity={0.4} />
+      </mesh>
+      {/* Bow (ring head) */}
+      <mesh position={[-0.42, 0, 0]} rotation={[0, Math.PI / 2, 0]} castShadow>
+        <torusGeometry args={[0.16, 0.05, 12, 24]} />
+        <meshStandardMaterial color="#F5C842" metalness={0.9} roughness={0.15} emissive="#D4A843" emissiveIntensity={0.4} />
+      </mesh>
+      {/* Teeth */}
+      <mesh position={[0.34, -0.12, 0]} castShadow>
+        <boxGeometry args={[0.08, 0.14, 0.06]} />
+        <meshStandardMaterial color="#F5C842" metalness={0.9} roughness={0.15} emissive="#D4A843" emissiveIntensity={0.4} />
+      </mesh>
+      <mesh position={[0.2, -0.11, 0]} castShadow>
+        <boxGeometry args={[0.07, 0.11, 0.06]} />
+        <meshStandardMaterial color="#F5C842" metalness={0.9} roughness={0.15} emissive="#D4A843" emissiveIntensity={0.4} />
+      </mesh>
+      <pointLight position={[0, 0, 0.3]} intensity={0.8} color="#FFD96A" distance={3} />
+    </group>
+  );
+}
 
 const NOTARY: NPCDef = {
   id: 'notary',
@@ -16,6 +55,7 @@ const NOTARY: NPCDef = {
   pantsColor: '#2C1040',
   position: [2, 0, -1.5],
   rotation: [0, Math.PI, 0],
+  important: true,
 };
 
 const SIGNING_STEPS = [
@@ -31,8 +71,12 @@ export default function ClosingScene() {
 
   const handleStep = (idx: number) => {
     if (idx !== step) return;
+    if (idx === 0 || idx === 1) {
+      getAudioEngine().play('sign');
+    }
     if (idx === 2) {
       setCelebrating(true);
+      getAudioEngine().play('celebration');
       updateSavings(-12000);
       addAchievement('homeowner');
       confetti({ particleCount: 130, spread: 80, origin: { y: 0.6 }, colors: ['#D4A843', '#0A8F7E', '#0D2B5E', '#fff', '#FFD700'] });
@@ -197,6 +241,9 @@ export default function ClosingScene() {
       <TallPlant position={[7.8, 0, 5.5]} scale={1.05} />
       {/* Potted plant near bookshelf */}
       <PottedPlant position={[-7.5, 0, -5]} scale={1.1} />
+
+      {/* Keys handoff — golden key floats above the table during celebration */}
+      {celebrating && <FloatingKey />}
 
       <NPCCharacter npc={NOTARY} onClick={() => openDialogue('notary')} />
 

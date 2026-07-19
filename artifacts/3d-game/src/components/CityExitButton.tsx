@@ -1,5 +1,6 @@
 import { useGameStore } from '@/store/gameStore';
 import { findBuilding } from '@/data/buildings';
+import { getAudioEngine } from '@/hooks/useGameAudio';
 
 export function CityExitButton() {
   const { currentLocation, setTransitioning, setCurrentLocation, setPlayerTarget } = useGameStore();
@@ -13,6 +14,7 @@ export function CityExitButton() {
   const building = isTour ? null : findBuilding(currentLocation);
 
   const handleReturn = () => {
+    getAudioEngine().play('door');
     setTransitioning(true);
     if (isTour) {
       setTimeout(() => {
