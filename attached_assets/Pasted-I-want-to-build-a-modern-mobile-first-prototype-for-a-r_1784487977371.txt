@@ -1,0 +1,164 @@
+I want to build a modern, mobile-first prototype for a redesigned Newport News Housing Hub website. This is a college design-thinking project for the City of Newport News. The website is a concept only—it does not need a backend or database, but it should look like a real, production-quality government service that appeals to younger adults (ages 18–35).
+
+Overall Design
+Clean, modern UI inspired by Zillow, Rocket Mortgage, Airbnb, Apple, and the Charlotte, NC Housing Services website.
+Avoid the typical outdated government website look.
+Mobile-first and fully responsive.
+Use HTML, CSS, and JavaScript.
+Use Bootstrap 5 where appropriate.
+Smooth scrolling and subtle animations.
+Rounded cards, soft shadows, modern spacing, and professional typography.
+Primary colors: navy blue, white, teal accents, and a small gold accent color.
+Homepage Layout
+
+Create a full landing page with:
+
+Hero Section
+
+Large headline:
+
+Find Your Path Home
+
+Subtitle:
+
+Explore affordable housing, homeownership programs, neighborhood resources, and personalized tools—all in one place.
+
+Large call-to-action button:
+
+Get Started
+
+Include a modern hero illustration or placeholder image of houses/community.
+
+Quick Action Cards
+
+Display six clickable cards with icons:
+
+🏡 Buy a Home
+
+🏢 Find Rental Resources
+
+💰 Can I Afford It?
+
+📍 Explore Neighborhoods
+
+🎓 First-Time Buyer Programs
+
+💬 Housing Assistance
+
+Cards should have hover animations.
+
+Affordability Section
+
+Create a highlighted section that introduces an affordability calculator.
+
+Text:
+
+Wondering if buying a home is possible? Compare renting versus owning and explore assistance programs.
+
+Include a large button:
+
+Try the Calculator
+
+Neighborhood Section
+
+Interactive cards for neighborhoods.
+
+Each card should show:
+
+Photo placeholder
+Neighborhood name
+Small description
+Average home price placeholder
+Learn More button
+Events Section
+
+Show upcoming community events in card format.
+
+Example:
+
+Homebuyer Workshop
+
+Financial Literacy Seminar
+
+Neighborhood Cleanup
+
+Housing Fair
+
+Testimonials
+
+Display testimonials from young homeowners.
+
+Use placeholder names and photos.
+
+Footer
+
+Include:
+
+About
+
+Contact
+
+Housing Resources
+
+Social Media Icons
+
+Accessibility
+
+Privacy Policy
+
+Navigation Bar
+
+Sticky navigation.
+
+Logo:
+
+🏠 Housing Hub
+
+Navigation links:
+
+Home
+
+Buy
+
+Rent
+
+Neighborhoods
+
+Resources
+
+Contact
+
+Include a responsive hamburger menu.
+
+Additional Pages
+
+Create placeholder pages for:
+
+Buy a Home
+Rental Resources
+Neighborhoods
+Housing Assistance
+Contact
+Styling
+
+Use:
+
+Bootstrap 5
+Google Font: Poppins or Inter
+Font Awesome icons
+Rounded buttons
+Modern cards
+Smooth hover effects
+Responsive layout
+Professional spacing
+Code Quality
+
+Organize the project into:
+
+index.html
+css/style.css
+js/script.js
+images/
+pages/
+
+Keep the code clean, commented, and easy to expand later.

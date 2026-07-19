@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Newport News Housing Hub"
+version = "1.0.0"
+id = "artifacts/housing-hub"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20453
+
+[services.development]
+run = "pnpm --filter @workspace/housing-hub run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/housing-hub", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/housing-hub/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20453"
+BASE_PATH = "/"
