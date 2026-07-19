@@ -176,7 +176,7 @@ export default function ApartmentScene() {
         </mesh>
         <pointLight position={[5, 0.9, 1.2]} intensity={0.3} color="#1060D0" distance={2} />
         <Html position={[0, 0.95, 0]} center distanceFactor={9}>
-          <div style={{
+          <div onClick={() => openDialogue('laptop')} style={{
             background: completedInteractions.includes('laptop') ? '#4ade80' : '#0A8F7E',
             color: completedInteractions.includes('laptop') ? '#0D2B5E' : '#fff',
             fontSize: 10, padding: '3px 8px', borderRadius: 6,
@@ -209,7 +209,7 @@ export default function ApartmentScene() {
           <meshStandardMaterial color="#FFA0B0" roughness={0.6} />
         </mesh>
         <Html position={[0, 0.75, 0]} center distanceFactor={9}>
-          <div style={{
+          <div onClick={() => openDialogue('piggybank')} style={{
             background: completedInteractions.includes('piggybank') ? '#4ade80' : '#D4A843',
             color: completedInteractions.includes('piggybank') ? '#0D2B5E' : '#0D2B5E',
             fontSize: 10, padding: '3px 8px', borderRadius: 6,

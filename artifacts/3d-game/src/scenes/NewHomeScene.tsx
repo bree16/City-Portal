@@ -190,7 +190,7 @@ export default function NewHomeScene() {
               </mesh>
             )}
             <Html position={[0, placed ? slot.size[1] + 0.55 : 0.55, 0]} center distanceFactor={10}>
-              <div style={{
+              <div onClick={() => { if (!placed) setActiveSlot(activeSlot === slot.id ? null : slot.id); }} style={{
                 background: placed ? '#0A8F7E' : '#D4A843',
                 color: placed ? '#fff' : '#0D2B5E',
                 fontSize: 10, padding: '3px 10px', borderRadius: 6,

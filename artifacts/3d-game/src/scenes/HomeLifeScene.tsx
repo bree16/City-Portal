@@ -330,7 +330,7 @@ export default function HomeLifeScene() {
               />
             </mesh>
             <Html position={[0, 0.7, 0]} center distanceFactor={12}>
-              <div style={{
+              <div onClick={() => { if (!owned) setActiveImp(isActive ? null : imp.id); }} style={{
                 background: owned ? 'rgba(45,122,45,0.9)' : `rgba(${imp.color.startsWith('#D') ? '212,168,67' : imp.color.startsWith('#8') ? '139,105,20' : imp.color.startsWith('#2') ? '39,174,96' : '243,156,18'},0.88)`,
                 color: '#fff', padding: '4px 10px', borderRadius: 6,
                 fontSize: 10, fontWeight: 700, fontFamily: 'Inter,sans-serif',

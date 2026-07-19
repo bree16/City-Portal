@@ -198,6 +198,7 @@ function BuildingExterior({ b, status, onEnter }: {
       {/* Sign / label */}
       <Html position={[0, h + 1.2, 0]} center distanceFactor={16}>
         <div
+          onClick={() => { if (!isLocked && b.hasInterior) onEnter(b.id); }}
           style={{
             background: isLocked ? 'rgba(40,40,40,0.9)' : isCurrent ? 'rgba(212,168,67,0.95)' : 'rgba(13,43,94,0.9)',
             padding: '5px 12px',
@@ -209,7 +210,7 @@ function BuildingExterior({ b, status, onEnter }: {
             fontFamily: 'Inter,sans-serif',
             border: `1px solid ${isLocked ? '#555' : isCurrent ? '#F0C050' : 'rgba(255,255,255,0.2)'}`,
             boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-            cursor: isLocked ? 'not-allowed' : 'pointer',
+            cursor: isLocked ? 'not-allowed' : b.hasInterior ? 'pointer' : 'default',
           }}
         >
           {b.icon} {b.name}

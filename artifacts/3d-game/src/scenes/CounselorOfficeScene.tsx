@@ -149,7 +149,7 @@ export default function CounselorOfficeScene() {
         <meshStandardMaterial color="#555" roughness={0.4} metalness={0.3} wireframe />
       </mesh>
       <Html position={[-3.5, 2.95, -6.7]} center distanceFactor={10}>
-        <div style={{
+        <div onClick={() => openDialogue('whiteboard')} style={{
           background: completedInteractions.includes('whiteboard') ? '#4ade80' : '#0D2B5E',
           color: completedInteractions.includes('whiteboard') ? '#0D2B5E' : '#fff',
           fontSize: 10, padding: '3px 10px', borderRadius: 6,
@@ -179,7 +179,7 @@ export default function CounselorOfficeScene() {
           </mesh>
         ))}
         <Html position={[0, 1.55, 0]} center distanceFactor={10}>
-          <div style={{
+          <div onClick={() => openDialogue('filing')} style={{
             background: completedInteractions.includes('filing') ? '#4ade80' : '#0A8F7E',
             color: completedInteractions.includes('filing') ? '#0D2B5E' : '#fff',
             fontSize: 10, padding: '3px 10px', borderRadius: 6,

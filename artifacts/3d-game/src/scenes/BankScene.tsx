@@ -189,7 +189,7 @@ export default function BankScene() {
             />
           </mesh>
           <Html position={[0, 0.34, 0]} center distanceFactor={10}>
-            <div style={{
+            <div onClick={() => { if (!completedInteractions.includes(doc.id)) completeInteraction(doc.id); }} style={{
               background: completedInteractions.includes(doc.id) ? '#4ade80' : '#0D2B5E',
               color: completedInteractions.includes(doc.id) ? '#0D2B5E' : '#fff',
               fontSize: 10, padding: '3px 8px', borderRadius: 6,

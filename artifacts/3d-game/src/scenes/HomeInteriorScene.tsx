@@ -151,8 +151,8 @@ function ClickableProp({ pos, label, tip }: FeatureProp) {
         />
       </mesh>
       {!open && (
-        <Html position={[0, 0.42, 0]} center distanceFactor={10} style={{ pointerEvents: 'none' }}>
-          <div style={{ background: 'rgba(10,143,126,0.85)', color: '#fff', borderRadius: 5, padding: '2px 7px', fontSize: 9, fontWeight: 700, fontFamily: 'Inter,sans-serif', whiteSpace: 'nowrap' }}>
+        <Html position={[0, 0.42, 0]} center distanceFactor={10}>
+          <div onClick={() => setOpen(true)} style={{ background: 'rgba(10,143,126,0.85)', color: '#fff', borderRadius: 5, padding: '2px 7px', fontSize: 9, fontWeight: 700, fontFamily: 'Inter,sans-serif', whiteSpace: 'nowrap', cursor: 'pointer' }}>
             ● Inspect
           </div>
         </Html>
