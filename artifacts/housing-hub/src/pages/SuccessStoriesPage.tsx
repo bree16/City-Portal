@@ -6,6 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import storyFamily from '@assets/generated_images/story_family_1.jpg';
+import storyVeteran from '@assets/generated_images/story_veteran.jpg';
+import storySingleMom from '@assets/generated_images/story_single_mom.jpg';
+import storySenior from '@assets/generated_images/story_senior_couple.jpg';
 
 function AnimatedCounter({ end, suffix = "", prefix = "" }: { end: number, suffix?: string, prefix?: string }) {
   const [count, setCount] = useState(0);
@@ -43,7 +47,8 @@ export default function SuccessStoriesPage() {
       story: "I never thought I'd own a home at 26. The counselor helped me understand my options and the grant covered my down payment. I closed in March and it still feels unreal.",
       quote: "This program changed my life.",
       initials: "MT",
-      color: "bg-blue-600"
+      color: "bg-blue-600",
+      photo: storyVeteran
     },
     {
       name: "Jasmine R.",
@@ -52,7 +57,8 @@ export default function SuccessStoriesPage() {
       story: "When I lost my job, I was terrified of losing our apartment. The emergency assistance kept us housed while I got back on my feet. The staff treated us with dignity every step of the way.",
       quote: "They gave us hope when we needed it most.",
       initials: "JR",
-      color: "bg-teal-600"
+      color: "bg-teal-600",
+      photo: storySingleMom
     },
     {
       name: "Devon S.",
@@ -61,7 +67,8 @@ export default function SuccessStoriesPage() {
       story: "I used the calculator thinking I wasn't ready. Turns out I was closer than I thought. Six months later I had a pre-approval letter. The tools on this site genuinely work.",
       quote: "It opened my eyes to what was possible.",
       initials: "DS",
-      color: "bg-amber-600"
+      color: "bg-amber-600",
+      photo: null
     },
     {
       name: "Alicia M.",
@@ -70,7 +77,8 @@ export default function SuccessStoriesPage() {
       story: "My credit was a mess and I didn't know where to start. Three sessions with my counselor and I had a real plan. Two years later my score went up 120 points and I bought my first home.",
       quote: "The guidance was priceless.",
       initials: "AM",
-      color: "bg-purple-600"
+      color: "bg-purple-600",
+      photo: null
     },
     {
       name: "James & Keisha W.",
@@ -79,7 +87,8 @@ export default function SuccessStoriesPage() {
       story: "We had the income but not the savings. The DPA grant covered everything we needed at closing. Newport News makes homeownership feel possible for working families.",
       quote: "We couldn't have done it without the grant.",
       initials: "JW",
-      color: "bg-indigo-600"
+      color: "bg-indigo-600",
+      photo: storyFamily
     },
     {
       name: "Tanya B.",
@@ -88,7 +97,8 @@ export default function SuccessStoriesPage() {
       story: "The voucher program gave my family stability we hadn't had in years. A safe, affordable place made everything else possible — school, work, health.",
       quote: "A safe home is the foundation for everything.",
       initials: "TB",
-      color: "bg-rose-600"
+      color: "bg-rose-600",
+      photo: storySenior
     }
   ];
 
@@ -146,8 +156,14 @@ export default function SuccessStoriesPage() {
                   <Quote className="absolute top-6 right-6 w-12 h-12 text-muted/50 rotate-180 pointer-events-none" />
                   <CardContent className="p-8 sm:p-10 flex flex-col h-full relative z-10">
                     <div className="flex items-center gap-4 mb-8 pb-8 border-b border-border">
-                      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-inner ${story.color}`}>
-                        {story.initials}
+                      <div className="w-16 h-16 rounded-full overflow-hidden shadow-md shrink-0 ring-2 ring-border">
+                        {story.photo ? (
+                          <img src={story.photo} alt={story.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className={`w-full h-full flex items-center justify-center text-white text-xl font-bold ${story.color}`}>
+                            {story.initials}
+                          </div>
+                        )}
                       </div>
                       <div>
                         <h3 className="text-xl font-bold text-primary">{story.name}</h3>

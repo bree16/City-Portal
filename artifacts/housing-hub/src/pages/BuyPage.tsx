@@ -1,27 +1,49 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, ChevronDown, DollarSign, Key, FileText, BadgePercent, Home, Users, CreditCard, BookOpen, Landmark } from 'lucide-react';
+import { CheckCircle2, ChevronDown, DollarSign, Key, FileText, BadgePercent, Home, Users, CreditCard, BookOpen, Landmark, ArrowRight } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
+import buyHero from '@assets/generated_images/buy_hero.jpg';
 
 export default function BuyPage() {
   return (
     <div className="flex flex-col w-full pt-20 bg-muted/20">
-      {/* Hero */}
-      <section className="bg-primary text-white py-20 lg:py-28 text-center px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0B2146] via-primary to-[#0D2B5E] z-0"></div>
-        <div className="container mx-auto relative z-10 max-w-4xl">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="text-secondary font-bold tracking-wider uppercase text-sm mb-4 block">Homeownership</span>
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight">Buying Your First Home Starts Here</h1>
-            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-10">
+      {/* Hero — split layout with lifestyle photo */}
+      <section className="bg-primary text-white relative overflow-hidden min-h-[520px] flex items-center">
+        {/* Photo right half */}
+        <div className="absolute inset-y-0 right-0 w-full lg:w-1/2 z-0">
+          <img src={buyHero} alt="Couple receiving keys to their first home" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-primary/10 lg:via-primary/60 lg:to-transparent" />
+        </div>
+        {/* Dark base for left side */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0B2146] via-primary to-primary/90 z-0 lg:w-3/5" />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-24 lg:py-32">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-5 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+              Homeownership Programs
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-5 tracking-tight leading-[1.1]">Buying Your First Home Starts Here</h1>
+            <p className="text-lg text-white/80 mb-8 leading-relaxed">
               From dream to keys — Newport News has programs, counselors, and neighbors ready to help you get there.
             </p>
-            <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-white rounded-full h-14 px-10 text-lg font-bold shadow-xl shadow-accent/20 transition-transform hover:scale-105">
-              <a href="#roadmap">Start Your Journey</a>
-            </Button>
+            <div className="flex flex-wrap gap-4">
+              <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-white rounded-full h-14 px-10 text-base font-bold shadow-xl shadow-accent/20 transition-transform hover:scale-105">
+                <a href="#roadmap">Start Your Journey</a>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 hover:text-white rounded-full h-14 px-8 text-base font-semibold bg-transparent">
+                <Link href="/quiz">Take the Quiz <ArrowRight className="ml-2 w-4 h-4" /></Link>
+              </Button>
+            </div>
+            {/* Trust indicators */}
+            <div className="flex items-center gap-6 mt-8 text-white/60 text-sm">
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-secondary" /> Free counseling</span>
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-secondary" /> Up to $25K assistance</span>
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-secondary" /> No cost to apply</span>
+            </div>
           </motion.div>
         </div>
       </section>

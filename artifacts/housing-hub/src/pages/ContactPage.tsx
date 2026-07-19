@@ -25,14 +25,19 @@ export default function ContactPage() {
   return (
     <div className="flex flex-col w-full pt-20 min-h-screen bg-muted/20">
       {/* Hero */}
-      <section className="bg-primary text-white py-16 text-center px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0B2146] to-accent/60 z-0"></div>
-        <div className="container mx-auto max-w-4xl relative z-10">
+      <section className="bg-primary text-white py-20 text-center px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0B2146] via-primary to-accent/60 z-0" />
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_30%_70%,_#0A8F7E_0%,_transparent_55%)] z-0 pointer-events-none" />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="container mx-auto max-w-4xl relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-6 backdrop-blur-md">
+            <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+            We're Here for You
+          </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight">Get in Touch — We're Here to Help</h1>
           <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
             Have questions about housing programs or need assistance? Our team is ready.
           </p>
-        </div>
+        </motion.div>
       </section>
 
       <section className="py-12 flex-1">

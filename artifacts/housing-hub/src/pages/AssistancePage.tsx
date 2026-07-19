@@ -4,6 +4,7 @@ import { HandHeart, Home, Wrench, ShieldAlert, ArrowRight, FileCheck } from 'luc
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
+import assistanceHero from '@assets/generated_images/assistance_hero.jpg';
 
 export default function AssistancePage() {
   const programs = [
@@ -46,16 +47,24 @@ export default function AssistancePage() {
 
   return (
     <div className="flex flex-col w-full pt-20">
-      {/* Hero */}
-      <section className="bg-primary text-white py-16 lg:py-24 text-center px-4 relative">
-        <div className="container mx-auto max-w-4xl relative z-10">
-          <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/20">
-            <HandHeart className="w-8 h-8 text-secondary" />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Newport News Has Your Back</h1>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto">
-            No one faces a housing challenge alone here. From emergency help to long-term programs, our community has resources for every situation.
-          </p>
+      {/* Hero — photo background */}
+      <section className="relative text-white py-24 lg:py-36 text-center px-4 overflow-hidden">
+        <img src={assistanceHero} alt="Housing counselor helping a family" className="absolute inset-0 w-full h-full object-cover z-0" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/92 via-primary/80 to-accent/50 z-10" />
+        <div className="container mx-auto max-w-4xl relative z-20">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-6 backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+              Housing Assistance Programs
+            </div>
+            <div className="w-16 h-16 bg-white/15 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/20">
+              <HandHeart className="w-8 h-8 text-secondary" />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Newport News Has Your Back</h1>
+            <p className="text-lg text-white/80 max-w-2xl mx-auto">
+              No one faces a housing challenge alone here. From emergency help to long-term programs, our community has resources for every situation.
+            </p>
+          </motion.div>
         </div>
       </section>
 

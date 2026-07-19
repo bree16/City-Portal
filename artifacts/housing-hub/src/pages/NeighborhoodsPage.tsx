@@ -9,6 +9,7 @@ import hiltonImage from '@assets/generated_images/hilton_village.jpg';
 import denbighImage from '@assets/generated_images/denbigh.jpg';
 import oysterImage from '@assets/generated_images/oyster_point.jpg';
 import southeastImage from '@assets/generated_images/southeast.jpg';
+import neighborhoodsHero from '@assets/generated_images/neighborhoods_hero.jpg';
 
 export default function NeighborhoodsPage() {
   const neighborhoods = [
@@ -44,14 +45,21 @@ export default function NeighborhoodsPage() {
 
   return (
     <div className="flex flex-col w-full pt-20 bg-muted/20">
-      {/* Hero */}
-      <section className="bg-primary text-white py-16 lg:py-24 text-center px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0B2146] via-primary to-accent/40 z-0"></div>
-        <div className="container mx-auto max-w-4xl relative z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">Discover Newport News Neighborhoods</h1>
-          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
-            Four distinct neighborhoods. One welcoming city. Explore the community that feels like home.
-          </p>
+      {/* Hero — photo background */}
+      <section className="bg-primary text-white py-20 lg:py-32 text-center px-4 relative overflow-hidden">
+        <img src={neighborhoodsHero} alt="Beautiful tree-lined street in Newport News" className="absolute inset-0 w-full h-full object-cover z-0" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/75 to-accent/40 z-10" />
+        <div className="container mx-auto max-w-4xl relative z-20">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-5 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+              Four Neighborhoods. One City.
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">Discover Newport News Neighborhoods</h1>
+            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
+              Four distinct neighborhoods. One welcoming city. Explore the community that feels like home.
+            </p>
+          </motion.div>
         </div>
       </section>
 

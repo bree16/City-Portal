@@ -2,33 +2,43 @@ import React from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { Building2, Home, Landmark, Hammer, AlertTriangle, ArrowRight, Sparkles } from 'lucide-react';
+import journeyRenting from '@assets/generated_images/journey_renting.jpg';
+import journeyBuying from '@assets/generated_images/journey_buying.jpg';
+import journeyOwning from '@assets/generated_images/journey_owning.jpg';
+import journeyRepairs from '@assets/generated_images/journey_repairs.jpg';
+import journeyEmergency from '@assets/generated_images/journey_emergency.jpg';
 
 export default function JourneyPage() {
   const journeyCards = [
     {
       icon: Building2, title: "I'm Renting",
       desc: "Find affordable rentals, understand your rights, and access rental assistance programs.",
-      href: "/rent", color: "teal"
+      href: "/rent", color: "teal", img: journeyRenting,
+      tag: "Rental Resources"
     },
     {
       icon: Home, title: "I Want to Buy My First Home",
       desc: "Explore homebuyer programs, down payment assistance, and get step-by-step guidance.",
-      href: "/buy", color: "navy"
+      href: "/buy", color: "navy", img: journeyBuying,
+      tag: "First-Time Buyer"
     },
     {
       icon: Landmark, title: "I Already Own a Home",
       desc: "Learn about repair programs, refinancing options, and resources to protect your investment.",
-      href: "/resources", color: "teal"
+      href: "/resources", color: "teal", img: journeyOwning,
+      tag: "Homeownership"
     },
     {
       icon: Hammer, title: "I Need Home Repairs",
       desc: "Access repair assistance programs and connect with certified contractors in Newport News.",
-      href: "/assistance", color: "navy"
+      href: "/assistance", color: "navy", img: journeyRepairs,
+      tag: "Repair Programs"
     },
     {
       icon: AlertTriangle, title: "I Need Emergency Housing Help",
       desc: "Get immediate help with eviction prevention, homelessness resources, and crisis assistance.",
-      href: "/assistance", color: "teal"
+      href: "/assistance", color: "teal", img: journeyEmergency,
+      tag: "Emergency Help"
     },
   ];
 
@@ -57,41 +67,69 @@ export default function JourneyPage() {
                 initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}}
                 transition={{delay: i * 0.1, duration: 0.5}} viewport={{once:true}}>
                 <Link href={card.href}>
-                  <div className="group relative bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-border/50 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer h-auto md:h-full flex flex-col border-l-4 border-l-accent" data-testid={`card-journey-${i}`}>
-                    <div className="absolute top-4 right-4 w-7 h-7 rounded-full bg-gray-100 text-xs font-bold text-gray-400 flex items-center justify-center">0{i+1}</div>
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10">
-                        <card.icon className="w-8 h-8 text-primary" />
+                  <div className="group bg-white rounded-2xl shadow-sm border border-border/30 hover:shadow-2xl hover:-translate-y-2 transition-all duration-400 cursor-pointer overflow-hidden flex flex-col" data-testid={`card-journey-${i}`}>
+                    {/* Photo header */}
+                    <div className="relative h-52 overflow-hidden">
+                      <img src={card.img} alt={card.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary/75 via-primary/20 to-transparent" />
+                      {/* Number badge */}
+                      <div className="absolute top-4 left-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-sm font-extrabold text-white flex items-center justify-center">
+                        0{i+1}
                       </div>
-                      <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all mt-1" />
+                      {/* Tag */}
+                      <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-accent text-white text-xs font-semibold">
+                        {card.tag}
+                      </div>
+                      {/* Icon floating at bottom */}
+                      <div className="absolute bottom-4 left-4 p-2.5 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 inline-flex">
+                        <card.icon className="w-5 h-5 text-white" />
+                      </div>
                     </div>
-                    <h2 className="text-xl font-bold text-primary mb-3 pr-6">{card.title}</h2>
-                    <p className="text-muted-foreground leading-relaxed flex-1">{card.desc}</p>
+                    {/* Content */}
+                    <div className="p-6 flex flex-col flex-1 border-l-4 border-l-accent">
+                      <div className="flex items-start justify-between mb-2">
+                        <h2 className="text-xl font-bold text-primary leading-snug flex-1 pr-4">{card.title}</h2>
+                        <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all shrink-0 mt-0.5" />
+                      </div>
+                      <p className="text-muted-foreground leading-relaxed text-sm flex-1">{card.desc}</p>
+                    </div>
                   </div>
                 </Link>
               </motion.div>
             ))}
           </div>
-          {/* 5th card centered */}
-          <div className="mt-6 flex justify-center">
-            <motion.div className="w-full md:w-1/2"
-              initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}}
-              transition={{delay: 0.4, duration: 0.5}} viewport={{once:true}}>
-              <Link href={journeyCards[4].href}>
-                <div className="group relative bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-border/50 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer flex flex-col border-l-4 border-l-accent" data-testid="card-journey-4">
-                  <div className="absolute top-4 right-4 w-7 h-7 rounded-full bg-gray-100 text-xs font-bold text-gray-400 flex items-center justify-center">05</div>
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10">
-                      <AlertTriangle className="w-8 h-8 text-primary" />
-                    </div>
-                    <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all mt-1" />
+          {/* 5th card — full width, horizontal layout */}
+          <motion.div className="mt-6"
+            initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}}
+            transition={{delay: 0.4, duration: 0.5}} viewport={{once:true}}>
+            <Link href={journeyCards[4].href}>
+              <div className="group bg-white rounded-2xl shadow-sm border border-border/30 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-400 cursor-pointer overflow-hidden flex flex-col md:flex-row" data-testid="card-journey-4">
+                {/* Photo left */}
+                <div className="relative md:w-72 h-52 md:h-auto overflow-hidden shrink-0">
+                  <img src={journeyCards[4].img} alt={journeyCards[4].title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-primary/75 via-primary/20 to-transparent" />
+                  <div className="absolute top-4 left-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-sm font-extrabold text-white flex items-center justify-center">05</div>
+                  <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-red-500 text-white text-xs font-semibold">
+                    {journeyCards[4].tag}
                   </div>
-                  <h2 className="text-xl font-bold text-primary mb-3 pr-6">{journeyCards[4].title}</h2>
-                  <p className="text-muted-foreground leading-relaxed">{journeyCards[4].desc}</p>
                 </div>
-              </Link>
-            </motion.div>
-          </div>
+                {/* Content right */}
+                <div className="p-6 md:p-8 flex flex-col justify-center border-l-4 border-l-accent flex-1">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="p-2.5 rounded-xl bg-red-50 inline-flex mb-4">
+                      <AlertTriangle className="w-6 h-6 text-red-500" />
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all shrink-0 mt-1" />
+                  </div>
+                  <h2 className="text-xl font-bold text-primary mb-3">{journeyCards[4].title}</h2>
+                  <p className="text-muted-foreground leading-relaxed">{journeyCards[4].desc}</p>
+                  <div className="mt-4 text-sm font-semibold text-accent flex items-center gap-1 group-hover:underline">
+                    Get Help Now <ArrowRight className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
         </div>
       </section>
 

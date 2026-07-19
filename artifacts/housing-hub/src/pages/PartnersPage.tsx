@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Building2, Home, Landmark, Scale, Key, Heart, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import partnersHero from '@assets/generated_images/partners_hero.jpg';
 
 export default function PartnersPage() {
   const featuredPartners = [
@@ -42,10 +43,16 @@ export default function PartnersPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-muted/30">
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary via-primary/95 to-primary/80 pt-32 pb-24 text-white text-center">
-        <div className="container mx-auto px-4 max-w-3xl">
+      {/* Hero — photo background */}
+      <section className="relative pt-32 pb-24 text-white text-center overflow-hidden">
+        <img src={partnersHero} alt="Newport News community partners" className="absolute inset-0 w-full h-full object-cover z-0" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/80 to-accent/45 z-10" />
+        <div className="container mx-auto px-4 max-w-3xl relative z-20">
           <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-6 backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+              Community Impact
+            </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Community Partners</h1>
             <p className="text-xl text-white/80 max-w-3xl mx-auto">Newport News is stronger because of its community. These organizations work alongside the city to make housing accessible, equitable, and welcoming for everyone.</p>
           </motion.div>

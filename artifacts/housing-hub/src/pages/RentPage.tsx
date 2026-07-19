@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
+import rentHero from '@assets/generated_images/rent_hero.jpg';
 import rent1 from '@assets/generated_images/rent_1.jpg';
 import rent2 from '@assets/generated_images/rent_2.jpg';
 import rent3 from '@assets/generated_images/rent_3.jpg';
@@ -33,10 +34,15 @@ export default function RentPage() {
 
   return (
     <div className="flex flex-col w-full pt-20 bg-muted/20 min-h-screen">
-      {/* Hero */}
-      <section className="bg-primary text-white py-16 lg:py-24 text-center px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0B2146] to-[#0D2B5E] z-0"></div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="container mx-auto max-w-4xl relative z-10">
+      {/* Hero — photo background */}
+      <section className="bg-primary text-white py-16 lg:py-28 text-center px-4 relative overflow-hidden">
+        <img src={rentHero} alt="Young professional in her new apartment" className="absolute inset-0 w-full h-full object-cover z-0" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/85 to-accent/50 z-10" />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="container mx-auto max-w-4xl relative z-20">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-5 backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+            Affordable Rentals in Newport News
+          </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">Find Your Next Rental in Newport News</h1>
           <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-12 leading-relaxed">
             Find a place that feels like home. Newport News has affordable rentals, strong tenant protections, and neighbors who look out for each other.

@@ -109,13 +109,19 @@ export default function EventsPage() {
   return (
     <div className="flex flex-col w-full pt-20 min-h-screen bg-muted/20">
       {/* Hero */}
-      <section className="bg-primary text-white py-16 lg:py-24 text-center px-4">
-        <div className="container mx-auto max-w-4xl">
+      <section className="bg-primary text-white py-20 lg:py-28 text-center px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0B2146] via-primary to-accent/50 z-0" />
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_70%_30%,_#D4A843_0%,_transparent_60%)] z-0 pointer-events-none" />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="container mx-auto max-w-4xl relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-6 backdrop-blur-md">
+            <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+            Newport News Community
+          </div>
           <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Community Events & Workshops</h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
             Connect, learn, and grow. Join us for workshops on homebuying, financial literacy, and community building.
           </p>
-        </div>
+        </motion.div>
       </section>
 
       <section className="py-12">

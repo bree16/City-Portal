@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import resourcesHero from '@assets/generated_images/resources_hero.jpg';
 
 type Category = "All" | "Homeownership" | "Housing Assistance" | "Helpful Services";
 
@@ -158,14 +159,21 @@ export default function ResourcesPage() {
 
   return (
     <div className="flex flex-col w-full pt-20 bg-muted/20 min-h-screen">
-      {/* Hero */}
-      <section className="bg-primary text-white py-16 lg:py-24 text-center px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0B2146] to-accent/80 z-0"></div>
-        <div className="container mx-auto max-w-4xl relative z-10">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Everything You Need in One Place</h1>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto">
-            Browse programs, organizations, and community services — organized around what matters to you, not what department runs it.
-          </p>
+      {/* Hero — photo background */}
+      <section className="relative text-white py-20 lg:py-32 text-center px-4 overflow-hidden">
+        <img src={resourcesHero} alt="Community members meeting with housing counselor" className="absolute inset-0 w-full h-full object-cover z-0" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/92 via-primary/80 to-accent/50 z-10" />
+        <div className="container mx-auto max-w-4xl relative z-20">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-5 backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+              Programs & Resources
+            </div>
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Everything You Need in One Place</h1>
+            <p className="text-lg text-white/80 max-w-2xl mx-auto">
+              Browse programs, organizations, and community services — organized around what matters to you, not what department runs it.
+            </p>
+          </motion.div>
         </div>
       </section>
 

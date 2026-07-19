@@ -48,17 +48,23 @@ export default function WhyNewportNewsPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero */}
-      <section className="relative pt-32 pb-24 bg-primary text-white overflow-hidden">
+      {/* Hero — full-bleed lifestyle photo */}
+      <section className="relative pt-40 pb-32 text-white overflow-hidden min-h-[560px] flex items-center">
         <div className="absolute inset-0 z-0">
-          <img src={heroImage} alt="Newport News Community" className="w-full h-full object-cover opacity-20" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/90 to-primary/60"></div>
+          <img src={heroImage} alt="Newport News Community" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/75 to-accent/50"></div>
         </div>
         <div className="container relative z-10 mx-auto px-4 max-w-4xl text-center">
-          <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} className="text-4xl md:text-6xl font-bold mb-6 text-white">Why Newport News?</motion.h1>
-          <motion.p initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:0.1}} className="text-xl text-white/80 leading-relaxed max-w-2xl mx-auto">
-            More than housing — a vibrant, welcoming community where you can build your future.
-          </motion.p>
+          <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.7}}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-6 backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+              Newport News, Virginia
+            </div>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight">Why Newport News?</h1>
+            <p className="text-xl md:text-2xl text-white/85 leading-relaxed max-w-2xl mx-auto">
+              More than housing — a vibrant, welcoming community where you can build your future.
+            </p>
+          </motion.div>
         </div>
       </section>
 

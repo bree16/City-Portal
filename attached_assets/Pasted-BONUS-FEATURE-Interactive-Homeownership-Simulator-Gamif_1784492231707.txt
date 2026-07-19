@@ -1,0 +1,486 @@
+BONUS FEATURE: Interactive Homeownership Simulator (Gamified Learning Experience)
+
+Create an optional interactive educational experience called:
+
+🏡 Homeownership Simulator
+
+or
+
+🎮 Path to Your First Home
+
+This should be an engaging browser-based experience that teaches first-time homebuyers the homebuying process through gameplay.
+
+The game should feel fun, educational, modern, and rewarding—not like a quiz.
+
+It should appeal especially to Gen Z and Millennial users.
+
+Overall Goal
+
+Players begin as someone renting an apartment and work toward purchasing their first home.
+
+Throughout the game they make realistic decisions that affect:
+
+Budget
+Credit
+Savings
+Home options
+Mortgage approval
+Closing process
+Homeownership success
+
+By the end, players understand the entire homebuying journey.
+
+Game Style
+
+Create a modern browser-based simulation.
+
+Prefer lightweight 3D if possible using technologies such as:
+
+Three.js
+React Three Fiber
+Babylon.js
+
+If full 3D becomes too resource intensive, create an isometric or 2.5D version instead.
+
+Gameplay should remain smooth on desktop and mobile.
+
+Game Progression
+
+The player starts in a small rental apartment.
+
+Mission:
+
+Save enough money to buy a home.
+
+Complete realistic homeownership milestones.
+
+Unlock a new home.
+
+Decorate it.
+
+Continue improving it.
+
+Stage 1
+Renting
+
+The player begins renting.
+
+Tasks include:
+
+Pay rent
+
+Track monthly expenses
+
+Build savings
+
+Improve credit score
+
+Reduce debt
+
+Choose between spending and saving
+
+Unexpected life events may occur.
+
+Examples:
+
+Car repair
+
+Medical bill
+
+Job promotion
+
+Bonus paycheck
+
+Higher rent
+
+The player learns budgeting.
+
+Stage 2
+Preparing to Buy
+
+Player begins researching homes.
+
+Activities include:
+
+Searching listings
+
+Comparing neighborhoods
+
+Learning about affordability
+
+Meeting a housing counselor
+
+Improving credit
+
+Exploring grants
+
+Comparing mortgage options
+
+Learning about down payments
+
+Checking eligibility for assistance
+
+The simulator teaches why each step matters.
+
+Stage 3
+House Hunting
+
+Players browse homes.
+
+Each property includes:
+
+Price
+
+Photos
+
+Neighborhood
+
+Commute
+
+Schools
+
+Parks
+
+Restaurants
+
+Crime rating (placeholder)
+
+Walkability
+
+Estimated mortgage
+
+Monthly payment
+
+Property taxes
+
+Insurance
+
+HOA
+
+Maintenance estimate
+
+Players compare homes before making an offer.
+
+Stage 4
+Offer & Negotiation
+
+Players choose:
+
+Offer price
+
+Inspection
+
+Negotiation strategy
+
+Earnest money
+
+Contingencies
+
+Possible outcomes:
+
+Offer accepted
+
+Counteroffer
+
+Rejected
+
+Competing buyers
+
+Inspection issues
+
+Repairs requested
+
+Stage 5
+Mortgage Approval
+
+Player submits documents.
+
+Complete simple educational tasks explaining:
+
+Income verification
+
+Credit
+
+Debt-to-income ratio
+
+Loan approval
+
+Interest rates
+
+Mortgage types
+
+Closing costs
+
+Loan estimate
+
+Players receive approval or suggestions for improvement.
+
+Stage 6
+Closing Day
+
+Create an exciting closing experience.
+
+Player signs documents.
+
+Receives keys.
+
+Celebration animation.
+
+Confetti.
+
+Achievement unlocked:
+
+🏡 First-Time Homeowner
+
+Stage 7
+Move In
+
+Player enters their new home.
+
+This becomes the fun portion of the simulator.
+
+Furniture Designer
+
+Allow players to decorate.
+
+Include categories:
+
+Living Room
+
+Bedroom
+
+Kitchen
+
+Dining Room
+
+Bathroom
+
+Office
+
+Outdoor
+
+Garage
+
+Players can:
+
+Move furniture
+
+Rotate furniture
+
+Change colors
+
+Choose styles
+
+Modern
+
+Traditional
+
+Farmhouse
+
+Minimalist
+
+Industrial
+
+Coastal
+
+Furniture snaps naturally into rooms.
+
+Shopping Experience
+
+Furniture should come from a virtual marketplace.
+
+Players can browse:
+
+Sofas
+
+Beds
+
+TVs
+
+Dining tables
+
+Desks
+
+Plants
+
+Lighting
+
+Rugs
+
+Wall art
+
+Kitchen appliances
+
+Bookshelves
+
+Decor
+
+Each item includes:
+
+Price
+
+Style
+
+Quality
+
+Budget level
+
+Players manage a furnishing budget.
+
+Smart Budgeting
+
+Teach users about financial decisions.
+
+Examples:
+
+"You only have $4,000 remaining."
+
+"Would you rather purchase a premium sofa or save money for future repairs?"
+
+Show how spending choices affect savings.
+
+Home Maintenance
+
+Occasionally introduce events such as:
+
+Roof leak
+
+Broken water heater
+
+HVAC replacement
+
+Lawn care
+
+Painting
+
+Appliance replacement
+
+Teach homeowners about maintenance costs.
+
+Home Improvement
+
+Players can later upgrade:
+
+Kitchen
+
+Bathrooms
+
+Flooring
+
+Landscaping
+
+Solar panels
+
+Garage
+
+Patio
+
+Energy efficiency
+
+Each improvement increases home value.
+
+Educational Mini-Games
+
+Include short activities such as:
+
+Credit Score Builder
+
+Mortgage Match
+
+Budget Challenge
+
+Closing Cost Calculator
+
+Inspection Challenge
+
+Neighborhood Comparison
+
+Grant Finder
+
+Down Payment Savings Challenge
+
+These should be fun, interactive, and educational.
+
+Rewards
+
+Unlock achievements.
+
+Examples:
+
+🏆 First Mortgage
+
+🏆 Budget Master
+
+🏆 Smart Shopper
+
+🏆 Credit Champion
+
+🏆 Homeowner
+
+🏆 Community Builder
+
+🏆 Dream Home
+
+Community Exploration
+
+Allow players to explore Newport News.
+
+Visit:
+
+Parks
+
+Coffee shops
+
+Restaurants
+
+Waterfront
+
+Community events
+
+Employers
+
+Housing counseling office
+
+Banks
+
+Real estate office
+
+These locations teach users about local resources.
+
+Integration with the Website
+
+The simulator should integrate naturally with the Housing Hub.
+
+Examples:
+
+Eligibility Quiz unlocks recommended assistance programs.
+
+Neighborhood Explorer influences where players shop for homes.
+
+Affordability Calculator helps determine purchasing power.
+
+Housing Journey tracks overall progress.
+
+Resources page provides educational help throughout the game.
+
+The simulator should reinforce—not replace—the educational tools already built into the website.
+
+Design Style
+
+Maintain the same branding, colors, typography, and overall visual identity as the Housing Hub website.
+
+The simulator should feel like an extension of the website—not a separate product.
+
+Educational Goal
+
+Every mechanic in the simulator should teach a real concept about renting, budgeting, buying, financing, closing, homeownership, or maintaining a home.
+
+Players should leave with a much better understanding of the homebuying process while having fun.
+
+The experience should feel similar to a blend of:
+
+The Sims (home decorating)
+Animal Crossing (cozy progression)
+House Flipper (customization)
+Zillow (home shopping)
+Monopoly (financial decision-making)

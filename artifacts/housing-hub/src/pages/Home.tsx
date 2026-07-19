@@ -13,10 +13,16 @@ import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from '@/components/ui/badge';
 import heroIllustration from '@assets/generated_images/hero_illustration.png';
+import heroPremium from '@assets/generated_images/hero_premium.jpg';
 import hiltonImage from '@assets/generated_images/hilton_village.jpg';
 import denbighImage from '@assets/generated_images/denbigh.jpg';
 import oysterImage from '@assets/generated_images/oyster_point.jpg';
 import southeastImage from '@assets/generated_images/southeast.jpg';
+import lifestyleNewHomeowners from '@assets/generated_images/lifestyle_new_homeowners.jpg';
+import lifestyleMilitaryFamily from '@assets/generated_images/lifestyle_military_family.jpg';
+import lifestyleCommunityFestival from '@assets/generated_images/lifestyle_community_festival.jpg';
+import lifestyleWaterfrontDog from '@assets/generated_images/lifestyle_waterfront_dog.jpg';
+import lifestyleCoffeeShop from '@assets/generated_images/lifestyle_coffee_shop.jpg';
 
 export default function HomePage() {
   // Search Bar State
@@ -110,15 +116,47 @@ export default function HomePage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex-1 w-full max-w-lg lg:max-w-xl mx-auto relative hidden md:block"
+              className="flex-1 w-full max-w-lg lg:max-w-2xl mx-auto relative hidden md:block"
             >
-              <div className="relative aspect-square w-full">
+              {/* Floating decorative orbs behind the image */}
+              <motion.div
+                animate={{ y: [0, -18, 0], opacity: [0.4, 0.7, 0.4] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-accent/25 blur-2xl pointer-events-none"
+              />
+              <motion.div
+                animate={{ y: [0, 14, 0], opacity: [0.3, 0.5, 0.3] }}
+                transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute -bottom-6 -left-6 w-32 h-32 rounded-full bg-secondary/20 blur-2xl pointer-events-none"
+              />
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/20" style={{ height: '480px' }}>
                 <img 
-                  src={heroIllustration} 
-                  alt="Newport News City Skyline Illustration" 
-                  className="w-full h-full object-contain filter drop-shadow-2xl"
+                  src={heroPremium} 
+                  alt="Newport News community — diverse families, professionals, and military members enjoying life in Newport News" 
+                  className="w-full h-full object-cover"
                   loading="eager"
                 />
+                {/* Subtle gradient overlay for depth */}
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent" />
+                {/* Floating stat badge */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.7, delay: 1.2 }}
+                  className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 shadow-xl"
+                >
+                  <div className="text-2xl font-extrabold text-primary leading-none">2,400+</div>
+                  <div className="text-xs text-muted-foreground font-medium mt-0.5">Families Housed This Year</div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.7, delay: 1.5 }}
+                  className="absolute top-6 right-6 bg-accent/95 backdrop-blur-md rounded-2xl px-4 py-3 shadow-xl"
+                >
+                  <div className="text-xl font-extrabold text-white leading-none">$0 Down</div>
+                  <div className="text-xs text-white/80 font-medium mt-0.5">Programs Available</div>
+                </motion.div>
               </div>
             </motion.div>
           </div>
@@ -196,6 +234,69 @@ export default function HomePage() {
                     </CardContent>
                   </Card>
                 </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Life in Newport News — Lifestyle Photo Band */}
+      <section className="py-20 bg-white overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+              Real People. Real Community.
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary">Life in Newport News</h2>
+            <p className="text-muted-foreground mt-3 text-lg max-w-xl mx-auto">A city where military families, first-time buyers, young professionals, and lifelong residents all call home.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
+            {[
+              { img: lifestyleNewHomeowners, caption: "First-Time Homeowners", sub: "Young families planting roots in Newport News", href: "/buy" },
+              { img: lifestyleMilitaryFamily, caption: "Military Families Welcome", sub: "Dedicated programs for veterans and active duty", href: "/resources" },
+              { img: lifestyleCommunityFestival, caption: "Community at the Heart", sub: "Festivals, farmers markets, and neighborhood events", href: "/neighborhoods" },
+            ].map((item, i) => (
+              <motion.a
+                key={i}
+                href={item.href}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.12 }}
+                className="block group relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 cursor-pointer"
+                style={{ height: '340px' }}
+              >
+                <img src={item.img} alt={item.caption} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <div className="text-lg font-bold leading-snug">{item.caption}</div>
+                  <div className="text-sm text-white/75 mt-1">{item.sub}</div>
+                </div>
+              </motion.a>
+            ))}
+          </div>
+          {/* Second row — 2-column wider photos */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6 mt-5">
+            {[
+              { img: lifestyleWaterfrontDog, caption: "Waterfront Living", sub: "Walk the James River boardwalk any morning of the week" },
+              { img: lifestyleCoffeeShop, caption: "Neighborhood Gems", sub: "Local coffee shops, restaurants, and boutiques on every block" },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.12 }}
+                className="relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 group"
+                style={{ height: '260px' }}
+              >
+                <img src={item.img} alt={item.caption} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/10 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <div className="text-lg font-bold">{item.caption}</div>
+                  <div className="text-sm text-white/75 mt-1">{item.sub}</div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -471,16 +572,40 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-20 relative text-white text-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary/80 z-0"></div>
-        <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_30%_50%,_#0A8F7E_0%,_transparent_60%)] z-0"></div>
-        <div className="container relative z-10 mx-auto px-4 max-w-3xl">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Ready to find your next home?</h2>
-          <p className="text-xl text-white/80 mb-10">Whether you want to buy, rent, or need assistance, we're here to help guide you.</p>
-          <Button asChild size="lg" className="bg-secondary hover:bg-secondary/90 text-primary font-bold rounded-full px-10 h-16 text-lg shadow-xl shadow-secondary/20 transition-transform hover:scale-105">
-            <Link href="/contact">Contact Our Team</Link>
-          </Button>
+      {/* Final CTA — with lifestyle photo background */}
+      <section className="relative py-28 text-white text-center overflow-hidden">
+        {/* Background photo */}
+        <img
+          src={lifestyleCommunityFestival}
+          alt="Newport News community"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/80 to-accent/70 z-10" />
+        {/* Teal glow spot */}
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_70%_50%,_#0A8F7E_0%,_transparent_55%)] z-10 pointer-events-none" />
+        <div className="container relative z-20 mx-auto px-4 max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-6 backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+              Newport News is ready for you
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-5 leading-tight">Ready to find your<br className="hidden md:block" /> next home?</h2>
+            <p className="text-xl text-white/80 mb-10 max-w-xl mx-auto">Whether you want to buy, rent, or need assistance — our team is here to guide you every step of the way.</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="bg-secondary hover:bg-secondary/90 text-primary font-bold rounded-full px-10 h-16 text-lg shadow-xl shadow-secondary/20 transition-transform hover:scale-105">
+                <Link href="/contact">Contact Our Team</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 hover:text-white rounded-full px-10 h-16 text-lg font-semibold bg-transparent">
+                <Link href="/quiz">Take the Quiz</Link>
+              </Button>
+            </div>
+          </motion.div>
         </div>
       </section>
     </div>

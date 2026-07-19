@@ -1,0 +1,1 @@
+- [Visual assets phase](visual-assets-phase.md) — 19+ custom images generated; all pages have real photography heroes; image paths and import conventions documented.
