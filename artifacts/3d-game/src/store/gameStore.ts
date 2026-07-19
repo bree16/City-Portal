@@ -8,13 +8,11 @@ export type CharacterAppearance = {
 };
 
 export interface GameState {
-  // Game progression
   stage: number;
   month: number;
   gameStarted: boolean;
   transitioning: boolean;
 
-  // Finances
   cash: number;
   savings: number;
   creditScore: number;
@@ -22,22 +20,18 @@ export interface GameState {
   monthlyIncome: number;
   monthlyExpenses: number;
 
-  // Player
   characterAppearance: CharacterAppearance;
   playerPosition: [number, number, number];
   targetPosition: [number, number, number];
 
-  // Dialogue
   activeDialogue: { npcId: string; lineIndex: number } | null;
 
-  // Progress
   achievements: string[];
   completedInteractions: string[];
   selectedHomeId: number | null;
   furnitureOwned: string[];
   lastLifeEvent: string | null;
 
-  // Actions
   startGame: (appearance: CharacterAppearance) => void;
   setStage: (stage: number) => void;
   setTransitioning: (v: boolean) => void;
@@ -66,15 +60,16 @@ const DEFAULT_APPEARANCE: CharacterAppearance = {
   pantsColor: '#1A3A6B',
 };
 
+// Generous starting stats — players advance by doing 2-3 quick interactions, not grinding
 const INITIAL_STATE = {
   stage: 1,
   month: 1,
   gameStarted: false,
   transitioning: false,
-  cash: 2400,
-  savings: 0,
-  creditScore: 620,
-  debt: 8500,
+  cash: 5800,
+  savings: 3500,
+  creditScore: 635,
+  debt: 4000,
   monthlyIncome: 3800,
   monthlyExpenses: 2100,
   characterAppearance: DEFAULT_APPEARANCE,

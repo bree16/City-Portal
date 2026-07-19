@@ -51,94 +51,89 @@ export function CharacterRig({
       <group ref={bodyGroupRef}>
         {/* Head */}
         <mesh position={[0, 1.55, 0]} castShadow>
-          <sphereGeometry args={[0.22, 12, 12]} />
-          <meshStandardMaterial color={skinTone} />
+          <sphereGeometry args={[0.22, 16, 16]} />
+          <meshStandardMaterial color={skinTone} roughness={0.75} metalness={0} />
         </mesh>
-
         {/* Hair */}
         <mesh position={[0, 1.71, 0]} castShadow>
-          <sphereGeometry args={[0.235, 12, 8]} />
-          <meshStandardMaterial color={hairColor} />
+          <sphereGeometry args={[0.235, 16, 10]} />
+          <meshStandardMaterial color={hairColor} roughness={0.6} metalness={0} />
         </mesh>
-
-        {/* Eyes */}
-        <mesh position={[-0.07, 1.56, 0.2]}>
-          <sphereGeometry args={[0.03, 6, 6]} />
-          <meshStandardMaterial color="#1a1a1a" />
+        {/* Eye whites */}
+        <mesh position={[-0.07, 1.565, 0.19]}>
+          <sphereGeometry args={[0.042, 8, 8]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.4} />
         </mesh>
-        <mesh position={[0.07, 1.56, 0.2]}>
-          <sphereGeometry args={[0.03, 6, 6]} />
-          <meshStandardMaterial color="#1a1a1a" />
+        <mesh position={[0.07, 1.565, 0.19]}>
+          <sphereGeometry args={[0.042, 8, 8]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.4} />
         </mesh>
-
+        {/* Pupils */}
+        <mesh position={[-0.07, 1.565, 0.205]}>
+          <sphereGeometry args={[0.025, 8, 8]} />
+          <meshStandardMaterial color="#1a1a1a" roughness={0.1} metalness={0.1} />
+        </mesh>
+        <mesh position={[0.07, 1.565, 0.205]}>
+          <sphereGeometry args={[0.025, 8, 8]} />
+          <meshStandardMaterial color="#1a1a1a" roughness={0.1} metalness={0.1} />
+        </mesh>
         {/* Smile */}
-        <mesh position={[0, 1.49, 0.21]} rotation={[0, 0, 0]}>
-          <boxGeometry args={[0.08, 0.02, 0.01]} />
-          <meshStandardMaterial color="#c0776a" />
+        <mesh position={[0, 1.49, 0.21]}>
+          <boxGeometry args={[0.08, 0.022, 0.01]} />
+          <meshStandardMaterial color="#c0776a" roughness={0.8} />
         </mesh>
-
         {/* Neck */}
         <mesh position={[0, 1.3, 0]} castShadow>
-          <cylinderGeometry args={[0.07, 0.07, 0.12, 8]} />
-          <meshStandardMaterial color={skinTone} />
+          <cylinderGeometry args={[0.07, 0.07, 0.12, 10]} />
+          <meshStandardMaterial color={skinTone} roughness={0.75} />
         </mesh>
-
         {/* Torso */}
         <mesh position={[0, 1.05, 0]} castShadow>
           <boxGeometry args={[0.42, 0.5, 0.24]} />
-          <meshStandardMaterial color={shirtColor} />
+          <meshStandardMaterial color={shirtColor} roughness={0.95} metalness={0} />
         </mesh>
-
         {/* Left Arm */}
         <mesh ref={leftArmRef} position={[-0.3, 1.05, 0]} castShadow>
-          <capsuleGeometry args={[0.07, 0.38, 4, 8]} />
-          <meshStandardMaterial color={shirtColor} />
+          <capsuleGeometry args={[0.07, 0.38, 6, 10]} />
+          <meshStandardMaterial color={shirtColor} roughness={0.95} />
         </mesh>
-
         {/* Right Arm */}
         <mesh ref={rightArmRef} position={[0.3, 1.05, 0]} castShadow>
-          <capsuleGeometry args={[0.07, 0.38, 4, 8]} />
-          <meshStandardMaterial color={shirtColor} />
+          <capsuleGeometry args={[0.07, 0.38, 6, 10]} />
+          <meshStandardMaterial color={shirtColor} roughness={0.95} />
         </mesh>
-
-        {/* Left Hand */}
+        {/* Hands */}
         <mesh position={[-0.3, 0.77, 0]} castShadow>
-          <sphereGeometry args={[0.07, 6, 6]} />
-          <meshStandardMaterial color={skinTone} />
+          <sphereGeometry args={[0.075, 8, 8]} />
+          <meshStandardMaterial color={skinTone} roughness={0.75} />
         </mesh>
-        {/* Right Hand */}
         <mesh position={[0.3, 0.77, 0]} castShadow>
-          <sphereGeometry args={[0.07, 6, 6]} />
-          <meshStandardMaterial color={skinTone} />
+          <sphereGeometry args={[0.075, 8, 8]} />
+          <meshStandardMaterial color={skinTone} roughness={0.75} />
         </mesh>
-
         {/* Pelvis */}
         <mesh position={[0, 0.75, 0]} castShadow>
           <boxGeometry args={[0.4, 0.2, 0.22]} />
-          <meshStandardMaterial color={pantsColor} />
+          <meshStandardMaterial color={pantsColor} roughness={0.9} />
         </mesh>
-
         {/* Left Leg */}
         <mesh ref={leftLegRef} position={[-0.12, 0.45, 0]} castShadow>
-          <capsuleGeometry args={[0.09, 0.48, 4, 8]} />
-          <meshStandardMaterial color={pantsColor} />
+          <capsuleGeometry args={[0.09, 0.48, 6, 10]} />
+          <meshStandardMaterial color={pantsColor} roughness={0.9} />
         </mesh>
-
         {/* Right Leg */}
         <mesh ref={rightLegRef} position={[0.12, 0.45, 0]} castShadow>
-          <capsuleGeometry args={[0.09, 0.48, 4, 8]} />
-          <meshStandardMaterial color={pantsColor} />
+          <capsuleGeometry args={[0.09, 0.48, 6, 10]} />
+          <meshStandardMaterial color={pantsColor} roughness={0.9} />
         </mesh>
-
-        {/* Left Shoe */}
+        {/* Shoes */}
         <mesh position={[-0.12, 0.16, 0.05]} castShadow>
-          <boxGeometry args={[0.14, 0.09, 0.24]} />
-          <meshStandardMaterial color="#2a1a0a" />
+          <boxGeometry args={[0.14, 0.09, 0.26]} />
+          <meshStandardMaterial color="#2a1a0a" roughness={0.3} metalness={0.15} />
         </mesh>
-        {/* Right Shoe */}
         <mesh position={[0.12, 0.16, 0.05]} castShadow>
-          <boxGeometry args={[0.14, 0.09, 0.24]} />
-          <meshStandardMaterial color="#2a1a0a" />
+          <boxGeometry args={[0.14, 0.09, 0.26]} />
+          <meshStandardMaterial color="#2a1a0a" roughness={0.3} metalness={0.15} />
         </mesh>
       </group>
     </group>

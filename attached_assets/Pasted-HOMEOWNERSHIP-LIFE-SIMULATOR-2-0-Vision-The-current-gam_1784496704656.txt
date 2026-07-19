@@ -1,0 +1,735 @@
+HOMEOWNERSHIP LIFE SIMULATOR 2.0
+Vision
+
+The current game is an excellent proof of concept.
+
+Instead of feeling like a collection of educational rooms, transform it into a fully immersive life simulator where the player experiences the complete journey from renting an apartment to becoming a successful homeowner.
+
+The game should combine financial literacy, homeownership education, life simulation, and exploration into one seamless experience.
+
+Think of it as a blend of:
+
+The Sims
+House Flipper
+Animal Crossing
+Zillow
+Rocket Mortgage
+Life Simulation games
+
+while remaining educational and appropriate for a city government housing program.
+
+The goal is not simply to teach housing information.
+
+The goal is to make players emotionally experience the process of becoming a homeowner.
+
+Overall Story
+
+Players begin with very little.
+
+They rent a small apartment.
+
+They have limited savings.
+
+Average credit.
+
+Student loans or other debt.
+
+A monthly budget.
+
+Their goal is simple:
+
+Build a better life.
+
+Throughout the simulator they will:
+
+Save money.
+
+Improve credit.
+
+Pay off debt.
+
+Find a better job.
+
+Learn about homeownership.
+
+Purchase their first home.
+
+Move in.
+
+Decorate.
+
+Maintain it.
+
+Increase its value.
+
+Eventually purchase their dream home.
+
+Every decision affects the player's future.
+
+Character Creation
+
+Expand the character creator.
+
+Allow players to customize:
+
+Skin tone
+
+Hair
+
+Facial features
+
+Hairstyles
+
+Facial hair
+
+Eye color
+
+Body type
+
+Clothing
+
+Shoes
+
+Accessories
+
+Voice
+
+Walking animation
+
+Idle animations
+
+Name
+
+Pronouns (optional)
+
+The character should appear throughout the entire game.
+
+Open World Exploration
+
+Instead of only one room, build a small explorable city inspired by Newport News.
+
+Players should freely walk between locations.
+
+Locations include:
+
+Apartment Complex
+
+Neighborhoods
+
+Housing Hub
+
+Bank
+
+Credit Union
+
+Real Estate Office
+
+Housing Counselor
+
+Coffee Shop
+
+Restaurant
+
+Furniture Store
+
+Home Improvement Store
+
+Employer
+
+Park
+
+Dog Park
+
+Waterfront
+
+Community Center
+
+Farmers Market
+
+Library
+
+Government Office
+
+Open Houses
+
+Schools
+
+Shopping Centers
+
+Each location teaches something.
+
+Smartphone
+
+Every player owns a smartphone.
+
+The phone becomes one of the main gameplay systems.
+
+Apps include:
+
+Housing Search
+
+Mortgage Calculator
+
+Budget Tracker
+
+Bank Account
+
+Email
+
+Calendar
+
+Maps
+
+Neighborhood Reviews
+
+Messages
+
+Credit Score
+
+Achievements
+
+Documents
+
+Savings Tracker
+
+Loan Progress
+
+Grant Eligibility
+
+The player should constantly use the phone throughout the game.
+
+Apartment Gameplay
+
+Players begin inside a small apartment.
+
+They must:
+
+Pay rent.
+
+Budget groceries.
+
+Pay utilities.
+
+Choose entertainment.
+
+Pay debt.
+
+Save money.
+
+Sleep.
+
+Go to work.
+
+Unexpected bills happen.
+
+Players learn how budgeting affects long-term goals.
+
+Employment
+
+Allow players to work.
+
+Career examples:
+
+Shipbuilding
+
+Healthcare
+
+Technology
+
+Education
+
+Government
+
+Military
+
+Retail
+
+Construction
+
+Small Business
+
+Each career has:
+
+Salary
+
+Benefits
+
+Raises
+
+Promotion opportunities
+
+Different schedules
+
+The player earns more as they progress.
+
+Financial Literacy
+
+The game should naturally teach:
+
+Budgeting
+
+Credit scores
+
+Emergency savings
+
+Debt
+
+Mortgages
+
+Interest
+
+Down payments
+
+Insurance
+
+Property taxes
+
+HOA fees
+
+Closing costs
+
+Maintenance
+
+Investing
+
+Retirement
+
+None of these lessons should feel like a classroom.
+
+Players learn through decisions.
+
+Home Search
+
+Players browse homes using a Zillow-style interface.
+
+Each listing includes:
+
+Price
+
+Photos
+
+3D tour
+
+Neighborhood
+
+Commute
+
+Schools
+
+Walkability
+
+Crime (placeholder)
+
+Restaurants
+
+Shopping
+
+Monthly payment
+
+Taxes
+
+Insurance
+
+HOA
+
+Estimated maintenance
+
+Distance to work
+
+Players can favorite homes.
+
+Schedule tours.
+
+Compare homes.
+
+Save searches.
+
+Touring Homes
+
+This should become fully explorable.
+
+Players physically walk through houses.
+
+Open doors.
+
+Look in rooms.
+
+Open cabinets.
+
+Measure rooms.
+
+Imagine furniture placement.
+
+Meet the realtor.
+
+Read inspection notes.
+
+Take photos.
+
+Favorite the home.
+
+Every house should feel different.
+
+Mortgage Process
+
+Expand dramatically.
+
+Players choose:
+
+Loan type
+
+Interest rate
+
+Down payment
+
+Lender
+
+Loan term
+
+Receive:
+
+Loan Estimate
+
+Monthly payment
+
+Cash to close
+
+Debt-to-income analysis
+
+Approval chance
+
+Teach each concept interactively.
+
+Closing Day
+
+Create one of the biggest moments in the game.
+
+Player:
+
+Signs documents.
+
+Receives keys.
+
+Family congratulates them.
+
+Confetti.
+
+Photos.
+
+Achievement unlocked.
+
+Music changes.
+
+Camera transitions.
+
+Garage door opens.
+
+The player walks into an empty house.
+
+A message appears:
+
+"Welcome Home."
+
+This should be one of the most memorable moments in the simulator.
+
+Furniture Shopping
+
+Expand into a complete furnishing experience.
+
+Players visit:
+
+Furniture stores.
+
+Browse aisles.
+
+Compare products.
+
+Purchase items.
+
+Schedule delivery.
+
+Carry boxes.
+
+Assemble furniture.
+
+Move furniture.
+
+Rotate furniture.
+
+Resize decorations where appropriate.
+
+Choose colors.
+
+Choose materials.
+
+Sell old furniture.
+
+Upgrade furniture later.
+
+Home Decorating
+
+Allow players to customize every room.
+
+Living Room
+
+Kitchen
+
+Dining Room
+
+Bedroom
+
+Bathroom
+
+Office
+
+Garage
+
+Backyard
+
+Patio
+
+Basement
+
+Players can:
+
+Paint walls.
+
+Change flooring.
+
+Add rugs.
+
+Hang artwork.
+
+Install lighting.
+
+Decorate shelves.
+
+Place plants.
+
+Change curtains.
+
+Add TVs.
+
+Gaming setups.
+
+Bookshelves.
+
+Kitchen appliances.
+
+Outdoor furniture.
+
+Pools (late game).
+
+Solar panels.
+
+Smart home devices.
+
+Everything should be draggable.
+
+Everything should snap into place.
+
+Home Maintenance
+
+Teach real ownership responsibilities.
+
+Examples:
+
+Roof leak.
+
+Broken water heater.
+
+HVAC replacement.
+
+Painting.
+
+Lawn care.
+
+Pest control.
+
+Foundation inspection.
+
+Broken appliances.
+
+Storm damage.
+
+Insurance claims.
+
+Maintenance affects home value.
+
+Neighborhood Life
+
+Players should experience community.
+
+Walk dogs.
+
+Meet neighbors.
+
+Attend festivals.
+
+Volunteer.
+
+Visit restaurants.
+
+Exercise.
+
+Go fishing.
+
+Walk trails.
+
+Attend concerts.
+
+Visit museums.
+
+Community events should occur throughout the year.
+
+Dynamic Events
+
+Every playthrough should feel different.
+
+Examples:
+
+Promotion.
+
+Layoff.
+
+Unexpected inheritance.
+
+Lottery.
+
+Medical bills.
+
+Interest rate changes.
+
+Rent increases.
+
+Grant opportunities.
+
+Home prices rise.
+
+Home prices fall.
+
+Storms.
+
+Community festivals.
+
+Holiday events.
+
+These events affect strategy.
+
+Educational Mini-Games
+
+Create engaging activities such as:
+
+Budget Challenge.
+
+Credit Score Builder.
+
+Inspection Challenge.
+
+Mortgage Match.
+
+Grant Finder.
+
+Neighborhood Comparison.
+
+Closing Cost Calculator.
+
+Savings Sprint.
+
+Furniture Budget Challenge.
+
+Each mini-game should teach a real financial concept.
+
+Achievement System
+
+Create dozens of achievements.
+
+Examples:
+
+First Paycheck
+
+Emergency Fund
+
+650 Credit Score
+
+700 Credit Score
+
+First Open House
+
+Offer Accepted
+
+Inspection Complete
+
+Closing Day
+
+First Mortgage Payment
+
+First Home Improvement
+
+Dream Kitchen
+
+Community Volunteer
+
+Neighborhood Explorer
+
+Financial Expert
+
+Homeowner
+
+Dream Home
+
+Each achievement should unlock badges and rewards.
+
+Progression
+
+The game should not end after buying a house.
+
+Players continue growing.
+
+Upgrade the house.
+
+Increase home value.
+
+Remodel.
+
+Landscape.
+
+Build equity.
+
+Sell the house.
+
+Move into a larger home.
+
+Eventually create their dream home.
+
+Integration with the Housing Hub
+
+The simulator should connect directly with the website.
+
+The Affordability Calculator influences purchasing power.
+
+The Eligibility Quiz unlocks recommended grants.
+
+The Neighborhood Explorer determines available homes.
+
+Community Partners provide assistance.
+
+Housing Resources help players overcome challenges.
+
+Everything should feel connected.
+
+Long-Term Goal
+
+The simulator should feel like a polished educational experience that could realistically be showcased by the City of Newport News as an innovative way to educate future residents.
+
+The experience should be memorable enough that users finish the game understanding:
+
+How to budget.
+How to improve credit.
+How to qualify for assistance.
+How to purchase a home.
+How to furnish a home.
+How to maintain a home.
+How to build long-term wealth through homeownership.
+
+The player should finish the experience not only with a virtual home, but with real-world knowledge and confidence to begin their own homeownership journey.
