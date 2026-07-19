@@ -4,6 +4,7 @@ import { useGameStore } from '@/store/gameStore';
 import { CharacterCreator } from '@/components/characters/CharacterCreator';
 import { CareerSelect } from '@/components/CareerSelect';
 import GamePage from '@/pages/GamePage';
+import { AudioManager } from '@/components/AudioManager';
 
 const queryClient = new QueryClient();
 
@@ -19,7 +20,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <GameGate />
+        <AudioManager>
+          <GameGate />
+        </AudioManager>
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -8,7 +8,6 @@ import { SpeechBubble } from '@/components/SpeechBubble';
 import { SceneTransition } from '@/components/SceneTransition';
 import { AchievementToast } from '@/components/AchievementToast';
 import { ResultsCard } from '@/components/ResultsCard';
-import { AudioManager } from '@/components/AudioManager';
 import { SmartPhone } from '@/components/SmartPhone';
 import { LifeEventModal } from '@/components/LifeEventModal';
 import { CityExitButton } from '@/components/CityExitButton';
@@ -317,43 +316,41 @@ export default function GamePage() {
   }, [activeToast, toastQueue]);
 
   return (
-    <AudioManager>
-      <div
-        style={{
-          width: '100vw',
-          height: '100dvh',
-          overflow: 'hidden',
-          background: '#0D2B5E',
-          position: 'relative',
-        }}
-      >
-        <GameHUD />
-        <div style={{ position: 'absolute', top: 72, left: 0, right: 0, bottom: 0 }}>
-          <Canvas
-            shadows
-            camera={{ position: [13, 11, 13], fov: 44 }}
-            style={{ width: '100%', height: '100%' }}
-            gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
-          >
-            <SceneContents />
-          </Canvas>
-        </div>
-        <SpeechBubble />
-        <SmartPhone />
-        <LifeEventModal />
-        <CityExitButton />
-        <TourChecklist />
-        <SceneTransition />
-        <AchievementToast
-          isVisible={!!activeToast}
-          title={activeToast ? formatTitle(activeToast) : ''}
-          onClose={() => setActiveToast(null)}
-        />
-        <ResultsCard
-          visible={showResultsCard}
-          onPlayAgain={() => setShowResultsCard(false)}
-        />
+    <div
+      style={{
+        width: '100vw',
+        height: '100dvh',
+        overflow: 'hidden',
+        background: '#0D2B5E',
+        position: 'relative',
+      }}
+    >
+      <GameHUD />
+      <div style={{ position: 'absolute', top: 72, left: 0, right: 0, bottom: 0 }}>
+        <Canvas
+          shadows
+          camera={{ position: [13, 11, 13], fov: 44 }}
+          style={{ width: '100%', height: '100%' }}
+          gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
+        >
+          <SceneContents />
+        </Canvas>
       </div>
-    </AudioManager>
+      <SpeechBubble />
+      <SmartPhone />
+      <LifeEventModal />
+      <CityExitButton />
+      <TourChecklist />
+      <SceneTransition />
+      <AchievementToast
+        isVisible={!!activeToast}
+        title={activeToast ? formatTitle(activeToast) : ''}
+        onClose={() => setActiveToast(null)}
+      />
+      <ResultsCard
+        visible={showResultsCard}
+        onPlayAgain={() => setShowResultsCard(false)}
+      />
+    </div>
   );
 }

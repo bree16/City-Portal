@@ -123,6 +123,8 @@ class GameAudioEngine {
    * Each scene gets a chord (freqs), oscillator type, and LFO rate for movement.
    */
   private AMBIENT: Record<number, { freqs: number[]; type: OscillatorType; lfo: number; gain: number }> = {
+    // Stage 0 — Title / Character Creator: soft, hopeful intro — gentle major 6th chord
+    0: { freqs: [87.3, 110, 130.8, 164.8, 196], type: 'sine', lfo: 0.09, gain: 0.026 },
     // Stage 1 — Apartment: warm jazz tones
     1: { freqs: [110, 138.6, 165, 220],   type: 'sine',     lfo: 0.18, gain: 0.032 },
     // Stage 2 — Counselor office: calm, open fifths

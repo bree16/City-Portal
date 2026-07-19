@@ -36,11 +36,21 @@ export function AudioManager({ children }: { children: React.ReactNode }) {
     }
   }, [engine]);
 
+  // ── Pre-game ambient (title / character creator) ──────────────────────────
+  const gameStarted = useGameStore((s) => s.gameStarted);
+
+  useEffect(() => {
+    if (!gameStarted) {
+      engine.startAmbient(0);
+    }
+  }, [gameStarted, engine]);
+
   // ── Stage changes → switch ambient track ──────────────────────────────────
   const prevStage = useRef<number | null>(null);
   const stage = useGameStore((s) => s.stage);
 
   useEffect(() => {
+    if (!gameStarted) return;
     if (prevStage.current === stage) return;
     prevStage.current = stage;
     engine.startAmbient(stage);
@@ -48,7 +58,7 @@ export function AudioManager({ children }: { children: React.ReactNode }) {
     if (stage === 6 || stage === 7) {
       setTimeout(() => engine.play('fanfare'), 800);
     }
-  }, [stage, engine]);
+  }, [stage, gameStarted, engine]);
 
   // ── Achievements → chime ──────────────────────────────────────────────────
   const achievements = useGameStore((s) => s.achievements);
