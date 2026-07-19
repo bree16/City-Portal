@@ -100,6 +100,7 @@ export interface GameState {
   setSelectedHome: (id: number) => void;
   buyFurniture: (id: string, price: number) => void;
   setShowResultsCard: (v: boolean) => void;
+  quitToMenu: () => void;
   resetGame: () => void;
 }
 
@@ -311,6 +312,17 @@ export const useGameStore = create<GameState>()(
           cash: Math.max(0, s.cash - price),
         })),
       setShowResultsCard: (v) => set({ showResultsCard: v }),
+      // Return to the character screen mid-game. Progress (stage, cash, etc.)
+      // stays in the persisted save; only transient/session flags are cleared.
+      quitToMenu: () =>
+        set({
+          gameStarted: false,
+          phoneOpen: false,
+          activeDialogue: null,
+          transitioning: false,
+          pendingLifeEvent: null,
+          pendingMaintenance: null,
+        }),
       // Reset gameplay state, but preserve audio preferences
       resetGame: () => set({ ...INITIAL_STATE }),
     }),

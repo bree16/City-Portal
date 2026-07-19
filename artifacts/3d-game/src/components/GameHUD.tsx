@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Home, Volume2, VolumeX, Smartphone, ChevronUp, ChevronDown } from 'lucide-react';
+import { Home, Volume2, VolumeX, Smartphone, ChevronUp, ChevronDown, LogOut } from 'lucide-react';
 import { useGameStore } from '@/store/gameStore';
 import { useAudioControls } from '@/components/AudioManager';
 import { buildings } from '@/data/buildings';
@@ -141,7 +141,8 @@ function ObjectiveCard({ stage }: { stage: number }) {
 // ── Main HUD ─────────────────────────────────────────────────────
 
 export function GameHUD() {
-  const { stage, month, cash, savings, creditScore, resetGame, characterAppearance, togglePhone, phoneOpen, lifeEventLog, currentLocation, playerPosition } = useGameStore();
+  const { stage, month, cash, savings, creditScore, resetGame, quitToMenu, characterAppearance, togglePhone, phoneOpen, lifeEventLog, currentLocation, playerPosition } = useGameStore();
+  const [showQuitConfirm, setShowQuitConfirm] = useState(false);
   const { muted, toggleMute, musicVolume, setMusicVolume, sfxVolume, setSfxVolume } = useAudioControls();
 
   const playerName = characterAppearance.name?.trim() || 'Player';
@@ -331,8 +332,109 @@ export function GameHUD() {
           >
             Restart
           </button>
+          <button
+            onClick={() => setShowQuitConfirm(true)}
+            title="Quit to Menu"
+            style={{
+              background: 'rgba(255,255,255,0.12)',
+              border: 'none',
+              color: 'rgba(255,255,255,0.6)',
+              fontSize: 10,
+              fontWeight: 700,
+              padding: '2px 8px',
+              borderRadius: 6,
+              cursor: 'pointer',
+              fontFamily: 'Inter, sans-serif',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 4,
+            }}
+          >
+            <LogOut size={11} />
+            Quit to Menu
+          </button>
         </div>
       </div>
+
+      {/* ── Quit confirmation dialog ── */}
+      {showQuitConfirm && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 60,
+            background: 'rgba(0,0,0,0.55)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'auto',
+            backdropFilter: 'blur(4px)',
+          }}
+          onClick={() => setShowQuitConfirm(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'rgba(13,43,94,0.97)',
+              border: '1px solid rgba(212,168,67,0.4)',
+              borderRadius: 16,
+              padding: '24px 28px',
+              maxWidth: 340,
+              width: '90%',
+              boxShadow: '0 12px 48px rgba(0,0,0,0.6)',
+              fontFamily: 'Inter, sans-serif',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ fontSize: 28, marginBottom: 8 }}>🚪</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: '#fff', marginBottom: 6 }}>
+              Quit to Menu?
+            </div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', lineHeight: 1.5, marginBottom: 18 }}>
+              You'll return to the character screen. Your progress is saved automatically, so you can continue later — or start fresh.
+            </div>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+              <button
+                onClick={() => setShowQuitConfirm(false)}
+                style={{
+                  flex: 1,
+                  padding: '9px 0',
+                  borderRadius: 10,
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  background: 'rgba(255,255,255,0.08)',
+                  color: '#fff',
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  fontFamily: 'Inter, sans-serif',
+                }}
+              >
+                Keep Playing
+              </button>
+              <button
+                onClick={() => {
+                  setShowQuitConfirm(false);
+                  quitToMenu();
+                }}
+                style={{
+                  flex: 1,
+                  padding: '9px 0',
+                  borderRadius: 10,
+                  border: 'none',
+                  background: '#D4A843',
+                  color: '#0D2B5E',
+                  fontSize: 12,
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  fontFamily: 'Inter, sans-serif',
+                }}
+              >
+                Quit to Menu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Stage progress dots (hidden in city view) ── */}
       {!isCity && (
