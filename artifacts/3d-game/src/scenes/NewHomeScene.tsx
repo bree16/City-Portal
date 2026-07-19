@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Html } from '@react-three/drei';
 import { useGameStore } from '@/store/gameStore';
+import { motion } from 'framer-motion';
 
 const FURNITURE_SLOTS = [
   {
@@ -56,7 +57,7 @@ const FURNITURE_SLOTS = [
 ];
 
 export default function NewHomeScene() {
-  const { cash, furnitureOwned, buyFurniture, addAchievement } = useGameStore();
+  const { cash, furnitureOwned, buyFurniture, addAchievement, setShowResultsCard } = useGameStore();
   const [activeSlot, setActiveSlot] = useState<string | null>(null);
   const [purchaseCount, setPurchaseCount] = useState(0);
   const [tip, setTip] = useState<string | null>(null);
@@ -250,6 +251,32 @@ export default function NewHomeScene() {
             Budget: <strong>${cash.toLocaleString()}</strong> | Click golden spots to furnish
           </div>
         </div>
+      </Html>
+
+      {/* View Your Journey button — always visible in new home stage */}
+      <Html position={[0, 3.8, 7]} center distanceFactor={14}>
+        <motion.button
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.2, type: 'spring', stiffness: 260, damping: 20 }}
+          onClick={() => setShowResultsCard(true)}
+          style={{
+            padding: '12px 28px',
+            borderRadius: 50,
+            background: 'linear-gradient(135deg, #0A8F7E 0%, #0D2B5E 100%)',
+            color: '#fff',
+            fontWeight: 800,
+            fontSize: 14,
+            border: '2px solid rgba(212,168,67,0.7)',
+            cursor: 'pointer',
+            fontFamily: 'Inter, sans-serif',
+            boxShadow: '0 8px 28px rgba(0,0,0,0.45)',
+            whiteSpace: 'nowrap',
+            letterSpacing: '0.02em',
+          }}
+        >
+          🏆 View Your Journey
+        </motion.button>
       </Html>
 
       {/* Financial tip popup */}

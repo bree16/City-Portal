@@ -7,6 +7,7 @@ import { GameHUD } from '@/components/GameHUD';
 import { SpeechBubble } from '@/components/SpeechBubble';
 import { SceneTransition } from '@/components/SceneTransition';
 import { AchievementToast } from '@/components/AchievementToast';
+import { ResultsCard } from '@/components/ResultsCard';
 import { AudioManager } from '@/components/AudioManager';
 import { SmartPhone } from '@/components/SmartPhone';
 import { IsometricCamera } from '@/components/IsometricCamera';
@@ -181,7 +182,7 @@ function formatTitle(id: string): string {
 }
 
 export default function GamePage() {
-  const { stage, achievements } = useGameStore();
+  const { stage, achievements, showResultsCard, setShowResultsCard } = useGameStore();
   const prevAchievements = useRef<string[]>([]);
   const [toastQueue, setToastQueue] = useState<string[]>([]);
   const [activeToast, setActiveToast] = useState<string | null>(null);
@@ -230,6 +231,10 @@ export default function GamePage() {
           isVisible={!!activeToast}
           title={activeToast ? formatTitle(activeToast) : ''}
           onClose={() => setActiveToast(null)}
+        />
+        <ResultsCard
+          visible={showResultsCard}
+          onPlayAgain={() => setShowResultsCard(false)}
         />
       </div>
     </AudioManager>

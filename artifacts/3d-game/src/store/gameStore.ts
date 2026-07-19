@@ -43,6 +43,7 @@ export interface GameState {
   selectedHomeId: number | null;
   furnitureOwned: string[];
   lastLifeEvent: string | null;
+  showResultsCard: boolean;
 
   setPhoneOpen: (v: boolean) => void;
   togglePhone: () => void;
@@ -64,6 +65,7 @@ export interface GameState {
   advanceMonth: () => void;
   setSelectedHome: (id: number) => void;
   buyFurniture: (id: string, price: number) => void;
+  setShowResultsCard: (v: boolean) => void;
   resetGame: () => void;
 }
 
@@ -113,6 +115,7 @@ const INITIAL_STATE = {
   selectedHomeId: null,
   furnitureOwned: [] as string[],
   lastLifeEvent: null,
+  showResultsCard: false,
 };
 
 // Fields that should not be persisted (runtime-only state)
@@ -171,6 +174,7 @@ export const useGameStore = create<GameState>()(
           furnitureOwned: [...s.furnitureOwned, id],
           cash: Math.max(0, s.cash - price),
         })),
+      setShowResultsCard: (v) => set({ showResultsCard: v }),
       resetGame: () => set({ ...INITIAL_STATE }),
     }),
     {
