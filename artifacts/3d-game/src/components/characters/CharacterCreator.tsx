@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { useGameStore, normalizeAppearance } from '@/store/gameStore';
@@ -66,12 +66,14 @@ function SwatchRow({ label, colors, value, onChange }: SwatchRowProps) {
   );
 }
 
-function CharacterPreview({ appearance }: { appearance: CharacterAppearance }) {
+function CharacterPreview({ appearance, emote }: { appearance: CharacterAppearance; emote: 'none' | 'wave' }) {
   return (
-    <Canvas camera={{ position: [0, 1.2, 3.2], fov: 42 }}>
-      <ambientLight intensity={0.8} />
-      <directionalLight position={[3, 5, 3]} intensity={1.3} />
-      <pointLight position={[-3, 3, -2]} intensity={0.4} color="#FFF8E7" />
+    <Canvas camera={{ position: [0, 1.25, 2.9], fov: 40 }} shadows>
+      {/* Three-point studio lighting */}
+      <ambientLight intensity={0.55} />
+      <directionalLight position={[2.5, 4, 3]} intensity={1.5} castShadow shadow-mapSize={[1024, 1024]} />
+      <pointLight position={[-3, 2.5, -2]} intensity={0.5} color="#9BC4E8" />
+      <pointLight position={[0, 3, -3]} intensity={0.7} color="#FFE0B0" />
       <CharacterRig
         skinTone={appearance.skinTone}
         hairColor={appearance.hairColor}
@@ -82,18 +84,24 @@ function CharacterPreview({ appearance }: { appearance: CharacterAppearance }) {
         bodyScale={appearance.bodyScale}
         accessories={appearance.accessories}
         isIdle={true}
+        emote={emote}
+        bigSmile
       />
       {/* Pedestal */}
-      <mesh position={[0, -0.05, 0]}>
-        <cylinderGeometry args={[0.6, 0.7, 0.1, 16]} />
-        <meshStandardMaterial color="#D4A843" />
+      <mesh position={[0, -0.06, 0]} receiveShadow>
+        <cylinderGeometry args={[0.62, 0.72, 0.12, 32]} />
+        <meshStandardMaterial color="#D4A843" roughness={0.35} metalness={0.3} />
+      </mesh>
+      <mesh position={[0, -0.13, 0]}>
+        <cylinderGeometry args={[0.8, 0.9, 0.05, 32]} />
+        <meshStandardMaterial color="#0D2B5E" roughness={0.6} />
       </mesh>
       <OrbitControls
         enablePan={false}
         enableZoom={false}
         target={[0, 0.9, 0]}
-        autoRotate
-        autoRotateSpeed={2.5}
+        autoRotate={emote === 'none'}
+        autoRotateSpeed={2.0}
         minPolarAngle={Math.PI / 4}
         maxPolarAngle={Math.PI / 1.8}
       />
@@ -132,6 +140,16 @@ export function CharacterCreator() {
     hasSavedGame ? normalizeAppearance(savedAppearance) : { ...DEFAULT_NEW }
   );
   const [nameError, setNameError] = useState('');
+  const [emote, setEmote] = useState<'none' | 'wave'>('none');
+  const emoteTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => { if (emoteTimer.current) clearTimeout(emoteTimer.current); }, []);
+
+  const playWave = () => {
+    if (emoteTimer.current) clearTimeout(emoteTimer.current);
+    setEmote('wave');
+    emoteTimer.current = setTimeout(() => setEmote('none'), 2600);
+  };
 
   const update = <K extends keyof CharacterAppearance>(key: K) => (val: CharacterAppearance[K]) =>
     setAppearance((a) => ({ ...a, [key]: val }));
@@ -224,7 +242,26 @@ export function CharacterCreator() {
                 border: '1px solid rgba(255,255,255,0.1)',
               }}
             >
-              <CharacterPreview appearance={appearance} />
+              <CharacterPreview appearance={appearance} emote={emote} />
+            </div>
+            <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginTop: 8 }}>
+              <button
+                onClick={playWave}
+                style={{
+                  padding: '5px 12px',
+                  borderRadius: 16,
+                  border: emote === 'wave' ? '1.5px solid #D4A843' : '1.5px solid rgba(255,255,255,0.2)',
+                  background: emote === 'wave' ? 'rgba(212,168,67,0.18)' : 'rgba(255,255,255,0.06)',
+                  color: emote === 'wave' ? '#D4A843' : 'rgba(255,255,255,0.7)',
+                  fontSize: 11,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  fontFamily: 'Inter, sans-serif',
+                  transition: 'all 0.15s',
+                }}
+              >
+                👋 Wave
+              </button>
             </div>
             <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.35)', fontSize: 10, marginTop: 6 }}>
               Drag to rotate preview
