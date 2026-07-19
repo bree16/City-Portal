@@ -49,10 +49,14 @@ export interface GameState {
   careerId: string | null;
   pendingLifeEvent: LifeEvent | null;
   lifeEventLog: string[];
-  currentLocation: string; // 'city' | buildingId
+  currentLocation: string; // 'city' | buildingId | 'home_tour'
+  tourProgress: Record<string, string[]>; // homeId → visited room names
 
   setPhoneOpen: (v: boolean) => void;
   setCurrentLocation: (id: string) => void;
+  markRoomVisited: (homeId: string, room: string) => void;
+  startHomeTour: (homeId: number) => void;
+  startNegotiation: () => void;
   togglePhone: () => void;
   setCareer: (id: string, monthlyIncome: number, bonus: { type: 'cash' | 'savings' | 'creditScore'; amount: number }) => void;
   setPendingLifeEvent: (event: LifeEvent | null) => void;
@@ -130,6 +134,7 @@ const INITIAL_STATE = {
   pendingLifeEvent: null,
   lifeEventLog: [] as string[],
   currentLocation: 'apartment', // new games start inside the apartment
+  tourProgress: {} as Record<string, string[]>,
 };
 
 // Fields that should not be persisted (runtime-only state)
@@ -150,6 +155,15 @@ export const useGameStore = create<GameState>()(
       setPhoneOpen: (v) => set({ phoneOpen: v }),
       togglePhone: () => set((s) => ({ phoneOpen: !s.phoneOpen })),
       setCurrentLocation: (id) => set({ currentLocation: id }),
+      markRoomVisited: (homeId, room) =>
+        set((s) => {
+          const prev = s.tourProgress[homeId] ?? [];
+          if (prev.includes(room)) return {};
+          return { tourProgress: { ...s.tourProgress, [homeId]: [...prev, room] } };
+        }),
+      startHomeTour: (homeId) => set({ currentLocation: 'home_tour', selectedHomeId: homeId }),
+      // Moves directly to negotiation without triggering the city routing in setStage
+      startNegotiation: () => set({ currentLocation: 'negotiation', stage: 4, completedInteractions: [] }),
       setCareer: (id, income, bonus) =>
         set((s) => {
           const base: Partial<GameState> = { careerId: id, monthlyIncome: income };
@@ -227,7 +241,7 @@ export const useGameStore = create<GameState>()(
     }),
     {
       name: 'path-to-home-game-state',
-      version: 3,
+      version: 4,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => {
         const persisted = { ...state } as Record<string, unknown>;
@@ -257,6 +271,10 @@ export const useGameStore = create<GameState>()(
           if (!s.currentLocation) {
             s.currentLocation = 'city';
           }
+        }
+        if (fromVersion < 4) {
+          // v3 → v4: add tourProgress for home walkthroughs.
+          if (!s.tourProgress) s.tourProgress = {};
         }
         return s;
       },

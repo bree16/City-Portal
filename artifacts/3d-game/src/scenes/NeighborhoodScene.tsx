@@ -16,13 +16,20 @@ const AGENTS: Array<Omit<NPCDef, 'position' | 'rotation'>> = [
 ];
 
 export default function NeighborhoodScene() {
-  const { openDialogue, setSelectedHome, setStage, setTransitioning } = useGameStore();
+  const { openDialogue, setSelectedHome, startNegotiation, startHomeTour, setTransitioning } = useGameStore();
   const [viewingHome, setViewingHome] = useState<number | null>(null);
 
+  // Go straight to the negotiation table (skip tour)
   const handleSelectHome = (homeId: number) => {
     setSelectedHome(homeId);
     setTransitioning(true);
-    setTimeout(() => { setStage(4); setTransitioning(false); }, 1800);
+    setTimeout(() => { startNegotiation(); setTransitioning(false); }, 1200);
+  };
+
+  // Walk through the home before making an offer
+  const handleStartTour = (homeId: number) => {
+    setTransitioning(true);
+    setTimeout(() => { startHomeTour(homeId); setTransitioning(false); }, 700);
   };
 
   return (
@@ -164,12 +171,21 @@ export default function NeighborhoodScene() {
                   <div style={{ fontSize: 11, color: '#555', marginBottom: 12 }}>
                     Est. payment: <strong>${home.monthlyPayment}/mo</strong>
                   </div>
-                  <button onClick={() => handleSelectHome(home.id)} style={{
+                  <button onClick={() => handleStartTour(home.id)} style={{
                     width: '100%', padding: '9px', borderRadius: 8,
-                    background: '#D4A843', color: '#0D2B5E', border: 'none',
+                    background: '#0A8F7E', color: '#fff', border: 'none',
                     cursor: 'pointer', fontWeight: 800, fontSize: 12, fontFamily: 'Inter, sans-serif',
+                    marginBottom: 6,
                   }}>
-                    Make an Offer! →
+                    🏠 Schedule Tour →
+                  </button>
+                  <button onClick={() => handleSelectHome(home.id)} style={{
+                    width: '100%', padding: '7px', borderRadius: 8,
+                    background: 'rgba(212,168,67,0.15)', color: '#D4A843',
+                    border: '1px solid rgba(212,168,67,0.4)',
+                    cursor: 'pointer', fontWeight: 700, fontSize: 11, fontFamily: 'Inter, sans-serif',
+                  }}>
+                    Skip Tour — Make an Offer
                   </button>
                 </div>
               </Html>

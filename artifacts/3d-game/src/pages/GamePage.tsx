@@ -16,6 +16,7 @@ import { IsometricCamera } from '@/components/IsometricCamera';
 import { GroundPlane } from '@/components/GroundPlane';
 import { PlayerCharacter } from '@/components/characters/PlayerCharacter';
 import CityMapScene from '@/scenes/CityMapScene';
+import HomeInteriorScene from '@/scenes/HomeInteriorScene';
 
 import ApartmentScene from '@/scenes/ApartmentScene';
 import CounselorOfficeScene from '@/scenes/CounselorOfficeScene';
@@ -30,6 +31,7 @@ const LOCATION_SCENES: Record<string, React.ComponentType> = {
   apartment:   ApartmentScene,
   counselor:   CounselorOfficeScene,
   realestate:  NeighborhoodScene,
+  home_tour:   HomeInteriorScene,
   negotiation: NegotiationScene,
   bank:        BankScene,
   closing:     ClosingScene,
@@ -121,7 +123,100 @@ const INTERIOR_CFG: Record<string, LightCfg> = {
     envPreset: 'apartment',
     accentColor: '#FFD96A', accentPos: [-6, 8, -6],
   },
+  home_tour: {
+    ambient: 0.55, ambientColor: '#FFF8F0',
+    keyColor: '#FFE0AA', keyIntensity: 1.6, keyPos: [10, 18, 10],
+    fillColor: '#FFE8D0', fillIntensity: 0.5,
+    rimColor: '#87CEEB', rimIntensity: 0.25,
+    fogColor: '#FFF8F0', fogNear: 28, fogFar: 70,
+    envPreset: 'apartment',
+    accentColor: '#FFD96A', accentPos: [-4, 6, -4],
+  },
 };
+
+// ── Tour checklist overlay ────────────────────────────────────────
+
+const TOUR_ROOMS = ['entry', 'living', 'kitchen', 'bedroom', 'backyard'] as const;
+const TOUR_ROOM_LABELS: Record<string, string> = {
+  entry:    '🚪 Entry Hallway',
+  living:   '🛋️ Living Room',
+  kitchen:  '🍳 Kitchen',
+  bedroom:  '🛏️ Bedroom',
+  backyard: '🌿 Backyard',
+};
+
+function TourChecklist() {
+  const currentLocation = useGameStore((s) => s.currentLocation);
+  const selectedHomeId   = useGameStore((s) => s.selectedHomeId);
+  const tourProgress     = useGameStore((s) => s.tourProgress);
+  const startNegotiation = useGameStore((s) => s.startNegotiation);
+  const setTransitioning = useGameStore((s) => s.setTransitioning);
+
+  if (currentLocation !== 'home_tour') return null;
+
+  const homeKey  = String(selectedHomeId ?? 1);
+  const visited  = tourProgress[homeKey] ?? [];
+  const allDone  = TOUR_ROOMS.every((r) => visited.includes(r));
+
+  const handleOffer = () => {
+    setTransitioning(true);
+    setTimeout(() => { startNegotiation(); setTransitioning(false); }, 900);
+  };
+
+  return (
+    <div style={{
+      position: 'fixed', top: 120, left: 12, zIndex: 32,
+      background: 'rgba(13,43,94,0.92)',
+      border: '1px solid rgba(255,255,255,0.12)',
+      borderRadius: 12, padding: '12px 14px',
+      backdropFilter: 'blur(12px)',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+      fontFamily: 'Inter, sans-serif', minWidth: 178,
+      marginTop: 4,
+    }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: '#D4A843', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
+        🏠 Tour Checklist
+      </div>
+      {TOUR_ROOMS.map((room) => {
+        const seen = visited.includes(room);
+        return (
+          <div key={room} style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            fontSize: 11, padding: '3px 0',
+            color: seen ? '#4ade80' : 'rgba(255,255,255,0.45)',
+            fontWeight: seen ? 700 : 400,
+          }}>
+            <span style={{ width: 14, textAlign: 'center' }}>{seen ? '✅' : '○'}</span>
+            {TOUR_ROOM_LABELS[room]}
+          </div>
+        );
+      })}
+      {allDone && (
+        <div style={{
+          marginTop: 8, padding: '4px 8px', borderRadius: 6,
+          background: 'rgba(10,143,126,0.18)',
+          border: '1px solid rgba(10,143,126,0.4)',
+          fontSize: 10, fontWeight: 700, color: '#0A8F7E', textAlign: 'center',
+        }}>
+          ✨ Fully Inspected!
+        </div>
+      )}
+      <button onClick={handleOffer} style={{
+        marginTop: 10, width: '100%', padding: '8px', borderRadius: 8,
+        background: '#D4A843', color: '#0D2B5E', border: 'none',
+        cursor: 'pointer', fontWeight: 800, fontSize: 11,
+        fontFamily: 'Inter, sans-serif',
+      }}>
+        {allDone ? '🏡 Make an Offer →' : 'Make an Offer →'}
+      </button>
+      {!allDone && (
+        <div style={{ marginTop: 6, fontSize: 9, color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>
+          Walk through all rooms to fully inspect
+        </div>
+      )}
+    </div>
+  );
+}
 
 // ── Sub-components ───────────────────────────────────────────────
 
@@ -236,6 +331,7 @@ export default function GamePage() {
         <SmartPhone />
         <LifeEventModal />
         <CityExitButton />
+        <TourChecklist />
         <SceneTransition />
         <AchievementToast
           isVisible={!!activeToast}

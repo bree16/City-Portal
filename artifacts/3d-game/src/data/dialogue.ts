@@ -105,6 +105,24 @@ export const stageDialogue: { [stage: number]: NpcDialogue } = {
         tip: 'Buying in an up-and-coming neighborhood can yield strong equity growth.',
       },
     ],
+    // Tour NPC dialogue — triggered when player enters the living room during a home walkthrough
+    tour_npc: [
+      {
+        speaker: 'Agent',
+        text: "Welcome! Take your time exploring each room. Click the teal markers to discover highlights — they affect resale value and your daily life.",
+        tip: "A home tour should take 30–45 minutes. Rushing is one of the most common buyer mistakes.",
+      },
+      {
+        speaker: 'Agent',
+        text: "Notice how natural light fills this space. Lighting is one of the top factors buyers mention after moving in — and one of the hardest to change.",
+        tip: "If possible, visit a home at different times of day to see how light changes throughout.",
+      },
+      {
+        speaker: 'Agent',
+        text: "Remember — you're buying the bones of a home, not the décor. Cosmetic changes are cheap. Structural issues are expensive. Always budget for an inspection!",
+        tip: "A home inspection costs $300–$500 and can reveal issues worth tens of thousands to fix.",
+      },
+    ],
   },
   4: {
     seller: [

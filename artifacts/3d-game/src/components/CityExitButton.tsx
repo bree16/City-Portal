@@ -4,20 +4,31 @@ import { findBuilding } from '@/data/buildings';
 export function CityExitButton() {
   const { currentLocation, setTransitioning, setCurrentLocation, setPlayerTarget } = useGameStore();
 
-  // Only show when inside a building (not in city)
+  // Only show when inside a building or home tour (not in city itself)
   if (currentLocation === 'city') return null;
 
-  const building = findBuilding(currentLocation);
+  // Home tour: go back to the Real Estate Office (listing cards), not the city map
+  const isTour = currentLocation === 'home_tour';
+  const building = isTour ? null : findBuilding(currentLocation);
 
   const handleReturn = () => {
     setTransitioning(true);
-    const exitPos = building?.exitCityPos ?? [0, 0, 0];
-    setTimeout(() => {
-      setCurrentLocation('city');
-      setPlayerTarget(exitPos);
-      setTransitioning(false);
-    }, 700);
+    if (isTour) {
+      setTimeout(() => {
+        setCurrentLocation('realestate');
+        setTransitioning(false);
+      }, 700);
+    } else {
+      const exitPos = building?.exitCityPos ?? [0, 0, 0];
+      setTimeout(() => {
+        setCurrentLocation('city');
+        setPlayerTarget(exitPos);
+        setTransitioning(false);
+      }, 700);
+    }
   };
+
+  const label = isTour ? '← Back to Listings' : '← Back to City';
 
   return (
     <button
@@ -47,7 +58,7 @@ export function CityExitButton() {
       onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(10,143,126,0.8)'; }}
       onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(13,43,94,0.88)'; }}
     >
-      ← Back to City
+      {label}
     </button>
   );
 }
