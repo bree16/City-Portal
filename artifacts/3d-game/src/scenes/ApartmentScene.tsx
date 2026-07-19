@@ -2,6 +2,7 @@ import { Html } from '@react-three/drei';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
+import { selectLifeEvent, shouldEventFire } from '@/data/lifeEvents';
 
 const LANDLORD: NPCDef = {
   id: 'landlord',
@@ -21,9 +22,14 @@ export default function ApartmentScene() {
     completedInteractions,
     savings,
     creditScore,
+    month,
+    monthlyIncome,
+    monthlyExpenses,
     setStage,
     setTransitioning,
     addAchievement,
+    advanceMonth,
+    setPendingLifeEvent,
   } = useGameStore();
 
   // Just talk to the landlord AND interact with one financial item — no month grinding
@@ -301,6 +307,27 @@ export default function ApartmentScene() {
               <div style={{ color: creditScore >= 650 ? '#4ade80' : '#fbbf24', fontWeight: 800 }}>{creditScore}</div>
             </div>
           </div>
+
+          {/* End Month — builds savings & may trigger a life event */}
+          <button
+            onClick={() => {
+              // Check for life event BEFORE advancing (use current month as seed)
+              const fires = shouldEventFire(month);
+              advanceMonth();
+              if (fires) {
+                setPendingLifeEvent(selectLifeEvent(month));
+              }
+            }}
+            style={{
+              width: '100%', padding: '10px', borderRadius: 10,
+              background: 'rgba(10,143,126,0.18)',
+              border: '1px solid rgba(10,143,126,0.4)',
+              color: '#0A8F7E', cursor: 'pointer', fontWeight: 700, fontSize: 12,
+              fontFamily: 'Inter, sans-serif', marginBottom: 8,
+            }}
+          >
+            ⏭ Pass a Month (+${(monthlyIncome - monthlyExpenses).toLocaleString()} net)
+          </button>
 
           {canAdvance ? (
             <button onClick={handleAdvance} style={{

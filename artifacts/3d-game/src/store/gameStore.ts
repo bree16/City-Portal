@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import type { LifeEvent } from '@/data/lifeEvents';
 
 export type HairstyleId = 'short' | 'medium' | 'locs' | 'curly' | 'ponytail' | 'fade';
 export type AccessoryId = 'glasses' | 'earrings' | 'hat';
@@ -45,8 +46,15 @@ export interface GameState {
   lastLifeEvent: string | null;
   showResultsCard: boolean;
 
+  careerId: string | null;
+  pendingLifeEvent: LifeEvent | null;
+  lifeEventLog: string[];
+
   setPhoneOpen: (v: boolean) => void;
   togglePhone: () => void;
+  setCareer: (id: string, monthlyIncome: number, bonus: { type: 'cash' | 'savings' | 'creditScore'; amount: number }) => void;
+  setPendingLifeEvent: (event: LifeEvent | null) => void;
+  applyLifeEvent: () => void;
   startGame: (appearance: CharacterAppearance) => void;
   setStage: (stage: number) => void;
   setTransitioning: (v: boolean) => void;
@@ -116,6 +124,9 @@ const INITIAL_STATE = {
   furnitureOwned: [] as string[],
   lastLifeEvent: null,
   showResultsCard: false,
+  careerId: null,
+  pendingLifeEvent: null,
+  lifeEventLog: [] as string[],
 };
 
 // Fields that should not be persisted (runtime-only state)
@@ -125,6 +136,7 @@ const TRANSIENT_FIELDS: (keyof GameState)[] = [
   'playerPosition',
   'targetPosition',
   'phoneOpen',
+  'pendingLifeEvent',
 ];
 
 export const useGameStore = create<GameState>()(
@@ -134,6 +146,31 @@ export const useGameStore = create<GameState>()(
 
       setPhoneOpen: (v) => set({ phoneOpen: v }),
       togglePhone: () => set((s) => ({ phoneOpen: !s.phoneOpen })),
+      setCareer: (id, income, bonus) =>
+        set((s) => {
+          const base: Partial<GameState> = { careerId: id, monthlyIncome: income };
+          if (bonus.type === 'cash') base.cash = s.cash + bonus.amount;
+          if (bonus.type === 'savings') base.savings = s.savings + bonus.amount;
+          if (bonus.type === 'creditScore') base.creditScore = Math.max(300, Math.min(850, s.creditScore + bonus.amount));
+          return base as Partial<GameState>;
+        }),
+      setPendingLifeEvent: (event) => set({ pendingLifeEvent: event }),
+      applyLifeEvent: () =>
+        set((s) => {
+          if (!s.pendingLifeEvent) return {};
+          const { effect, title } = s.pendingLifeEvent;
+          const next: Partial<GameState> = {
+            pendingLifeEvent: null,
+            lastLifeEvent: title,
+            lifeEventLog: [title, ...s.lifeEventLog].slice(0, 3),
+          };
+          if (effect.type === 'cash') next.cash = Math.max(0, s.cash + effect.delta);
+          if (effect.type === 'savings') next.savings = Math.max(0, s.savings + effect.delta);
+          if (effect.type === 'income') next.monthlyIncome = s.monthlyIncome + effect.delta;
+          if (effect.type === 'expenses') next.monthlyExpenses = Math.max(0, s.monthlyExpenses + effect.delta);
+          if (effect.type === 'credit') next.creditScore = Math.max(300, Math.min(850, s.creditScore + effect.delta));
+          return next;
+        }),
       startGame: (appearance) => set({ gameStarted: true, characterAppearance: appearance }),
       setStage: (stage) => set({ stage, completedInteractions: [], transitioning: false }),
       setTransitioning: (v) => set({ transitioning: v }),
@@ -179,7 +216,7 @@ export const useGameStore = create<GameState>()(
     }),
     {
       name: 'path-to-home-game-state',
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => {
         const persisted = { ...state } as Record<string, unknown>;
@@ -195,6 +232,14 @@ export const useGameStore = create<GameState>()(
           s.characterAppearance = normalizeAppearance(
             s.characterAppearance as Partial<CharacterAppearance> | undefined
           );
+        }
+        if (fromVersion < 2) {
+          // v1 → v2: add careerId. Players who were mid-game get a default so they aren't blocked.
+          if (!s.careerId) {
+            const stage = typeof s.stage === 'number' ? s.stage : 1;
+            s.careerId = stage > 1 ? 'government' : null;
+          }
+          if (!Array.isArray(s.lifeEventLog)) s.lifeEventLog = [];
         }
         return s;
       },

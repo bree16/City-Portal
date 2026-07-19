@@ -10,6 +10,7 @@ import { AchievementToast } from '@/components/AchievementToast';
 import { ResultsCard } from '@/components/ResultsCard';
 import { AudioManager } from '@/components/AudioManager';
 import { SmartPhone } from '@/components/SmartPhone';
+import { LifeEventModal } from '@/components/LifeEventModal';
 import { IsometricCamera } from '@/components/IsometricCamera';
 import { GroundPlane } from '@/components/GroundPlane';
 import { PlayerCharacter } from '@/components/characters/PlayerCharacter';
@@ -226,6 +227,7 @@ export default function GamePage() {
         </div>
         <SpeechBubble />
         <SmartPhone />
+        <LifeEventModal />
         <SceneTransition />
         <AchievementToast
           isVisible={!!activeToast}

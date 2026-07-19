@@ -1,4 +1,5 @@
-import { Home, Volume2, VolumeX, Smartphone } from 'lucide-react';
+import { useState } from 'react';
+import { Home, Volume2, VolumeX, Smartphone, ChevronUp, ChevronDown } from 'lucide-react';
 import { useGameStore } from '@/store/gameStore';
 import { useAudioControls } from '@/components/AudioManager';
 
@@ -14,10 +15,11 @@ const STAGE_NAMES = [
 ];
 
 export function GameHUD() {
-  const { stage, month, cash, savings, creditScore, resetGame, characterAppearance, togglePhone, phoneOpen } = useGameStore();
+  const { stage, month, cash, savings, creditScore, resetGame, characterAppearance, togglePhone, phoneOpen, lifeEventLog } = useGameStore();
   const { muted, toggleMute } = useAudioControls();
 
   const playerName = characterAppearance.name?.trim() || 'Player';
+  const [logExpanded, setLogExpanded] = useState(false);
 
   return (
     <div
@@ -191,6 +193,78 @@ export function GameHUD() {
       >
         <Smartphone size={22} />
       </button>
+
+      {/* Life Events Log — fixed bottom-left */}
+      {lifeEventLog.length > 0 && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 24,
+            left: 16,
+            zIndex: 35,
+            fontFamily: 'Inter, sans-serif',
+            pointerEvents: 'auto',
+          }}
+        >
+          <button
+            onClick={() => setLogExpanded((v) => !v)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '6px 12px',
+              borderRadius: 20,
+              background: 'rgba(13,43,94,0.92)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              color: 'rgba(255,255,255,0.7)',
+              fontSize: 11,
+              fontWeight: 700,
+              cursor: 'pointer',
+              backdropFilter: 'blur(12px)',
+              fontFamily: 'Inter, sans-serif',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+            }}
+          >
+            📋 Life Events
+            {logExpanded ? <ChevronDown size={12} /> : <ChevronUp size={12} />}
+          </button>
+          {logExpanded && (
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '100%',
+                left: 0,
+                marginBottom: 6,
+                minWidth: 200,
+                background: 'rgba(13,43,94,0.96)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: 12,
+                padding: '10px 12px',
+                backdropFilter: 'blur(12px)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+              }}
+            >
+              <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
+                Recent Events
+              </div>
+              {lifeEventLog.map((title, i) => (
+                <div
+                  key={i}
+                  style={{
+                    fontSize: 11,
+                    color: i === 0 ? '#D4A843' : 'rgba(255,255,255,0.55)',
+                    padding: '4px 0',
+                    borderBottom: i < lifeEventLog.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                    fontWeight: i === 0 ? 700 : 400,
+                  }}
+                >
+                  {i === 0 ? '● ' : '○ '}{title}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Stage progress dots */}
       <div
