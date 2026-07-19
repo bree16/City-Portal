@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Html } from '@react-three/drei';
+import { InteractionZone } from '@/components/InteractionZone';
+import { SceneObstacles } from '@/components/SceneObstacles';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
@@ -34,6 +36,10 @@ export default function NeighborhoodScene() {
 
   return (
     <group>
+      <SceneObstacles
+        circles={homes.map((_, idx) => ({ x: -15 + idx * 10, z: -2.5, r: 3.4 }))}
+        bounds={{ minX: -27, maxX: 27, minZ: -6.5, maxZ: 9 }}
+      />
       {/* Grass — PBR */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[60, 22]} />
@@ -194,6 +200,16 @@ export default function NeighborhoodScene() {
             <NPCCharacter
               npc={agentNpc}
               onClick={() => {
+                openDialogue(AGENTS[idx].id);
+                setViewingHome(viewingHome === home.id ? null : home.id);
+              }}
+            />
+            {/* Generous zone around the agent — clicking anywhere nearby opens the listing */}
+            <InteractionZone
+              position={[0, 0, 4.5]}
+              radius={1.6}
+              prompt={`View ${home.name}`}
+              onActivate={() => {
                 openDialogue(AGENTS[idx].id);
                 setViewingHome(viewingHome === home.id ? null : home.id);
               }}

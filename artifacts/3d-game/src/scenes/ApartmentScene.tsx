@@ -1,4 +1,6 @@
 import { Html } from '@react-three/drei';
+import { InteractionZone } from '@/components/InteractionZone';
+import { SceneObstacles } from '@/components/SceneObstacles';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
@@ -49,6 +51,21 @@ export default function ApartmentScene() {
 
   return (
     <group>
+      <SceneObstacles
+        circles={[
+          { x: -2, z: -3.5, r: 1.4 },   // sofa
+          { x: -2, z: -2, r: 0.7 },     // coffee table
+          { x: 3, z: -5.5, r: 1.1 },    // TV stand
+          { x: 5, z: 1.5, r: 0.95 },    // desk
+          { x: -4.5, z: -4.5, r: 1.7 }, // kitchen counter
+          { x: -5.5, z: 1.5, r: 0.5 },  // piggy bank
+        ]}
+        bounds={{ minX: -6.4, maxX: 6.4, minZ: -5.4, maxZ: 5.4 }}
+      />
+      {/* Generous interaction zones */}
+      <InteractionZone position={[5, 0, 1.5]} radius={1.5} prompt="Check Budget" onActivate={() => openDialogue('laptop')} />
+      <InteractionZone position={[-5.5, 0, 1.5]} radius={1.3} prompt="Savings Jar" onActivate={() => openDialogue('piggybank')} />
+      <InteractionZone position={[4.5, 0, -2.5]} radius={1.4} prompt="Talk to Landlord" onActivate={() => openDialogue('landlord')} />
       {/* Floor — warm hardwood */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[14, 12]} />

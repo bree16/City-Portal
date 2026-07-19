@@ -1,4 +1,6 @@
 import { Html } from '@react-three/drei';
+import { InteractionZone } from '@/components/InteractionZone';
+import { SceneObstacles } from '@/components/SceneObstacles';
 import { useGameStore } from '@/store/gameStore';
 import { buildings, buildingRequiredStage } from '@/data/buildings';
 import type { BuildingDef } from '@/data/buildings';
@@ -232,6 +234,16 @@ function BuildingExterior({ b, status, onEnter }: {
           <meshStandardMaterial transparent opacity={0} />
         </mesh>
       )}
+
+      {/* Generous walk-up zone in front of the entrance */}
+      {b.hasInterior && !isLocked && (
+        <InteractionZone
+          position={[0, 0, d / 2 + 1.6]}
+          radius={2.0}
+          prompt={`Enter ${b.name}`}
+          onActivate={() => onEnter(b.id)}
+        />
+      )}
     </group>
   );
 }
@@ -252,6 +264,16 @@ export default function CityMapScene() {
 
   return (
     <group>
+      <SceneObstacles
+        circles={buildings
+          .filter((b) => b.id !== 'park')
+          .map((b) => ({
+            x: b.cityPos[0],
+            z: b.cityPos[2],
+            r: Math.max(b.footprint[0], b.footprint[1]) / 2 + 0.5,
+          }))}
+        bounds={{ minX: -33, maxX: 33, minZ: -33, maxZ: 33 }}
+      />
       {/* === GROUND === */}
       {/* Main grass base */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>

@@ -2,6 +2,8 @@ import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { useGameStore } from '@/store/gameStore';
+import { InteractionZone } from '@/components/InteractionZone';
+import { SceneObstacles } from '@/components/SceneObstacles';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { homes } from '@/data/homes';
@@ -139,6 +141,15 @@ function ClickableProp({ pos, label, tip }: FeatureProp) {
   const [open, setOpen] = useState(false);
   return (
     <group position={pos}>
+      {/* Generous zone — clicking near the marker also toggles it */}
+      <InteractionZone
+        position={[0, -pos[1], 0]}
+        radius={0.95}
+        height={1.8}
+        highlightPad={0.7}
+        prompt="Inspect"
+        onActivate={() => setOpen((v) => !v)}
+      />
       <mesh
         onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
         castShadow
@@ -241,6 +252,23 @@ export default function HomeInteriorScene() {
   return (
     <group>
       <ZoneTracker homeId={String(homeId)} />
+      <SceneObstacles
+        circles={[
+          { x: -1.5, z: 0.5, r: 1.6 },   // sofa
+          { x: -1.5, z: 2.2, r: 0.9 },   // coffee table
+          { x: 2.5, z: 2, r: 1.2 },      // TV stand
+          { x: 6.5, z: -1.5, r: 1.1 },   // kitchen counter (south)
+          { x: 6.5, z: 1.2, r: 1.1 },    // kitchen counter (north)
+          ...(theme.hasKitchenIsland ? [{ x: 4.5, z: 0, r: 1.4 }] : []),
+          ...(theme.hasFireplace ? [{ x: -4.7, z: 3, r: 1.1 }] : []),
+          { x: -5.5, z: -1.5, r: 1.7 },  // bed
+          { x: -7.2, z: 0.5, r: 0.7 },   // dresser
+          { x: 0, z: -5.5, r: 0.7 },     // patio table
+        ]}
+        bounds={{ minX: -7.6, maxX: 7.6, minZ: -7.6, maxZ: 8.4 }}
+      />
+      {/* Generous zone around the realtor */}
+      <InteractionZone position={[-1, 0, 2.5]} radius={1.4} prompt="Talk to Realtor" onActivate={() => openDialogue('tour_npc')} />
 
       {/* Home name card */}
       <Html position={[0, 3.5, 8.5]} center distanceFactor={18}>

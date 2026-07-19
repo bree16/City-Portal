@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { useGameStore } from '@/store/gameStore';
 
 const OFFSET = new THREE.Vector3(13, 11, 13);
-const LERP_SPEED = 0.05;
+const DAMP = 3.2; // frame-rate independent smoothing
 
 export function IsometricCamera() {
   const { camera } = useThree();
@@ -17,14 +17,15 @@ export function IsometricCamera() {
     initialized.current = true;
   }
 
-  useFrame(() => {
+  useFrame((_, dt) => {
     const { playerPosition } = useGameStore.getState();
     const px = playerPosition[0];
     const pz = playerPosition[2];
 
     lookTarget.current.set(px, 0, pz);
     const desired = lookTarget.current.clone().add(OFFSET);
-    camera.position.lerp(desired, LERP_SPEED);
+    const t = 1 - Math.exp(-DAMP * Math.min(dt, 0.05));
+    camera.position.lerp(desired, t);
     camera.lookAt(lookTarget.current);
   });
 
