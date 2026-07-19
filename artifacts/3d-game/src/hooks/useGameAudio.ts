@@ -7,18 +7,29 @@ export type SoundEffect = 'click' | 'dialogue' | 'coin' | 'achievement' | 'fanfa
 
 // ─── Singleton audio engine ────────────────────────────────────────────────
 
+const VOLUME_KEY = 'gameAudioVolume';
+const DEFAULT_VOLUME = 0.6;
+
 class GameAudioEngine {
   private ctx: AudioContext | null = null;
   private masterGain: GainNode | null = null;
   private ambientOscillators: OscillatorNode[] = [];
   private _muted = false;
+  private _volume: number;
+
+  constructor() {
+    // Restore persisted volume (0–1)
+    const stored = localStorage.getItem(VOLUME_KEY);
+    this._volume = stored !== null ? Math.max(0, Math.min(1, parseFloat(stored))) : DEFAULT_VOLUME;
+    if (isNaN(this._volume)) this._volume = DEFAULT_VOLUME;
+  }
 
   // Lazy-init — must be triggered by a user gesture first
   private boot(): AudioContext {
     if (!this.ctx) {
       this.ctx = new AudioContext();
       this.masterGain = this.ctx.createGain();
-      this.masterGain.gain.value = 0.6;
+      this.masterGain.gain.value = this._muted ? 0 : this._volume;
       this.masterGain.connect(this.ctx.destination);
     }
     if (this.ctx.state === 'suspended') {
@@ -31,16 +42,39 @@ class GameAudioEngine {
     return this._muted;
   }
 
+  get volume() {
+    return this._volume;
+  }
+
   setMuted(val: boolean) {
     this._muted = val;
     if (this.masterGain) {
       // Smooth ramp to avoid clicks
       const ctx = this.ctx!;
       this.masterGain.gain.cancelScheduledValues(ctx.currentTime);
-      this.masterGain.gain.linearRampToValueAtTime(val ? 0 : 0.6, ctx.currentTime + 0.08);
+      this.masterGain.gain.linearRampToValueAtTime(val ? 0 : this._volume, ctx.currentTime + 0.08);
     }
     if (val) {
       this.stopAmbient();
+    }
+  }
+
+  setVolume(level: number) {
+    this._volume = Math.max(0, Math.min(1, level));
+    localStorage.setItem(VOLUME_KEY, String(this._volume));
+    if (this.masterGain && !this._muted) {
+      const ctx = this.ctx!;
+      this.masterGain.gain.cancelScheduledValues(ctx.currentTime);
+      this.masterGain.gain.linearRampToValueAtTime(this._volume, ctx.currentTime + 0.05);
+    }
+    // If volume is raised while muted, auto-unmute
+    if (this._volume > 0 && this._muted) {
+      this._muted = false;
+      if (this.masterGain) {
+        const ctx = this.ctx!;
+        this.masterGain.gain.cancelScheduledValues(ctx.currentTime);
+        this.masterGain.gain.linearRampToValueAtTime(this._volume, ctx.currentTime + 0.08);
+      }
     }
   }
 

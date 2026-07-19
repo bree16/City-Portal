@@ -142,7 +142,7 @@ function ObjectiveCard({ stage }: { stage: number }) {
 
 export function GameHUD() {
   const { stage, month, cash, savings, creditScore, resetGame, characterAppearance, togglePhone, phoneOpen, lifeEventLog, currentLocation, playerPosition } = useGameStore();
-  const { muted, toggleMute } = useAudioControls();
+  const { muted, toggleMute, volume, setVolume } = useAudioControls();
 
   const playerName = characterAppearance.name?.trim() || 'Player';
   const [logExpanded, setLogExpanded] = useState(false);
@@ -252,23 +252,41 @@ export function GameHUD() {
             </span>
           </div>
           <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.2)' }} />
-          <button
-            onClick={toggleMute}
-            title={muted ? 'Unmute' : 'Mute'}
-            style={{
-              background: muted ? 'rgba(212,168,67,0.18)' : 'rgba(255,255,255,0.10)',
-              border: muted ? '1px solid rgba(212,168,67,0.5)' : '1px solid transparent',
-              color: muted ? '#D4A843' : 'rgba(255,255,255,0.65)',
-              padding: '3px 6px',
-              borderRadius: 6,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              transition: 'all 0.15s',
-            }}
-          >
-            {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
-          </button>
+          {/* Volume controls: mute toggle + slider */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <button
+              onClick={toggleMute}
+              title={muted ? 'Unmute' : 'Mute'}
+              style={{
+                background: muted ? 'rgba(212,168,67,0.18)' : 'rgba(255,255,255,0.10)',
+                border: muted ? '1px solid rgba(212,168,67,0.5)' : '1px solid transparent',
+                color: muted ? '#D4A843' : 'rgba(255,255,255,0.65)',
+                padding: '3px 6px',
+                borderRadius: 6,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                transition: 'all 0.15s',
+              }}
+            >
+              {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+            </button>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={muted ? 0 : Math.round(volume * 100)}
+              onChange={(e) => setVolume(Number(e.target.value) / 100)}
+              title={`Volume: ${muted ? 0 : Math.round(volume * 100)}%`}
+              style={{
+                width: 64,
+                height: 4,
+                cursor: 'pointer',
+                accentColor: '#D4A843',
+                opacity: 0.85,
+              }}
+            />
+          </div>
           <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.2)' }} />
           <button
             onClick={resetGame}

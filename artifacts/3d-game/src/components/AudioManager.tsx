@@ -12,9 +12,16 @@ import { getAudioEngine } from '@/hooks/useGameAudio';
 interface AudioCtxValue {
   muted: boolean;
   toggleMute: () => void;
+  volume: number;
+  setVolume: (level: number) => void;
 }
 
-const AudioCtx = createContext<AudioCtxValue>({ muted: false, toggleMute: () => {} });
+const AudioCtx = createContext<AudioCtxValue>({
+  muted: false,
+  toggleMute: () => {},
+  volume: 0.6,
+  setVolume: () => {},
+});
 
 export function useAudioControls() {
   return useContext(AudioCtx);
@@ -24,7 +31,8 @@ export function useAudioControls() {
 
 export function AudioManager({ children }: { children: React.ReactNode }) {
   const engine = getAudioEngine();
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useState(() => engine.muted);
+  const [volume, setVolumeState] = useState(() => engine.volume);
 
   const toggleMute = useCallback(() => {
     const next = !engine.muted;
@@ -32,6 +40,17 @@ export function AudioManager({ children }: { children: React.ReactNode }) {
     setMuted(next);
     // If unmuting, restart ambient for the current stage
     if (!next) {
+      engine.startAmbient(useGameStore.getState().stage);
+    }
+  }, [engine]);
+
+  const setVolume = useCallback((level: number) => {
+    engine.setVolume(level);
+    setVolumeState(engine.volume);
+    // Sync muted state in case setVolume auto-unmuted
+    setMuted(engine.muted);
+    // If raising volume from 0 while ambient isn't playing, restart it
+    if (level > 0) {
       engine.startAmbient(useGameStore.getState().stage);
     }
   }, [engine]);
@@ -109,7 +128,7 @@ export function AudioManager({ children }: { children: React.ReactNode }) {
   }, [engine]);
 
   return (
-    <AudioCtx.Provider value={{ muted, toggleMute }}>
+    <AudioCtx.Provider value={{ muted, toggleMute, volume, setVolume }}>
       {children}
     </AudioCtx.Provider>
   );
