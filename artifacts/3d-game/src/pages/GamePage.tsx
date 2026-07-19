@@ -1,71 +1,126 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Canvas } from '@react-three/fiber';
 import { useGameStore } from '@/store/gameStore';
 import { GameHUD } from '@/components/GameHUD';
+import { SpeechBubble } from '@/components/SpeechBubble';
+import { SceneTransition } from '@/components/SceneTransition';
 import { AchievementToast } from '@/components/AchievementToast';
+import { IsometricCamera } from '@/components/IsometricCamera';
+import { GroundPlane } from '@/components/GroundPlane';
+import { PlayerCharacter } from '@/components/characters/PlayerCharacter';
 
-// Stages
-import { Stage1Renting } from '@/stages/Stage1Renting';
-import { Stage2Preparing } from '@/stages/Stage2Preparing';
-import { Stage3Hunting } from '@/stages/Stage3Hunting';
-import { Stage4Offer } from '@/stages/Stage4Offer';
-import { Stage5Mortgage } from '@/stages/Stage5Mortgage';
-import { Stage6Closing } from '@/stages/Stage6Closing';
-import { Stage7MoveIn } from '@/stages/Stage7MoveIn';
+import ApartmentScene from '@/scenes/ApartmentScene';
+import CounselorOfficeScene from '@/scenes/CounselorOfficeScene';
+import NeighborhoodScene from '@/scenes/NeighborhoodScene';
+import NegotiationScene from '@/scenes/NegotiationScene';
+import BankScene from '@/scenes/BankScene';
+import ClosingScene from '@/scenes/ClosingScene';
+import NewHomeScene from '@/scenes/NewHomeScene';
+
+const SCENES: Record<number, React.ComponentType> = {
+  1: ApartmentScene,
+  2: CounselorOfficeScene,
+  3: NeighborhoodScene,
+  4: NegotiationScene,
+  5: BankScene,
+  6: ClosingScene,
+  7: NewHomeScene,
+};
+
+function SceneContents({ stage }: { stage: number }) {
+  const Scene = SCENES[stage] ?? ApartmentScene;
+  return (
+    <>
+      <ambientLight intensity={0.65} />
+      <directionalLight
+        position={[14, 16, 12]}
+        intensity={1.3}
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+        shadow-camera-near={0.5}
+        shadow-camera-far={100}
+        shadow-camera-left={-24}
+        shadow-camera-right={24}
+        shadow-camera-top={24}
+        shadow-camera-bottom={-24}
+      />
+      <pointLight position={[-10, 10, -8]} intensity={0.35} color="#FFF8E7" />
+      <GroundPlane />
+      <PlayerCharacter />
+      <Scene />
+      <IsometricCamera />
+    </>
+  );
+}
+
+function formatTitle(id: string): string {
+  return id
+    .split('_')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
 
 export default function GamePage() {
   const { stage, achievements } = useGameStore();
-  
-  // Achievement Toast State
+  const prevAchievements = useRef<string[]>([]);
   const [toastQueue, setToastQueue] = useState<string[]>([]);
   const [activeToast, setActiveToast] = useState<string | null>(null);
 
-  // Watch for new achievements
   useEffect(() => {
-    if (achievements.length > 0) {
-      const latest = achievements[achievements.length - 1];
-      if (latest !== activeToast && !toastQueue.includes(latest)) {
-        setToastQueue(prev => [...prev, latest]);
-      }
+    const newOnes = achievements.filter((a) => !prevAchievements.current.includes(a));
+    if (newOnes.length > 0) {
+      setToastQueue((q) => [...q, ...newOnes]);
+      prevAchievements.current = achievements;
     }
   }, [achievements]);
 
-  // Process toast queue
   useEffect(() => {
     if (!activeToast && toastQueue.length > 0) {
       setActiveToast(toastQueue[0]);
-      setToastQueue(prev => prev.slice(1));
+      setToastQueue((q) => q.slice(1));
     }
   }, [activeToast, toastQueue]);
 
-  const renderStage = () => {
-    switch (stage) {
-      case 1: return <Stage1Renting />;
-      case 2: return <Stage2Preparing />;
-      case 3: return <Stage3Hunting />;
-      case 4: return <Stage4Offer />;
-      case 5: return <Stage5Mortgage />;
-      case 6: return <Stage6Closing />;
-      case 7: return <Stage7MoveIn />;
-      default: return <Stage1Renting />;
-    }
-  };
-
-  const formatAchievementTitle = (id: string) => {
-    return id.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  };
-
   return (
-    <div className="min-h-[100dvh] w-full flex flex-col bg-background font-sans overflow-hidden">
-      {stage !== 6 && <GameHUD />}
-      
-      <main className="flex-1 w-full max-w-7xl mx-auto overflow-hidden relative shadow-2xl bg-white md:my-4 md:rounded-2xl border border-border flex flex-col">
-        {renderStage()}
-      </main>
+    <div
+      style={{
+        width: '100vw',
+        height: '100dvh',
+        overflow: 'hidden',
+        background: '#0D2B5E',
+        position: 'relative',
+      }}
+    >
+      {/* HUD overlay */}
+      <GameHUD />
 
-      <AchievementToast 
-        isVisible={!!activeToast} 
-        title={activeToast ? formatAchievementTitle(activeToast) : ''} 
-        onClose={() => setActiveToast(null)} 
+      {/* 3D Canvas — starts below the HUD (~72px) */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 72,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+      >
+        <Canvas
+          shadows
+          camera={{ position: [13, 11, 13], fov: 44 }}
+          style={{ width: '100%', height: '100%' }}
+          gl={{ antialias: true, alpha: false }}
+        >
+          <SceneContents stage={stage} />
+        </Canvas>
+      </div>
+
+      {/* HTML overlays on top of canvas */}
+      <SpeechBubble />
+      <SceneTransition />
+      <AchievementToast
+        isVisible={!!activeToast}
+        title={activeToast ? formatTitle(activeToast) : ''}
+        onClose={() => setActiveToast(null)}
       />
     </div>
   );

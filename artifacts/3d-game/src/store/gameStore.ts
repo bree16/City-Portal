@@ -1,79 +1,135 @@
 import { create } from 'zustand';
-import { HomeOption } from '@/data/homes';
-import { FurnitureItem } from '@/data/furniture';
+
+export type CharacterAppearance = {
+  skinTone: string;
+  hairColor: string;
+  shirtColor: string;
+  pantsColor: string;
+};
 
 export interface GameState {
+  // Game progression
   stage: number;
   month: number;
+  gameStarted: boolean;
+  transitioning: boolean;
+
+  // Finances
   cash: number;
   savings: number;
   creditScore: number;
   debt: number;
   monthlyIncome: number;
-  achievements: string[];
-  selectedHome: HomeOption | null;
-  furnitureOwned: FurnitureItem[];
-  homeEquity: number;
-  completedTasks: string[];
-  lastEvent: string | null;
+  monthlyExpenses: number;
 
+  // Player
+  characterAppearance: CharacterAppearance;
+  playerPosition: [number, number, number];
+  targetPosition: [number, number, number];
+
+  // Dialogue
+  activeDialogue: { npcId: string; lineIndex: number } | null;
+
+  // Progress
+  achievements: string[];
+  completedInteractions: string[];
+  selectedHomeId: number | null;
+  furnitureOwned: string[];
+  lastLifeEvent: string | null;
+
+  // Actions
+  startGame: (appearance: CharacterAppearance) => void;
   setStage: (stage: number) => void;
-  advanceMonth: (cashDelta: number) => void;
-  updateCash: (amount: number) => void;
-  updateSavings: (amount: number) => void;
-  updateCreditScore: (amount: number) => void;
-  updateDebt: (amount: number) => void;
-  updateMonthlyIncome: (amount: number) => void;
+  setTransitioning: (v: boolean) => void;
+  setPlayerTarget: (pos: [number, number, number]) => void;
+  setPlayerPosition: (pos: [number, number, number]) => void;
+  openDialogue: (npcId: string) => void;
+  advanceDialogue: () => void;
+  closeDialogue: () => void;
+  completeInteraction: (id: string) => void;
   addAchievement: (id: string) => void;
-  setSelectedHome: (home: HomeOption | null) => void;
-  addFurniture: (item: FurnitureItem) => void;
-  updateHomeEquity: (amount: number) => void;
-  completeTask: (taskId: string) => void;
-  setLastEvent: (eventId: string | null) => void;
+  updateCash: (delta: number) => void;
+  updateSavings: (delta: number) => void;
+  updateCreditScore: (delta: number) => void;
+  updateDebt: (delta: number) => void;
+  updateMonthlyIncome: (delta: number) => void;
+  advanceMonth: () => void;
+  setSelectedHome: (id: number) => void;
+  buyFurniture: (id: string, price: number) => void;
   resetGame: () => void;
 }
 
-export const useGameStore = create<GameState>((set) => ({
+const DEFAULT_APPEARANCE: CharacterAppearance = {
+  skinTone: '#FDBCB4',
+  hairColor: '#3B1F0A',
+  shirtColor: '#0A8F7E',
+  pantsColor: '#1A3A6B',
+};
+
+const INITIAL_STATE = {
   stage: 1,
   month: 1,
+  gameStarted: false,
+  transitioning: false,
   cash: 2400,
   savings: 0,
   creditScore: 620,
   debt: 8500,
   monthlyIncome: 3800,
-  achievements: [],
-  selectedHome: null,
-  furnitureOwned: [],
-  homeEquity: 0,
-  completedTasks: [],
-  lastEvent: null,
+  monthlyExpenses: 2100,
+  characterAppearance: DEFAULT_APPEARANCE,
+  playerPosition: [0, 0, 0] as [number, number, number],
+  targetPosition: [0, 0, 0] as [number, number, number],
+  activeDialogue: null,
+  achievements: [] as string[],
+  completedInteractions: [] as string[],
+  selectedHomeId: null,
+  furnitureOwned: [] as string[],
+  lastLifeEvent: null,
+};
 
-  setStage: (stage) => set({ stage }),
-  advanceMonth: (cashDelta) => set((state) => ({ month: state.month + 1, cash: state.cash + cashDelta })),
-  updateCash: (amount) => set((state) => ({ cash: state.cash + amount })),
-  updateSavings: (amount) => set((state) => ({ savings: state.savings + amount })),
-  updateCreditScore: (amount) => set((state) => ({ creditScore: state.creditScore + amount })),
-  updateDebt: (amount) => set((state) => ({ debt: state.debt + amount })),
-  updateMonthlyIncome: (amount) => set((state) => ({ monthlyIncome: state.monthlyIncome + amount })),
-  addAchievement: (id) => set((state) => ({ achievements: [...state.achievements, id] })),
-  setSelectedHome: (home) => set({ selectedHome: home }),
-  addFurniture: (item) => set((state) => ({ furnitureOwned: [...state.furnitureOwned, item] })),
-  updateHomeEquity: (amount) => set((state) => ({ homeEquity: state.homeEquity + amount })),
-  completeTask: (taskId) => set((state) => ({ completedTasks: [...state.completedTasks, taskId] })),
-  setLastEvent: (eventId) => set({ lastEvent: eventId }),
-  resetGame: () => set({
-    stage: 1,
-    month: 1,
-    cash: 2400,
-    savings: 0,
-    creditScore: 620,
-    debt: 8500,
-    monthlyIncome: 3800,
-    achievements: [],
-    selectedHome: null,
-    furnitureOwned: [],
-    homeEquity: 0,
-    completedTasks: [],
-    lastEvent: null
-  }),
+export const useGameStore = create<GameState>((set) => ({
+  ...INITIAL_STATE,
+
+  startGame: (appearance) => set({ gameStarted: true, characterAppearance: appearance }),
+  setStage: (stage) => set({ stage, completedInteractions: [], transitioning: false }),
+  setTransitioning: (v) => set({ transitioning: v }),
+  setPlayerTarget: (pos) => set({ targetPosition: pos }),
+  setPlayerPosition: (pos) => set({ playerPosition: pos }),
+  openDialogue: (npcId) => set({ activeDialogue: { npcId, lineIndex: 0 } }),
+  advanceDialogue: () =>
+    set((s) =>
+      s.activeDialogue
+        ? { activeDialogue: { ...s.activeDialogue, lineIndex: s.activeDialogue.lineIndex + 1 } }
+        : {}
+    ),
+  closeDialogue: () => set({ activeDialogue: null }),
+  completeInteraction: (id) =>
+    set((s) => ({
+      completedInteractions: s.completedInteractions.includes(id)
+        ? s.completedInteractions
+        : [...s.completedInteractions, id],
+    })),
+  addAchievement: (id) =>
+    set((s) => ({
+      achievements: s.achievements.includes(id) ? s.achievements : [...s.achievements, id],
+    })),
+  updateCash: (delta) => set((s) => ({ cash: Math.max(0, s.cash + delta) })),
+  updateSavings: (delta) => set((s) => ({ savings: Math.max(0, s.savings + delta) })),
+  updateCreditScore: (delta) =>
+    set((s) => ({ creditScore: Math.max(300, Math.min(850, s.creditScore + delta)) })),
+  updateDebt: (delta) => set((s) => ({ debt: Math.max(0, s.debt + delta) })),
+  updateMonthlyIncome: (delta) => set((s) => ({ monthlyIncome: s.monthlyIncome + delta })),
+  advanceMonth: () =>
+    set((s) => {
+      const net = s.monthlyIncome - s.monthlyExpenses;
+      return { month: s.month + 1, cash: Math.max(0, s.cash + net) };
+    }),
+  setSelectedHome: (id) => set({ selectedHomeId: id }),
+  buyFurniture: (id, price) =>
+    set((s) => ({
+      furnitureOwned: [...s.furnitureOwned, id],
+      cash: Math.max(0, s.cash - price),
+    })),
+  resetGame: () => set({ ...INITIAL_STATE }),
 }));
