@@ -17,7 +17,12 @@ import ContactPage from '@/pages/ContactPage';
 import ResourcesPage from '@/pages/ResourcesPage';
 import EventsPage from '@/pages/EventsPage';
 import SuccessStoriesPage from '@/pages/SuccessStoriesPage';
+import JourneyPage from '@/pages/JourneyPage';
+import QuizPage from '@/pages/QuizPage';
+import WhyNewportNewsPage from '@/pages/WhyNewportNewsPage';
+import PartnersPage from '@/pages/PartnersPage';
 import NotFound from '@/pages/not-found';
+import { AccessibilityWidget } from '@/components/AccessibilityWidget';
 
 const queryClient = new QueryClient();
 
@@ -28,6 +33,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       <main className="flex-1 flex flex-col">{children}</main>
       <Footer />
       <ChatWidget />
+      <AccessibilityWidget />
     </div>
   );
 }
@@ -41,6 +47,10 @@ function Router() {
         <Route path="/rent" component={RentPage} />
         <Route path="/neighborhoods" component={NeighborhoodsPage} />
         <Route path="/assistance" component={AssistancePage} />
+        <Route path="/journey" component={JourneyPage} />
+        <Route path="/why-newport-news" component={WhyNewportNewsPage} />
+        <Route path="/partners" component={PartnersPage} />
+        <Route path="/quiz" component={QuizPage} />
         <Route path="/resources" component={ResourcesPage} />
         <Route path="/events" component={EventsPage} />
         <Route path="/success-stories" component={SuccessStoriesPage} />

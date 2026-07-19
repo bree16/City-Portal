@@ -315,4 +315,7 @@
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
   }
+
+  .high-contrast { filter: contrast(1.5) saturate(0); }
+  .reduce-motion * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

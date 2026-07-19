@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { 
   Home, Building2, Calculator, MapPin, 
   GraduationCap, HandHeart, ArrowRight, Star,
-  Calendar, MapPin as MapPinIcon, Users, DollarSign, Percent, Banknote
+  Calendar, MapPin as MapPinIcon, Users, DollarSign, Percent, Banknote, Search
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,6 +19,21 @@ import oysterImage from '@assets/generated_images/oyster_point.jpg';
 import southeastImage from '@assets/generated_images/southeast.jpg';
 
 export default function HomePage() {
+  // Search Bar State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [, setLocation] = useLocation();
+  
+  const handleSearch = (query: string) => {
+    const q = query.toLowerCase();
+    if (q.includes('rent') || q.includes('rental')) setLocation('/rent');
+    else if (q.includes('buy') || q.includes('first-time') || q.includes('homebuyer') || q.includes('grant') || q.includes('down payment')) setLocation('/buy');
+    else if (q.includes('counselor') || q.includes('contact')) setLocation('/contact');
+    else if (q.includes('emergency')) setLocation('/assistance');
+    else if (q.includes('neighbor')) setLocation('/neighborhoods');
+    else if (q.includes('repair') || q.includes('journey')) setLocation('/journey');
+    else setLocation('/resources');
+  };
+
   // Calculator States
   const [calcTab, setCalcTab] = useState("buy");
   const [income, setIncome] = useState([5500]);
@@ -27,6 +42,7 @@ export default function HomePage() {
   const [downPayment, setDownPayment] = useState([10]);
   const [taxes, setTaxes] = useState([200]);
   const [insurance, setInsurance] = useState([100]);
+  const [hoa, setHoa] = useState([0]);
   const [monthlyRent, setMonthlyRent] = useState([1500]);
 
   // Buy Math
@@ -38,7 +54,7 @@ export default function HomePage() {
     ? (loanAmount * rateMonth * Math.pow(1 + rateMonth, numPayments)) / (Math.pow(1 + rateMonth, numPayments) - 1) 
     : 0;
   
-  const totalMonthly = monthlyPi + taxes[0] + insurance[0];
+  const totalMonthly = monthlyPi + taxes[0] + insurance[0] + hoa[0];
   const dti = (totalMonthly / income[0]) * 100;
   
   // DTI logic
@@ -109,7 +125,37 @@ export default function HomePage() {
         </div>
         
         {/* Curved bottom edge */}
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-muted [clip-path:polygon(0_100%,100%_100%,100%_100%,0_0)] md:[clip-path:polygon(0_100%,100%_100%,100%_0,0_100%)]"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-white [clip-path:polygon(0_100%,100%_100%,100%_100%,0_0)] md:[clip-path:polygon(0_100%,100%_100%,100%_0,0_100%)] z-10"></div>
+      </section>
+
+      {/* Smart Search Section */}
+      <section className="py-10 bg-white border-b border-border/30 z-20 relative">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <div className="relative flex items-center bg-white rounded-full shadow-lg border border-border/40 px-4 py-3 gap-3">
+            <Search className="w-5 h-5 text-muted-foreground shrink-0" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSearch(searchQuery)}
+              placeholder="What are you looking for? Try 'rental assistance' or 'buy a home'"
+              className="flex-1 outline-none text-sm bg-transparent text-foreground placeholder:text-muted-foreground"
+              data-testid="input-smart-search"
+            />
+            <button onClick={() => handleSearch(searchQuery)} className="bg-accent text-white rounded-full px-4 py-1.5 text-sm font-medium hover:bg-accent/90 transition-colors" data-testid="button-search-submit">
+              Search
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2 mt-4 justify-center">
+            {['Rental Assistance','First-Time Buyer','Housing Counselor','Emergency Housing','Grants','Home Repairs'].map(chip => (
+              <button key={chip} onClick={() => { setSearchQuery(chip); handleSearch(chip); }}
+                className="px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-medium hover:bg-accent/20 transition-colors border border-accent/20"
+                data-testid={`chip-${chip.toLowerCase().replace(/ /g,'-')}`}>
+                {chip}
+              </button>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* 2. Quick Action Cards */}
@@ -277,7 +323,7 @@ export default function HomePage() {
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-8 pt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-muted-foreground">Monthly Taxes</label>
                         <Input type="number" value={taxes[0]} onChange={e => setTaxes([Number(e.target.value)])} className="bg-muted/50 border-none" />
@@ -285,6 +331,10 @@ export default function HomePage() {
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-muted-foreground">Monthly Insurance</label>
                         <Input type="number" value={insurance[0]} onChange={e => setInsurance([Number(e.target.value)])} className="bg-muted/50 border-none" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-muted-foreground">Monthly HOA Fees</label>
+                        <Input type="number" value={hoa[0]} onChange={e => setHoa([Number(e.target.value)])} className="bg-muted/50 border-none" />
                       </div>
                     </div>
 
@@ -297,7 +347,7 @@ export default function HomePage() {
                     <div className="mb-8">
                       <p className="text-sm font-medium text-secondary mb-1 uppercase tracking-wider">Est. Monthly Payment</p>
                       <div className="text-5xl font-extrabold mb-2">${Math.round(totalMonthly).toLocaleString()}</div>
-                      <p className="text-sm text-white/60">P&I + Taxes + Insurance</p>
+                      <p className="text-sm text-white/60">P&I + Taxes + Insurance + HOA</p>
                     </div>
 
                     <div className="space-y-4 border-t border-white/10 pt-6 mb-8">
