@@ -57,15 +57,21 @@ export function AudioManager({ children }: { children: React.ReactNode }) {
 
   // ── Pre-game ambient (title / character creator) ──────────────────────────
   const gameStarted = useGameStore((s) => s.gameStarted);
+  const prevStage = useRef<number | null>(null);
 
   useEffect(() => {
     if (!gameStarted) {
+      // Handles both first load AND mid-game returns to the character screen:
+      // startAmbient tears down any game-stage voices (with a fade) before
+      // starting the soft intro track. Reset the stage tracker so that if the
+      // player starts a new game, the stage effect below re-triggers even if
+      // the stage number is unchanged.
+      prevStage.current = null;
       engine.startAmbient(0);
     }
   }, [gameStarted, engine]);
 
   // ── Stage changes → switch ambient track ──────────────────────────────────
-  const prevStage = useRef<number | null>(null);
   const stage = useGameStore((s) => s.stage);
 
   useEffect(() => {

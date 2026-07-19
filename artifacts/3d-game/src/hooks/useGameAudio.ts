@@ -14,6 +14,7 @@ class GameAudioEngine {
   private ctx: AudioContext | null = null;
   private masterGain: GainNode | null = null;
   private ambientOscillators: OscillatorNode[] = [];
+  private ambientGains: GainNode[] = [];
   private _muted = false;
   private _volume: number;
 
@@ -209,14 +210,42 @@ class GameAudioEngine {
       gain.gain.linearRampToValueAtTime(perVoice, ctx.currentTime + 1.5);
 
       this.ambientOscillators.push(osc, lfo);
+      this.ambientGains.push(gain);
     });
   }
 
+  /**
+   * Stop all ambient voices. Fades gains to zero before stopping the
+   * oscillators to avoid audible pops when tearing down mid-game music
+   * (e.g. when returning to the character screen).
+   */
   stopAmbient() {
-    this.ambientOscillators.forEach((n) => {
-      try { n.stop(); } catch (_) { /* already stopped */ }
-    });
+    const oscillators = this.ambientOscillators;
+    const gains = this.ambientGains;
     this.ambientOscillators = [];
+    this.ambientGains = [];
+
+    if (oscillators.length === 0) return;
+
+    const FADE = 0.25;
+    if (this.ctx && this.ctx.state === 'running') {
+      const now = this.ctx.currentTime;
+      gains.forEach((g) => {
+        try {
+          g.gain.cancelScheduledValues(now);
+          g.gain.setValueAtTime(g.gain.value, now);
+          g.gain.linearRampToValueAtTime(0, now + FADE);
+        } catch (_) { /* node already disconnected */ }
+      });
+      oscillators.forEach((n) => {
+        try { n.stop(now + FADE + 0.02); } catch (_) { /* already stopped */ }
+      });
+    } else {
+      // No running context — stop immediately
+      oscillators.forEach((n) => {
+        try { n.stop(); } catch (_) { /* already stopped */ }
+      });
+    }
   }
 }
 
