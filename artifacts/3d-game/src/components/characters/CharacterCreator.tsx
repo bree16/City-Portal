@@ -80,16 +80,39 @@ function CharacterPreview({ appearance }: { appearance: CharacterAppearance }) {
 }
 
 export function CharacterCreator() {
-  const { startGame } = useGameStore();
-  const [appearance, setAppearance] = useState<CharacterAppearance>({
-    skinTone: SKIN_TONES[0],
-    hairColor: HAIR_COLORS[1],
-    shirtColor: SHIRT_COLORS[0],
-    pantsColor: PANTS_COLORS[0],
-  });
+  const { startGame, resetGame, stage, characterAppearance: savedAppearance, gameStarted } = useGameStore();
+
+  // A saved game exists if the player has started before (gameStarted was persisted) or advanced past stage 1
+  const hasSavedGame = gameStarted || stage > 1;
+
+  const [appearance, setAppearance] = useState<CharacterAppearance>(
+    hasSavedGame
+      ? savedAppearance
+      : {
+          skinTone: SKIN_TONES[0],
+          hairColor: HAIR_COLORS[1],
+          shirtColor: SHIRT_COLORS[0],
+          pantsColor: PANTS_COLORS[0],
+        }
+  );
 
   const update = (key: keyof CharacterAppearance) => (val: string) =>
     setAppearance((a) => ({ ...a, [key]: val }));
+
+  const handleContinue = () => {
+    // Resume: just mark gameStarted with saved appearance
+    startGame(savedAppearance);
+  };
+
+  const handleNewGame = () => {
+    resetGame();
+    setAppearance({
+      skinTone: SKIN_TONES[0],
+      hairColor: HAIR_COLORS[1],
+      shirtColor: SHIRT_COLORS[0],
+      pantsColor: PANTS_COLORS[0],
+    });
+  };
 
   return (
     <div
@@ -165,21 +188,50 @@ export function CharacterCreator() {
             <SwatchRow label="Shirt Color" colors={SHIRT_COLORS} value={appearance.shirtColor} onChange={update('shirtColor')} />
             <SwatchRow label="Pants Color" colors={PANTS_COLORS} value={appearance.pantsColor} onChange={update('pantsColor')} />
 
+            {hasSavedGame && (
+              <button
+                onClick={handleContinue}
+                style={{
+                  marginTop: 8,
+                  width: '100%',
+                  padding: '14px',
+                  borderRadius: 12,
+                  background: '#D4A843',
+                  color: '#0D2B5E',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: 800,
+                  fontSize: 16,
+                  transition: 'all 0.15s',
+                  boxShadow: '0 4px 20px rgba(212,168,67,0.4)',
+                  fontFamily: 'Inter, sans-serif',
+                }}
+                onMouseEnter={(e) => {
+                  (e.target as HTMLButtonElement).style.transform = 'scale(1.02)';
+                }}
+                onMouseLeave={(e) => {
+                  (e.target as HTMLButtonElement).style.transform = 'scale(1)';
+                }}
+              >
+                Continue Journey →
+              </button>
+            )}
+
             <button
-              onClick={() => startGame(appearance)}
+              onClick={() => hasSavedGame ? handleNewGame() : startGame(appearance)}
               style={{
-                marginTop: 8,
+                marginTop: hasSavedGame ? 10 : 8,
                 width: '100%',
                 padding: '14px',
                 borderRadius: 12,
-                background: '#D4A843',
-                color: '#0D2B5E',
-                border: 'none',
+                background: hasSavedGame ? 'rgba(255,255,255,0.1)' : '#D4A843',
+                color: hasSavedGame ? 'rgba(255,255,255,0.8)' : '#0D2B5E',
+                border: hasSavedGame ? '1px solid rgba(255,255,255,0.2)' : 'none',
                 cursor: 'pointer',
                 fontWeight: 800,
                 fontSize: 16,
                 transition: 'all 0.15s',
-                boxShadow: '0 4px 20px rgba(212,168,67,0.4)',
+                boxShadow: hasSavedGame ? 'none' : '0 4px 20px rgba(212,168,67,0.4)',
                 fontFamily: 'Inter, sans-serif',
               }}
               onMouseEnter={(e) => {
@@ -189,8 +241,14 @@ export function CharacterCreator() {
                 (e.target as HTMLButtonElement).style.transform = 'scale(1)';
               }}
             >
-              Start Your Journey →
+              {hasSavedGame ? 'New Game' : 'Start Your Journey →'}
             </button>
+
+            {hasSavedGame && (
+              <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: 11, marginTop: 8, marginBottom: 0 }}>
+                Starting a new game will erase your saved progress
+              </p>
+            )}
           </div>
         </div>
       </motion.div>
