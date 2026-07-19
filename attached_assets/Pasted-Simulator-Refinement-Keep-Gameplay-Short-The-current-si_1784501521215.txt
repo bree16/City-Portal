@@ -1,0 +1,127 @@
+Simulator Refinement (Keep Gameplay Short)
+
+The current simulator is heading in the right direction.
+
+Do not turn this into a large open-world game.
+
+This simulator is intended as an educational demonstration that someone can complete in approximately 5–8 minutes, with each stage lasting around 45–90 seconds.
+
+The experience should remain simple, engaging, and easy to understand.
+
+Fix Existing Issues First
+
+Before adding anything new:
+
+Fix the Savings Jar interaction so clicking it always opens the Budget screen.
+Verify every clickable object works correctly.
+Remove any broken or incomplete interactions.
+Ensure every stage can be completed without confusion.
+Improve the Character Creator
+
+The current character feels too blocky and Roblox-inspired.
+
+Keep the same customization options, but redesign the character to be:
+
+More rounded
+More natural in proportion
+More expressive
+Better animated
+Slightly more realistic
+
+Aim for a style closer to The Sims than Roblox.
+
+Do not make the graphics photorealistic or overly detailed, since the game should still run smoothly in a browser.
+
+Improve the Rooms
+
+Keep the current room-based gameplay.
+
+Simply make each room feel more realistic by adding:
+
+Better lighting
+More furniture
+Plants
+Wall art
+Rugs
+Windows
+Better flooring
+Small decorative items
+
+The rooms should feel lived in without becoming cluttered.
+
+Keep the Pace Fast
+
+Each stage should be completable in about one minute.
+
+Players should always know exactly what to do next.
+
+Avoid long dialogue or complicated mechanics.
+
+Each stage should teach one main concept before moving on.
+
+Add Small Interactive Moments
+
+Instead of expanding into a giant game, make each stage slightly more interactive.
+
+Examples:
+
+Renting
+
+Click the budget notebook.
+Decide whether to save money or pay debt.
+Check your savings jar.
+
+Preparing
+
+Talk to the counselor.
+Review your credit score.
+Complete the document checklist.
+
+House Hunting
+
+Walk through two or three homes.
+Compare monthly payments.
+Select your favorite.
+
+Closing
+
+Sign documents.
+Receive the keys.
+Unlock "First-Time Homeowner."
+
+Move-In
+
+Place a few pieces of furniture.
+Choose a couch.
+Pick a bed.
+Hang artwork.
+Finish decorating.
+
+These interactions should take less than a minute each while still being satisfying.
+
+Improve the UI
+
+Keep the current interface, but make it feel more polished.
+
+Slightly smaller dialog windows
+Better spacing
+Softer shadows
+Smoother animations
+Cleaner icons
+More modern typography
+Keep the Educational Focus
+
+The simulator should feel fun, but its primary purpose is education.
+
+Every stage should teach one important concept:
+
+Budgeting
+Saving
+Credit
+Home searching
+Mortgage basics
+Closing
+Moving in
+Homeownership
+
+The player should finish the simulator with a clear understanding of the homebuying process without feeling overwhelmed.
