@@ -36,33 +36,79 @@ function hashId(id: string): number {
   return (h >>> 0) / 4294967295;
 }
 
+/* ── Shared geometry/material instances ─────────────────────────────
+ * Every NPC reuses these singletons instead of allocating its own copy.
+ * The ring's pulse is driven by per-mesh scale, and the ring material's
+ * opacity is animated once globally (all rings breathe together), so a
+ * single material instance is safe to share. */
+const ringGeo = new THREE.RingGeometry(0.55, 0.7, 48);
+const ringMat = new THREE.MeshBasicMaterial({
+  color: '#D4A843',
+  transparent: true,
+  opacity: 0.45,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+});
+const markerStemGeo = new THREE.CapsuleGeometry(0.045, 0.16, 4, 10);
+const markerDotGeo = new THREE.SphereGeometry(0.05, 12, 10);
+const markerMat = new THREE.MeshStandardMaterial({
+  color: '#D4A843',
+  emissive: '#D4A843',
+  emissiveIntensity: 0.6,
+  roughness: 0.3,
+  metalness: 0.4,
+});
+const hitboxGeo = new THREE.BoxGeometry(0.6, 1.8, 0.5);
+const hitboxMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
+
+/** Animate the shared ring material's opacity once per frame (not per NPC). */
+let ringPulseFrameStamp = -1;
+function pulseSharedRingMat(t: number) {
+  if (ringPulseFrameStamp === t) return;
+  ringPulseFrameStamp = t;
+  ringMat.opacity = 0.35 + (Math.sin(t * 2) + 1) * 0.15;
+}
+
+/** Hide name labels beyond this camera distance (with hysteresis to avoid flicker). */
+const LABEL_SHOW_DIST = 16;
+const LABEL_HIDE_DIST = 18;
+const tmpWorldPos = new THREE.Vector3();
+
 export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
   const { activeDialogue } = useGameStore();
   const isActive = activeDialogue?.npcId === npc.id;
   const emphasized = isActive || npc.important === true;
 
   // Deterministic per-NPC constants derived from the id hash.
-  const { idlePhase, gestureCycle, gestureOffset } = useMemo(() => {
+  const { idlePhase, gestureCycle, gestureOffset, frameSkew } = useMemo(() => {
     const h = hashId(npc.id);
     return {
       idlePhase: h * 12, // seconds of desync between idle timers
       gestureCycle: 9 + h * 5, // ~9-14s between gestures
       gestureOffset: h * 14, // stagger when the first gesture fires
+      frameSkew: Math.floor(h * 10), // stagger throttled checks across NPCs
     };
   }, [npc.id]);
 
+  const rootRef = useRef<THREE.Group>(null);
   const rigGroupRef = useRef<THREE.Group>(null);
   const ringRef = useRef<THREE.Mesh>(null);
-  const ringMatRef = useRef<THREE.MeshBasicMaterial>(null);
   const markerRef = useRef<THREE.Group>(null);
+  const frameCount = useRef(0);
 
   // Gesture emote — React state so CharacterRig re-renders with the new prop.
   // Only flips at cycle boundaries (~twice per 9-14s), so re-renders are rare.
   const [emote, setEmote] = useState<'none' | 'wave'>('none');
   const emoteRef = useRef<'none' | 'wave'>('none');
 
+  // Distance-based label culling — keeps the DOM overlay count low in
+  // crowded scenes. Checked every ~10 frames (staggered per NPC).
+  const [labelVisible, setLabelVisible] = useState(true);
+  const labelVisibleRef = useRef(true);
+
   useFrame(({ clock, camera }) => {
     const t = clock.elapsedTime;
+    const frame = frameCount.current++;
 
     // ── Occasional gesture: brief wave on a slow deterministic cycle ──
     const phase = (t + gestureOffset) % gestureCycle;
@@ -87,14 +133,25 @@ export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
       );
     }
 
+    // ── Throttled label distance check (every 10 frames, staggered) ──
+    if ((frame + frameSkew) % 10 === 0 && rootRef.current) {
+      rootRef.current.getWorldPosition(tmpWorldPos);
+      const dist = tmpWorldPos.distanceTo(camera.position);
+      const next = labelVisibleRef.current
+        ? dist < LABEL_HIDE_DIST
+        : dist < LABEL_SHOW_DIST;
+      if (next !== labelVisibleRef.current) {
+        labelVisibleRef.current = next;
+        setLabelVisible(next);
+      }
+    }
+
     // ── Quest emphasis: pulsing gold ring ──
     if (emphasized) {
+      pulseSharedRingMat(t);
       if (ringRef.current) {
         const s = 0.5 + Math.sin(t * 2 + idlePhase) * 0.06;
         ringRef.current.scale.set(s, s, s);
-      }
-      if (ringMatRef.current) {
-        ringMatRef.current.opacity = 0.35 + (Math.sin(t * 2 + idlePhase) + 1) * 0.15;
       }
       // Bobbing "!" marker above the head.
       if (markerRef.current) {
@@ -105,7 +162,7 @@ export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
   });
 
   return (
-    <group position={npc.position} rotation={npc.rotation ?? [0, 0, 0]}>
+    <group ref={rootRef} position={npc.position} rotation={npc.rotation ?? [0, 0, 0]}>
       <group ref={rigGroupRef}>
         <CharacterRig
           skinTone={npc.skinTone}
@@ -119,101 +176,81 @@ export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
         />
       </group>
 
-      {/* Quest emphasis: softly pulsing gold ring on the ground */}
+      {/* Quest emphasis: softly pulsing gold ring on the ground (shared geo/mat) */}
       {emphasized && (
-        <mesh ref={ringRef} position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[0.55, 0.7, 48]} />
-          <meshBasicMaterial
-            ref={ringMatRef}
-            color="#D4A843"
-            transparent
-            opacity={0.45}
-            side={THREE.DoubleSide}
-            depthWrite={false}
-          />
-        </mesh>
+        <mesh
+          ref={ringRef}
+          position={[0, 0.02, 0]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          geometry={ringGeo}
+          material={ringMat}
+        />
       )}
 
-      {/* Quest emphasis: bobbing gold "!" marker above the head */}
+      {/* Quest emphasis: bobbing gold "!" marker above the head (shared geo/mat) */}
       {emphasized && (
         <group ref={markerRef} position={[0, 2.55, 0]}>
           {/* Stem */}
-          <mesh position={[0, 0.09, 0]} castShadow>
-            <capsuleGeometry args={[0.045, 0.16, 4, 10]} />
-            <meshStandardMaterial
-              color="#D4A843"
-              emissive="#D4A843"
-              emissiveIntensity={0.6}
-              roughness={0.3}
-              metalness={0.4}
-            />
-          </mesh>
+          <mesh position={[0, 0.09, 0]} castShadow geometry={markerStemGeo} material={markerMat} />
           {/* Dot */}
-          <mesh position={[0, -0.11, 0]} castShadow>
-            <sphereGeometry args={[0.05, 12, 10]} />
-            <meshStandardMaterial
-              color="#D4A843"
-              emissive="#D4A843"
-              emissiveIntensity={0.6}
-              roughness={0.3}
-              metalness={0.4}
-            />
-          </mesh>
+          <mesh position={[0, -0.11, 0]} castShadow geometry={markerDotGeo} material={markerMat} />
         </group>
       )}
 
-      {/* Invisible click hitbox */}
+      {/* Invisible click hitbox (shared geo/mat) */}
       <mesh
         position={[0, 0.9, 0]}
+        geometry={hitboxGeo}
+        material={hitboxMat}
         onClick={(e) => {
           e.stopPropagation();
           getAudioEngine().play('click');
           onClick?.();
         }}
-      >
-        <boxGeometry args={[0.6, 1.8, 0.5]} />
-        <meshStandardMaterial transparent opacity={0} />
-      </mesh>
+      />
 
-      {/* Name label above head — glass look */}
-      <Html
-        position={[0, 2.2, 0]}
-        center
-        distanceFactor={8}
-        zIndexRange={[10, 0]}
-        style={{ pointerEvents: 'none' }}
-      >
-        <div
-          style={{
-            background: isActive
-              ? 'rgba(20, 26, 40, 0.82)'
-              : 'rgba(13, 18, 30, 0.68)',
-            color: isActive ? '#F5D97A' : '#fff',
-            padding: '3px 10px',
-            borderRadius: 10,
-            fontSize: 11,
-            fontWeight: 700,
-            whiteSpace: 'nowrap',
-            fontFamily: 'Inter, sans-serif',
-            boxShadow: isActive
-              ? '0 2px 12px rgba(212,168,67,0.35)'
-              : '0 2px 8px rgba(0,0,0,0.4)',
-            border: isActive
-              ? '1.5px solid #D4A843'
-              : '1px solid rgba(255,255,255,0.18)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            cursor: 'pointer',
-            pointerEvents: 'auto',
-          }}
-          onClick={() => {
-            getAudioEngine().play('click');
-            onClick?.();
-          }}
+      {/* Name label above head — glass look. Hidden beyond ~18m so distant
+          NPCs don't each keep a DOM overlay alive. */}
+      {labelVisible && (
+        <Html
+          position={[0, 2.2, 0]}
+          center
+          distanceFactor={8}
+          zIndexRange={[10, 0]}
+          style={{ pointerEvents: 'none' }}
         >
-          {npc.name}
-        </div>
-      </Html>
+          <div
+            style={{
+              background: isActive
+                ? 'rgba(20, 26, 40, 0.82)'
+                : 'rgba(13, 18, 30, 0.68)',
+              color: isActive ? '#F5D97A' : '#fff',
+              padding: '3px 10px',
+              borderRadius: 10,
+              fontSize: 11,
+              fontWeight: 700,
+              whiteSpace: 'nowrap',
+              fontFamily: 'Inter, sans-serif',
+              boxShadow: isActive
+                ? '0 2px 12px rgba(212,168,67,0.35)'
+                : '0 2px 8px rgba(0,0,0,0.4)',
+              border: isActive
+                ? '1.5px solid #D4A843'
+                : '1px solid rgba(255,255,255,0.18)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              cursor: 'pointer',
+              pointerEvents: 'auto',
+            }}
+            onClick={() => {
+              getAudioEngine().play('click');
+              onClick?.();
+            }}
+          >
+            {npc.name}
+          </div>
+        </Html>
+      )}
     </group>
   );
 }
