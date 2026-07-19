@@ -116,47 +116,15 @@ export default function HomePage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex-1 w-full max-w-lg lg:max-w-2xl mx-auto relative hidden md:block"
+              className="flex-1 w-full max-w-lg lg:max-w-xl mx-auto relative hidden md:block"
             >
-              {/* Floating decorative orbs behind the image */}
-              <motion.div
-                animate={{ y: [0, -18, 0], opacity: [0.4, 0.7, 0.4] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-accent/25 blur-2xl pointer-events-none"
-              />
-              <motion.div
-                animate={{ y: [0, 14, 0], opacity: [0.3, 0.5, 0.3] }}
-                transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute -bottom-6 -left-6 w-32 h-32 rounded-full bg-secondary/20 blur-2xl pointer-events-none"
-              />
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/20" style={{ height: '480px' }}>
+              <div className="relative aspect-square w-full">
                 <img 
-                  src={heroPremium} 
-                  alt="Newport News community — diverse families, professionals, and military members enjoying life in Newport News" 
-                  className="w-full h-full object-cover"
+                  src={heroIllustration} 
+                  alt="Newport News City Skyline Illustration" 
+                  className="w-full h-full object-contain filter drop-shadow-2xl"
                   loading="eager"
                 />
-                {/* Subtle gradient overlay for depth */}
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent" />
-                {/* Floating stat badge */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.7, delay: 1.2 }}
-                  className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-3 shadow-xl"
-                >
-                  <div className="text-2xl font-extrabold text-primary leading-none">2,400+</div>
-                  <div className="text-xs text-muted-foreground font-medium mt-0.5">Families Housed This Year</div>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.7, delay: 1.5 }}
-                  className="absolute top-6 right-6 bg-accent/95 backdrop-blur-md rounded-2xl px-4 py-3 shadow-xl"
-                >
-                  <div className="text-xl font-extrabold text-white leading-none">$0 Down</div>
-                  <div className="text-xs text-white/80 font-medium mt-0.5">Programs Available</div>
-                </motion.div>
               </div>
             </motion.div>
           </div>
