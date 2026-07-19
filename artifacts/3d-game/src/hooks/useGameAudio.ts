@@ -11,29 +11,39 @@ export type SoundEffect = 'click' | 'dialogue' | 'coin' | 'achievement' | 'fanfa
 
 class GameAudioEngine {
   private ctx: AudioContext | null = null;
-  private masterGain: GainNode | null = null;
+  private musicGain: GainNode | null = null;
+  private sfxGain: GainNode | null = null;
   private ambientOscillators: OscillatorNode[] = [];
   private ambientGains: GainNode[] = [];
   private _muted = false;
-  private _volume: number;
+  private _musicVolume: number;
+  private _sfxVolume: number;
 
   constructor() {
     // Restore persisted audio prefs from the game save (gameStore persists
     // them alongside stage, cash, etc.). The persist middleware rehydrates
     // synchronously from localStorage, so this is safe at construction time.
-    const { audioVolume, audioMuted } = useGameStore.getState();
-    this._volume = typeof audioVolume === 'number' ? Math.max(0, Math.min(1, audioVolume)) : DEFAULT_VOLUME;
-    if (isNaN(this._volume)) this._volume = DEFAULT_VOLUME;
+    const { musicVolume, sfxVolume, audioMuted } = useGameStore.getState();
+    this._musicVolume = this._clamp(musicVolume);
+    this._sfxVolume = this._clamp(sfxVolume);
     this._muted = audioMuted === true;
+  }
+
+  private _clamp(v: unknown): number {
+    const n = typeof v === 'number' && !isNaN(v) ? v : DEFAULT_VOLUME;
+    return Math.max(0, Math.min(1, n));
   }
 
   // Lazy-init — must be triggered by a user gesture first
   private boot(): AudioContext {
     if (!this.ctx) {
       this.ctx = new AudioContext();
-      this.masterGain = this.ctx.createGain();
-      this.masterGain.gain.value = this._muted ? 0 : this._volume;
-      this.masterGain.connect(this.ctx.destination);
+      this.musicGain = this.ctx.createGain();
+      this.musicGain.gain.value = this._muted ? 0 : this._musicVolume;
+      this.musicGain.connect(this.ctx.destination);
+      this.sfxGain = this.ctx.createGain();
+      this.sfxGain.gain.value = this._muted ? 0 : this._sfxVolume;
+      this.sfxGain.connect(this.ctx.destination);
     }
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
@@ -45,42 +55,59 @@ class GameAudioEngine {
     return this._muted;
   }
 
-  get volume() {
-    return this._volume;
+  get musicVolume() {
+    return this._musicVolume;
+  }
+
+  get sfxVolume() {
+    return this._sfxVolume;
+  }
+
+  private _rampGain(node: GainNode | null, target: number, time = 0.08) {
+    if (!node || !this.ctx) return;
+    const ctx = this.ctx;
+    node.gain.cancelScheduledValues(ctx.currentTime);
+    node.gain.linearRampToValueAtTime(target, ctx.currentTime + time);
   }
 
   setMuted(val: boolean) {
     this._muted = val;
     useGameStore.getState().setAudioMuted(val);
-    if (this.masterGain) {
-      // Smooth ramp to avoid clicks
-      const ctx = this.ctx!;
-      this.masterGain.gain.cancelScheduledValues(ctx.currentTime);
-      this.masterGain.gain.linearRampToValueAtTime(val ? 0 : this._volume, ctx.currentTime + 0.08);
-    }
+    // Smooth ramps to avoid clicks
+    this._rampGain(this.musicGain, val ? 0 : this._musicVolume);
+    this._rampGain(this.sfxGain, val ? 0 : this._sfxVolume);
     if (val) {
       this.stopAmbient();
     }
   }
 
-  setVolume(level: number) {
-    this._volume = Math.max(0, Math.min(1, level));
-    useGameStore.getState().setAudioVolume(this._volume);
-    if (this.masterGain && !this._muted) {
-      const ctx = this.ctx!;
-      this.masterGain.gain.cancelScheduledValues(ctx.currentTime);
-      this.masterGain.gain.linearRampToValueAtTime(this._volume, ctx.currentTime + 0.05);
-    }
-    // If volume is raised while muted, auto-unmute
-    if (this._volume > 0 && this._muted) {
+  private _unmuteIfNeeded() {
+    if (this._muted) {
       this._muted = false;
       useGameStore.getState().setAudioMuted(false);
-      if (this.masterGain) {
-        const ctx = this.ctx!;
-        this.masterGain.gain.cancelScheduledValues(ctx.currentTime);
-        this.masterGain.gain.linearRampToValueAtTime(this._volume, ctx.currentTime + 0.08);
-      }
+      this._rampGain(this.musicGain, this._musicVolume);
+      this._rampGain(this.sfxGain, this._sfxVolume);
     }
+  }
+
+  setMusicVolume(level: number) {
+    this._musicVolume = this._clamp(level);
+    useGameStore.getState().setMusicVolume(this._musicVolume);
+    if (!this._muted) {
+      this._rampGain(this.musicGain, this._musicVolume, 0.05);
+    }
+    // If volume is raised while muted, auto-unmute
+    if (this._musicVolume > 0) this._unmuteIfNeeded();
+  }
+
+  setSfxVolume(level: number) {
+    this._sfxVolume = this._clamp(level);
+    useGameStore.getState().setSfxVolume(this._sfxVolume);
+    if (!this._muted) {
+      this._rampGain(this.sfxGain, this._sfxVolume, 0.05);
+    }
+    // If volume is raised while muted, auto-unmute
+    if (this._sfxVolume > 0) this._unmuteIfNeeded();
   }
 
   // ── SFX ──────────────────────────────────────────────────────────────────
@@ -110,7 +137,7 @@ class GameAudioEngine {
     osc.type = type;
     osc.frequency.value = freq;
     osc.connect(gain);
-    gain.connect(this.masterGain!);
+    gain.connect(this.sfxGain!);
     const t = ctx.currentTime + startOffset;
     gain.gain.setValueAtTime(0, t);
     gain.gain.linearRampToValueAtTime(peakGain, t + 0.01);
@@ -205,7 +232,7 @@ class GameAudioEngine {
 
       gain.gain.value = 0;
       osc.connect(gain);
-      gain.connect(this.masterGain!);
+      gain.connect(this.musicGain!);
 
       lfo.start();
       osc.start();

@@ -60,9 +60,11 @@ export interface GameState {
   pendingMaintenance: MaintenanceEvent | null; // transient
 
   // Audio preferences — persisted with the save so they survive clearing localStorage-only keys
-  audioVolume: number; // 0–1
+  musicVolume: number; // 0–1
+  sfxVolume: number; // 0–1
   audioMuted: boolean;
-  setAudioVolume: (level: number) => void;
+  setMusicVolume: (level: number) => void;
+  setSfxVolume: (level: number) => void;
   setAudioMuted: (muted: boolean) => void;
 
   setPhoneOpen: (v: boolean) => void;
@@ -176,10 +178,12 @@ export const useGameStore = create<GameState>()(
     (set) => ({
       ...INITIAL_STATE,
       pendingMaintenance: null,
-      audioVolume: DEFAULT_VOLUME,
+      musicVolume: DEFAULT_VOLUME,
+      sfxVolume: DEFAULT_VOLUME,
       audioMuted: false,
 
-      setAudioVolume: (level) => set({ audioVolume: Math.max(0, Math.min(1, level)) }),
+      setMusicVolume: (level) => set({ musicVolume: Math.max(0, Math.min(1, level)) }),
+      setSfxVolume: (level) => set({ sfxVolume: Math.max(0, Math.min(1, level)) }),
       setAudioMuted: (muted) => set({ audioMuted: muted }),
 
       setPhoneOpen: (v) => set({ phoneOpen: v }),
@@ -312,7 +316,7 @@ export const useGameStore = create<GameState>()(
     }),
     {
       name: 'path-to-home-game-state',
-      version: 6,
+      version: 7,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => {
         const persisted = { ...state } as Record<string, unknown>;
@@ -368,6 +372,14 @@ export const useGameStore = create<GameState>()(
             s.audioVolume = vol;
           }
           if (typeof s.audioMuted !== 'boolean') s.audioMuted = false;
+        }
+        if (fromVersion < 7) {
+          // v6 → v7: split the single master volume into music + SFX volumes.
+          // Seed both from the old audioVolume so players keep their level.
+          const legacy = typeof s.audioVolume === 'number' ? Math.max(0, Math.min(1, s.audioVolume as number)) : DEFAULT_VOLUME;
+          if (typeof s.musicVolume !== 'number') s.musicVolume = legacy;
+          if (typeof s.sfxVolume !== 'number') s.sfxVolume = legacy;
+          delete s.audioVolume;
         }
         return s;
       },

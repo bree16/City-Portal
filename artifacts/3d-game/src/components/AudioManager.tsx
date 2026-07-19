@@ -12,15 +12,19 @@ import { getAudioEngine } from '@/hooks/useGameAudio';
 interface AudioCtxValue {
   muted: boolean;
   toggleMute: () => void;
-  volume: number;
-  setVolume: (level: number) => void;
+  musicVolume: number;
+  setMusicVolume: (level: number) => void;
+  sfxVolume: number;
+  setSfxVolume: (level: number) => void;
 }
 
 const AudioCtx = createContext<AudioCtxValue>({
   muted: false,
   toggleMute: () => {},
-  volume: 0.6,
-  setVolume: () => {},
+  musicVolume: 0.6,
+  setMusicVolume: () => {},
+  sfxVolume: 0.6,
+  setSfxVolume: () => {},
 });
 
 export function useAudioControls() {
@@ -32,7 +36,8 @@ export function useAudioControls() {
 export function AudioManager({ children }: { children: React.ReactNode }) {
   const engine = getAudioEngine();
   const [muted, setMuted] = useState(() => engine.muted);
-  const [volume, setVolumeState] = useState(() => engine.volume);
+  const [musicVolume, setMusicVolumeState] = useState(() => engine.musicVolume);
+  const [sfxVolume, setSfxVolumeState] = useState(() => engine.sfxVolume);
 
   const toggleMute = useCallback(() => {
     const next = !engine.muted;
@@ -44,16 +49,28 @@ export function AudioManager({ children }: { children: React.ReactNode }) {
     }
   }, [engine]);
 
-  const setVolume = useCallback((level: number) => {
-    engine.setVolume(level);
-    setVolumeState(engine.volume);
-    // Sync muted state in case setVolume auto-unmuted
+  const setMusicVolume = useCallback((level: number) => {
+    engine.setMusicVolume(level);
+    setMusicVolumeState(engine.musicVolume);
+    // Sync muted state in case setMusicVolume auto-unmuted
     setMuted(engine.muted);
     // If raising volume from 0 while ambient isn't playing, restart it
     if (level > 0) {
       engine.startAmbient(useGameStore.getState().stage);
     }
   }, [engine]);
+
+  const setSfxVolume = useCallback((level: number) => {
+    engine.setSfxVolume(level);
+    setSfxVolumeState(engine.sfxVolume);
+    // Sync muted state in case setSfxVolume auto-unmuted
+    const wasMuted = muted;
+    setMuted(engine.muted);
+    // If auto-unmuted via the SFX slider, bring the music back too
+    if (wasMuted && !engine.muted) {
+      engine.startAmbient(useGameStore.getState().stage);
+    }
+  }, [engine, muted]);
 
   // ── Pre-game ambient (title / character creator) ──────────────────────────
   const gameStarted = useGameStore((s) => s.gameStarted);
@@ -134,7 +151,7 @@ export function AudioManager({ children }: { children: React.ReactNode }) {
   }, [engine]);
 
   return (
-    <AudioCtx.Provider value={{ muted, toggleMute, volume, setVolume }}>
+    <AudioCtx.Provider value={{ muted, toggleMute, musicVolume, setMusicVolume, sfxVolume, setSfxVolume }}>
       {children}
     </AudioCtx.Provider>
   );

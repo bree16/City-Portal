@@ -142,7 +142,7 @@ function ObjectiveCard({ stage }: { stage: number }) {
 
 export function GameHUD() {
   const { stage, month, cash, savings, creditScore, resetGame, characterAppearance, togglePhone, phoneOpen, lifeEventLog, currentLocation, playerPosition } = useGameStore();
-  const { muted, toggleMute, volume, setVolume } = useAudioControls();
+  const { muted, toggleMute, musicVolume, setMusicVolume, sfxVolume, setSfxVolume } = useAudioControls();
 
   const playerName = characterAppearance.name?.trim() || 'Player';
   const [logExpanded, setLogExpanded] = useState(false);
@@ -271,21 +271,48 @@ export function GameHUD() {
             >
               {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
             </button>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={muted ? 0 : Math.round(volume * 100)}
-              onChange={(e) => setVolume(Number(e.target.value) / 100)}
-              title={`Volume: ${muted ? 0 : Math.round(volume * 100)}%`}
-              style={{
-                width: 64,
-                height: 4,
-                cursor: 'pointer',
-                accentColor: '#D4A843',
-                opacity: 0.85,
-              }}
-            />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.5)', width: 28, textAlign: 'right', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                  Music
+                </span>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={muted ? 0 : Math.round(musicVolume * 100)}
+                  onChange={(e) => setMusicVolume(Number(e.target.value) / 100)}
+                  title={`Music volume: ${muted ? 0 : Math.round(musicVolume * 100)}%`}
+                  style={{
+                    width: 64,
+                    height: 4,
+                    cursor: 'pointer',
+                    accentColor: '#D4A843',
+                    opacity: 0.85,
+                  }}
+                />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.5)', width: 28, textAlign: 'right', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                  SFX
+                </span>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={muted ? 0 : Math.round(sfxVolume * 100)}
+                  onChange={(e) => setSfxVolume(Number(e.target.value) / 100)}
+                  title={`Sound effects volume: ${muted ? 0 : Math.round(sfxVolume * 100)}%`}
+                  style={{
+                    width: 64,
+                    height: 4,
+                    cursor: 'pointer',
+                    accentColor: '#0A8F7E',
+                    opacity: 0.85,
+                  }}
+                />
+              </div>
+            </div>
           </div>
           <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.2)' }} />
           <button
