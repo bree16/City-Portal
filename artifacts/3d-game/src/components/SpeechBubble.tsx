@@ -2,8 +2,15 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useGameStore } from '@/store/gameStore';
 import { stageDialogue } from '@/data/dialogue';
 
+/** Replace {name} and {pronoun}/{pronouns} tokens in dialogue text with the player's values. */
+function interpolate(text: string, name: string, pronouns: string): string {
+  return text
+    .replace(/\{name\}/gi, name)
+    .replace(/\{pronouns?\}/gi, pronouns);
+}
+
 export function SpeechBubble() {
-  const { stage, activeDialogue, advanceDialogue, closeDialogue, completeInteraction } =
+  const { stage, activeDialogue, advanceDialogue, closeDialogue, completeInteraction, characterAppearance } =
     useGameStore();
 
   if (!activeDialogue) return null;
@@ -16,6 +23,12 @@ export function SpeechBubble() {
     closeDialogue();
     return null;
   }
+
+  const playerName = characterAppearance.name?.trim() || 'Player';
+  const playerPronouns = characterAppearance.pronouns || 'They/Them';
+
+  const displayText = interpolate(line.text, playerName, playerPronouns);
+  const displayTip = line.tip ? interpolate(line.tip, playerName, playerPronouns) : undefined;
 
   const handleNext = () => {
     if (isLast) {
@@ -92,7 +105,7 @@ export function SpeechBubble() {
                 width: 36,
                 height: 36,
                 borderRadius: '50%',
-                background: '#0A8F7E',
+                background: line.speaker === 'You' ? '#D4A843' : '#0A8F7E',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -102,17 +115,17 @@ export function SpeechBubble() {
                 flexShrink: 0,
               }}
             >
-              {line.speaker.charAt(0)}
+              {line.speaker === 'You' ? playerName.charAt(0).toUpperCase() : line.speaker.charAt(0)}
             </div>
 
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#0A8F7E', marginBottom: 4 }}>
-                {line.speaker}
+              <div style={{ fontSize: 11, fontWeight: 700, color: line.speaker === 'You' ? '#D4A843' : '#0A8F7E', marginBottom: 4 }}>
+                {line.speaker === 'You' ? playerName : line.speaker}
               </div>
               <p style={{ fontSize: 14, color: '#1a1a2e', lineHeight: 1.55, margin: 0 }}>
-                {line.text}
+                {displayText}
               </p>
-              {line.tip && (
+              {displayTip && (
                 <div
                   style={{
                     marginTop: 10,
@@ -125,7 +138,7 @@ export function SpeechBubble() {
                     lineHeight: 1.4,
                   }}
                 >
-                  💡 {line.tip}
+                  💡 {displayTip}
                 </div>
               )}
             </div>

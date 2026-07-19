@@ -44,6 +44,10 @@ export function PlayerCharacter() {
         hairColor={characterAppearance.hairColor}
         shirtColor={characterAppearance.shirtColor}
         pantsColor={characterAppearance.pantsColor}
+        eyeColor={characterAppearance.eyeColor}
+        hairstyle={characterAppearance.hairstyle}
+        bodyScale={characterAppearance.bodyScale}
+        accessories={characterAppearance.accessories}
         isMoving={isMovingRef.current}
         isIdle={!isMovingRef.current}
       />

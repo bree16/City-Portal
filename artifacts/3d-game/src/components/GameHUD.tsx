@@ -14,8 +14,10 @@ const STAGE_NAMES = [
 ];
 
 export function GameHUD() {
-  const { stage, month, cash, savings, creditScore, resetGame } = useGameStore();
+  const { stage, month, cash, savings, creditScore, resetGame, characterAppearance } = useGameStore();
   const { muted, toggleMute } = useAudioControls();
+
+  const playerName = characterAppearance.name?.trim() || 'Player';
 
   return (
     <div
@@ -42,7 +44,7 @@ export function GameHUD() {
           pointerEvents: 'auto',
         }}
       >
-        {/* Logo */}
+        {/* Logo + player name */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ background: '#fff', padding: 5, borderRadius: 8 }}>
             <Home size={16} color="#0A8F7E" />
@@ -50,6 +52,25 @@ export function GameHUD() {
           <div style={{ lineHeight: 1.2 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: '#fff' }}>Newport News</div>
             <div style={{ fontSize: 10, fontWeight: 700, color: '#D4A843' }}>Housing Hub</div>
+          </div>
+          {/* Player name badge */}
+          <div
+            style={{
+              marginLeft: 6,
+              padding: '2px 10px',
+              borderRadius: 12,
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.14)',
+              fontSize: 11,
+              fontWeight: 700,
+              color: 'rgba(255,255,255,0.75)',
+              maxWidth: 120,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            👤 {playerName}
           </div>
         </div>
 

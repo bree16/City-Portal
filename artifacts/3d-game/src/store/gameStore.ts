@@ -1,11 +1,21 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+export type HairstyleId = 'short' | 'medium' | 'locs' | 'curly' | 'ponytail' | 'fade';
+export type AccessoryId = 'glasses' | 'earrings' | 'hat';
+
 export type CharacterAppearance = {
   skinTone: string;
   hairColor: string;
   shirtColor: string;
   pantsColor: string;
+  // New fields
+  name: string;
+  pronouns: string;
+  hairstyle: HairstyleId;
+  eyeColor: string;
+  bodyScale: number; // 0 = slimmer, 1 = broader
+  accessories: AccessoryId[];
 };
 
 export interface GameState {
@@ -54,12 +64,29 @@ export interface GameState {
   resetGame: () => void;
 }
 
-const DEFAULT_APPEARANCE: CharacterAppearance = {
+export const DEFAULT_APPEARANCE: CharacterAppearance = {
   skinTone: '#FDBCB4',
   hairColor: '#3B1F0A',
   shirtColor: '#0A8F7E',
   pantsColor: '#1A3A6B',
+  name: 'Alex',
+  pronouns: 'They/Them',
+  hairstyle: 'medium',
+  eyeColor: '#5B3A29',
+  bodyScale: 0.5,
+  accessories: [],
 };
+
+/** Merge a (possibly partial/legacy) persisted appearance onto the full default. */
+export function normalizeAppearance(raw: Partial<CharacterAppearance> | undefined): CharacterAppearance {
+  return {
+    ...DEFAULT_APPEARANCE,
+    ...(raw ?? {}),
+    // Array and number fields must not be undefined
+    accessories: Array.isArray(raw?.accessories) ? raw!.accessories : DEFAULT_APPEARANCE.accessories,
+    bodyScale: typeof raw?.bodyScale === 'number' ? raw!.bodyScale : DEFAULT_APPEARANCE.bodyScale,
+  };
+}
 
 // Generous starting stats — players advance by doing 2-3 quick interactions, not grinding
 const INITIAL_STATE = {
@@ -141,6 +168,7 @@ export const useGameStore = create<GameState>()(
     }),
     {
       name: 'path-to-home-game-state',
+      version: 1,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => {
         const persisted = { ...state } as Record<string, unknown>;
@@ -148,6 +176,16 @@ export const useGameStore = create<GameState>()(
           delete persisted[key as string];
         }
         return persisted;
+      },
+      migrate: (persistedState: unknown, fromVersion: number) => {
+        const s = (persistedState ?? {}) as Record<string, unknown>;
+        if (fromVersion < 1) {
+          // v0 → v1: fill in new CharacterAppearance fields that may be missing
+          s.characterAppearance = normalizeAppearance(
+            s.characterAppearance as Partial<CharacterAppearance> | undefined
+          );
+        }
+        return s;
       },
     }
   )
