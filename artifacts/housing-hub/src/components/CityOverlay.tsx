@@ -5,12 +5,14 @@
  */
 import { CityStreetLife } from './CityStreetLife';
 import { CityLiveFeed } from './CityLiveFeed';
+import { CityHomeFeed } from './CityHomeFeed';
 
 export function CityOverlay() {
   return (
     <>
       <CityStreetLife />
       <CityLiveFeed />
+      <CityHomeFeed />
     </>
   );
 }
