@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
 import { useGameStore } from '@/store/gameStore';
 import { getAudioEngine } from '@/hooks/useGameAudio';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { TitleScene } from './TitleScene';
+import titleBg from '@/assets/title-bg.jpg';
 
 export function TitleScreen({ onPlay, onContinue }: { onPlay: () => void, onContinue: () => void }) {
   const gameStarted = useGameStore((s) => s.gameStarted);
@@ -64,10 +63,23 @@ export function TitleScreen({ onPlay, onContinue }: { onPlay: () => void, onCont
 
   return (
     <div className="relative w-full h-full bg-[#110e15] overflow-hidden text-[#ffffff] font-sans flex flex-col items-center justify-center">
-      <div className="absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 2, 8], fov: 45 }}>
-          <TitleScene />
-        </Canvas>
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <motion.img
+          src={titleBg}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          initial={{ scale: 1.08 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 18, ease: 'linear' }}
+        />
+        {/* Legibility gradient over the artwork */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(7,23,44,0.55) 0%, rgba(7,23,44,0.25) 35%, rgba(7,23,44,0.35) 70%, rgba(7,23,44,0.7) 100%)',
+          }}
+        />
       </div>
       
       <div className="relative z-10 w-full max-w-4xl p-6 pointer-events-none flex flex-col items-center justify-center h-full">
