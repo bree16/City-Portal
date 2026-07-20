@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar as CalendarIcon, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -7,15 +7,30 @@ import { Badge } from '@/components/ui/badge';
 
 type FilterType = 'All' | 'Workshop' | 'Education' | 'Community';
 
+interface HubEvent {
+  id: string | number;
+  title: string;
+  dateStr: string;
+  fullDate: string;
+  isoDate?: string | null;
+  time: string;
+  location: string;
+  type: string;
+  desc: string;
+  url: string;
+  color?: string;
+}
+
 export default function EventsPage() {
   const [activeFilter, setActiveFilter] = useState<FilterType>('All');
 
-  const events = [
+  const fallbackEvents: HubEvent[] = [
     {
       id: 1,
       title: "Beyond the Keys Homeowner Workshop",
       dateStr: "AUG 8",
       fullDate: "Aug 8, 2026",
+      isoDate: "2026-08-08",
       time: "9:30 AM – 11:00 AM",
       location: "The Legacy of HOPE Foundation, Newport News",
       type: "Workshop",
@@ -28,6 +43,7 @@ export default function EventsPage() {
       title: "Empower Your Finances: Navigating the Road to Independence",
       dateStr: "AUG 15",
       fullDate: "Multiple dates",
+      isoDate: "2026-08-15",
       time: "See Eventbrite for times",
       location: "Newport News, VA",
       type: "Education",
@@ -40,6 +56,7 @@ export default function EventsPage() {
       title: "Bank On Hampton Roads — Fall Financial Classes",
       dateStr: "SEP 1",
       fullDate: "Sep 2026 – Jan 2027",
+      isoDate: "2026-09-01",
       time: "Virtual & in-person classes",
       location: "Hampton Roads (virtual options)",
       type: "Education",
@@ -52,6 +69,7 @@ export default function EventsPage() {
       title: "Home & Healthy Living Expo",
       dateStr: "SEP 24",
       fullDate: "Sep 24, 2026",
+      isoDate: "2026-09-24",
       time: "10:00 AM – 2:00 PM",
       location: "Newport News, VA",
       type: "Community",
@@ -85,9 +103,33 @@ export default function EventsPage() {
     }
   ];
 
-  const filteredEvents = activeFilter === 'All' 
-    ? events 
-    : events.filter(e => e.type === activeFilter);
+  const [events, setEvents] = useState<HubEvent[]>(fallbackEvents);
+  const [updatedAt, setUpdatedAt] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/events')
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((data: { events: HubEvent[]; updatedAt: string }) => {
+        if (cancelled || !Array.isArray(data.events) || data.events.length === 0) return;
+        setEvents(data.events);
+        setUpdatedAt(data.updatedAt);
+      })
+      .catch(() => {
+        /* keep fallback list */
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Hide dated events that have already passed, even in the fallback list.
+  const upcoming = events.filter((e) => {
+    if (!e.isoDate) return true;
+    return new Date(e.isoDate + 'T23:59:59').getTime() >= Date.now();
+  });
+
+  const filteredEvents = activeFilter === 'All'
+    ? upcoming
+    : upcoming.filter(e => e.type === activeFilter);
 
   return (
     <div className="flex flex-col w-full pt-20 min-h-screen bg-muted/20">
@@ -177,7 +219,7 @@ export default function EventsPage() {
                   transition={{ duration: 0.4, delay: i * 0.1 }}
                 >
                   <Card className="overflow-hidden border-border/50 shadow-sm hover:shadow-md transition-shadow bg-white flex flex-col sm:flex-row group">
-                    <div className={`${evt.color} text-white p-6 flex flex-col items-center justify-center min-w-[120px] shrink-0 text-center`}>
+                    <div className={`${evt.color ?? (evt.type === 'Education' ? 'bg-accent' : 'bg-primary')} text-white p-6 flex flex-col items-center justify-center min-w-[120px] shrink-0 text-center`}>
                       {evt.dateStr.includes(' ') ? (
                         <>
                           <span className="text-sm font-bold uppercase tracking-wider mb-1 opacity-90">{evt.dateStr.split(' ')[0]}</span>
