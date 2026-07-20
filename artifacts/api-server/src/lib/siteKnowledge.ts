@@ -291,9 +291,8 @@ try {
 // ---------------------------------------------------------------------------
 
 function tokenize(q: string): string[] {
-  return (q.toLowerCase().match(/[a-z]+/g) || []).filter(
-    (w) => w.length > 2 && !STOP_WORDS.has(w),
-  );
+  const words: string[] = q.toLowerCase().match(/[a-z]+/g) ?? [];
+  return words.filter((w) => w.length > 2 && !STOP_WORDS.has(w));
 }
 
 function expandQuery(query: string): { terms: Set<string>; phrases: string[] } {

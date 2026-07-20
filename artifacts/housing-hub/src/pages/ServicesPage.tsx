@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MyNewportNews } from '@/components/MyNewportNews';
 import { 
   Droplet, Trash2, Bus, PawPrint, Briefcase, ShieldAlert, 
   Car, Landmark, BookOpen, HeartPulse, School, CalendarDays,
@@ -22,6 +24,13 @@ interface Service {
   icon: React.ElementType;
   gradient: string;
   keywords: string[];
+  /** Official info page ("Learn More") */
+  url: string;
+  /** Direct action link ("Quick Access") */
+  quickUrl: string;
+  quickLabel: string;
+  /** Internal route instead of external link */
+  internal?: boolean;
 }
 
 const CATEGORIES: Category[] = [
@@ -30,22 +39,31 @@ const CATEGORIES: Category[] = [
 ];
 
 const SERVICES: Service[] = [
-  { id: 'water', title: 'Water & Utilities', description: 'Start, stop, or manage your utility services.', category: 'Utilities', icon: Droplet, gradient: 'from-blue-500 to-cyan-400', keywords: ['water bill', 'pay utility bill', 'sewer', 'electric'] },
-  { id: 'trash', title: 'Trash & Recycling', description: 'Collection schedules, recycling information, and bulk pickup.', category: 'Utilities', icon: Trash2, gradient: 'from-emerald-500 to-teal-400', keywords: ['trash schedule', 'find my trash day', 'garbage', 'pickup', 'recycling'] },
-  { id: 'transit', title: 'Public Transportation', description: 'Bus routes, transit schedules, park-and-ride locations, and resources.', category: 'Transportation', icon: Bus, gradient: 'from-indigo-500 to-blue-400', keywords: ['bus routes', 'find transit', 'park and ride'] },
-  { id: 'pets', title: 'Pet Services', description: 'Pet licensing, dog parks, animal shelter information, and adoption.', category: 'Pets', icon: PawPrint, gradient: 'from-orange-400 to-amber-300', keywords: ['pet license', 'register a pet', 'dog', 'adoption'] },
-  { id: 'jobs', title: 'Jobs & Careers', description: 'City jobs, major employers, hiring events, internships, and opportunities.', category: 'Employment', icon: Briefcase, gradient: 'from-slate-600 to-slate-400', keywords: ['jobs', 'apply for city jobs', 'careers'] },
-  { id: 'safety', title: 'Public Safety', description: 'Emergency resources, police services, fire department, and neighborhood safety.', category: 'Safety', icon: ShieldAlert, gradient: 'from-red-500 to-rose-400', keywords: ['police', 'emergency contacts', 'fire'] },
-  { id: 'dmv', title: 'Transportation & DMV', description: 'Parking, vehicle services, transportation updates, and driving resources.', category: 'Transportation', icon: Car, gradient: 'from-violet-500 to-purple-400', keywords: ['parking', 'dmv'] },
-  { id: 'gov', title: 'Government Services', description: 'Taxes, permits, voting information, public records, and city departments.', category: 'Government', icon: Landmark, gradient: 'from-stone-600 to-stone-400', keywords: ['permits', 'taxes', 'voting', 'report an issue'] },
-  { id: 'library', title: 'Library & Learning', description: 'Library services, educational resources, community classes, and digital learning.', category: 'Education', icon: BookOpen, gradient: 'from-fuchsia-500 to-pink-400', keywords: ['library', 'classes'] },
-  { id: 'health', title: 'Health & Wellness', description: 'Hospitals, urgent care, mental health resources, clinics, and wellness services.', category: 'Health', icon: HeartPulse, gradient: 'from-rose-500 to-pink-500', keywords: ['health', 'mental health', 'hospital'] },
-  { id: 'schools', title: 'Schools & Education', description: 'Schools, colleges, childcare resources, and educational opportunities.', category: 'Education', icon: School, gradient: 'from-sky-500 to-blue-500', keywords: ['schools', 'childcare', 'college'] },
-  { id: 'events', title: 'Community Events', description: 'Festivals, volunteer opportunities, farmers markets, concerts, and activities.', category: 'Community', icon: CalendarDays, gradient: 'from-yellow-500 to-orange-400', keywords: ['events', 'upcoming events', 'festival'] },
+  { id: 'water', title: 'Water & Utilities', description: 'Start, stop, or manage your utility services.', category: 'Utilities', icon: Droplet, gradient: 'from-blue-500 to-cyan-400', keywords: ['water bill', 'pay utility bill', 'sewer', 'electric'], url: 'https://www.nnva.gov/151/Waterworks', quickUrl: 'https://www.nnva.gov/1433', quickLabel: 'Pay your bill' },
+  { id: 'trash', title: 'Trash & Recycling', description: 'Collection schedules, recycling information, and bulk pickup.', category: 'Utilities', icon: Trash2, gradient: 'from-emerald-500 to-teal-400', keywords: ['trash schedule', 'find my trash day', 'garbage', 'pickup', 'recycling'], url: 'https://www.nnva.gov/1333/Garbage-Recycling', quickUrl: 'https://www.nnva.gov/771', quickLabel: 'Find my pickup day' },
+  { id: 'transit', title: 'Public Transportation', description: 'Bus routes, transit schedules, park-and-ride locations, and resources.', category: 'Transportation', icon: Bus, gradient: 'from-indigo-500 to-blue-400', keywords: ['bus routes', 'find transit', 'park and ride'], url: 'https://gohrt.com/', quickUrl: 'https://gohrt.com/routes/', quickLabel: 'Find a route' },
+  { id: 'pets', title: 'Pet Services', description: 'Pet licensing, dog parks, animal shelter information, and adoption.', category: 'Pets', icon: PawPrint, gradient: 'from-orange-400 to-amber-300', keywords: ['pet license', 'register a pet', 'dog', 'adoption'], url: 'https://nnparksandrec.org/animal-welfare/', quickUrl: 'https://www.nnva.gov/faq.aspx?TID=26', quickLabel: 'Pet license info' },
+  { id: 'jobs', title: 'Jobs & Careers', description: 'City jobs, major employers, hiring events, internships, and opportunities.', category: 'Employment', icon: Briefcase, gradient: 'from-slate-600 to-slate-400', keywords: ['jobs', 'apply for city jobs', 'careers'], url: 'https://www.nnva.gov/193', quickUrl: 'https://www.nnva.gov/193', quickLabel: 'Apply now' },
+  { id: 'safety', title: 'Public Safety', description: 'Emergency resources, police services, fire department, and neighborhood safety.', category: 'Safety', icon: ShieldAlert, gradient: 'from-red-500 to-rose-400', keywords: ['police', 'emergency contacts', 'fire'], url: 'https://www.nnva.gov/police', quickUrl: 'https://www.nnva.gov/2391/Contact-NNPD', quickLabel: 'Contact NNPD' },
+  { id: 'dmv', title: 'Transportation & DMV', description: 'Parking, vehicle services, transportation updates, and driving resources.', category: 'Transportation', icon: Car, gradient: 'from-violet-500 to-purple-400', keywords: ['parking', 'dmv'], url: 'https://www.dmv.virginia.gov/', quickUrl: 'https://www.dmv.virginia.gov/', quickLabel: 'Virginia DMV' },
+  { id: 'gov', title: 'Government Services', description: 'Taxes, permits, voting information, public records, and city departments.', category: 'Government', icon: Landmark, gradient: 'from-stone-600 to-stone-400', keywords: ['permits', 'taxes', 'voting', 'report an issue'], url: 'https://www.nnva.gov/', quickUrl: 'https://www.nnva.gov/453/Permits', quickLabel: 'Apply for permits' },
+  { id: 'library', title: 'Library & Learning', description: 'Library services, educational resources, community classes, and digital learning.', category: 'Education', icon: BookOpen, gradient: 'from-fuchsia-500 to-pink-400', keywords: ['library', 'classes'], url: 'https://library.nnva.gov/', quickUrl: 'https://library.nnva.gov/', quickLabel: 'Visit the library' },
+  { id: 'health', title: 'Health & Wellness', description: 'Hospitals, urgent care, mental health resources, clinics, and wellness services.', category: 'Health', icon: HeartPulse, gradient: 'from-rose-500 to-pink-500', keywords: ['health', 'mental health', 'hospital'], url: 'https://www.vdh.virginia.gov/hampton-peninsula/', quickUrl: 'https://www.vdh.virginia.gov/hampton-peninsula/', quickLabel: 'Health district' },
+  { id: 'schools', title: 'Schools & Education', description: 'Schools, colleges, childcare resources, and educational opportunities.', category: 'Education', icon: School, gradient: 'from-sky-500 to-blue-500', keywords: ['schools', 'childcare', 'college'], url: 'https://sbo.nn.k12.va.us/', quickUrl: 'https://www.nn.k12.va.us/schools/', quickLabel: 'Find a school' },
+  { id: 'events', title: 'Community Events', description: 'Festivals, volunteer opportunities, farmers markets, concerts, and activities.', category: 'Community', icon: CalendarDays, gradient: 'from-yellow-500 to-orange-400', keywords: ['events', 'upcoming events', 'festival'], url: '/events', quickUrl: '/events', quickLabel: 'See events', internal: true },
 ];
 
 const SUGGESTED_SEARCHES = ['Water Bill', 'Trash Schedule', 'Bus Routes', 'Jobs', 'Pet License', 'Library', 'Police', 'Events', 'Permits', 'Schools'];
-const QUICK_ACTIONS = ['Pay Utility Bill', 'Report an Issue', 'Apply for City Jobs', 'Find My Trash Day', 'Register a Pet', 'Find Transit', 'Upcoming Events', 'Emergency Contacts'];
+const QUICK_ACTIONS: { label: string; href: string; internal?: boolean }[] = [
+  { label: 'Pay Utility Bill', href: 'https://www.nnva.gov/1433' },
+  { label: 'Report an Issue', href: 'https://www.nnva.gov/requesttracker.aspx' },
+  { label: 'Apply for City Jobs', href: 'https://www.nnva.gov/193' },
+  { label: 'Find My Trash Day', href: 'https://www.nnva.gov/771' },
+  { label: 'Register a Pet', href: 'https://www.nnva.gov/faq.aspx?TID=26' },
+  { label: 'Find Transit', href: 'https://gohrt.com/routes/' },
+  { label: 'Upcoming Events', href: '/events', internal: true },
+  { label: 'Emergency Contacts', href: 'https://www.nnva.gov/2391/Contact-NNPD' },
+];
 
 export default function ServicesPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -151,12 +169,25 @@ export default function ServicesPage() {
         <div className="container mx-auto px-4 py-4 overflow-x-auto no-scrollbar">
           <div className="flex items-center gap-3 min-w-max pb-2 md:pb-0 justify-start md:justify-center">
             {QUICK_ACTIONS.map(action => (
-              <button 
-                key={action}
-                className="whitespace-nowrap px-5 py-2.5 rounded-full bg-muted/50 hover:bg-accent/10 hover:text-accent text-foreground/80 font-medium text-sm border border-border hover:border-accent/30 transition-all shadow-sm hover:shadow"
-              >
-                {action}
-              </button>
+              action.internal ? (
+                <Link
+                  key={action.label}
+                  href={action.href}
+                  className="whitespace-nowrap px-5 py-2.5 rounded-full bg-muted/50 hover:bg-accent/10 hover:text-accent text-foreground/80 font-medium text-sm border border-border hover:border-accent/30 transition-all shadow-sm hover:shadow"
+                >
+                  {action.label}
+                </Link>
+              ) : (
+                <a
+                  key={action.label}
+                  href={action.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="whitespace-nowrap px-5 py-2.5 rounded-full bg-muted/50 hover:bg-accent/10 hover:text-accent text-foreground/80 font-medium text-sm border border-border hover:border-accent/30 transition-all shadow-sm hover:shadow"
+                >
+                  {action.label}
+                </a>
+              )
             ))}
           </div>
         </div>
@@ -232,11 +263,23 @@ export default function ServicesPage() {
                             <p className="text-muted-foreground text-sm flex-1 leading-relaxed">{service.description}</p>
                             
                             <div className="mt-6 flex flex-col w-full gap-2 opacity-90 group-hover:opacity-100 transition-opacity">
-                              <Button className="w-full bg-primary/5 text-primary hover:bg-primary hover:text-white rounded-xl shadow-none transition-colors border border-primary/10">
-                                Learn More
+                              <Button asChild className="w-full bg-primary/5 text-primary hover:bg-primary hover:text-white rounded-xl shadow-none transition-colors border border-primary/10">
+                                {service.internal ? (
+                                  <Link href={service.url} data-testid={`link-learn-${service.id}`}>Learn More</Link>
+                                ) : (
+                                  <a href={service.url} target="_blank" rel="noopener noreferrer" data-testid={`link-learn-${service.id}`}>Learn More</a>
+                                )}
                               </Button>
-                              <Button variant="ghost" className="w-full text-accent hover:text-accent hover:bg-accent/10 rounded-xl flex items-center justify-center gap-1 h-9">
-                                Quick Access <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                              <Button asChild variant="ghost" className="w-full text-accent hover:text-accent hover:bg-accent/10 rounded-xl flex items-center justify-center gap-1 h-9">
+                                {service.internal ? (
+                                  <Link href={service.quickUrl} data-testid={`link-quick-${service.id}`}>
+                                    {service.quickLabel} <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                  </Link>
+                                ) : (
+                                  <a href={service.quickUrl} target="_blank" rel="noopener noreferrer" data-testid={`link-quick-${service.id}`}>
+                                    {service.quickLabel} <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                  </a>
+                                )}
                               </Button>
                             </div>
                           </CardContent>
@@ -251,105 +294,13 @@ export default function ServicesPage() {
             </div>
           </div>
 
-          {/* Right Column: "My Newport News" Prototype Dashboard */}
+          {/* Right Column: "My Newport News" resident dashboard */}
           <div className="lg:col-span-4 xl:col-span-3">
             <div className="sticky top-40 space-y-6">
-              
-              <Card className="border-border shadow-lg rounded-3xl overflow-hidden bg-white">
-                <div className="h-24 bg-gradient-to-r from-primary to-accent relative">
-                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
-                  <Button size="icon" variant="ghost" className="absolute top-4 right-4 text-white hover:bg-white/20 rounded-full" aria-label="Dashboard settings">
-                    <Settings2 className="w-5 h-5" />
-                  </Button>
-                </div>
-                
-                <CardContent className="px-6 pb-6 pt-0 relative">
-                  <div className="flex justify-center -mt-10 mb-4">
-                    <div className="w-20 h-20 rounded-full bg-white p-1.5 shadow-md">
-                      <div className="w-full h-full bg-muted rounded-full flex items-center justify-center text-primary font-bold text-2xl">
-                        JD
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="text-center mb-8">
-                    <h3 className="text-xl font-bold text-primary">My Newport News</h3>
-                    <p className="text-sm text-muted-foreground">Welcome back, John</p>
-                  </div>
 
-                  <div className="space-y-5">
-                    {/* Widget 1 */}
-                    <div className="bg-muted/50 rounded-2xl p-4 border border-border/50">
-                      <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
-                          <Droplet className="w-4 h-4 text-blue-500" /> Utility Status
-                        </h4>
-                        <Badge className="bg-green-100 text-green-700 border-none px-2 shadow-none font-semibold">Active</Badge>
-                      </div>
-                      <div className="flex justify-between items-end">
-                        <div>
-                          <p className="text-xs text-muted-foreground mb-1">Next bill due</p>
-                          <p className="font-bold text-primary">Oct 15, 2023</p>
-                        </div>
-                        <Button size="sm" className="h-8 rounded-full bg-white text-primary hover:bg-muted border border-border shadow-sm">Pay $84</Button>
-                      </div>
-                    </div>
-
-                    {/* Widget 2 */}
-                    <div className="bg-muted/50 rounded-2xl p-4 border border-border/50">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 bg-emerald-100 text-emerald-600 rounded-full shrink-0">
-                          <Trash2 className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-bold text-foreground">Next Trash Pickup</h4>
-                          <p className="text-sm text-muted-foreground mt-0.5">Tomorrow morning</p>
-                          <p className="text-xs font-medium text-emerald-600 mt-1 flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3" /> Recycling week
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Widget 3 */}
-                    <div className="bg-muted/50 rounded-2xl p-4 border border-border/50">
-                      <h4 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
-                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" /> Favorite Services
-                      </h4>
-                      <div className="flex gap-2">
-                        <button className="flex flex-col items-center gap-1 group flex-1">
-                          <div className="w-10 h-10 rounded-full bg-white border border-border shadow-sm flex items-center justify-center group-hover:border-accent transition-colors">
-                            <Library className="w-4 h-4 text-primary" />
-                          </div>
-                          <span className="text-[10px] font-medium text-muted-foreground text-center">Library</span>
-                        </button>
-                        <button className="flex flex-col items-center gap-1 group flex-1">
-                          <div className="w-10 h-10 rounded-full bg-white border border-border shadow-sm flex items-center justify-center group-hover:border-accent transition-colors">
-                            <Briefcase className="w-4 h-4 text-primary" />
-                          </div>
-                          <span className="text-[10px] font-medium text-muted-foreground text-center">Jobs</span>
-                        </button>
-                        <button className="flex flex-col items-center gap-1 group flex-1">
-                          <div className="w-10 h-10 rounded-full bg-white border border-border shadow-sm flex items-center justify-center group-hover:border-accent transition-colors">
-                            <ShieldAlert className="w-4 h-4 text-primary" />
-                          </div>
-                          <span className="text-[10px] font-medium text-muted-foreground text-center">Safety</span>
-                        </button>
-                        <button className="flex flex-col items-center gap-1 group flex-1">
-                          <div className="w-10 h-10 rounded-full bg-white border border-border shadow-sm flex items-center justify-center border-dashed group-hover:border-accent group-hover:bg-accent/5 transition-all text-muted-foreground">
-                            +
-                          </div>
-                          <span className="text-[10px] font-medium text-muted-foreground text-center">Add</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <Button variant="outline" className="w-full mt-6 rounded-xl border-border/60 hover:bg-muted text-primary shadow-sm font-medium">
-                    View Full Dashboard
-                  </Button>
-                </CardContent>
-              </Card>
+              <MyNewportNews
+                services={SERVICES.filter(s => !s.internal).map(s => ({ id: s.id, title: s.title, icon: s.icon, url: s.url }))}
+              />
 
               {/* Promo Card */}
               <Card className="border-none shadow-lg rounded-3xl overflow-hidden bg-gradient-to-br from-accent to-accent/80 text-white relative">
@@ -358,8 +309,8 @@ export default function ServicesPage() {
                   <Bell className="w-8 h-8 mb-4 text-white/80" />
                   <h3 className="font-bold text-lg mb-2">City Alerts</h3>
                   <p className="text-white/80 text-sm mb-4">Sign up for emergency notifications and important city updates directly to your phone.</p>
-                  <Button className="w-full bg-white text-accent hover:bg-white/90 rounded-full font-bold shadow-sm">
-                    Manage Alerts
+                  <Button asChild className="w-full bg-white text-accent hover:bg-white/90 rounded-full font-bold shadow-sm">
+                    <a href="https://www.nnva.gov/1556/NN-ALERT" target="_blank" rel="noopener noreferrer">Manage Alerts</a>
                   </Button>
                 </CardContent>
               </Card>
@@ -418,9 +369,4 @@ export default function ServicesPage() {
 
     </div>
   );
-}
-
-// Helper component for the missing Library icon in the prototype widget
-function Library(props: any) {
-  return <BookOpen {...props} />;
 }
