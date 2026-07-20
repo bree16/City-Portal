@@ -4,6 +4,7 @@
  * Page-aware: pulls relevant stats per route. Fixed overlay, pointer-events: none (except toasts).
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 
@@ -428,101 +429,7 @@ function BalloonScene({ color, accent }: { color: string; accent: string }) {
   );
 }
 
-// ─── City Hall Toast ──────────────────────────────────────────────────────────
-function CityHallToast({
-  cards, color, accent,
-}: { cards: InfoCard[]; color: string; accent: string }) {
-  const [idx, setIdx] = useState(0);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const showTimer = setTimeout(() => setVisible(true), 5000);
-    return () => clearTimeout(showTimer);
-  }, []);
-
-  useEffect(() => {
-    if (!visible) return;
-    const hide = setTimeout(() => {
-      setVisible(false);
-      setTimeout(() => {
-        setIdx(i => (i + 1) % cards.length);
-        setVisible(true);
-      }, 3000);
-    }, 8000);
-    return () => clearTimeout(hide);
-  }, [visible, cards.length]);
-
-  const card = cards[idx];
-
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          key={idx}
-          initial={{ x: 340, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: 340, opacity: 0 }}
-          transition={{ type: 'spring', stiffness: 260, damping: 26 }}
-          style={{
-            position: 'fixed', bottom: 50, right: 20, zIndex: 9999,
-            width: 296,
-            background: 'linear-gradient(145deg, #06122a 0%, #0f2347 100%)',
-            border: `1.5px solid ${color}55`,
-            borderRadius: 16,
-            padding: '14px 18px 16px',
-            boxShadow: `0 10px 40px rgba(0,0,0,0.5), 0 0 0 1px ${color}18`,
-            fontFamily: 'Inter, sans-serif',
-            pointerEvents: 'auto',
-          }}
-        >
-          {/* Header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-            <div style={{
-              width: 34, height: 34, borderRadius: 8, flexShrink: 0,
-              background: `${color}18`, border: `1px solid ${color}40`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
-            }}>🏛️</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 9, fontWeight: 800, color: accent, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                City of Newport News
-              </div>
-              <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', marginTop: 1 }}>Housing Hub Announcement</div>
-            </div>
-            <button
-              onClick={() => setVisible(false)}
-              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)', cursor: 'pointer', fontSize: 18, lineHeight: 1, padding: 0, flexShrink: 0 }}
-            >×</button>
-          </div>
-          {/* Badge */}
-          {card.badge && (
-            <span style={{
-              display: 'inline-block',
-              background: `${color}20`, border: `1px solid ${color}45`,
-              borderRadius: 6, padding: '2px 8px',
-              fontSize: 8, fontWeight: 800, color, letterSpacing: '0.06em',
-              marginBottom: 7,
-            }}>{card.badge}</span>
-          )}
-          {/* Content */}
-          <div style={{ fontSize: 16, fontWeight: 800, color: '#fff', lineHeight: 1.3, marginBottom: 5 }}>
-            {card.headline}
-          </div>
-          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.58)', lineHeight: 1.55 }}>
-            {card.sub}
-          </div>
-          {/* Divider */}
-          <div style={{ marginTop: 12, height: 1.5, background: `linear-gradient(90deg, ${color}50, transparent)` }} />
-          {/* Dots */}
-          <div style={{ display: 'flex', gap: 5, marginTop: 10, justifyContent: 'center' }}>
-            {cards.map((_, i) => (
-              <div key={i} style={{ width: i === idx ? 16 : 6, height: 6, borderRadius: 3, background: i === idx ? color : 'rgba(255,255,255,0.15)', transition: 'all 0.3s' }} />
-            ))}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
+// CityHallToast removed — was causing unwanted popups
 
 // ─── News Ticker ──────────────────────────────────────────────────────────────
 function NewsTicker({ items }: { items: string[] }) {
@@ -578,81 +485,11 @@ function NewsTicker({ items }: { items: string[] }) {
   );
 }
 
-// ─── Street Sign Post ─────────────────────────────────────────────────────────
-function StreetSignPost({ cards, color, accent }: { cards: InfoCard[]; color: string; accent: string }) {
-  const [up, setUp] = useState(false);
-  const [cardIdx, setCardIdx] = useState(0);
-
-  useEffect(() => {
-    const show = setTimeout(() => {
-      setUp(true);
-      setTimeout(() => {
-        setUp(false);
-        setTimeout(() => {
-          setCardIdx(i => (i + 1) % cards.length);
-        }, 800);
-      }, 7000);
-    }, 5500);
-    return () => clearTimeout(show);
-  }, []);
-
-  useEffect(() => {
-    if (!up) {
-      const id = setTimeout(() => {
-        setUp(true);
-        setTimeout(() => setUp(false), 7000);
-      }, 28000);
-      return () => clearTimeout(id);
-    }
-  }, [up]);
-
-  const card = cards[cardIdx];
-
-  return (
-    <motion.div
-      style={{ position: 'fixed', left: 40, bottom: 34, zIndex: 9987, pointerEvents: 'none' }}
-      animate={{ y: up ? 0 : 260 }}
-      transition={{ type: 'spring', stiffness: 150, damping: 22 }}
-    >
-      {/* Sign arms */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
-        {/* Top directional sign */}
-        <div style={{
-          background: `linear-gradient(135deg, ${color}18, ${color}0a)`,
-          border: `2px solid ${color}`,
-          borderRadius: 8, padding: '8px 16px',
-          fontFamily: 'Inter, sans-serif',
-          boxShadow: `0 4px 20px rgba(0,0,0,0.4)`,
-          backdropFilter: 'blur(8px)',
-          display: 'flex', alignItems: 'center', gap: 8,
-          minWidth: 200,
-        }}>
-          <div style={{ fontSize: 18 }}>{card.badge?.includes('Grant') ? '💰' : card.badge?.includes('Call') ? '📞' : '📌'}</div>
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', lineHeight: 1.2 }}>{card.headline}</div>
-            <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.55)', marginTop: 3 }}>{card.sub}</div>
-          </div>
-        </div>
-        {/* Second sign */}
-        <div style={{ width: 3, height: 10, background: '#666' }} />
-        <div style={{
-          background: accent,
-          borderRadius: 6, padding: '5px 14px',
-          fontSize: 9, fontWeight: 900, color: '#0B2146',
-          letterSpacing: '0.1em', fontFamily: 'Inter, sans-serif',
-        }}>
-          NEWPORT NEWS HOUSING HUB
-        </div>
-        {/* Pole */}
-        <div style={{ width: 4, height: 120, background: 'linear-gradient(180deg, #888, #555)', borderRadius: 2 }} />
-        {/* Base */}
-        <div style={{ width: 36, height: 8, background: '#444', borderRadius: 4 }} />
-      </div>
-    </motion.div>
-  );
-}
+// StreetSignPost removed — was causing unwanted bottom-left popup
 
 // ─── Main component ───────────────────────────────────────────────────────────
+// Renders into #city-overlay — a div in index.html that is a SIBLING of #root,
+// completely outside the React tree, so no React transforms can break position:fixed.
 
 const SKIP_PAGES = new Set(['/simulator', '/sign-in', '/sign-up']);
 
@@ -662,17 +499,18 @@ export function CityLiveFeed() {
 
   if (SKIP_PAGES.has(path)) return null;
 
-  const data = getPageData(path);
-  const cards = data.cards;
+  const container = document.getElementById('city-overlay');
+  if (!container) return null;
 
-  return (
+  const data = getPageData(path);
+
+  return createPortal(
     <>
       <DroneScene   color={data.color} />
       <BusScene     ticker={data.ticker} />
       <BalloonScene color={data.color} accent={data.accent} />
-      <StreetSignPost cards={cards} color={data.color} accent={data.accent} />
-      <CityHallToast cards={cards} color={data.color} accent={data.accent} />
-      <NewsTicker items={data.ticker} />
-    </>
+      <NewsTicker   items={data.ticker} />
+    </>,
+    container,
   );
 }
