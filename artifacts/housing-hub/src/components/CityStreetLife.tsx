@@ -79,6 +79,14 @@ function Confetti() {
   );
 }
 
+// Characters live only in the two bottom corners, scaled small so they
+// never cover readable content.  Scale origin matches the corner so the
+// character grows inward (not outward off-screen) on hover.
+const POS = {
+  BL: { bottom: 92, left: 4 },
+  BR: { bottom: 92, right: 4 },
+} as const;
+
 // ─── Interactive wrapper ──────────────────────────────────────────────────────
 
 interface CharWrapperProps {
@@ -109,17 +117,19 @@ function CharWrapper({ style, bubbleColor = '#14B8A6', bubbleTexts, showConfetti
 
   useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
+  const isRight = style != null && 'right' in (style as object);
+
   return (
     <div
-      style={{ position: 'fixed', zIndex: 9960, cursor: 'pointer', pointerEvents: 'auto', userSelect: 'none', ...style }}
+      style={{ position: 'absolute', cursor: 'pointer', pointerEvents: 'auto', userSelect: 'none', ...style }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={handleClick}
     >
       <motion.div
-        animate={{ scale: hovered ? 1.12 : 1, opacity: hovered || clicked ? 1 : 0.72 }}
-        transition={{ duration: 0.18 }}
-        style={{ position: 'relative' }}
+        animate={{ scale: hovered ? 0.72 : 0.60, opacity: hovered || clicked ? 1 : 0.60 }}
+        transition={{ duration: 0.2 }}
+        style={{ position: 'relative', transformOrigin: isRight ? 'bottom right' : 'bottom left' }}
       >
         {children(hovered, clicked)}
         <AnimatePresence>
@@ -599,141 +609,109 @@ type SceneDef = {
   showConfetti?: boolean;
 };
 
+// Two characters per page — one in each bottom corner, scaled small.
+// Speech bubbles pop upward so they're always visible above the characters.
 const PAGE_SCENES: Record<string, SceneDef[]> = {
   '/': [
-    { id: 'a', Char: CharCyclist, style: { top: '28%', right: '3%' },
-      bubbleTexts: ['Love biking in Newport News! 🚴', 'Clean city, great trails! 🌿', 'Cycling to my new home! 🏡'] },
-    { id: 'b', Char: CharHomebuyer, style: { bottom: 90, left: '8%' },
+    { id: 'a', Char: CharHomebuyer, style: POS.BL,
       bubbleTexts: ['I bought my home! 🔑🏡', 'Best decision ever! 🎉', 'Newport News forever! ⭐'],
       bubbleColor: '#D4AF37', showConfetti: true },
-    { id: 'c', Char: CharDogWalker, style: { top: '60%', left: '2%' },
+    { id: 'b', Char: CharDogWalker, style: POS.BR,
       bubbleTexts: ['Best neighborhood walks! 🐕', 'Woof! Great city! 🐾', 'Every block is beautiful here!'] },
   ],
   '/buy': [
-    { id: 'a', Char: CharCounselor, style: { top: '22%', right: '2%' },
+    { id: 'a', Char: CharCounselor, style: POS.BR,
       bubbleTexts: ['Free HUD counseling! 📞', 'Call (757) 933-2311 🏠', 'I can help you find a program!'] },
-    { id: 'b', Char: CharHomebuyer, style: { top: '52%', left: '3%' },
+    { id: 'b', Char: CharHomebuyer, style: POS.BL,
       bubbleTexts: ['Your keys are waiting! 🔑', 'First-time buyer grants help! 💰', 'You can do this! 🏡'],
       bubbleColor: '#D4AF37', showConfetti: true },
-    { id: 'c', Char: CharBenchSitter, style: { bottom: 90, right: '12%' },
-      bubbleTexts: ['I used the calculator above! ↑', 'Rent vs. buy changed my mind!', 'Great tool up there! 👆'] },
   ],
   '/rent': [
-    { id: 'a', Char: CharFamilyGroup, style: { top: '20%', right: '2%' },
+    { id: 'a', Char: CharFamilyGroup, style: POS.BR,
       bubbleTexts: ['Found our perfect rental! 🏠', 'Newport News is home! ❤️', 'Great neighborhood for families!'] },
-    { id: 'b', Char: CharNurse, style: { top: '55%', left: '3%' },
+    { id: 'b', Char: CharNurse, style: POS.BL,
       bubbleTexts: ['Good rental = good health! 💙', 'I found mine through this site!', 'Stable housing matters! 🏥'] },
-    { id: 'c', Char: CharKidsRunning, style: { bottom: 90, left: '35%' },
-      bubbleTexts: ['We love our neighborhood! 🌟', 'Best parks in Newport News! 🎉', 'So much space to run!'] },
   ],
   '/neighborhoods': [
-    { id: 'a', Char: CharCyclist, style: { top: '38%', right: '3%' },
-      bubbleTexts: ['Hilton Village is amazing! 🚴', 'Denbigh has the best parks!', 'Oyster Point for the win! 🏙️'] },
-    { id: 'b', Char: CharFamilyGroup, style: { top: '62%', left: '2%' },
-      bubbleTexts: ['We chose Southeast! 🏡', 'Our neighborhood is perfect!', 'Every area has something special!'] },
-    { id: 'c', Char: CharDogWalker, style: { top: '20%', left: '4%' },
+    { id: 'a', Char: CharDogWalker, style: POS.BL,
       bubbleTexts: ['50+ parks to walk in! 🐕', '14 miles of trails! 🐾', 'Best dog-walking city!'] },
+    { id: 'b', Char: CharCyclist, style: POS.BR,
+      bubbleTexts: ['Hilton Village is amazing! 🚴', 'Denbigh has the best parks!', 'Oyster Point for the win! 🏙️'] },
   ],
   '/assistance': [
-    { id: 'a', Char: CharCounselor, style: { top: '26%', right: '3%' },
+    { id: 'a', Char: CharCounselor, style: POS.BR,
       bubbleTexts: ['I can help you apply! 📋', 'Free guidance available! 🤝', 'No appointment needed!'] },
-    { id: 'b', Char: CharNurse, style: { top: '55%', left: '3%' },
-      bubbleTexts: ['2-1-1 helped my family! 💙', 'Emergency help is one call away!', 'You\'re not alone! ❤️'] },
-    { id: 'c', Char: CharFamilyGroup, style: { bottom: 90, right: '10%' },
+    { id: 'b', Char: CharFamilyGroup, style: POS.BL,
       bubbleTexts: ['We got eviction help! 🙏', 'Don\'t wait — call today!', 'Programs saved our home! 🏡'],
       showConfetti: true },
   ],
   '/journey': [
-    { id: 'a', Char: CharKidsRunning, style: { top: '22%', right: '3%' },
+    { id: 'a', Char: CharKidsRunning, style: POS.BR,
       bubbleTexts: ['Our parents bought a home! 🌟', 'Homeownership is possible!', 'Start your journey today! 🎉'] },
-    { id: 'b', Char: CharCounselor, style: { bottom: 90, left: '5%' },
-      bubbleTexts: ['Step 1: check your credit! 📊', 'Free counseling at step 2!', 'I\'ll walk you through it all!'] },
-    { id: 'c', Char: CharHomebuyer, style: { top: '50%', right: '4%' },
+    { id: 'b', Char: CharHomebuyer, style: POS.BL,
       bubbleTexts: ['Every path leads home! 🔑', 'Rent, buy, repair — we cover all!', 'Your journey starts here! 🏡'],
       bubbleColor: '#D4AF37', showConfetti: true },
   ],
   '/events': [
-    { id: 'a', Char: CharMusician, style: { top: '24%', left: '3%' },
+    { id: 'a', Char: CharMusician, style: POS.BL,
       bubbleTexts: ['♪ Beyond the Keys Aug 8! ♪', '♫ Free workshops every month!', '♩ Come join us! 🎶'] },
-    { id: 'b', Char: CharFamilyGroup, style: { top: '52%', right: '3%' },
-      bubbleTexts: ['We loved the last workshop! 🎉', 'Free events = great value!', 'Bring the whole family! ❤️'] },
-    { id: 'c', Char: CharKidsRunning, style: { bottom: 90, left: '40%' },
+    { id: 'b', Char: CharKidsRunning, style: POS.BR,
       bubbleTexts: ['Bank On program is free! ⭐', 'Can\'t wait for the expo!', 'Register now — it\'s free!'] },
   ],
   '/contact': [
-    { id: 'a', Char: CharCounselor, style: { top: '24%', right: '3%' },
+    { id: 'a', Char: CharCounselor, style: POS.BR,
       bubbleTexts: ['(757) 933-2311 📞', 'Mon–Fri 8am–5pm!', 'Walk-ins welcome too!'] },
-    { id: 'b', Char: CharBenchSitter, style: { top: '56%', left: '4%' },
+    { id: 'b', Char: CharBenchSitter, style: POS.BL,
       bubbleTexts: ['They replied in 2 days! ✉️', 'Great team here!', '2400 Washington Ave! 📍'] },
-    { id: 'c', Char: CharNurse, style: { bottom: 90, right: '15%' },
-      bubbleTexts: ['Free HUD counseling here! 💙', 'They really helped me!', 'Certified advisors! ⭐'] },
   ],
   '/resources': [
-    { id: 'a', Char: CharShipbuilder, style: { top: '28%', right: '3%' },
+    { id: 'a', Char: CharShipbuilder, style: POS.BR,
       bubbleTexts: ['SHIP Plan is working! ⚓', 'HII supports Newport News!', 'New housing incoming! 🏗️'] },
-    { id: 'b', Char: CharBenchSitter, style: { top: '60%', left: '4%' },
+    { id: 'b', Char: CharBenchSitter, style: POS.BL,
       bubbleTexts: ['Virginia Housing saves! 💰', 'Below-market rates are real!', 'I read the SHIP Plan — great stuff!'] },
-    { id: 'c', Char: CharCounselor, style: { bottom: 90, left: '38%' },
-      bubbleTexts: ['HUD counseling is free! 📋', 'Download the checklist! ✅', 'Resources for every situation!'] },
   ],
   '/services': [
-    { id: 'a', Char: CharShipbuilder, style: { top: '26%', right: '4%' },
+    { id: 'a', Char: CharShipbuilder, style: POS.BR,
       bubbleTexts: ['City services are great! 🏙️', 'NN-ALERT kept me safe!', 'City jobs open now! 💼'] },
-    { id: 'b', Char: CharCyclist, style: { top: '56%', left: '3%' },
-      bubbleTexts: ['Paid my bill online! 💳', 'newportnewsva.gov is fast!', 'City is so well-organized! 👍'] },
-    { id: 'c', Char: CharDogWalker, style: { bottom: 90, right: '14%' },
+    { id: 'b', Char: CharDogWalker, style: POS.BL,
       bubbleTexts: ['Reported a sidewalk issue! 🐕', 'City fixed it in 3 days!', 'Great city services! 🌆'] },
   ],
   '/quiz': [
-    { id: 'a', Char: CharCounselor, style: { top: '22%', right: '3%' },
+    { id: 'a', Char: CharCounselor, style: POS.BR,
       bubbleTexts: ['Take the quiz above! ↑', '7 questions, 2 minutes!', 'I matched 4 programs!'] },
-    { id: 'b', Char: CharKidsRunning, style: { top: '55%', left: '3%' },
+    { id: 'b', Char: CharKidsRunning, style: POS.BL,
       bubbleTexts: ['Our family used the quiz! 🌟', 'Found grants we didn\'t know about!', 'So easy to use! 🎉'] },
-    { id: 'c', Char: CharHomebuyer, style: { bottom: 90, right: '10%' },
-      bubbleTexts: ['Quiz matched my programs! 🔑', 'Results in seconds! ⭐', 'Best tool on the site!'],
-      bubbleColor: '#D4AF37' },
   ],
   '/why-newport-news': [
-    { id: 'a', Char: CharShipbuilder, style: { top: '24%', right: '3%' },
+    { id: 'a', Char: CharShipbuilder, style: POS.BR,
       bubbleTexts: ['HII — largest VA employer! ⚓', 'Proud Newport News builder!', 'This city built the fleet!'] },
-    { id: 'b', Char: CharCyclist, style: { top: '55%', left: '3%' },
+    { id: 'b', Char: CharCyclist, style: POS.BL,
       bubbleTexts: ['14 miles of trails! 🚴', 'Noland Trail is incredible!', 'Best cycling city in VA!'] },
-    { id: 'c', Char: CharFamilyGroup, style: { bottom: 90, right: '12%' },
-      bubbleTexts: ['Newport News is home! ❤️', 'Military, workers, families — all here!', 'Best city in Hampton Roads!'] },
   ],
   '/success-stories': [
-    { id: 'a', Char: CharHomebuyer, style: { top: '20%', right: '3%' },
+    { id: 'a', Char: CharHomebuyer, style: POS.BR,
       bubbleTexts: ['I bought at 26! 🔑', 'City grants made it happen!', 'Your story could be next! 🏡'],
       bubbleColor: '#D4AF37', showConfetti: true },
-    { id: 'b', Char: CharFamilyGroup, style: { top: '52%', left: '3%' },
-      bubbleTexts: ['We\'re homeowners now! 🎉', 'Counseling changed everything!', 'Best decision for our family! ❤️'],
-      showConfetti: true },
-    { id: 'c', Char: CharMusician, style: { bottom: 90, left: '30%' },
+    { id: 'b', Char: CharMusician, style: POS.BL,
       bubbleTexts: ['♪ Every story matters! ♫', '♩ Share yours today!', '♫ Newport News sings! 🎶'] },
   ],
   '/checklist': [
-    { id: 'a', Char: CharCounselor, style: { top: '24%', right: '3%' },
-      bubbleTexts: ['Step 1: credit check! ✅', 'Aim for 620+ first!', 'I\'ll walk through every step!'] },
-    { id: 'b', Char: CharNurse, style: { top: '55%', left: '3%' },
+    { id: 'a', Char: CharNurse, style: POS.BR,
       bubbleTexts: ['Financial health matters! 💙', 'Save 3–6 months expenses!', 'Healthy finances = home ready!'] },
-    { id: 'c', Char: CharKidsRunning, style: { bottom: 90, right: '12%' },
-      bubbleTexts: ['We\'re ready to move in! 🌟', 'Checklist really helped! 🎉', 'Dad finished all the steps!'] },
+    { id: 'b', Char: CharCounselor, style: POS.BL,
+      bubbleTexts: ['Step 1: credit check! ✅', 'Aim for 620+ first!', 'I\'ll walk through every step!'] },
   ],
   '/ship': [
-    { id: 'a', Char: CharShipbuilder, style: { top: '26%', right: '3%' },
+    { id: 'a', Char: CharShipbuilder, style: POS.BR,
       bubbleTexts: ['Building more homes! 🏗️', 'SHIP Plan is bold! ⚓', 'Missing Middle is the key!'] },
-    { id: 'b', Char: CharCounselor, style: { top: '56%', left: '4%' },
-      bubbleTexts: ['4 pillars: Reform, Production, Affordability, Preservation!', 'This plan will help thousands!', 'Great housing policy! 📋'] },
-    { id: 'c', Char: CharFamilyGroup, style: { bottom: 90, left: '35%' },
+    { id: 'b', Char: CharFamilyGroup, style: POS.BL,
       bubbleTexts: ['SHIP Plan = more homes! 🏡', 'Duplexes coming to our street!', 'Policy that works! ✅'] },
   ],
   '/partners': [
-    { id: 'a', Char: CharCounselor, style: { top: '22%', right: '3%' },
+    { id: 'a', Char: CharCounselor, style: POS.BR,
       bubbleTexts: ['Virginia Housing is great! 💰', 'NNRHA helped my family!', 'Dial 2-1-1 anytime! 📞'] },
-    { id: 'b', Char: CharShipbuilder, style: { top: '55%', left: '3%' },
+    { id: 'b', Char: CharShipbuilder, style: POS.BL,
       bubbleTexts: ['HII and city work together! ⚓', 'Proud partner of Newport News!', 'Community investment! 🏗️'] },
-    { id: 'c', Char: CharFamilyGroup, style: { bottom: 90, right: '10%' },
-      bubbleTexts: ['Partners made it possible! 🤝', 'United Way 2-1-1 saved us!', 'Federal + city = results! ✅'] },
   ],
 };
 
@@ -753,23 +731,38 @@ function SceneCard({ scene }: { scene: SceneDef }) {
 }
 
 // ─── Main export ──────────────────────────────────────────────────────────────
+// We create a dedicated `position:fixed` div appended directly to document.body
+// and portal into it.  Characters inside it use `position:absolute` relative to
+// the container, which is itself fixed — guaranteeing viewport-relative placement
+// no matter what CSS transforms any parent element in the React tree applies
+// (e.g. Framer Motion page-transition wrappers).
 
 export function CityStreetLife() {
   const [location] = useLocation();
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const div = document.createElement('div');
+    div.style.cssText =
+      'position:fixed;top:0;left:0;width:100vw;height:100vh;' +
+      'pointer-events:none;z-index:9960;overflow:visible;';
+    document.body.appendChild(div);
+    setContainer(div);
+    return () => { document.body.removeChild(div); };
+  }, []);
+
   const path = location.split('?')[0];
 
-  if (SKIP.has(path)) return null;
+  if (SKIP.has(path) || !container) return null;
 
   const scenes = PAGE_SCENES[path] ?? PAGE_SCENES['/'];
 
-  // Render via portal directly on document.body so position:fixed is never
-  // broken by CSS transforms applied to parent page elements (e.g. page transitions).
   return createPortal(
     <>
       {scenes.map(scene => (
         <SceneCard key={scene.id} scene={scene} />
       ))}
     </>,
-    document.body,
+    container,
   );
 }

@@ -319,8 +319,8 @@ function useFlash(interval = 220) {
   return on;
 }
 
-// Drone hovers at different viewport heights each cycle to appear throughout the page
-const DRONE_TOPS = [80, 200, 320, 140, 260];
+// Drone stays near the very top (just below the navbar) so it never covers content
+const DRONE_TOP = 58;
 
 // ─── Drone Scene ──────────────────────────────────────────────────────────────
 function DroneScene({ color }: { color: string }) {
@@ -358,7 +358,7 @@ function DroneScene({ color }: { color: string }) {
                  phase === 'entering' ? '62vw' :
                  phase === 'hovering' ? '62vw' : '-20vw';
 
-  const droneTop = DRONE_TOPS[cycleCount % DRONE_TOPS.length];
+  const droneTop = DRONE_TOP;
 
   return (
     <motion.div style={{ position: 'fixed', top: droneTop, right: 0, left: 0, pointerEvents: 'none', zIndex: 9990 }}>
@@ -413,7 +413,7 @@ function BusScene({ ticker }: { ticker: string[] }) {
 function BalloonScene({ color, accent }: { color: string; accent: string }) {
   return (
     <motion.div
-      style={{ position: 'fixed', top: '28%', right: 0, pointerEvents: 'none', zIndex: 9985 }}
+      style={{ position: 'fixed', top: 68, right: 0, pointerEvents: 'none', zIndex: 9985 }}
       initial={{ x: 200, opacity: 0 }}
       animate={{ x: [200, -600], opacity: [0, 1, 1, 0] }}
       transition={{ times: [0, 0.06, 0.9, 1], duration: 22, delay: 14, repeat: Infinity, repeatDelay: 40, ease: 'linear' }}
