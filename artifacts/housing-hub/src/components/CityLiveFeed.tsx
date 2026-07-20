@@ -500,12 +500,14 @@ export function CityLiveFeed() {
   if (SKIP_PAGES.has(path)) return null;
 
   const data = getPageData(path);
+  const isHome = path === '/';
 
   return (
     <>
-      <DroneScene   color={data.color} />
+      {/* Drone and balloon only on the home page */}
+      {isHome && <DroneScene   color={data.color} />}
+      {isHome && <BalloonScene color={data.color} accent={data.accent} />}
       <BusScene     ticker={data.ticker} />
-      <BalloonScene color={data.color} accent={data.accent} />
       <NewsTicker   items={data.ticker} />
     </>
   );
