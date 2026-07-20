@@ -158,21 +158,21 @@ export default function ResourcesPage() {
       category: "Helpful Services",
       icon: Building2,
       desc: "Bulk item pickup, recycling, and waste management services.",
-      url: "https://www.nnva.gov/378/Solid-Waste"
+      url: "https://www.nnva.gov/771/Solid-Waste-Collection-Schedule-Calendar"
     },
     {
       title: "Bill Pay",
       category: "Helpful Services",
       icon: Building2,
       desc: "Pay city utility bills and fees online.",
-      url: "https://www.nnva.gov/1483/Online-Services"
+      url: "https://www.nnva.gov/1433/Pay-a-Bill"
     },
     {
       title: "Jobs",
       category: "Helpful Services",
       icon: Users,
       desc: "City of Newport News employment opportunities and career resources.",
-      url: "https://www.governmentjobs.com/careers/newportnews"
+      url: "https://www.nnva.gov/193/Apply-for-a-Job"
     }
   ];
 

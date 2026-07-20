@@ -68,7 +68,7 @@ const PHASES: ChecklistPhase[] = [
       { id: "insurance", text: "Shop for homeowner's insurance before closing" },
       { id: "walkthrough", text: "Do a final walk-through 24 hours before closing" },
       { id: "closing", text: "Bring your ID and certified funds to closing — then get your keys" },
-      { id: "utilities", text: "Set up utilities with the city", link: { label: "City online services", href: "https://www.nnva.gov/1483/Online-Services", external: true } },
+      { id: "utilities", text: "Set up utilities with the city", link: { label: "City bill pay", href: "https://www.nnva.gov/1433/Pay-a-Bill", external: true } },
     ],
   },
 ];
