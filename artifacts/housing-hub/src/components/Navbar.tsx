@@ -30,6 +30,7 @@ export function Navbar() {
     { label: 'Journey', href: '/journey' },
     { label: 'Why Newport News', href: '/why-newport-news' },
     { label: 'Simulator', href: '/simulator' },
+    { label: 'Events', href: '/events' },
     { label: 'Services', href: '/services' },
     { label: 'Contact', href: '/contact' },
   ];
@@ -37,8 +38,9 @@ export function Navbar() {
   const mobileLinks = [
     ...navLinks,
     { label: 'Resources', href: '/resources' },
-    { label: 'Events', href: '/events' },
     { label: 'Success Stories', href: '/success-stories' },
+    { label: 'Buyer Checklist', href: '/checklist' },
+    { label: 'SHIP Housing Plan', href: '/ship' },
   ];
 
   return (

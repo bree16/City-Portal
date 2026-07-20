@@ -151,6 +151,22 @@ export function NewsEventsSlideshow() {
             </AnimatePresence>
           </div>
 
+          {/* On-image arrows */}
+          <button
+            onClick={prev}
+            aria-label="Previous picture"
+            className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/35 hover:bg-black/60 backdrop-blur-sm text-white flex items-center justify-center transition-colors z-10"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            onClick={next}
+            aria-label="Next picture"
+            className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/35 hover:bg-black/60 backdrop-blur-sm text-white flex items-center justify-center transition-colors z-10"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
           {/* Dots */}
           <div className="absolute top-5 right-5 flex gap-2">
             {SLIDES.map((s, i) => (
