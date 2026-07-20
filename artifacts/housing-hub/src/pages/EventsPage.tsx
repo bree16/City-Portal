@@ -246,6 +246,59 @@ export default function EventsPage() {
           </div>
         </div>
       </section>
+
+      {/* Ongoing & recurring classes — real programs you can join any time */}
+      <section className="pb-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <div className="bg-white rounded-2xl shadow-sm border border-border p-8 md:p-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary mb-2">Ongoing Classes & Counseling</h2>
+            <p className="text-muted-foreground mb-8">
+              These real programs run year-round — no need to wait for an event date.
+            </p>
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                {
+                  title: "Virginia Housing Free Homebuyer Course",
+                  schedule: "Self-paced online, or live classes offered monthly",
+                  desc: "The free education course required for Virginia Housing loans and most down payment assistance. Certificate on completion.",
+                  href: "https://www.virginiahousing.com/homebuyers/homebuyer-education",
+                  cta: "Enroll Free"
+                },
+                {
+                  title: "HUD-Approved Housing Counseling",
+                  schedule: "By appointment, year-round",
+                  desc: "One-on-one help with budgeting, credit repair, buying, or avoiding foreclosure — free or low-cost with approved agencies serving Newport News.",
+                  href: "https://www.hud.gov/counseling",
+                  cta: "Find a Counselor"
+                },
+                {
+                  title: "NNRHA Homeownership Programs",
+                  schedule: "Office hours Mon–Fri • (757) 928-2620",
+                  desc: "The Housing Authority's homeownership and family self-sufficiency programs for Newport News residents.",
+                  href: "https://nnrha.net/",
+                  cta: "Visit NNRHA"
+                },
+                {
+                  title: "United Way 211 Referrals",
+                  schedule: "24/7 — call or text 2-1-1",
+                  desc: "Not sure where to start? A live specialist connects you to rent help, classes, and local housing services.",
+                  href: "https://www.211virginia.org/",
+                  cta: "Get Connected"
+                },
+              ].map((c) => (
+                <div key={c.title} className="border border-border rounded-xl p-6 flex flex-col hover:shadow-md transition-shadow">
+                  <h3 className="font-bold text-lg text-primary mb-1">{c.title}</h3>
+                  <div className="text-xs font-semibold uppercase tracking-wide text-accent mb-3">{c.schedule}</div>
+                  <p className="text-sm text-foreground/80 leading-relaxed mb-5 flex-1">{c.desc}</p>
+                  <Button asChild variant="outline" className="w-fit font-semibold">
+                    <a href={c.href} target="_blank" rel="noopener noreferrer">{c.cta}</a>
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

@@ -24,6 +24,9 @@ import WhyNewportNewsPage from '@/pages/WhyNewportNewsPage';
 import PartnersPage from '@/pages/PartnersPage';
 import NotFound from '@/pages/not-found';
 import ServicesPage from '@/pages/ServicesPage';
+import ChecklistPage from '@/pages/ChecklistPage';
+import ShipPage from '@/pages/ShipPage';
+import { HelpLineStrip } from '@/components/HelpLineStrip';
 import { AccessibilityWidget } from '@/components/AccessibilityWidget';
 
 const queryClient = new QueryClient();
@@ -33,6 +36,7 @@ function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-[100dvh] flex flex-col bg-background text-foreground">
       <Navbar />
       <main className="flex-1 flex flex-col">{children}</main>
+      <HelpLineStrip />
       <Footer />
       <ChatWidget />
       <AccessibilityWidget />
@@ -58,6 +62,8 @@ function Router() {
         <Route path="/events" component={EventsPage} />
         <Route path="/services" component={ServicesPage} />
         <Route path="/success-stories" component={SuccessStoriesPage} />
+        <Route path="/checklist" component={ChecklistPage} />
+        <Route path="/ship" component={ShipPage} />
         <Route path="/contact" component={ContactPage} />
         <Route component={NotFound} />
       </Switch>
