@@ -69,6 +69,8 @@ export interface GameState {
   dashboardOpen: boolean;
   /** Whether the Listing/Sell modal DraggablePanel is open. */
   listingOpen: boolean;
+  /** Current annual mortgage interest rate as a percent (default 6.5). */
+  mortgageRate: number;
 
   // Audio preferences — persisted with the save so they survive clearing localStorage-only keys
   musicVolume: number; // 0–1
@@ -116,6 +118,10 @@ export interface GameState {
   setListingOpen: (v: boolean) => void;
   /** Advance one month in homelife: pays mortgage, accrues income, checks maintenance. */
   advanceHomeLifeMonth: () => void;
+  /** Apply a lump-sum extra principal payment toward the mortgage. */
+  payDownMortgage: (amount: number) => void;
+  /** Refinance the mortgage: reduce rate, recalculate payment, deduct closing fee. */
+  refinanceMortgage: (newRate: number, fee: number) => void;
   quitToMenu: () => void;
   resetGame: () => void;
 }
@@ -176,6 +182,7 @@ const INITIAL_STATE = {
   homeValue: 0,
   mortgageBalance: 0,
   mortgagePayment: 0,
+  mortgageRate: 6.5,
   improvementsOwned: [] as string[],
   homeLifeMonths: 0,
   dashboardOpen: true,
@@ -266,18 +273,34 @@ export const useGameStore = create<GameState>()(
       advanceHomeMonth: () =>
         set((s) => {
           const net = s.monthlyIncome - s.monthlyExpenses;
-          // Real 30-yr amortization: FIXED payment set at purchase; principal =
-          // payment minus this month's interest on the remaining balance.
-          const monthlyRate = 0.065 / 12;
+          const annualRate = (s.mortgageRate ?? 6.5) / 100;
+          const monthlyRate = annualRate / 12;
           const payment = s.mortgagePayment > 0
             ? s.mortgagePayment
-            : Math.round(s.homeValue * 0.9 * 0.006321); // fallback for saves from before this field existed
+            : Math.round(s.homeValue * 0.9 * 0.006321);
           const interest = Math.round(s.mortgageBalance * monthlyRate);
           const principalPaid = Math.max(50, payment - interest);
           return {
             month: s.month + 1,
             cash: Math.max(0, s.cash + net),
             mortgageBalance: Math.max(0, s.mortgageBalance - principalPaid),
+          };
+        }),
+      payDownMortgage: (amount) =>
+        set((s) => ({
+          cash: Math.max(0, s.cash - amount),
+          mortgageBalance: Math.max(0, s.mortgageBalance - amount),
+        })),
+      refinanceMortgage: (newRate, fee) =>
+        set((s) => {
+          if (s.cash < fee) return {};
+          const mr = newRate / 100 / 12;
+          // Recalculate payment on full 30-year term from current balance
+          const newPayment = Math.round(s.mortgageBalance * mr / (1 - Math.pow(1 + mr, -360)));
+          return {
+            mortgageRate: newRate,
+            mortgagePayment: newPayment,
+            cash: Math.max(0, s.cash - fee),
           };
         }),
       setCareer: (id, income, expenses, bonus) =>

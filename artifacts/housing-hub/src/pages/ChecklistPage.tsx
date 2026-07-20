@@ -86,14 +86,16 @@ export default function ChecklistPage() {
       <section className="relative bg-primary text-white py-20 print:hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_70%_30%,_#D4A843_0%,_transparent_60%)] z-0 pointer-events-none" />
         <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
-          <Badge className="bg-white/10 text-white border-white/20 mb-6">Free Printable Guide</Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">First-Time Buyer Checklist</h1>
-          <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8">
-            Every step from "thinking about it" to keys in hand — tuned for Newport News programs and resources.
-          </p>
-          <Button onClick={() => window.print()} className="bg-accent hover:bg-accent/90 text-white font-bold h-12 px-6 rounded-lg gap-2">
-            <Printer className="w-4 h-4" /> Print This Checklist
-          </Button>
+          <motion.div initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <Badge className="bg-white/10 text-white border-white/20 mb-6">Free Printable Guide</Badge>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">First-Time Buyer Checklist</h1>
+            <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8">
+              Every step from "thinking about it" to keys in hand — tuned for Newport News programs and resources.
+            </p>
+            <Button onClick={() => window.print()} className="bg-accent hover:bg-accent/90 text-white font-bold h-12 px-6 rounded-lg gap-2">
+              <Printer className="w-4 h-4" /> Print This Checklist
+            </Button>
+          </motion.div>
         </div>
       </section>
 

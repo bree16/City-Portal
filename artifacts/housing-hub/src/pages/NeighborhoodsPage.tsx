@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { NeighborhoodMap } from '@/components/NeighborhoodMap';
 import { NEIGHBORHOODS, CITY_MARKET } from '@/data/market';
+import { AnimatedSection, StaggerSection, StaggerItem } from '@/components/ui/AnimatedSection';
 
 import hiltonImage from '@assets/stock_images/hood_hilton.jpg';
 import denbighImage from '@assets/stock_images/hood_denbigh.jpg';
@@ -30,7 +31,7 @@ export default function NeighborhoodsPage() {
 
   return (
     <div className="flex flex-col w-full pt-20 bg-muted/20">
-      {/* Hero — photo background */}
+      {/* Hero */}
       <section className="bg-primary text-white py-20 lg:py-32 text-center px-4 relative overflow-hidden">
         <img src={neighborhoodsHero} alt="Beautiful tree-lined street in Newport News" className="absolute inset-0 w-full h-full object-cover z-0" />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/75 to-accent/40 z-10" />
@@ -51,20 +52,31 @@ export default function NeighborhoodsPage() {
       {/* Interactive Map */}
       <section className="py-16 bg-white border-b border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-6">
+          <AnimatedSection variant="slideUp" className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-6">
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-primary">Explore the Map</h2>
               <p className="text-muted-foreground mt-1">Click a pin to see typical prices and jump to live Zillow listings.</p>
             </div>
             <p className="text-xs text-muted-foreground">Market data: {CITY_MARKET.updated} · Median sale price citywide {CITY_MARKET.medianSalePrice}</p>
-          </div>
-          <NeighborhoodMap onSelect={scrollToHood} />
+          </AnimatedSection>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <NeighborhoodMap onSelect={scrollToHood} />
+          </motion.div>
         </div>
       </section>
 
       {/* Neighborhood Cards Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <AnimatedSection variant="slideUp" className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-primary mb-3">All Neighborhoods</h2>
+            <div className="h-1 w-14 bg-accent rounded-full mx-auto" />
+          </AnimatedSection>
           <div className="grid md:grid-cols-2 gap-8">
             {NEIGHBORHOODS.map((hood, i) => (
               <motion.div
@@ -74,6 +86,7 @@ export default function NeighborhoodsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
               >
                 <Card className="h-full border-none shadow-lg overflow-hidden bg-white group flex flex-col">
                   <div className="relative h-64 overflow-hidden">
@@ -134,13 +147,22 @@ export default function NeighborhoodsPage() {
         </div>
       </section>
 
-      {/* Comparison */}
+      {/* Comparison Table */}
       <section className="py-20 bg-white border-t border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
-          <div className="overflow-hidden rounded-2xl border border-border">
+          <AnimatedSection variant="slideUp" className="mb-8 text-center">
+            <h2 className="text-2xl font-bold text-primary mb-2">Neighborhood Comparison</h2>
+            <p className="text-muted-foreground text-sm">Estimates from {CITY_MARKET.updated} market reports — verify on Zillow</p>
+          </AnimatedSection>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="overflow-hidden rounded-2xl border border-border shadow-sm"
+          >
             <div className="bg-primary text-white p-4 flex items-center justify-between flex-wrap gap-2">
-              <h2 className="text-lg font-bold">Neighborhood Comparison</h2>
-              <span className="text-xs text-white/70">Estimates from {CITY_MARKET.updated} market reports — verify on Zillow</span>
+              <h2 className="text-lg font-bold">Side-by-Side</h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm text-left">
@@ -155,18 +177,25 @@ export default function NeighborhoodsPage() {
                 </thead>
                 <tbody className="divide-y divide-border">
                   {NEIGHBORHOODS.map((hood, i) => (
-                    <tr key={hood.id} className={i % 2 === 0 ? 'bg-white' : 'bg-muted/30'}>
+                    <motion.tr
+                      key={hood.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.35, delay: i * 0.06 }}
+                      className={i % 2 === 0 ? 'bg-white' : 'bg-muted/30'}
+                    >
                       <td className="px-6 py-4 font-bold text-primary">{hood.name}</td>
                       <td className="px-6 py-4 font-medium">{hood.medianHome}</td>
                       <td className="px-6 py-4 font-medium">{hood.medianRent}</td>
                       <td className="px-6 py-4 text-center font-bold text-accent">{hood.walk}</td>
                       <td className="px-6 py-4 text-center font-bold text-accent">{hood.schools}</td>
-                    </tr>
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>

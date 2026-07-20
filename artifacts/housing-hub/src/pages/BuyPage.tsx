@@ -5,20 +5,19 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
+import { AnimatedSection, StaggerSection, StaggerItem } from '@/components/ui/AnimatedSection';
 import buyHero from '@assets/generated_images/buy_hero.jpg';
 import { NEIGHBORHOODS, CITY_MARKET, ZILLOW_ALL_HOMES } from '@/data/market';
 
 export default function BuyPage() {
   return (
     <div className="flex flex-col w-full pt-20 bg-muted/20">
-      {/* Hero — split layout with lifestyle photo */}
+      {/* Hero — split layout */}
       <section className="bg-primary text-white relative overflow-hidden min-h-[520px] flex items-center">
-        {/* Photo right half */}
         <div className="absolute inset-y-0 right-0 w-full lg:w-1/2 z-0">
           <img src={buyHero} alt="Couple receiving keys to their first home" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-primary/10 lg:via-primary/60 lg:to-transparent" />
         </div>
-        {/* Dark base for left side */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#0B2146] via-primary to-primary/90 z-0 lg:w-3/5" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-24 lg:py-32">
@@ -39,7 +38,6 @@ export default function BuyPage() {
                 <Link href="/quiz">Take the Quiz <ArrowRight className="ml-2 w-4 h-4" /></Link>
               </Button>
             </div>
-            {/* Trust indicators */}
             <div className="flex items-center gap-6 mt-8 text-white/60 text-sm">
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-secondary" /> Free counseling</span>
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-secondary" /> Up to $25K assistance</span>
@@ -52,13 +50,13 @@ export default function BuyPage() {
       {/* Homebuyer Roadmap */}
       <section id="roadmap" className="py-24 bg-white relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-          <div className="text-center mb-16">
+          <AnimatedSection variant="slideUp" className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Your Homebuyer Roadmap</h2>
+            <div className="h-1 w-14 bg-accent rounded-full mt-2 mb-4 mx-auto" />
             <p className="text-muted-foreground text-lg">Follow these five steps to make your dream of homeownership a reality.</p>
-          </div>
+          </AnimatedSection>
 
           <div className="relative">
-            {/* Vertical Line */}
             <div className="absolute left-8 md:left-1/2 top-4 bottom-4 w-1 bg-secondary/30 -ml-0.5 rounded-full hidden sm:block"></div>
 
             <div className="space-y-12">
@@ -95,10 +93,10 @@ export default function BuyPage() {
       {/* Programs */}
       <section className="py-24 bg-muted/30 border-y border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="text-center mb-16">
+          <AnimatedSection variant="slideUp" className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Programs Built for Newport News Buyers</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">Explore financial products and educational resources tailored for residents.</p>
-          </div>
+          </AnimatedSection>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
@@ -115,8 +113,9 @@ export default function BuyPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
-                <Card className="bg-white border-border/50 shadow-sm hover:shadow-xl transition-all duration-300 rounded-xl h-full flex flex-col group hover:-translate-y-1">
+                <Card className="bg-white border-border/50 shadow-sm hover:shadow-xl transition-all duration-300 rounded-xl h-full flex flex-col group">
                   <CardContent className="p-8 flex flex-col h-full">
                     <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 text-accent group-hover:bg-accent group-hover:text-white transition-colors">
                       <prog.icon className="w-7 h-7" />
@@ -141,19 +140,24 @@ export default function BuyPage() {
       {/* Market Snapshot */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="text-center mb-12">
+          <AnimatedSection variant="slideUp" className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">What Homes Cost Right Now</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Citywide, the median sale price is {CITY_MARKET.medianSalePrice} ({CITY_MARKET.updated}). Here's what a typical home costs by neighborhood — tap through to live Zillow listings.
+              Citywide, the median sale price is {CITY_MARKET.medianSalePrice} ({CITY_MARKET.updated}). Here's what a typical home costs by neighborhood.
             </p>
-          </div>
+          </AnimatedSection>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-            {NEIGHBORHOODS.map((n) => (
-              <a
+            {NEIGHBORHOODS.map((n, i) => (
+              <motion.a
                 key={n.id}
                 href={n.zillowBuyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.07 }}
+                whileHover={{ y: -4, transition: { duration: 0.15 } }}
                 className="group bg-muted/30 hover:bg-primary rounded-2xl border border-border p-6 transition-colors"
               >
                 <div className="flex items-center justify-between mb-2">
@@ -162,50 +166,57 @@ export default function BuyPage() {
                 </div>
                 <p className="text-2xl font-extrabold text-accent group-hover:text-secondary transition-colors">{n.medianHome}</p>
                 <p className="text-xs text-muted-foreground group-hover:text-white/70 transition-colors mt-1">typical home value · view listings on Zillow</p>
-              </a>
+              </motion.a>
             ))}
           </div>
-          <div className="text-center">
+          <AnimatedSection variant="fadeIn" className="text-center">
             <Button asChild size="lg" variant="outline" className="border-primary/20 text-primary hover:bg-primary hover:text-white font-bold">
               <a href={ZILLOW_ALL_HOMES} target="_blank" rel="noopener noreferrer">
                 Browse All Newport News Homes on Zillow <ExternalLink className="w-4 h-4 ml-2" />
               </a>
             </Button>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* FAQs */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4 max-w-3xl">
-          <div className="text-center mb-16">
+          <AnimatedSection variant="slideUp" className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Frequently Asked Questions</h2>
-          </div>
+          </AnimatedSection>
           
-          <Accordion type="single" collapsible className="w-full bg-muted/10 p-6 rounded-2xl border border-border">
-            {[
-              { q: "Who qualifies for first-time buyer programs?", a: "Must not have owned a home in the past 3 years, meet income limits, and complete a homebuyer education course." },
-              { q: "How much money do I need to buy a home?", a: "It varies. Some programs allow as little as 3% down. Down payment assistance can cover part or all of this." },
-              { q: "Can I buy a home with bad credit?", a: "Some programs work with credit scores as low as 580. Our counselors can help you create a plan to improve your score." },
-              { q: "What grants are available in Newport News?", a: "Programs include Virginia Housing grants, NNRHA assistance, and federal HOME funds distributed by the city." },
-              { q: "How long does the process take?", a: "Typically 60–90 days from pre-approval to closing. Starting early with counseling can shorten this timeline." },
-              { q: "Is there help for veterans?", a: "Yes. VA loans offer zero down payment. We also have veteran-specific counseling services." }
-            ].map((faq, i) => (
-              <AccordionItem key={i} value={`item-${i}`} className="border-border">
-                <AccordionTrigger className="text-left font-semibold text-lg text-primary hover:text-accent hover:no-underline py-5">
-                  {faq.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground text-base leading-relaxed pb-6">
-                  {faq.a}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <Accordion type="single" collapsible className="w-full bg-muted/10 p-6 rounded-2xl border border-border">
+              {[
+                { q: "Who qualifies for first-time buyer programs?", a: "Must not have owned a home in the past 3 years, meet income limits, and complete a homebuyer education course." },
+                { q: "How much money do I need to buy a home?", a: "It varies. Some programs allow as little as 3% down. Down payment assistance can cover part or all of this." },
+                { q: "Can I buy a home with bad credit?", a: "Some programs work with credit scores as low as 580. Our counselors can help you create a plan to improve your score." },
+                { q: "What grants are available in Newport News?", a: "Programs include Virginia Housing grants, NNRHA assistance, and federal HOME funds distributed by the city." },
+                { q: "How long does the process take?", a: "Typically 60–90 days from pre-approval to closing. Starting early with counseling can shorten this timeline." },
+                { q: "Is there help for veterans?", a: "Yes. VA loans offer zero down payment. We also have veteran-specific counseling services." }
+              ].map((faq, i) => (
+                <AccordionItem key={i} value={`item-${i}`} className="border-border">
+                  <AccordionTrigger className="text-left font-semibold text-lg text-primary hover:text-accent hover:no-underline py-5">
+                    {faq.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground text-base leading-relaxed pb-6">
+                    {faq.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </motion.div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-primary text-white text-center px-4">
+      <AnimatedSection variant="wipeUp" className="py-20 bg-primary text-white text-center px-4">
         <div className="container mx-auto max-w-3xl">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Talk to a Housing Counselor</h2>
           <p className="text-lg text-white/80 mb-10">Get free, personalized advice from a certified professional who can help you map out your homebuying strategy.</p>
@@ -213,7 +224,7 @@ export default function BuyPage() {
             <Link href="/contact">Schedule a Consultation</Link>
           </Button>
         </div>
-      </section>
+      </AnimatedSection>
     </div>
   );
 }

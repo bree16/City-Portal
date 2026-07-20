@@ -4,6 +4,7 @@ import { HandHeart, Home, Wrench, ShieldAlert, ArrowRight, FileCheck } from 'luc
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
+import { AnimatedSection, StaggerSection, StaggerItem } from '@/components/ui/AnimatedSection';
 import assistanceHero from '@assets/generated_images/assistance_hero.jpg';
 
 export default function AssistancePage() {
@@ -47,7 +48,7 @@ export default function AssistancePage() {
 
   return (
     <div className="flex flex-col w-full pt-20">
-      {/* Hero — photo background */}
+      {/* Hero */}
       <section className="relative text-white py-24 lg:py-36 text-center px-4 overflow-hidden">
         <img src={assistanceHero} alt="Housing counselor helping a family" className="absolute inset-0 w-full h-full object-cover z-0" />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/92 via-primary/80 to-accent/50 z-10" />
@@ -71,13 +72,21 @@ export default function AssistancePage() {
       {/* Programs Grid */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection variant="slideUp" className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-3">Programs Ready to Help</h2>
+            <div className="h-1 w-14 bg-accent rounded-full mt-2 mb-4 mx-auto" />
+            <p className="text-muted-foreground max-w-xl mx-auto">Every program below is available to Newport News residents — find the one that fits your situation.</p>
+          </AnimatedSection>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {programs.map((prog, i) => (
               <motion.div
                 key={prog.name}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
               >
                 <Card className="h-full border-none shadow-sm hover:shadow-lg transition-all duration-300 bg-white group flex flex-col">
                   <CardContent className="p-8 flex flex-col h-full">
@@ -101,9 +110,11 @@ export default function AssistancePage() {
 
             {/* Need Help Card */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: programs.length * 0.1 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.5, delay: programs.length * 0.1 }}
+              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
             >
               <Card className="h-full border-none bg-gradient-to-br from-accent to-accent/80 text-white flex flex-col justify-center shadow-md">
                 <CardContent className="p-8 text-center">
@@ -120,6 +131,19 @@ export default function AssistancePage() {
           </div>
         </div>
       </section>
+
+      {/* CTA Banner */}
+      <AnimatedSection variant="wipeRight" className="py-16 bg-primary text-white text-center px-4">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="text-3xl font-bold mb-4">Ready to Take the First Step?</h2>
+          <p className="text-white/80 text-lg mb-8 max-w-xl mx-auto">
+            Talk to a certified housing specialist — free, confidential, and available now.
+          </p>
+          <Button asChild size="lg" className="bg-secondary hover:bg-secondary/90 text-primary font-bold rounded-full h-14 px-10 text-lg shadow-xl">
+            <Link href="/contact">Get Help Today</Link>
+          </Button>
+        </div>
+      </AnimatedSection>
     </div>
   );
 }

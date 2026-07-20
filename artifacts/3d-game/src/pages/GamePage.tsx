@@ -308,28 +308,68 @@ function formatTitle(id: string): string {
 function HomeLifeOverlays() {
   const {
     stage, listingOpen, setListingOpen, dashboardOpen, setDashboardOpen,
-    homeValue, mortgageBalance, cash, selectedHomeId, pendingMaintenance,
-    advanceHomeLifeMonth, updateCash,
+    homeValue, mortgageBalance, mortgagePayment, mortgageRate, cash,
+    selectedHomeId, pendingMaintenance, homeLifeMonths,
+    advanceHomeLifeMonth, payDownMortgage, refinanceMortgage,
   } = useGameStore();
+
+  // Sub-panel view within the listing modal
+  const [activeAction, setActiveAction] = useState<'none' | 'paydown' | 'refinance'>('none');
+  // Selected paydown amount
+  const [paydownAmt, setPaydownAmt]     = useState(0);
+  // Selected refinance tier index
+  const [refiIdx, setRefiIdx]           = useState(0);
+
+  // Reset sub-view when modal opens/closes
+  useEffect(() => {
+    if (!listingOpen) { setActiveAction('none'); setPaydownAmt(0); setRefiIdx(0); }
+  }, [listingOpen]);
 
   if (stage !== 8) return null;
 
-  const home = homes.find((h) => h.id === selectedHomeId) ?? homes[0];
-  const equityValue = Math.max(0, homeValue - mortgageBalance);
-  const equityPct   = homeValue > 0 ? (equityValue / homeValue) * 100 : 0;
-  const interestPortion = Math.round(mortgageBalance * 0.065 / 12);
+  const home         = homes.find((h) => h.id === selectedHomeId) ?? homes[0];
+  const equityValue  = Math.max(0, homeValue - mortgageBalance);
+  const equityPct    = homeValue > 0 ? (equityValue / homeValue) * 100 : 0;
+  const curRate      = mortgageRate ?? 6.5;
+  const monthlyRate  = curRate / 100 / 12;
+  const interestPortion = Math.round(mortgageBalance * monthlyRate);
   const taxInsurance    = Math.round(home.price * 0.015 / 12);
-  const principal       = Math.max(0, home.monthlyPayment - interestPortion - taxInsurance);
+  const principal       = Math.max(0, (mortgagePayment || home.monthlyPayment) - interestPortion - taxInsurance);
   const agentFee        = Math.round(homeValue * 0.05);
   const closingCosts    = Math.round(homeValue * 0.02);
   const estProfit       = homeValue - agentFee - closingCosts - mortgageBalance;
 
-  const btnBase: React.CSSProperties = {
-    width: '100%', padding: '9px', borderRadius: 'var(--glass-radius)',
-    border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 12,
-    fontFamily: 'Inter, sans-serif', marginBottom: 6, transition: 'background 0.15s',
-    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+  // ── Refinance tier options ────────────────────────────────────────
+  const refiTiers = [
+    { label: 'Standard',  rate: 6.0,  fee: 3500,  minMonths: 0,  badge: 'Available Now' },
+    { label: 'Better',    rate: 5.5,  fee: 4500,  minMonths: 6,  badge: '6+ Months' },
+    { label: 'Best Rate', rate: 5.0,  fee: 5500,  minMonths: 18, badge: '18+ Months' },
+  ].filter((t) => homeLifeMonths >= t.minMonths && t.rate < curRate);
+
+  const calcPayment = (rate: number, bal: number) => {
+    const r = rate / 100 / 12;
+    return Math.round(bal * r / (1 - Math.pow(1 + r, -360)));
   };
+
+  // ── Shared button style factory ───────────────────────────────────
+  const btn = (color: string, bg: string, border = 'transparent'): React.CSSProperties => ({
+    padding: '9px 10px', borderRadius: 'var(--glass-radius)',
+    background: bg, color, border: `1px solid ${border}`,
+    cursor: 'pointer', fontWeight: 700, fontSize: 10,
+    fontFamily: 'Inter,sans-serif', transition: 'opacity 0.15s',
+    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+  });
+  const btnFull = (color: string, bg: string, border = 'transparent'): React.CSSProperties => ({
+    ...btn(color, bg, border), width: '100%', marginBottom: 6,
+  });
+  const row: React.CSSProperties = {
+    display: 'flex', justifyContent: 'space-between', fontSize: 11,
+    padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.06)',
+  };
+  const dimTxt = { color: 'rgba(255,255,255,0.55)' };
+  const panel = (bg: string): React.CSSProperties => ({
+    background: bg, borderRadius: 'var(--glass-radius)', padding: '10px 12px', marginBottom: 10,
+  });
 
   return (
     <>
@@ -349,12 +389,12 @@ function HomeLifeOverlays() {
             {/* Key metrics */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 12 }}>
               {[
-                { label: 'Home Value',    value: `${homeValue.toLocaleString()}`,   color: '#4ade80' },
+                { label: 'Home Value',    value: `${homeValue.toLocaleString()}`,       color: '#4ade80' },
                 { label: 'Mortgage Left', value: `${mortgageBalance.toLocaleString()}`, color: '#f87171' },
-                { label: 'Equity',        value: `${equityPct.toFixed(1)}%`,          color: '#D4AF37' },
+                { label: 'Equity',        value: `${equityPct.toFixed(1)}%`,             color: '#D4AF37' },
               ].map((m) => (
                 <div key={m.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 'var(--glass-radius)', padding: '6px 8px', textAlign: 'center' }}>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: m.color }}>{m.value}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: m.color }}>{m.value}</div>
                   <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{m.label}</div>
                 </div>
               ))}
@@ -363,7 +403,8 @@ function HomeLifeOverlays() {
             {/* Equity bar */}
             <div style={{ marginBottom: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'rgba(255,255,255,0.4)', marginBottom: 4 }}>
-                <span>Equity built: ${equityValue.toLocaleString()}</span><span>{equityPct.toFixed(1)}%</span>
+                <span>Equity built: ${equityValue.toLocaleString()}</span>
+                <span>{equityPct.toFixed(1)}%</span>
               </div>
               <div style={{ height: 6, background: 'rgba(255,255,255,0.08)', borderRadius: 'var(--glass-radius)', overflow: 'hidden' }}>
                 <div style={{ height: '100%', width: `${Math.min(100, equityPct)}%`, background: 'linear-gradient(90deg, #D4AF37, #4ade80)', borderRadius: 'var(--glass-radius)', transition: 'width 0.8s ease' }} />
@@ -371,18 +412,18 @@ function HomeLifeOverlays() {
             </div>
 
             {/* Monthly breakdown */}
-            <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 'var(--glass-radius)', padding: '8px 10px', marginBottom: 12 }}>
+            <div style={{ ...panel('rgba(255,255,255,0.04)'), marginBottom: 12 }}>
               <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: 6, letterSpacing: 1 }}>
-                Monthly Payment — ${home.monthlyPayment}/mo
+                Monthly Payment — ${mortgagePayment || home.monthlyPayment}/mo · {curRate}% APR
               </div>
               {[
                 { label: 'Principal',       value: principal,       color: '#4ade80' },
                 { label: 'Interest',        value: interestPortion, color: '#f87171' },
                 { label: 'Tax + Insurance', value: taxInsurance,    color: '#fbbf24' },
-              ].map((row) => (
-                <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, padding: '2px 0', color: 'rgba(255,255,255,0.7)' }}>
-                  <span>{row.label}</span>
-                  <span style={{ color: row.color, fontWeight: 700 }}>${row.value}/mo</span>
+              ].map((r) => (
+                <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, padding: '2px 0', color: 'rgba(255,255,255,0.7)' }}>
+                  <span>{r.label}</span>
+                  <span style={{ color: r.color, fontWeight: 700 }}>${r.value}/mo</span>
                 </div>
               ))}
             </div>
@@ -392,8 +433,7 @@ function HomeLifeOverlays() {
               onClick={advanceHomeLifeMonth}
               disabled={!!pendingMaintenance}
               style={{
-                ...btnBase,
-                background: pendingMaintenance ? 'rgba(255,255,255,0.08)' : '#0F766E',
+                ...btnFull('#fff', pendingMaintenance ? 'rgba(255,255,255,0.08)' : '#0F766E'),
                 color: pendingMaintenance ? 'rgba(255,255,255,0.35)' : '#fff',
                 cursor: pendingMaintenance ? 'default' : 'pointer',
               }}
@@ -408,14 +448,12 @@ function HomeLifeOverlays() {
               <button
                 onClick={() => setListingOpen(true)}
                 style={{
-                  ...btnBase,
-                  background: 'linear-gradient(135deg, #D4AF37, #F5C842)',
-                  color: '#0F172A',
+                  ...btnFull('#0F172A', 'linear-gradient(135deg,#D4AF37,#F5C842)'),
                   boxShadow: '0 0 16px rgba(212,175,55,0.5)',
                   animation: 'pulse 2s infinite',
                 }}
               >
-                <GameIcon name="home" size={14} /> List My Home →
+                <GameIcon name="home" size={14} /> Manage Home →
               </button>
             )}
           </div>
@@ -425,93 +463,269 @@ function HomeLifeOverlays() {
       {listingOpen && (
         <DraggablePanel
           id="listing-modal"
-          title="Ready to Sell?"
+          title={activeAction === 'paydown' ? 'Extra Mortgage Payment' : activeAction === 'refinance' ? 'Refinance Your Mortgage' : 'Home Options'}
           icon="home"
-          defaultPosition={{ x: Math.max(16, Math.round(window.innerWidth / 2) - 185), y: 90 }}
+          defaultPosition={{ x: Math.max(16, Math.round(window.innerWidth / 2) - 185), y: 80 }}
           onClose={() => setListingOpen(false)}
         >
-          <div style={{ width: 340, fontFamily: 'var(--display-font)', color: '#fff', textAlign: 'center' }}>
-            <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'center', color: '#4ade80' }}>
-              <GameIcon name="home" size={40} />
-            </div>
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 18 }}>Estimated Sale Breakdown</div>
+          <div style={{ width: 350, fontFamily: 'var(--display-font)', color: '#fff' }}>
 
-            {[
-              { label: 'Current Market Value',  value:  homeValue,        color: '#4ade80' },
-              { label: 'Agent Commission (5%)', value: -agentFee,         color: '#f87171' },
-              { label: 'Closing Costs (2%)',    value: -closingCosts,     color: '#f87171' },
-              { label: 'Mortgage Payoff',       value: -mortgageBalance,  color: '#f87171' },
-            ].map((row) => (
-              <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                <span style={{ color: 'rgba(255,255,255,0.65)' }}>{row.label}</span>
-                <span style={{ color: row.color, fontWeight: 700 }}>
-                  {row.value >= 0 ? '' : '−'}${Math.abs(row.value).toLocaleString()}
-                </span>
-              </div>
-            ))}
+            {/* ── MAIN VIEW ─────────────────────────────────────────── */}
+            {activeAction === 'none' && (
+              <>
+                {/* Sale breakdown */}
+                <div style={{ textAlign: 'center', marginBottom: 14 }}>
+                  <div style={{ color: '#4ade80', marginBottom: 6 }}><GameIcon name="home" size={36} /></div>
+                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', marginBottom: 12 }}>Estimated Sale Breakdown</div>
+                  {[
+                    { label: 'Current Market Value',  value:  homeValue,       color: '#4ade80' },
+                    { label: 'Agent Commission (5%)', value: -agentFee,        color: '#f87171' },
+                    { label: 'Closing Costs (2%)',    value: -closingCosts,    color: '#f87171' },
+                    { label: 'Mortgage Payoff',       value: -mortgageBalance, color: '#f87171' },
+                  ].map((r) => (
+                    <div key={r.label} style={row}>
+                      <span style={dimTxt}>{r.label}</span>
+                      <span style={{ color: r.color, fontWeight: 700 }}>
+                        {r.value < 0 ? '−' : ''}${Math.abs(r.value).toLocaleString()}
+                      </span>
+                    </div>
+                  ))}
+                </div>
 
-            <div style={{ marginTop: 14, padding: '12px', background: estProfit > 0 ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)', borderRadius: 'var(--glass-radius)', marginBottom: 14 }}>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>Estimated Profit</div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: estProfit > 0 ? '#4ade80' : '#f87171' }}>
-                {estProfit >= 0 ? '+' : ''}${estProfit.toLocaleString()}
-              </div>
-            </div>
+                <div style={{ ...panel(estProfit > 0 ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)'), textAlign: 'center', marginBottom: 12 }}>
+                  <div style={{ fontSize: 10, ...dimTxt }}>Estimated Sale Profit</div>
+                  <div style={{ fontSize: 26, fontWeight: 800, color: estProfit > 0 ? '#4ade80' : '#f87171' }}>
+                    {estProfit >= 0 ? '+' : ''}${estProfit.toLocaleString()}
+                  </div>
+                </div>
 
-            <div style={{ background: 'rgba(212,175,55,0.1)', borderRadius: 'var(--glass-radius)', padding: '10px 12px', marginBottom: 16, fontSize: 11, color: 'rgba(255,255,255,0.7)', lineHeight: 1.4 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, justifyContent: 'center' }}>
-                <GameIcon name="sparkles" size={14} color="#D4AF37" />
-                <strong style={{ color: '#D4AF37' }}>Dream Home Ahead!</strong>
-              </div>
-              Your equity could fund a larger Newport News home — start your journey toward your forever home!
-            </div>
+                <div style={{ ...panel('rgba(212,175,55,0.1)'), fontSize: 10, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5, textAlign: 'center', marginBottom: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, justifyContent: 'center', marginBottom: 4 }}>
+                    <GameIcon name="sparkles" size={13} color="#D4AF37" />
+                    <strong style={{ color: '#D4AF37' }}>Grow Your Investment</strong>
+                  </div>
+                  Use extra cash to pay down your mortgage or refinance for a lower rate.
+                </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 4 }}>
-              <button
-                onClick={() => {
-                  const extra = Math.min(5000, Math.floor((cash || 0) * 0.1));
-                  if (extra > 0) {
-                    updateCash(-extra);
-                    useGameStore.setState((s) => ({ mortgageBalance: Math.max(0, s.mortgageBalance - extra) }));
-                  }
-                  setListingOpen(false);
-                }}
-                disabled={!cash || cash < 500}
-                style={{
-                  padding: '10px 8px', borderRadius: 'var(--glass-radius)',
-                  background: cash >= 500 ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.04)',
-                  color: cash >= 500 ? '#4ade80' : 'rgba(255,255,255,0.3)',
-                  border: `1px solid ${cash >= 500 ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.1)'}`,
-                  cursor: cash >= 500 ? 'pointer' : 'default', fontWeight: 700, fontSize: 10,
-                  fontFamily: 'Inter,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5
-                }}
-              >
-                <GameIcon name="bank" size={12} /> Pay Down Mortgage
-              </button>
-              <button
-                onClick={() => setListingOpen(false)}
-                style={{
-                  padding: '10px 8px', borderRadius: 'var(--glass-radius)',
-                  background: 'rgba(212,175,55,0.1)', color: '#D4AF37',
-                  border: '1px solid rgba(212,175,55,0.3)', cursor: 'pointer',
-                  fontWeight: 700, fontSize: 10, fontFamily: 'Inter,sans-serif',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5
-                }}
-              >
-                <GameIcon name="chart" size={12} /> Refinance (Coming Soon)
-              </button>
-            </div>
-            <button
-              onClick={() => setListingOpen(false)}
-              style={{
-                width: '100%', padding: '11px', borderRadius: 'var(--glass-radius)',
-                background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)',
-                border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer',
-                fontWeight: 700, fontSize: 11, fontFamily: 'Inter,sans-serif',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
-              }}
-            >
-              <GameIcon name="close" size={10} /> Keep Building Equity
-            </button>
+                {/* Action buttons */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 6 }}>
+                  <button
+                    onClick={() => { setPaydownAmt(Math.min(5000, Math.floor((cash || 0) * 0.1))); setActiveAction('paydown'); }}
+                    disabled={!cash || cash < 500}
+                    style={btn(
+                      cash >= 500 ? '#4ade80' : 'rgba(255,255,255,0.25)',
+                      cash >= 500 ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)',
+                      cash >= 500 ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.08)',
+                    )}
+                  >
+                    <GameIcon name="bank" size={12} /> Pay Down Mortgage
+                  </button>
+                  <button
+                    onClick={() => { setRefiIdx(0); setActiveAction('refinance'); }}
+                    disabled={refiTiers.length === 0}
+                    style={btn(
+                      refiTiers.length > 0 ? '#D4AF37' : 'rgba(255,255,255,0.25)',
+                      refiTiers.length > 0 ? 'rgba(212,175,55,0.12)' : 'rgba(255,255,255,0.04)',
+                      refiTiers.length > 0 ? 'rgba(212,175,55,0.35)' : 'rgba(255,255,255,0.08)',
+                    )}
+                  >
+                    <GameIcon name="chart" size={12} /> {refiTiers.length > 0 ? 'Refinance' : 'Refinance (Need 6mo)'}
+                  </button>
+                </div>
+
+                <button onClick={() => setListingOpen(false)} style={btnFull('rgba(255,255,255,0.45)', 'rgba(255,255,255,0.05)', 'rgba(255,255,255,0.1)')}>
+                  <GameIcon name="close" size={10} /> Keep Building Equity
+                </button>
+              </>
+            )}
+
+            {/* ── PAY DOWN VIEW ─────────────────────────────────────── */}
+            {activeAction === 'paydown' && (
+              <>
+                <div style={{ ...panel('rgba(74,222,128,0.08)'), marginBottom: 14 }}>
+                  <div style={{ fontSize: 10, ...dimTxt, marginBottom: 2 }}>Current Mortgage Balance</div>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: '#f87171' }}>${mortgageBalance.toLocaleString()}</div>
+                  <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>Cash available: ${(cash || 0).toLocaleString()}</div>
+                </div>
+
+                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginBottom: 8 }}>Choose extra payment amount:</div>
+
+                {/* Preset amounts */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 10 }}>
+                  {[1000, 2500, 5000, 10000].map((amt) => {
+                    const canAfford = (cash || 0) >= amt;
+                    const newBal    = Math.max(0, mortgageBalance - amt);
+                    const newEq     = homeValue > 0 ? ((homeValue - newBal) / homeValue * 100) : 0;
+                    const selected  = paydownAmt === amt;
+                    return (
+                      <button
+                        key={amt}
+                        disabled={!canAfford}
+                        onClick={() => setPaydownAmt(amt)}
+                        style={{
+                          padding: '8px', borderRadius: 'var(--glass-radius)',
+                          background: selected ? 'rgba(74,222,128,0.2)' : canAfford ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
+                          color: selected ? '#4ade80' : canAfford ? '#fff' : 'rgba(255,255,255,0.2)',
+                          border: `1px solid ${selected ? 'rgba(74,222,128,0.6)' : canAfford ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)'}`,
+                          cursor: canAfford ? 'pointer' : 'default',
+                          fontFamily: 'Inter,sans-serif', textAlign: 'left',
+                        }}
+                      >
+                        <div style={{ fontWeight: 800, fontSize: 12 }}>${amt.toLocaleString()}</div>
+                        {canAfford && <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>→ {newEq.toFixed(1)}% equity</div>}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Effect preview */}
+                {paydownAmt > 0 && (
+                  <div style={{ ...panel('rgba(74,222,128,0.08)'), marginBottom: 10 }}>
+                    <div style={{ fontSize: 10, color: '#4ade80', fontWeight: 700, marginBottom: 6 }}>Effect of this payment</div>
+                    {[
+                      { label: 'New balance',   value: `${Math.max(0, mortgageBalance - paydownAmt).toLocaleString()}`, color: '#4ade80' },
+                      { label: 'New equity',    value: `${Math.min(100, homeValue > 0 ? ((homeValue - Math.max(0, mortgageBalance - paydownAmt)) / homeValue * 100) : 0).toFixed(1)}%`, color: '#D4AF37' },
+                      { label: 'Cash after',    value: `${Math.max(0, (cash || 0) - paydownAmt).toLocaleString()}`,    color: '#fbbf24' },
+                    ].map((r) => (
+                      <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, padding: '2px 0' }}>
+                        <span style={dimTxt}>{r.label}</span>
+                        <span style={{ color: r.color, fontWeight: 700 }}>{r.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                  <button onClick={() => setActiveAction('none')} style={btn('rgba(255,255,255,0.45)', 'rgba(255,255,255,0.06)', 'rgba(255,255,255,0.1)')}>
+                    ← Back
+                  </button>
+                  <button
+                    disabled={paydownAmt <= 0 || (cash || 0) < paydownAmt}
+                    onClick={() => { payDownMortgage(paydownAmt); setActiveAction('none'); }}
+                    style={btn(
+                      paydownAmt > 0 && (cash || 0) >= paydownAmt ? '#fff' : 'rgba(255,255,255,0.25)',
+                      paydownAmt > 0 && (cash || 0) >= paydownAmt ? '#0F766E' : 'rgba(255,255,255,0.04)',
+                    )}
+                  >
+                    <GameIcon name="bank" size={12} /> Apply Payment
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* ── REFINANCE VIEW ────────────────────────────────────── */}
+            {activeAction === 'refinance' && (
+              <>
+                {refiTiers.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: 20, ...dimTxt, fontSize: 12 }}>
+                    No refinance options available yet. Build more equity or wait until Month 6.
+                  </div>
+                ) : (
+                  <>
+                    <div style={{ ...panel('rgba(255,255,255,0.04)'), marginBottom: 10 }}>
+                      <div style={{ fontSize: 10, ...dimTxt, marginBottom: 4 }}>Current Loan</div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div>
+                          <div style={{ fontSize: 16, fontWeight: 800, color: '#f87171' }}>{curRate}% APR</div>
+                          <div style={{ fontSize: 9, ...dimTxt }}>Current Rate</div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: 16, fontWeight: 800, color: '#fbbf24' }}>${mortgagePayment || home.monthlyPayment}/mo</div>
+                          <div style={{ fontSize: 9, ...dimTxt }}>Monthly Payment</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginBottom: 8 }}>Choose a refinance option:</div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
+                      {refiTiers.map((t, i) => {
+                        const newPmt    = calcPayment(t.rate, mortgageBalance);
+                        const savings   = (mortgagePayment || home.monthlyPayment) - newPmt;
+                        const breakEven = savings > 0 ? Math.ceil(t.fee / savings) : 999;
+                        const canAfford = (cash || 0) >= t.fee;
+                        const selected  = refiIdx === i;
+                        return (
+                          <button
+                            key={t.label}
+                            disabled={!canAfford}
+                            onClick={() => setRefiIdx(i)}
+                            style={{
+                              padding: '10px 12px', borderRadius: 'var(--glass-radius)',
+                              background: selected ? 'rgba(212,175,55,0.15)' : canAfford ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.02)',
+                              border: `1px solid ${selected ? 'rgba(212,175,55,0.6)' : canAfford ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)'}`,
+                              color: canAfford ? '#fff' : 'rgba(255,255,255,0.25)',
+                              cursor: canAfford ? 'pointer' : 'default', textAlign: 'left',
+                              fontFamily: 'Inter,sans-serif',
+                            }}
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <div>
+                                <span style={{ fontSize: 14, fontWeight: 800, color: selected ? '#D4AF37' : '#fff' }}>{t.rate}% APR</span>
+                                <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', marginLeft: 6 }}>{t.label}</span>
+                              </div>
+                              <span style={{ fontSize: 8, background: 'rgba(74,222,128,0.15)', color: '#4ade80', padding: '2px 6px', borderRadius: 4 }}>
+                                {t.badge}
+                              </span>
+                            </div>
+                            {canAfford && (
+                              <div style={{ display: 'flex', gap: 12, marginTop: 5, fontSize: 9, color: 'rgba(255,255,255,0.5)' }}>
+                                <span>New pmt: <strong style={{ color: '#4ade80' }}>${newPmt}/mo</strong></span>
+                                <span>Save: <strong style={{ color: '#4ade80' }}>${savings}/mo</strong></span>
+                                <span>Break-even: <strong style={{ color: '#fbbf24' }}>{breakEven} mo</strong></span>
+                              </div>
+                            )}
+                            {!canAfford && (
+                              <div style={{ fontSize: 9, color: '#f87171', marginTop: 3 }}>
+                                Need ${(t.fee - (cash || 0)).toLocaleString()} more cash for closing costs
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Confirm section */}
+                    {refiTiers[refiIdx] && (cash || 0) >= refiTiers[refiIdx].fee && (
+                      <div style={{ ...panel('rgba(212,175,55,0.08)'), fontSize: 10, marginBottom: 10 }}>
+                        <div style={{ color: '#D4AF37', fontWeight: 700, marginBottom: 5 }}>Refinance Summary</div>
+                        {[
+                          { label: 'New rate',         value: `${refiTiers[refiIdx].rate}% APR` },
+                          { label: 'New payment',      value: `${calcPayment(refiTiers[refiIdx].rate, mortgageBalance)}/mo` },
+                          { label: 'Monthly savings',  value: `${((mortgagePayment || home.monthlyPayment) - calcPayment(refiTiers[refiIdx].rate, mortgageBalance))}/mo` },
+                          { label: 'Closing cost',     value: `-${refiTiers[refiIdx].fee.toLocaleString()}` },
+                        ].map((r) => (
+                          <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '2px 0' }}>
+                            <span style={dimTxt}>{r.label}</span>
+                            <span style={{ fontWeight: 700, color: r.label === 'Closing cost' ? '#f87171' : '#4ade80' }}>{r.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                      <button onClick={() => setActiveAction('none')} style={btn('rgba(255,255,255,0.45)', 'rgba(255,255,255,0.06)', 'rgba(255,255,255,0.1)')}>
+                        ← Back
+                      </button>
+                      <button
+                        disabled={!refiTiers[refiIdx] || (cash || 0) < refiTiers[refiIdx].fee}
+                        onClick={() => {
+                          const t = refiTiers[refiIdx];
+                          if (t) { refinanceMortgage(t.rate, t.fee); setActiveAction('none'); }
+                        }}
+                        style={btn(
+                          refiTiers[refiIdx] && (cash || 0) >= refiTiers[refiIdx]?.fee ? '#fff' : 'rgba(255,255,255,0.25)',
+                          refiTiers[refiIdx] && (cash || 0) >= refiTiers[refiIdx]?.fee ? 'linear-gradient(135deg,#D4AF37,#F5C842)' : 'rgba(255,255,255,0.04)',
+                        )}
+                      >
+                        <GameIcon name="chart" size={12} /> Confirm Refinance
+                      </button>
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+
           </div>
         </DraggablePanel>
       )}

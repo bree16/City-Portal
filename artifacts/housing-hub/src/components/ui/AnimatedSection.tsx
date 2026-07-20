@@ -4,10 +4,15 @@ import * as anims from '@/lib/animations';
 
 export type AnimVariant =
   | 'fadeUp' | 'fadeDown' | 'fadeIn'
-  | 'slideLeft' | 'slideRight'
+  | 'slideLeft' | 'slideRight' | 'slideUp'
   | 'scaleIn' | 'scaleGentle'
-  | 'blurReveal' | 'flipUp'
-  | 'staggerFast' | 'staggerNormal' | 'staggerSlow';
+  | 'blurReveal' | 'flipUp' | 'flipY'
+  | 'staggerFast' | 'staggerNormal' | 'staggerSlow'
+  // Expressive
+  | 'swoopIn' | 'popIn' | 'rollIn' | 'rollRight'
+  | 'springUp' | 'glowFade' | 'tiltReveal' | 'magnetIn'
+  | 'wipeUp' | 'wipeRight' | 'spinReveal' | 'wave'
+  | 'dartLeft' | 'dartRight' | 'dropIn';
 
 const MAP: Record<AnimVariant, any> = {
   fadeUp:        anims.fadeUp,
@@ -15,13 +20,30 @@ const MAP: Record<AnimVariant, any> = {
   fadeIn:        anims.fadeIn,
   slideLeft:     anims.slideLeft,
   slideRight:    anims.slideRight,
+  slideUp:       anims.slideUp,
   scaleIn:       anims.scaleIn,
   scaleGentle:   anims.scaleGentle,
   blurReveal:    anims.blurReveal,
   flipUp:        anims.flipUp,
+  flipY:         anims.flipY,
   staggerFast:   anims.staggerFast,
   staggerNormal: anims.staggerNormal,
   staggerSlow:   anims.staggerSlow,
+  swoopIn:       anims.swoopIn,
+  popIn:         anims.popIn,
+  rollIn:        anims.rollIn,
+  rollRight:     anims.rollRight,
+  springUp:      anims.springUp,
+  glowFade:      anims.glowFade,
+  tiltReveal:    anims.tiltReveal,
+  magnetIn:      anims.magnetIn,
+  wipeUp:        anims.wipeUp,
+  wipeRight:     anims.wipeRight,
+  spinReveal:    anims.spinReveal,
+  wave:          anims.wave,
+  dartLeft:      anims.dartLeft,
+  dartRight:     anims.dartRight,
+  dropIn:        anims.dropIn,
 };
 
 interface Props {

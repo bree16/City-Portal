@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useToast } from '@/hooks/use-toast';
+import { AnimatedSection, StaggerSection, StaggerItem } from '@/components/ui/AnimatedSection';
 
 export default function ContactPage() {
   const { toast } = useToast();
@@ -43,46 +44,49 @@ export default function ContactPage() {
       <section className="py-12 flex-1">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl space-y-16">
           
-          {/* Top Info Grid */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <Card className="border-none shadow-sm text-center p-8 bg-white">
-              <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 text-accent">
-                <MapPin className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-primary mb-2">Office Location</h3>
-              <p className="text-muted-foreground text-sm">2400 Washington Avenue<br/>Newport News, VA 23607</p>
-            </Card>
-            <Card className="border-none shadow-sm text-center p-8 bg-white">
-              <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 text-accent">
-                <Phone className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-primary mb-2">Phone</h3>
-              <p className="text-muted-foreground text-sm">(757) 933-2311<br/>Hours: Mon–Fri 8am–5pm</p>
-            </Card>
-            <Card className="border-none shadow-sm text-center p-8 bg-white">
-              <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 text-accent">
-                <Mail className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-primary mb-2">Email</h3>
-              <p className="text-muted-foreground text-sm">housing@newportnewsva.gov</p>
-            </Card>
-          </div>
+          {/* Top Info Cards */}
+          <StaggerSection className="grid md:grid-cols-3 gap-6">
+            {[
+              { icon: MapPin, title: "Office Location", line1: "2400 Washington Avenue", line2: "Newport News, VA 23607" },
+              { icon: Phone, title: "Phone", line1: "(757) 933-2311", line2: "Hours: Mon–Fri 8am–5pm" },
+              { icon: Mail, title: "Email", line1: "housing@newportnewsva.gov", line2: "" }
+            ].map((info) => (
+              <StaggerItem key={info.title}>
+                <Card className="border-none shadow-sm text-center p-8 bg-white hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                  <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 text-accent">
+                    <info.icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-bold text-primary mb-2">{info.title}</h3>
+                  <p className="text-muted-foreground text-sm">{info.line1}{info.line2 && <><br/>{info.line2}</>}</p>
+                </Card>
+              </StaggerItem>
+            ))}
+          </StaggerSection>
 
           {/* Map Placeholder */}
-          <div className="w-full h-[300px] bg-primary/5 rounded-2xl border border-border flex flex-col items-center justify-center gap-4 relative overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="w-full h-[300px] bg-primary/5 rounded-2xl border border-border flex flex-col items-center justify-center gap-4 relative overflow-hidden"
+          >
             <MapPin className="w-10 h-10 text-accent" />
             <div className="text-center">
               <p className="font-bold text-primary text-lg">2400 Washington Ave, Newport News, VA</p>
             </div>
-            <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-white mt-2">
-              Open in Google Maps
+            <Button asChild variant="outline" className="border-accent text-accent hover:bg-accent hover:text-white mt-2">
+              <a href="https://maps.google.com/?q=2400+Washington+Ave+Newport+News+VA" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
             </Button>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-5 gap-12 items-start">
-            {/* Contact Form (Left) */}
+            {/* Contact Form */}
             <motion.div 
-              initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
               className="lg:col-span-3"
             >
               <Card className="border-none shadow-lg bg-white">
@@ -140,37 +144,48 @@ export default function ContactPage() {
               </Card>
             </motion.div>
 
-            {/* Emergency Numbers (Right) */}
+            {/* Emergency Numbers */}
             <motion.div 
-              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15 }}
               className="lg:col-span-2 space-y-6"
             >
               <h2 className="text-2xl font-bold text-primary">Emergency Housing Numbers</h2>
-              <div className="space-y-4">
+              <StaggerSection className="space-y-4">
                 {[
                   { name: "Emergency Housing Hotline", num: "(757) 933-2311" },
                   { name: "Virginia 211 Helpline", num: "2-1-1" },
                   { name: "NNRHA", num: "(757) 928-2600" },
                   { name: "Homeless Outreach", num: "(757) 933-2400" }
                 ].map((ph, i) => (
-                  <Card key={i} className="bg-white border-l-4 border-l-accent shadow-sm">
-                    <CardContent className="p-5 flex items-center justify-between">
-                      <div>
-                        <h4 className="font-bold text-primary mb-1">{ph.name}</h4>
-                        <div className="text-lg font-extrabold text-foreground">{ph.num}</div>
-                      </div>
-                      <a href={`tel:${ph.num.replace(/[^0-9]/g, '')}`} className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent hover:bg-accent hover:text-white transition-colors">
-                        <Phone className="w-5 h-5" />
-                      </a>
-                    </CardContent>
-                  </Card>
+                  <StaggerItem key={i}>
+                    <Card className="bg-white border-l-4 border-l-accent shadow-sm hover:shadow-md transition-shadow">
+                      <CardContent className="p-5 flex items-center justify-between">
+                        <div>
+                          <h4 className="font-bold text-primary mb-1">{ph.name}</h4>
+                          <div className="text-lg font-extrabold text-foreground">{ph.num}</div>
+                        </div>
+                        <a href={`tel:${ph.num.replace(/[^0-9]/g, '')}`} className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent hover:bg-accent hover:text-white transition-colors">
+                          <Phone className="w-5 h-5" />
+                        </a>
+                      </CardContent>
+                    </Card>
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerSection>
             </motion.div>
           </div>
 
-          {/* Request Counselor Section */}
-          <div className="mt-16">
+          {/* Request Counselor */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mt-16"
+          >
             <Card className="border-none shadow-lg bg-gradient-to-br from-primary to-[#0B2146] text-white">
               <CardContent className="p-8 lg:p-12">
                 <div className="max-w-3xl mx-auto text-center mb-10">
@@ -236,7 +251,7 @@ export default function ContactPage() {
                 </form>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
 
         </div>
       </section>

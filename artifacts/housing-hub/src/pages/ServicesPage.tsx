@@ -323,42 +323,66 @@ export default function ServicesPage() {
       {/* Journey Flow Section */}
       <section className="py-20 bg-white border-t border-border/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55 }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
             <Badge className="bg-accent/10 text-accent hover:bg-accent/20 border-none mb-4 px-4 py-1">The Full Journey</Badge>
             <h2 className="text-3xl font-bold text-primary mb-4">Homeownership is Only the Beginning</h2>
             <p className="text-lg text-muted-foreground">
               From finding your dream home to putting down roots, we're here to support every step of your Newport News story.
             </p>
-          </div>
+          </motion.div>
 
           <div className="relative">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
               {/* Step 1 */}
-              <div className="flex flex-col items-center text-center group">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0 }}
+                className="flex flex-col items-center text-center group"
+              >
                 <div className="w-16 h-16 rounded-full bg-white border-4 border-muted flex items-center justify-center mb-6 shadow-sm group-hover:border-primary transition-colors">
                   <Home className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-bold text-foreground mb-2">1. Find Your Home</h3>
                 <p className="text-sm text-muted-foreground px-4">Explore neighborhoods, learn through our simulator, and secure financing.</p>
-              </div>
+              </motion.div>
 
               {/* Step 2 */}
-              <div className="flex flex-col items-center text-center group">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.15 }}
+                className="flex flex-col items-center text-center group"
+              >
                 <div className="w-16 h-16 rounded-full bg-white border-4 border-muted flex items-center justify-center mb-6 shadow-sm group-hover:border-accent transition-colors">
                   <MapPin className="w-6 h-6 text-accent" />
                 </div>
                 <h3 className="text-lg font-bold text-foreground mb-2">2. Move In</h3>
                 <p className="text-sm text-muted-foreground px-4">Get keys, set up utilities, and settle into your new neighborhood.</p>
-              </div>
+              </motion.div>
 
               {/* Step 3 */}
-              <div className="flex flex-col items-center text-center group">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="flex flex-col items-center text-center group"
+              >
                 <div className="w-16 h-16 rounded-full bg-primary border-4 border-primary/20 flex items-center justify-center mb-6 shadow-md shadow-primary/20 scale-110">
                   <HeartPulse className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-primary mb-2">3. Thrive in the City</h3>
                 <p className="text-sm text-muted-foreground px-4">Access resident services, join community events, and become part of the story.</p>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>

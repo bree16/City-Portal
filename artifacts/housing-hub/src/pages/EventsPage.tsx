@@ -4,6 +4,7 @@ import { Calendar as CalendarIcon, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { AnimatedSection, StaggerSection, StaggerItem } from '@/components/ui/AnimatedSection';
 
 type FilterType = 'All' | 'Workshop' | 'Education' | 'Community';
 
@@ -115,13 +116,10 @@ export default function EventsPage() {
         setEvents(data.events);
         setUpdatedAt(data.updatedAt);
       })
-      .catch(() => {
-        /* keep fallback list */
-      });
+      .catch(() => { /* keep fallback list */ });
     return () => { cancelled = true; };
   }, []);
 
-  // Hide dated events that have already passed, even in the fallback list.
   const upcoming = events.filter((e) => {
     if (!e.isoDate) return true;
     return new Date(e.isoDate + 'T23:59:59').getTime() >= Date.now();
@@ -151,11 +149,16 @@ export default function EventsPage() {
 
       <section className="py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          
           <div className="grid lg:grid-cols-3 gap-8">
             
-            {/* Left Column: Calendar Hint & Filters */}
-            <div className="lg:col-span-1 space-y-8">
+            {/* Left Column: Filters + Calendar */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="lg:col-span-1 space-y-8"
+            >
               {/* Filter Pills */}
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-border">
                 <h3 className="font-bold text-primary mb-4">Filter by Type</h3>
@@ -185,17 +188,15 @@ export default function EventsPage() {
                   <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
                 </div>
                 <div className="grid grid-cols-7 gap-1 text-center text-sm">
-                  {/* Empty slots for July */}
                   <div className="p-2 text-muted-foreground/30">26</div>
                   <div className="p-2 text-muted-foreground/30">27</div>
                   <div className="p-2 text-muted-foreground/30">28</div>
                   <div className="p-2 text-muted-foreground/30">29</div>
                   <div className="p-2 text-muted-foreground/30">30</div>
                   <div className="p-2 text-muted-foreground/30">31</div>
-                  {/* Days */}
                   {[...Array(31)].map((_, i) => {
                     const day = i + 1;
-                    const hasEvent = day === 8 || day === 15; // real events in Aug
+                    const hasEvent = day === 8 || day === 15;
                     return (
                       <div key={day} className="relative p-2 aspect-square flex items-center justify-center rounded-md hover:bg-muted transition-colors cursor-pointer">
                         <span className={hasEvent ? 'font-bold text-primary' : 'text-foreground'}>{day}</span>
@@ -207,16 +208,18 @@ export default function EventsPage() {
                   })}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Right Column: Events List */}
+            {/* Right Column: Events */}
             <div className="lg:col-span-2 space-y-6">
               {filteredEvents.map((evt, i) => (
                 <motion.div
                   key={evt.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.45, delay: i * 0.08 }}
+                  whileHover={{ x: 4, transition: { duration: 0.15 } }}
                 >
                   <Card className="overflow-hidden border-border/50 shadow-sm hover:shadow-md transition-shadow bg-white flex flex-col sm:flex-row group">
                     <div className={`${evt.color ?? (evt.type === 'Education' ? 'bg-accent' : 'bg-primary')} text-white p-6 flex flex-col items-center justify-center min-w-[120px] shrink-0 text-center`}>
@@ -226,7 +229,7 @@ export default function EventsPage() {
                           <span className="text-4xl font-extrabold">{evt.dateStr.split(' ')[1]}</span>
                         </>
                       ) : (
-                        <span className="text-sm font-extrabold uppercase tracking-widest rotate-0">{evt.dateStr}</span>
+                        <span className="text-sm font-extrabold uppercase tracking-widest">{evt.dateStr}</span>
                       )}
                     </div>
                     <CardContent className="p-6 flex-1 flex flex-col">
@@ -240,7 +243,6 @@ export default function EventsPage() {
                         </Badge>
                       </div>
                       <h3 className="text-xl font-bold text-primary mb-3">{evt.title}</h3>
-                      
                       <div className="space-y-2 text-sm text-muted-foreground font-medium mb-4 flex-1">
                         <div className="flex items-center gap-2">
                           <CalendarIcon className="w-4 h-4 text-accent" /> {evt.fullDate} • {evt.time}
@@ -249,11 +251,7 @@ export default function EventsPage() {
                           <MapPin className="w-4 h-4 text-accent" /> {evt.location}
                         </div>
                       </div>
-                      
-                      <p className="text-foreground/80 text-sm mb-6 leading-relaxed">
-                        {evt.desc}
-                      </p>
-                      
+                      <p className="text-foreground/80 text-sm mb-6 leading-relaxed">{evt.desc}</p>
                       <div className="mt-auto">
                         <Button asChild className="bg-primary hover:bg-primary/90 text-white font-semibold">
                           <a href={evt.url} target="_blank" rel="noopener noreferrer">Register</a>
@@ -275,15 +273,21 @@ export default function EventsPage() {
         </div>
       </section>
 
-      {/* Ongoing & recurring classes — real programs you can join any time */}
+      {/* Ongoing classes */}
       <section className="pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="bg-white rounded-2xl shadow-sm border border-border p-8 md:p-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="bg-white rounded-2xl shadow-sm border border-border p-8 md:p-10"
+          >
             <h2 className="text-2xl md:text-3xl font-bold text-primary mb-2">Ongoing Classes & Counseling</h2>
             <p className="text-muted-foreground mb-8">
               These real programs run year-round — no need to wait for an event date.
             </p>
-            <div className="grid md:grid-cols-2 gap-6">
+            <StaggerSection className="grid md:grid-cols-2 gap-6">
               {[
                 {
                   title: "Virginia Housing Free Homebuyer Course",
@@ -314,17 +318,19 @@ export default function EventsPage() {
                   cta: "Get Connected"
                 },
               ].map((c) => (
-                <div key={c.title} className="border border-border rounded-xl p-6 flex flex-col hover:shadow-md transition-shadow">
-                  <h3 className="font-bold text-lg text-primary mb-1">{c.title}</h3>
-                  <div className="text-xs font-semibold uppercase tracking-wide text-accent mb-3">{c.schedule}</div>
-                  <p className="text-sm text-foreground/80 leading-relaxed mb-5 flex-1">{c.desc}</p>
-                  <Button asChild variant="outline" className="w-fit font-semibold">
-                    <a href={c.href} target="_blank" rel="noopener noreferrer">{c.cta}</a>
-                  </Button>
-                </div>
+                <StaggerItem key={c.title}>
+                  <div className="border border-border rounded-xl p-6 flex flex-col hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                    <h3 className="font-bold text-lg text-primary mb-1">{c.title}</h3>
+                    <div className="text-xs font-semibold uppercase tracking-wide text-accent mb-3">{c.schedule}</div>
+                    <p className="text-sm text-foreground/80 leading-relaxed mb-5 flex-1">{c.desc}</p>
+                    <Button asChild variant="outline" className="w-fit font-semibold">
+                      <a href={c.href} target="_blank" rel="noopener noreferrer">{c.cta}</a>
+                    </Button>
+                  </div>
+                </StaggerItem>
               ))}
-            </div>
-          </div>
+            </StaggerSection>
+          </motion.div>
         </div>
       </section>
     </div>

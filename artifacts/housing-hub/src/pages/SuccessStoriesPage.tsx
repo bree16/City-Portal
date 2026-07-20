@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { AnimatedSection, StaggerSection, StaggerItem } from '@/components/ui/AnimatedSection';
 import storyFamily from '@assets/generated_images/story_family_1.jpg';
 import storyVeteran from '@assets/generated_images/story_veteran.jpg';
 import storySingleMom from '@assets/generated_images/story_single_mom.jpg';
@@ -106,14 +107,32 @@ export default function SuccessStoriesPage() {
       {/* Hero */}
       <section className="bg-primary text-white py-16 lg:py-24 text-center px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-tr from-[#0B2146] to-primary z-0"></div>
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_60%_40%,_#D4A843_0%,_transparent_55%)] z-0 pointer-events-none" />
         <div className="container mx-auto max-w-4xl relative z-10">
-          <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/20">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/20"
+          >
             <Heart className="w-8 h-8 text-secondary" />
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">Stories from Newport News</h1>
-          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight"
+          >
+            Stories from Newport News
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed"
+          >
             Your neighbors found their path home in Newport News. Here are their stories.
-          </p>
+          </motion.p>
         </div>
       </section>
 
@@ -128,12 +147,19 @@ export default function SuccessStoriesPage() {
               { end: 92, label: "Satisfaction", suffix: "%" },
               { end: 25, label: "Partners", suffix: "+" }
             ].map((stat, i) => (
-              <div key={i} className="text-center px-2">
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="text-center px-2"
+              >
                 <div className="text-3xl md:text-4xl font-extrabold text-secondary mb-2">
                   <AnimatedCounter end={stat.end} prefix={stat.prefix} suffix={stat.suffix} />
                 </div>
                 <div className="text-white/80 text-xs font-bold uppercase tracking-widest">{stat.label}</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -142,6 +168,10 @@ export default function SuccessStoriesPage() {
       {/* Stories Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <AnimatedSection variant="slideUp" className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-primary mb-3">Voices from Our Community</h2>
+            <div className="h-1 w-14 bg-accent rounded-full mx-auto" />
+          </AnimatedSection>
           <div className="grid md:grid-cols-2 gap-8">
             {stories.map((story, i) => (
               <motion.div
@@ -150,6 +180,7 @@ export default function SuccessStoriesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
               >
                 <Card className="h-full border-none shadow-md hover:shadow-xl transition-shadow bg-white overflow-hidden relative">
                   <Quote className="absolute top-6 right-6 w-12 h-12 text-muted/50 rotate-180 pointer-events-none" />
@@ -196,38 +227,47 @@ export default function SuccessStoriesPage() {
       {/* CTA Share Story */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4 max-w-3xl text-center">
-          <h2 className="text-3xl font-bold text-primary mb-6">Share Your Story</h2>
-          <p className="text-muted-foreground text-lg mb-10">
-            Did our programs help you find or keep your home? We'd love to hear from you. Your story can inspire others in the community to take the first step.
-          </p>
+          <AnimatedSection variant="popIn" className="mb-10">
+            <h2 className="text-3xl font-bold text-primary mb-6">Share Your Story</h2>
+            <p className="text-muted-foreground text-lg">
+              Did our programs help you find or keep your home? We'd love to hear from you. Your story can inspire others in the community to take the first step.
+            </p>
+          </AnimatedSection>
           
-          <Card className="text-left border-border/50 shadow-lg bg-muted/10">
-            <CardContent className="p-8">
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold">Name</label>
-                    <Input placeholder="Your full name" className="bg-white border-border focus-visible:ring-accent" />
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <Card className="text-left border-border/50 shadow-lg bg-muted/10">
+              <CardContent className="p-8">
+                <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold">Name</label>
+                      <Input placeholder="Your full name" className="bg-white border-border focus-visible:ring-accent" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold">Neighborhood</label>
+                      <Input placeholder="e.g. Denbigh" className="bg-white border-border focus-visible:ring-accent" />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold">Neighborhood</label>
-                    <Input placeholder="e.g. Denbigh" className="bg-white border-border focus-visible:ring-accent" />
+                    <label className="text-sm font-semibold">Program Used (if any)</label>
+                    <Input placeholder="e.g. First-Time Buyer Grant" className="bg-white border-border focus-visible:ring-accent" />
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold">Program Used (if any)</label>
-                  <Input placeholder="e.g. First-Time Buyer Grant" className="bg-white border-border focus-visible:ring-accent" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold">Your Story</label>
-                  <Textarea rows={5} placeholder="Tell us how we helped you..." className="bg-white border-border focus-visible:ring-accent resize-none" />
-                </div>
-                <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg">
-                  Submit Your Story
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold">Your Story</label>
+                    <Textarea rows={5} placeholder="Tell us how we helped you..." className="bg-white border-border focus-visible:ring-accent resize-none" />
+                  </div>
+                  <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg">
+                    Submit Your Story
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </section>
     </div>

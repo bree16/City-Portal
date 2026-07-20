@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { AnimatedSection, StaggerSection, StaggerItem } from '@/components/ui/AnimatedSection';
 
 import rentHero from '@assets/generated_images/rent_hero.jpg';
 import rent1 from '@assets/stock_images/rental_1.jpg';
@@ -22,7 +23,6 @@ export default function RentPage() {
   const [maxRent, setMaxRent] = useState('');
   const [minBeds, setMinBeds] = useState('any');
 
-  // Real Newport News rental communities (advertised 2026 starting rents).
   const listingImages: Record<number, string> = { 1: rent1, 2: rent2, 3: rent3, 4: rent4, 5: rent5, 6: rent6 };
   const listings = RENTALS.map((r) => ({ ...r, img: listingImages[r.id] }));
 
@@ -38,7 +38,7 @@ export default function RentPage() {
 
   return (
     <div className="flex flex-col w-full pt-20 bg-muted/20 min-h-screen">
-      {/* Hero — photo background */}
+      {/* Hero */}
       <section className="bg-primary text-white py-16 lg:py-28 text-center px-4 relative overflow-hidden">
         <img src={rentHero} alt="Young professional in her new apartment" className="absolute inset-0 w-full h-full object-cover z-0" />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/85 to-accent/50 z-10" />
@@ -96,7 +96,7 @@ export default function RentPage() {
       {/* Listings */}
       <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-8">
+          <AnimatedSection variant="slideUp" className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-8">
             <div>
               <h2 className="text-2xl font-bold text-primary">Real Rental Communities in Newport News</h2>
               <p className="text-muted-foreground text-sm mt-1">
@@ -108,15 +108,17 @@ export default function RentPage() {
                 Browse all on Zillow <ExternalLink className="w-4 h-4 ml-1.5" />
               </a>
             </Button>
-          </div>
+          </AnimatedSection>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredListings.map((listing, i) => (
               <motion.div
                 key={listing.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                whileHover={{ y: -4 }}
               >
                 <Card className="overflow-hidden border-border/50 shadow-sm hover:shadow-lg transition-all duration-300 bg-white group flex flex-col h-full">
                   <div className="relative h-56 overflow-hidden">
@@ -169,27 +171,41 @@ export default function RentPage() {
       {/* Section 8 */}
       <section className="py-20 bg-primary text-white">
         <div className="container mx-auto px-4 max-w-4xl text-center">
-          <Home className="w-12 h-12 text-secondary mx-auto mb-6" />
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Housing Choice Voucher Program (Section 8)</h2>
-          <p className="text-lg text-white/80 leading-relaxed mb-10">
-            The NNRHA administers vouchers that help low-income families afford private market rentals. The program pays a portion of your rent directly to the landlord, while you pay the remaining affordable portion.
-          </p>
+          <AnimatedSection variant="popIn">
+            <Home className="w-12 h-12 text-secondary mx-auto mb-6" />
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Housing Choice Voucher Program (Section 8)</h2>
+            <p className="text-lg text-white/80 leading-relaxed mb-10">
+              The NNRHA administers vouchers that help low-income families afford private market rentals. The program pays a portion of your rent directly to the landlord, while you pay the remaining affordable portion.
+            </p>
+          </AnimatedSection>
           <div className="grid sm:grid-cols-2 gap-6 text-left mb-10">
-            <div className="bg-white/10 p-6 rounded-xl border border-white/20 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="bg-white/10 p-6 rounded-xl border border-white/20 backdrop-blur-sm"
+            >
               <h3 className="font-bold text-secondary mb-2">Eligibility Basics</h3>
               <ul className="list-disc list-inside space-y-2 text-white/80 text-sm">
                 <li>Income must be below 50% of the Area Median Income</li>
                 <li>Must be a US citizen or eligible immigrant</li>
                 <li>Background checks required for all adults</li>
               </ul>
-            </div>
-            <div className="bg-white/10 p-6 rounded-xl border border-white/20 backdrop-blur-sm">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="bg-white/10 p-6 rounded-xl border border-white/20 backdrop-blur-sm"
+            >
               <h3 className="font-bold text-secondary mb-2">Current Status</h3>
               <p className="text-white/80 text-sm mb-4">The waitlist periodically opens for new applications. Check current status below.</p>
               <Button className="w-full bg-secondary hover:bg-secondary/90 text-primary font-bold">
                 Waitlist Open — Apply Now
               </Button>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -198,7 +214,13 @@ export default function RentPage() {
       <section className="py-20 bg-accent text-white">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="flex flex-col md:flex-row items-center gap-10">
-            <div className="flex-1">
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="flex-1"
+            >
               <div className="flex items-center gap-3 mb-4">
                 <AlertCircle className="w-8 h-8 text-white" />
                 <h2 className="text-3xl font-bold">Emergency Rental Assistance</h2>
@@ -206,30 +228,38 @@ export default function RentPage() {
               <p className="text-white/90 text-lg mb-8">
                 For residents facing eviction or an inability to pay rent due to sudden financial hardship. Immediate help is available.
               </p>
-              <div className="space-y-4">
+              <StaggerSection className="space-y-4">
                 {[
                   { name: "Virginia Rent Relief Program", note: "State-funded emergency rental assistance", url: "https://www.dhcd.virginia.gov/rrp" },
                   { name: "HUD Emergency Rental Assistance", note: "Federal housing support programs", url: "https://www.hud.gov/topics/rental_assistance" },
                   { name: "Newport News Human Services", note: "City-funded eviction prevention", url: "https://www.nnva.gov/339/Human-Services" }
                 ].map((fund, i) => (
-                  <div key={i} className="bg-white p-4 rounded-xl flex items-center justify-between shadow-lg">
-                    <div>
-                      <h4 className="font-bold text-primary">{fund.name}</h4>
-                      <p className="text-sm text-muted-foreground">{fund.note}</p>
+                  <StaggerItem key={i}>
+                    <div className="bg-white p-4 rounded-xl flex items-center justify-between shadow-lg">
+                      <div>
+                        <h4 className="font-bold text-primary">{fund.name}</h4>
+                        <p className="text-sm text-muted-foreground">{fund.note}</p>
+                      </div>
+                      <Button asChild variant="outline" className="border-accent text-accent hover:bg-accent hover:text-white shrink-0">
+                        <a href={fund.url} target="_blank" rel="noopener noreferrer">Apply Now</a>
+                      </Button>
                     </div>
-                    <Button asChild variant="outline" className="border-accent text-accent hover:bg-accent hover:text-white shrink-0">
-                      <a href={fund.url} target="_blank" rel="noopener noreferrer">Apply Now</a>
-                    </Button>
-                  </div>
+                  </StaggerItem>
                 ))}
-              </div>
-            </div>
-            <div className="w-full md:w-1/3 bg-white text-center p-8 rounded-2xl shadow-2xl">
+              </StaggerSection>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="w-full md:w-1/3 bg-white text-center p-8 rounded-2xl shadow-2xl"
+            >
               <h3 className="text-xl font-bold text-primary mb-2">Facing Eviction?</h3>
               <p className="text-muted-foreground text-sm mb-6">Call our crisis hotline immediately.</p>
               <div className="text-3xl font-extrabold text-accent mb-6">(757) 933-2311</div>
               <Button className="w-full bg-primary hover:bg-primary/90 text-white h-12">Call Now</Button>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -238,32 +268,40 @@ export default function RentPage() {
       <section className="py-20 bg-muted/20">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="grid md:grid-cols-2 gap-12">
-            
             <div>
-              <h2 className="text-3xl font-bold text-primary mb-8">Know Your Rights as a Neighbor</h2>
-              <div className="space-y-4">
+              <AnimatedSection variant="slideUp">
+                <h2 className="text-3xl font-bold text-primary mb-8">Know Your Rights as a Neighbor</h2>
+              </AnimatedSection>
+              <StaggerSection className="space-y-4">
                 {[
                   { title: "Know Your Rights", desc: "Understanding the Virginia Residential Landlord and Tenant Act.", icon: ShieldCheck, url: "https://www.dhcd.virginia.gov/content/fair-housing" },
                   { title: "How to Handle Disputes", desc: "Free mediation and legal aid for landlord-tenant issues.", icon: Info, url: "https://www.virginialegalaid.org/" },
                   { title: "Eviction Prevention", desc: "Steps to take if you receive a pay-or-quit notice.", icon: AlertCircle, url: "https://www.evictionfreeva.com/" }
                 ].map((card, i) => (
-                  <Card key={i} className="bg-white border-border/50 shadow-sm hover:shadow-md transition-shadow">
-                    <CardContent className="p-5 flex items-start gap-4">
-                      <div className="p-3 bg-primary/5 rounded-lg text-primary shrink-0">
-                        <card.icon className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-foreground mb-1">{card.title}</h4>
-                        <p className="text-sm text-muted-foreground mb-2">{card.desc}</p>
-                        <a href={card.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-accent hover:underline">Learn More →</a>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <StaggerItem key={i}>
+                    <Card className="bg-white border-border/50 shadow-sm hover:shadow-md transition-shadow">
+                      <CardContent className="p-5 flex items-start gap-4">
+                        <div className="p-3 bg-primary/5 rounded-lg text-primary shrink-0">
+                          <card.icon className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-foreground mb-1">{card.title}</h4>
+                          <p className="text-sm text-muted-foreground mb-2">{card.desc}</p>
+                          <a href={card.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-accent hover:underline">Learn More →</a>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerSection>
             </div>
 
-            <div>
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
               <h2 className="text-3xl font-bold text-primary mb-8">Rental Search Tips</h2>
               <Accordion type="single" collapsible className="w-full bg-white p-6 rounded-2xl border border-border">
                 {[
@@ -283,14 +321,13 @@ export default function RentPage() {
                   </AccordionItem>
                 ))}
               </Accordion>
-            </div>
-            
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Counseling CTA */}
-      <section className="py-12 bg-white border-y border-border">
+      <AnimatedSection variant="wipeUp" className="py-12 bg-white border-y border-border">
         <div className="container mx-auto px-4 max-w-4xl flex flex-col md:flex-row items-center justify-between gap-6 bg-muted/50 p-8 rounded-2xl">
           <div>
             <h2 className="text-2xl font-bold text-primary mb-2">Talk to a Rental Counselor</h2>
@@ -300,13 +337,15 @@ export default function RentPage() {
             Schedule a Session
           </Button>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* Partners */}
       <section className="py-16 bg-muted/10">
         <div className="container mx-auto px-4 text-center">
-          <h3 className="text-xl font-bold text-muted-foreground mb-8">Our Community Partners</h3>
-          <div className="flex flex-wrap justify-center gap-4">
+          <AnimatedSection variant="fadeIn" className="mb-8">
+            <h3 className="text-xl font-bold text-muted-foreground">Our Community Partners</h3>
+          </AnimatedSection>
+          <StaggerSection className="flex flex-wrap justify-center gap-4">
             {[
               { name: "NNRHA", tag: "Housing Authority" },
               { name: "Virginia Housing", tag: "State Finance" },
@@ -314,12 +353,14 @@ export default function RentPage() {
               { name: "Habitat for Humanity", tag: "Affordable Builds" },
               { name: "Legal Aid Society", tag: "Tenant Defense" }
             ].map((p, i) => (
-              <div key={i} className="bg-white border border-border px-6 py-4 rounded-xl shadow-sm min-w-[200px]">
-                <div className="font-bold text-primary">{p.name}</div>
-                <div className="text-xs text-muted-foreground uppercase tracking-wider">{p.tag}</div>
-              </div>
+              <StaggerItem key={i}>
+                <div className="bg-white border border-border px-6 py-4 rounded-xl shadow-sm min-w-[200px]">
+                  <div className="font-bold text-primary">{p.name}</div>
+                  <div className="text-xs text-muted-foreground uppercase tracking-wider">{p.tag}</div>
+                </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerSection>
         </div>
       </section>
     </div>

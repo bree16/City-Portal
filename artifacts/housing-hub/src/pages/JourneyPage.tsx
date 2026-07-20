@@ -136,13 +136,20 @@ export default function JourneyPage() {
       {/* Quiz CTA */}
       <section className="py-16 bg-accent/10 border-t border-accent/20">
         <div className="container mx-auto px-4 text-center max-w-2xl">
-          <h2 className="text-2xl font-bold text-primary mb-3">Not Sure Where to Start?</h2>
-          <p className="text-muted-foreground mb-6">Answer 7 quick questions and we'll match you to the programs, counselors, and resources that fit your life.</p>
-          <Link href="/quiz">
-            <button className="bg-accent text-white px-8 py-3 rounded-full font-semibold hover:bg-accent/90 transition-colors inline-flex items-center gap-2" data-testid="button-take-quiz">
-              Take the Quiz <ArrowRight className="w-4 h-4" />
-            </button>
-          </Link>
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-2xl font-bold text-primary mb-3">Not Sure Where to Start?</h2>
+            <p className="text-muted-foreground mb-6">Answer 7 quick questions and we'll match you to the programs, counselors, and resources that fit your life.</p>
+            <Link href="/quiz">
+              <button className="bg-accent text-white px-8 py-3 rounded-full font-semibold hover:bg-accent/90 transition-colors inline-flex items-center gap-2" data-testid="button-take-quiz">
+                Take the Quiz <ArrowRight className="w-4 h-4" />
+              </button>
+            </Link>
+          </motion.div>
         </div>
       </section>
     </div>

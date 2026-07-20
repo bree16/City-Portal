@@ -115,13 +115,20 @@ export default function PartnersPage() {
       {/* Become a Partner CTA */}
       <section className="py-20 bg-accent text-white text-center">
         <div className="container mx-auto px-4 max-w-3xl">
-          <h2 className="text-3xl font-bold mb-6">Become a Partner</h2>
-          <p className="text-lg text-white/90 mb-10 max-w-2xl mx-auto">
-            Are you an organization that supports housing access in Newport News? Join our partner network and help us reach more residents.
-          </p>
-          <Button variant="outline" size="lg" className="border-white text-primary hover:bg-white/90 bg-white font-bold rounded-full px-8 h-14 shadow-lg">
-            Partner With Us
-          </Button>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <h2 className="text-3xl font-bold mb-6">Become a Partner</h2>
+            <p className="text-lg text-white/90 mb-10 max-w-2xl mx-auto">
+              Are you an organization that supports housing access in Newport News? Join our partner network and help us reach more residents.
+            </p>
+            <Button variant="outline" size="lg" className="border-white text-primary hover:bg-white/90 bg-white font-bold rounded-full px-8 h-14 shadow-lg">
+              Partner With Us
+            </Button>
+          </motion.div>
         </div>
       </section>
     </div>
