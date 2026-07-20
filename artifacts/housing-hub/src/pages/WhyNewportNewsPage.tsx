@@ -32,7 +32,7 @@ export default function WhyNewportNewsPage() {
   const [selectedNeighborhood, setSelectedNeighborhood] = useState<keyof typeof commuteData>('Hilton Village');
 
   const lifestyleCards = [
-    { title: "Parks & Recreation", icon: Home, image: parksImage, desc: "Over 50 parks, athletic fields, and green spaces across the city.", url: "https://www.nnva.gov/217/Parks-Recreation" },
+    { title: "Parks & Recreation", icon: Home, image: parksImage, desc: "Over 50 parks, athletic fields, and green spaces across the city.", url: "https://www.nps.gov/places/newport-news-park.htm" },
     { title: "Local Restaurants", icon: UtensilsCrossed, image: restaurantsImage, desc: "Diverse dining from waterfront seafood to international cuisine.", url: "https://www.yelp.com/search?find_desc=restaurants&find_loc=Newport+News%2C+VA" },
     { title: "Coffee Shops", icon: Coffee, image: coffeeImage, desc: "Independent cafes and local spots perfect for remote work and meetups.", url: "https://www.google.com/maps/search/coffee+shops+Newport+News+VA" },
     { title: "Arts & Culture", icon: Palette, image: artsImage, desc: "A growing arts scene with murals, galleries, and cultural events.", url: "https://www.visitnewportnews.com/things-to-do/arts-culture/" },
@@ -40,7 +40,7 @@ export default function WhyNewportNewsPage() {
     { title: "Community Events", icon: Calendar, image: eventsImage, desc: "Festivals, neighborhood gatherings, and holiday celebrations throughout the year.", url: "https://www.visitnewportnews.com/events/" },
     { title: "Shopping", icon: ShoppingBag, image: shoppingImage, desc: "From major malls to local boutiques, shopping for every need and budget.", url: "https://www.patrickhemall.com/" },
     { title: "Walkable Neighborhoods", icon: MapPin, image: neighborhoodsImage, desc: "Tree-lined streets and pedestrian-friendly communities to explore.", url: "/neighborhoods" },
-    { title: "Pet-Friendly Spaces", icon: Heart, image: petsImage, desc: "Dog parks, walking trails, and pet-welcoming neighborhoods throughout the city.", url: "https://www.visitnewportnews.com/things-to-do/outdoor-recreation/" },
+    { title: "Pet-Friendly Spaces", icon: Heart, image: petsImage, desc: "Dog parks, walking trails, and pet-welcoming neighborhoods throughout the city.", url: "https://www.marinersmuseum.org/visit/noland-trail/" },
     { title: "Waterfront Activities", icon: Anchor, image: waterfrontImage, desc: "Kayaking, fishing, trails, and stunning views along the James River.", url: "https://www.nolandtrail.com/" },
     { title: "Major Employers", icon: Building2, image: employersImage, desc: "World-class employers across shipbuilding, healthcare, government, and tech.", url: "#employers" },
     { title: "Schools & Education", icon: GraduationCap, image: schoolsImage, desc: "Strong public schools and proximity to several colleges and universities.", url: "https://www.nnschools.org/" },

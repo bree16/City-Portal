@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ScrollProgress } from '@/components/ui/ScrollProgress';
+import { CountUp } from '@/components/ui/CountUp';
+import { TiltCard } from '@/components/ui/TiltCard';
+import { AnimatedSection, StaggerSection, StaggerItem } from '@/components/ui/AnimatedSection';
 import { 
   Home, Building2, Calculator, MapPin, 
   GraduationCap, HandHeart, ArrowRight, Star,
@@ -80,6 +84,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col w-full">
+      <ScrollProgress />
       {/* 1. Hero Section */}
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-primary text-white">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0B2146] to-accent/80 z-0"></div>
@@ -89,6 +94,10 @@ export default function HomePage() {
           backgroundSize: '300% 300%',
           animation: 'gradient-shift 8s ease infinite',
         }} />
+        {/* Floating ambient orbs */}
+        <div className="absolute top-12 right-16 w-[420px] h-[420px] bg-[#14B8A6] rounded-full blur-[140px] opacity-[0.18] pointer-events-none orb-1" />
+        <div className="absolute bottom-16 left-8  w-[340px] h-[340px] bg-[#D4AF37] rounded-full blur-[120px] opacity-[0.14] pointer-events-none orb-2" />
+        <div className="absolute top-1/2 right-[38%] w-[260px] h-[260px] bg-[#FF007F] rounded-full blur-[100px] opacity-[0.10] pointer-events-none" style={{ animation: 'orb-drift-2 22s ease-in-out infinite' }} />
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
             <motion.div 
@@ -102,8 +111,26 @@ export default function HomePage() {
                 City of Newport News
               </div>
               <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-[1.1]">
-                Find Your <br className="hidden md:block"/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-[#F9D47D]">Path Home</span>
+                {['Find', 'Your'].map((word, i) => (
+                  <motion.span
+                    key={word}
+                    initial={{ opacity: 0, y: 40, filter: 'blur(6px)' }}
+                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                    transition={{ duration: 0.6, delay: 0.3 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                    className="inline-block mr-4"
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+                <br className="hidden md:block"/>
+                <motion.span
+                  initial={{ opacity: 0, y: 40, filter: 'blur(6px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  transition={{ duration: 0.7, delay: 0.58, ease: [0.22, 1, 0.36, 1] }}
+                  className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-secondary to-[#F9D47D]"
+                >
+                  Path Home
+                </motion.span>
               </h1>
               <p className="text-lg md:text-xl text-white/80 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                 Explore affordable housing, homeownership programs, neighborhood resources, and personalized tools—all in one place.
@@ -176,12 +203,13 @@ export default function HomePage() {
       {/* 2. Quick Action Cards */}
       <section id="programs" className="py-24 bg-muted">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <AnimatedSection className="text-center max-w-2xl mx-auto mb-16" variant="fadeUp">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Your Newport News. Your Future.</h2>
+            <div className="h-1 w-16 bg-accent rounded-full mx-auto mb-4" />
             <p className="text-muted-foreground text-lg">Whether you're planting roots, looking for your next home, or need a helping hand — Newport News has resources built around you.</p>
-          </div>
+          </AnimatedSection>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          <StaggerSection className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" speed="normal">
             {[
               { icon: Home, title: "Buy a Home", desc: "Find listings, financing, and homebuyer programs", href: "/buy" },
               { icon: Building2, title: "Find Rental Resources", desc: "Browse affordable rentals and subsidized housing", href: "/rent" },
@@ -189,31 +217,31 @@ export default function HomePage() {
               { icon: MapPin, title: "Explore Neighborhoods", desc: "Discover communities that match your lifestyle", href: "/neighborhoods" },
               { icon: GraduationCap, title: "First-Time Buyer Programs", desc: "Special grants and loan assistance for first-timers", href: "/resources" },
               { icon: HandHeart, title: "Housing Assistance", desc: "Emergency help, vouchers, and support programs", href: "/resources" }
-            ].map((card, i) => (
-              <motion.div
-                key={card.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-              >
-                <Link href={card.href} className="block group h-full">
-                  <Card className="h-full border-transparent border-l-4 border-l-accent shadow-sm hover:shadow-lg hover:-translate-y-1 hover:bg-accent/5 transition-all duration-300 overflow-hidden group-hover:border-accent/20 bg-white">
-                    <CardContent className="p-8 flex flex-col h-full">
-                      <div className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mb-6 text-accent group-hover:bg-accent group-hover:text-white transition-colors duration-300">
-                        <card.icon className="w-7 h-7" />
-                      </div>
-                      <h3 className="text-xl font-bold text-primary mb-3">{card.title}</h3>
-                      <p className="text-muted-foreground mb-6 flex-1">{card.desc}</p>
-                      <div className="flex items-center text-accent font-medium text-sm mt-auto group-hover:underline">
-                        Explore <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </motion.div>
+            ].map((card) => (
+              <StaggerItem key={card.title} variant="fadeUp">
+                <TiltCard intensity={6}>
+                  <Link href={card.href} className="block group h-full">
+                    <Card className="h-full border-transparent border-l-4 border-l-accent shadow-sm hover:shadow-2xl bg-white overflow-hidden relative gradient-border-hover shine-on-hover">
+                      <CardContent className="p-8 flex flex-col h-full">
+                        <motion.div
+                          className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mb-6 text-accent"
+                          whileHover={{ scale: 1.15, rotate: 6 }}
+                          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                        >
+                          <card.icon className="w-7 h-7" />
+                        </motion.div>
+                        <h3 className="text-xl font-bold text-primary mb-3">{card.title}</h3>
+                        <p className="text-muted-foreground mb-6 flex-1">{card.desc}</p>
+                        <div className="flex items-center text-accent font-medium text-sm mt-auto group-hover:gap-2 transition-all">
+                          Explore <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-2" />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </TiltCard>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerSection>
         </div>
       </section>
 
@@ -338,14 +366,15 @@ export default function HomePage() {
       {/* Life in Newport News — Lifestyle Photo Band */}
       <section className="py-20 bg-white overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <AnimatedSection className="text-center mb-12" variant="fadeUp">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
               Real People. Real Community.
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-primary">Life in Newport News</h2>
+            <div className="h-1 w-16 bg-accent rounded-full mx-auto mt-4 mb-3" />
             <p className="text-muted-foreground mt-3 text-lg max-w-xl mx-auto">A city where military families, first-time buyers, young professionals, and lifelong residents all call home.</p>
-          </div>
+          </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
             {[
               { img: lifestyleNewHomeowners, caption: "First-Time Homeowners", sub: "Young families planting roots in Newport News", href: "/buy" },
@@ -402,20 +431,30 @@ export default function HomePage() {
       <section className="bg-primary py-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.03)_50%,rgba(255,255,255,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px]"></div>
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="container relative z-10 mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10">
+          <StaggerSection className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10" speed="fast">
             {[
-              { num: "2,400+", label: "Families Assisted" },
-              { num: "$18M", label: "Housing Aid Distributed" },
-              { num: "340", label: "Affordable Units Available" },
-              { num: "92%", label: "Satisfaction Rating" }
+              { end: 2400, prefix: '', suffix: '+', label: "Families Assisted" },
+              { end: 18,   prefix: '\u0024', suffix: 'M', label: "Housing Aid Distributed" },
+              { end: 340,  prefix: '',  suffix: '',  label: "Affordable Units Available" },
+              { end: 92,   prefix: '',  suffix: '%', label: "Satisfaction Rating" },
             ].map((stat, i) => (
-              <div key={i} className="text-center px-4">
-                <div className="text-3xl md:text-4xl font-extrabold text-white mb-2">{stat.num}</div>
-                <div className="w-8 h-1 bg-secondary mx-auto mb-3 rounded-full"></div>
-                <div className="text-white/80 text-sm font-medium uppercase tracking-wider">{stat.label}</div>
-              </div>
+              <StaggerItem key={i} variant="scaleIn">
+                <div className="text-center px-4">
+                  <div className="text-3xl md:text-4xl font-extrabold text-white mb-2">
+                    <CountUp end={stat.end} prefix={stat.prefix} suffix={stat.suffix} duration={2} />
+                  </div>
+                  <motion.div
+                    className="w-8 h-1 bg-secondary mx-auto mb-3 rounded-full origin-left"
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: i * 0.12 }}
+                  />
+                  <div className="text-white/80 text-sm font-medium uppercase tracking-wider">{stat.label}</div>
+                </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerSection>
         </motion.div>
       </section>
 
@@ -625,45 +664,42 @@ export default function HomePage() {
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Explore Neighborhoods</h2>
+            <AnimatedSection className="max-w-2xl" variant="slideLeft">
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">Explore Neighborhoods</h2>
+              <div className="h-1 w-14 bg-accent rounded-full mb-4" />
               <p className="text-muted-foreground text-lg">Discover the unique character and offerings of communities across Newport News.</p>
-            </div>
-            <Button asChild variant="ghost" className="text-accent hover:text-accent hover:bg-accent/10 group">
-              <Link href="/neighborhoods">
-                View all neighborhoods <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
+            </AnimatedSection>
+            <AnimatedSection variant="slideRight">
+              <Button asChild variant="ghost" className="text-accent hover:text-accent hover:bg-accent/10 group">
+                <Link href="/neighborhoods">
+                  View all neighborhoods <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </AnimatedSection>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StaggerSection className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" speed="normal">
             {[
               { name: "Hilton Village", img: hiltonImage, desc: "Historic charm, walkable streets, and artisan shops.", price: "$320k" },
               { name: "Denbigh", img: denbighImage, desc: "Spacious lots, great parks, and suburban feel.", price: "$285k" },
               { name: "Oyster Point", img: oysterImage, desc: "Modern condos, bustling commerce, and dining.", price: "$350k" },
               { name: "Southeast", img: southeastImage, desc: "Rich heritage, waterfront views, and community focus.", price: "$210k" }
-            ].map((hood, i) => (
-              <motion.div
-                key={hood.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-              >
+            ].map((hood) => (
+              <StaggerItem key={hood.name} variant="scaleGentle">
                 <Link href="/neighborhoods" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-md group-hover:shadow-xl transition-all duration-300">
-                    <img src={hood.img} alt={hood.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <div className="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-md group-hover:shadow-2xl transition-all duration-500">
+                    <img src={hood.img} alt={hood.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
                       <div className="inline-block px-2.5 py-1 bg-secondary text-primary text-xs font-bold rounded-md mb-3">Avg: {hood.price}</div>
                       <h3 className="text-2xl font-bold mb-2">{hood.name}</h3>
                       <p className="text-white/80 text-sm line-clamp-2">{hood.desc}</p>
                     </div>
                   </div>
                 </Link>
-              </motion.div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerSection>
         </div>
       </section>
 
@@ -674,46 +710,47 @@ export default function HomePage() {
       <section className="py-24 bg-muted/30 border-t border-border/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-            <div className="max-w-2xl">
+            <AnimatedSection className="max-w-2xl" variant="slideLeft">
               <Badge className="bg-accent/10 text-accent hover:bg-accent/20 border-none mb-4 px-4 py-1">Resident Services Hub</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Everything You Need After Moving In</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">Everything You Need After Moving In</h2>
+              <div className="h-1 w-14 bg-accent rounded-full mb-4" />
               <p className="text-muted-foreground text-lg">Everything you need to live, work, and thrive in Newport News—all in one place.</p>
-            </div>
-            <Button asChild className="bg-accent hover:bg-accent/90 text-white rounded-full px-6 h-12">
-              <Link href="/services">
-                Explore All Services <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
+            </AnimatedSection>
+            <AnimatedSection variant="slideRight">
+              <Button asChild className="bg-accent hover:bg-accent/90 text-white rounded-full px-6 h-12">
+                <Link href="/services">
+                  Explore All Services <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </AnimatedSection>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <StaggerSection className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6" speed="fast">
             {[
               { icon: Banknote, title: "Pay Utility Bill", desc: "Quick and easy online payments." },
               { icon: Trash2, title: "Trash & Recycling", desc: "Find your collection day." },
               { icon: MapPinIcon, title: "Report an Issue", desc: "Help us keep our city beautiful." },
               { icon: Users, title: "Community Events", desc: "Discover what's happening." }
-            ].map((service, i) => (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-              >
+            ].map((service) => (
+              <StaggerItem key={service.title} variant="flipUp">
                 <Link href="/services" className="block group h-full">
-                  <Card className="h-full border-border/50 shadow-sm hover:shadow-md transition-all duration-300 group-hover:border-accent/30 bg-white">
+                  <Card className="h-full border-border/50 shadow-sm hover:shadow-xl transition-all duration-300 group-hover:border-accent/30 bg-white card-lift">
                     <CardContent className="p-6 flex flex-col items-center text-center">
-                      <div className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mb-4 text-accent group-hover:bg-accent group-hover:text-white transition-colors">
+                      <motion.div
+                        className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mb-4 text-accent"
+                        whileHover={{ scale: 1.2, rotate: -8 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+                      >
                         <service.icon className="w-6 h-6" />
-                      </div>
+                      </motion.div>
                       <h3 className="text-lg font-bold text-primary mb-2">{service.title}</h3>
                       <p className="text-sm text-muted-foreground">{service.desc}</p>
                     </CardContent>
                   </Card>
                 </Link>
-              </motion.div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerSection>
         </div>
       </section>
 

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ScrollProgress } from '@/components/ui/ScrollProgress';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -72,6 +73,7 @@ export function Navbar() {
 
   return (
     <>
+      <ScrollProgress />
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled || !isHomepage || isMobileMenuOpen

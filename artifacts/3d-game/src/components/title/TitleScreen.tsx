@@ -17,10 +17,57 @@ export function TitleScreen({ onPlay, onContinue }: { onPlay: () => void, onCont
   const [showHowTo, setShowHowTo] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
   const [showConfirmNew, setShowConfirmNew] = useState(false);
-  
+  const [showDevMode, setShowDevMode] = useState(false);
+
   const engine = getAudioEngine();
   const [muted, setMuted] = useState(engine.muted);
-  
+
+  // ── Dev Stage Select: type "2005" anywhere on the title screen ──────────
+  useEffect(() => {
+    const buf: string[] = [];
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.length === 1) {
+        buf.push(e.key);
+        if (buf.length > 4) buf.shift();
+        if (buf.join('') === '2005') {
+          engine.play('click');
+          setShowDevMode(true);
+          buf.length = 0;
+        }
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [engine]);
+
+  const DEV_STAGES = [
+    { n: 1, label: 'City Start',    desc: 'Career & character creation' },
+    { n: 2, label: 'Budget Phase',  desc: 'Work, save & build credit',   careerId: 'teacher', cash: 800,  savings: 1200,  income: 4200 },
+    { n: 3, label: 'Home Shopping', desc: 'Tour homes across the city',  careerId: 'teacher', cash: 5000, savings: 9500,  income: 4200 },
+    { n: 4, label: 'Make an Offer', desc: 'Negotiation mini-game',       careerId: 'teacher', cash: 3000, savings: 24500, homeId: 1 },
+    { n: 5, label: 'Get Financed',  desc: 'Bank & mortgage approval',    careerId: 'teacher', cash: 3000, savings: 24500, homeId: 1 },
+    { n: 6, label: 'Closing Day',   desc: 'Sign and get the keys',       careerId: 'teacher', cash: 2500, savings: 24500, homeId: 1 },
+    { n: 7, label: 'Move In',       desc: 'Furnish your new home',       careerId: 'teacher', cash: 2000, savings: 500,   homeId: 1 },
+    { n: 8, label: 'Home Life',     desc: 'Mortgage & equity journey',   careerId: 'teacher', cash: 2000, savings: 500,   homeId: 1 },
+  ] as const;
+
+  type DevStage = typeof DEV_STAGES[number];
+  const jumpToStage = (s: DevStage) => {
+    useGameStore.setState({
+      gameStarted: true,
+      stage: s.n,
+      currentLocation: s.n === 7 ? 'newhome' : s.n === 8 ? 'homelife' : 'city',
+      ...('careerId' in s ? { careerId: s.careerId } : {}),
+      ...('cash'    in s ? { cash:    s.cash    } : {}),
+      ...('savings' in s ? { savings: s.savings } : {}),
+      ...('income'  in s ? { monthlyIncome: s.income, monthlyExpenses: Math.round(s.income * 0.65) } : {}),
+      ...('homeId'  in s ? { selectedHomeId: s.homeId } : {}),
+    });
+    setShowDevMode(false);
+    onContinue();
+  };
+  // ────────────────────────────────────────────────────────────────────────
+
   useEffect(() => {
     const handleFirstClick = () => {
       if (!engine.muted) {
@@ -184,6 +231,34 @@ export function TitleScreen({ onPlay, onContinue }: { onPlay: () => void, onCont
             <p className="text-lg mb-8 text-left">This interactive simulator helps first-time homebuyers learn about budgeting, credit, home shopping, mortgages, closing, and homeownership through a fun, guided experience.</p>
             <div className="flex justify-end">
               <button onClick={() => setShowAbout(false)} className="glass-btn px-6 py-2">Close</button>
+            </div>
+          </ModalOverlay>
+        )}
+
+        {showDevMode && (
+          <ModalOverlay onClose={() => setShowDevMode(false)}>
+            <div className="flex items-center justify-between mb-1">
+              <h2 className="text-2xl font-bold text-[var(--teal)]" style={{ fontFamily: 'var(--display-font)' }}>
+                🛠 Dev Mode
+              </h2>
+              <span className="text-xs text-white/30 bg-white/10 px-2 py-0.5 rounded font-mono">2005</span>
+            </div>
+            <p className="text-sm text-white/50 mb-5">Jump to any stage. Stats are preset for quick testing.</p>
+            <div className="grid grid-cols-2 gap-3">
+              {DEV_STAGES.map((s) => (
+                <button
+                  key={s.n}
+                  onClick={() => jumpToStage(s)}
+                  className="glass-btn text-left px-4 py-3 hover:border-[var(--teal)] transition-colors"
+                >
+                  <div className="text-[var(--teal)] font-bold text-xs mb-0.5 uppercase tracking-wider">Stage {s.n}</div>
+                  <div className="font-semibold text-sm leading-tight">{s.label}</div>
+                  <div className="text-xs text-white/50 mt-0.5">{s.desc}</div>
+                </button>
+              ))}
+            </div>
+            <div className="mt-4 text-center">
+              <button onClick={() => setShowDevMode(false)} className="glass-btn px-6 py-2 text-sm">Close</button>
             </div>
           </ModalOverlay>
         )}
