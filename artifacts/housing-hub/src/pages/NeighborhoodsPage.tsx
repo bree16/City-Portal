@@ -6,12 +6,12 @@ import { Button } from '@/components/ui/button';
 import { NeighborhoodMap } from '@/components/NeighborhoodMap';
 import { NEIGHBORHOODS, CITY_MARKET } from '@/data/market';
 
-import hiltonImage from '@assets/generated_images/hilton_village.jpg';
-import denbighImage from '@assets/generated_images/denbigh.jpg';
-import oysterImage from '@assets/generated_images/oyster_point.jpg';
-import southeastImage from '@assets/generated_images/southeast.jpg';
-import portWarwickImage from '@assets/generated_images/port_warwick.jpg';
-import kilnCreekImage from '@assets/generated_images/kiln_creek.jpg';
+import hiltonImage from '@assets/stock_images/hood_hilton.jpg';
+import denbighImage from '@assets/stock_images/hood_denbigh.jpg';
+import oysterImage from '@assets/stock_images/hood_oyster_point.jpg';
+import southeastImage from '@assets/stock_images/hood_southeast.jpg';
+import portWarwickImage from '@assets/stock_images/hood_port_warwick.jpg';
+import kilnCreekImage from '@assets/stock_images/hood_kiln_creek.jpg';
 import neighborhoodsHero from '@assets/generated_images/neighborhoods_hero.jpg';
 
 const HOOD_IMAGES: Record<string, string> = {

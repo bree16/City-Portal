@@ -17,139 +17,162 @@ export default function ResourcesPage() {
       title: "Virginia Housing",
       category: "Homeownership",
       icon: Home,
-      desc: "Statewide authority providing affordable mortgages, down payment assistance, and homeownership education."
+      desc: "Statewide authority providing affordable mortgages, down payment assistance, and homeownership education.",
+      url: "https://www.virginiahousing.com/"
     },
     {
       title: "Newport News Redevelopment & Housing Authority (NNRHA)",
       category: "Homeownership",
       icon: Building2,
-      desc: "Local agency offering housing programs, vouchers, and community development."
+      desc: "Local agency offering housing programs, vouchers, and community development.",
+      url: "https://nnrha.net/"
     },
     {
       title: "Newport News Choice Neighborhood",
       category: "Homeownership",
       icon: Users,
-      desc: "Federal initiative to transform distressed housing and surrounding neighborhoods."
+      desc: "Federal initiative to transform distressed housing and surrounding neighborhoods.",
+      url: "https://www.nnva.gov/2765/Choice-Neighborhood"
     },
     {
       title: "Virginia Housing & Community Development Corporation",
       category: "Homeownership",
       icon: Building2,
-      desc: "State agency supporting housing development and community revitalization."
+      desc: "State agency supporting housing development and community revitalization.",
+      url: "https://www.vhcdc.org/"
     },
     {
       title: "Virginia Peninsula REALTORS®",
       category: "Homeownership",
       icon: Home,
-      desc: "Local real estate professionals committed to housing access in the Peninsula region."
+      desc: "Local real estate professionals committed to housing access in the Peninsula region.",
+      url: "https://vpar.realtor/"
     },
     {
       title: "Housing Counseling",
       category: "Housing Assistance",
       icon: HeartHandshake,
-      desc: "Free certified counseling for renters, buyers, and homeowners facing challenges."
+      desc: "Free certified counseling for renters, buyers, and homeowners facing challenges.",
+      url: "https://www.hud.gov/counseling"
     },
     {
       title: "Fair Housing",
       category: "Housing Assistance",
       icon: ShieldCheck,
-      desc: "Know your rights. File a complaint if you've experienced housing discrimination."
+      desc: "Know your rights. File a complaint if you've experienced housing discrimination.",
+      url: "https://www.dpor.virginia.gov/fairhousing/"
     },
     {
       title: "Emergency Housing",
       category: "Housing Assistance",
       icon: Home,
-      desc: "Immediate shelter and assistance for families in crisis."
+      desc: "Immediate shelter and assistance for families in crisis — Housing Crisis Hotline.",
+      url: "https://www.theplanningcouncil.org/housing-crisis-hotline/"
     },
     {
       title: "Homeless Prevention",
       category: "Housing Assistance",
       icon: HeartHandshake,
-      desc: "Programs to help residents avoid homelessness before it happens."
+      desc: "THRIVE Peninsula programs to help residents avoid homelessness before it happens.",
+      url: "https://thriveva.org/"
     },
     {
       title: "Housing Crisis Resources",
       category: "Housing Assistance",
       icon: ShieldCheck,
-      desc: "Rapid response for housing emergencies including eviction and displacement."
+      desc: "Virginia DHCD rapid response for housing emergencies including eviction and displacement.",
+      url: "https://www.dhcd.virginia.gov/homelessnesshousing-crisis-resources"
     },
     {
       title: "Community Action Programs",
       category: "Housing Assistance",
       icon: Users,
-      desc: "Local agencies providing wrap-around services including housing support."
+      desc: "Hampton Roads Community Action Program — wrap-around services including housing support.",
+      url: "https://www.hrcapinc.org/"
     },
     {
       title: "Veteran Housing Assistance",
       category: "Housing Assistance",
       icon: ShieldCheck,
-      desc: "Specialized programs for veterans including VA loans and transitional housing."
+      desc: "National Call Center for Homeless Veterans and VA housing programs.",
+      url: "https://www.va.gov/homeless/nationalcallcenter.asp"
     },
     {
       title: "United Way 211",
       category: "Housing Assistance",
       icon: HeartHandshake,
-      desc: "Call or text 2-1-1 to connect with local housing and social services."
+      desc: "Call or text 2-1-1 to connect with local housing and social services.",
+      url: "https://www.211virginia.org/"
     },
     {
       title: "Housing Opportunities Made Equal (HOME)",
       category: "Housing Assistance",
       icon: Home,
-      desc: "Federal program funding affordable housing development and rental assistance."
+      desc: "Virginia's statewide fair-housing organization fighting housing discrimination.",
+      url: "https://homeofva.org/"
     },
     {
       title: "Find a Housing Counselor",
       category: "Helpful Services",
       icon: Users,
-      desc: "Search for HUD-approved counselors serving Newport News."
+      desc: "Search for HUD-approved counselors serving Newport News.",
+      url: "https://www.hud.gov/counseling"
     },
     {
       title: "Homebuyer Education",
       category: "Helpful Services",
       icon: GraduationCap,
-      desc: "Complete the required HUD education course online or in person."
+      desc: "Complete the required homebuyer education course online or in person.",
+      url: "https://www.virginiahousing.com/homebuyers/homebuyer-education"
     },
     {
       title: "Human Services",
       category: "Helpful Services",
       icon: HeartHandshake,
-      desc: "City department offering benefits, childcare assistance, and family support."
+      desc: "City department offering benefits, childcare assistance, and family support.",
+      url: "https://www.nnva.gov/253/Human-Services"
     },
     {
       title: "Property Information",
       category: "Helpful Services",
       icon: BookOpen,
-      desc: "Search Newport News property records, ownership, and assessments."
+      desc: "Search Newport News property records, ownership, and assessments.",
+      url: "https://www.nnva.gov/149/Property-Information"
     },
     {
       title: "Taxes",
       category: "Helpful Services",
       icon: Building2,
-      desc: "Pay property taxes and understand your tax obligations."
+      desc: "Pay property taxes and understand your tax obligations.",
+      url: "https://www.nnva.gov/413/Treasurer"
     },
     {
       title: "Permits",
       category: "Helpful Services",
       icon: BookOpen,
-      desc: "Apply for building permits for home renovations and new construction."
+      desc: "Apply for building permits for home renovations and new construction.",
+      url: "https://www.nnva.gov/1058/Permit-Applications"
     },
     {
       title: "Solid Waste",
       category: "Helpful Services",
       icon: Building2,
-      desc: "Bulk item pickup, recycling, and waste management services."
+      desc: "Bulk item pickup, recycling, and waste management services.",
+      url: "https://www.nnva.gov/378/Solid-Waste"
     },
     {
       title: "Bill Pay",
       category: "Helpful Services",
       icon: Building2,
-      desc: "Pay city utility bills and fees online."
+      desc: "Pay city utility bills and fees online.",
+      url: "https://www.nnva.gov/1483/Online-Services"
     },
     {
       title: "Jobs",
       category: "Helpful Services",
       icon: Users,
-      desc: "City of Newport News employment opportunities and career resources."
+      desc: "City of Newport News employment opportunities and career resources.",
+      url: "https://www.governmentjobs.com/careers/newportnews"
     }
   ];
 
@@ -192,11 +215,15 @@ export default function ResourcesPage() {
                     The City's long-term housing roadmap — focused on affordability, redevelopment, neighborhood stability, homeownership opportunities, and partnerships.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <Button className="bg-accent hover:bg-accent/90 text-white font-bold h-12 px-6 rounded-lg">
-                      Learn About SHIP
+                    <Button asChild className="bg-accent hover:bg-accent/90 text-white font-bold h-12 px-6 rounded-lg">
+                      <a href="https://www.nnva.gov/3027/Housing-Resources" target="_blank" rel="noopener noreferrer">
+                        Learn About SHIP
+                      </a>
                     </Button>
-                    <Button variant="outline" className="border-white/30 text-primary hover:bg-white/10 hover:text-white bg-white font-bold h-12 px-6 rounded-lg">
-                      Read SHIP Document
+                    <Button asChild variant="outline" className="border-white/30 text-primary hover:bg-white/10 hover:text-white bg-white font-bold h-12 px-6 rounded-lg">
+                      <a href="https://nngov.civicweb.net/document/276368/Strategic%20Housing%20Initiatives%20Plan%20Presentation.pdf?handle=B7C83EF52AFF4A2D885AA7ADD92CF12D" target="_blank" rel="noopener noreferrer">
+                        Read SHIP Document
+                      </a>
                     </Button>
                   </div>
                 </div>
@@ -251,8 +278,10 @@ export default function ResourcesPage() {
                     <p className="text-sm text-muted-foreground mb-6 flex-1 leading-relaxed">
                       {res.desc}
                     </p>
-                    <Button variant="link" className="p-0 h-auto font-bold text-accent justify-start gap-1">
-                      Learn More <ExternalLink className="w-3.5 h-3.5" />
+                    <Button asChild variant="link" className="p-0 h-auto font-bold text-accent justify-start gap-1">
+                      <a href={res.url} target="_blank" rel="noopener noreferrer">
+                        Learn More <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
                     </Button>
                   </CardContent>
                 </Card>
