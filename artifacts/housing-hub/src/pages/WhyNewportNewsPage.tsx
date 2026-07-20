@@ -190,12 +190,12 @@ export default function WhyNewportNewsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { name: "Newport News Shipbuilding (HII)", icon: Anchor, ind: "Manufacturing", desc: "The largest industrial employer in Virginia employing tens of thousands." },
-              { name: "U.S. Military & Government", icon: Shield, ind: "Government", desc: "Fort Eustis, NWS Yorktown, and federal agencies provide thousands of careers." },
-              { name: "Riverside Health System", icon: Heart, ind: "Healthcare", desc: "Major regional healthcare provider with hospitals, clinics, and research facilities." },
-              { name: "Jefferson Lab", icon: Zap, ind: "Science & Research", desc: "DOE national lab doing cutting-edge nuclear physics research." },
-              { name: "Newport News Public Schools", icon: GraduationCap, ind: "Education", desc: "City school system employing educators and support staff across dozens of schools." },
-              { name: "Technology & Manufacturing", icon: Cpu, ind: "Technology", desc: "Growing tech sector and advanced manufacturing companies." }
+              { name: "Newport News Shipbuilding (HII)", icon: Anchor, ind: "Manufacturing", desc: "The largest industrial employer in Virginia employing tens of thousands.", url: "https://careers.huntingtoningalls.com/" },
+              { name: "U.S. Military & Government", icon: Shield, ind: "Government", desc: "Fort Eustis, NWS Yorktown, and federal agencies provide thousands of careers.", url: "https://www.usajobs.gov/" },
+              { name: "Riverside Health System", icon: Heart, ind: "Healthcare", desc: "Major regional healthcare provider with hospitals, clinics, and research facilities.", url: "https://www.riversideonline.com/careers" },
+              { name: "Jefferson Lab", icon: Zap, ind: "Science & Research", desc: "DOE national lab doing cutting-edge nuclear physics research.", url: "https://www.jlab.org/human_resources/employment" },
+              { name: "Newport News Public Schools", icon: GraduationCap, ind: "Education", desc: "City school system employing educators and support staff across dozens of schools.", url: "https://www.nnschools.org/careers" },
+              { name: "Technology & Manufacturing", icon: Cpu, ind: "Technology", desc: "Growing tech sector and advanced manufacturing companies.", url: "https://www.governmentjobs.com/careers/newportnews" }
             ].map((emp, i) => (
               <motion.div key={emp.name} initial={{opacity:0,y:20}} whileInView={{opacity:1,y:0}} transition={{delay: i*0.05}} viewport={{once:true}}
                 className="bg-white rounded-2xl p-6 shadow-sm border border-border/50 hover:shadow-md transition-shadow">
@@ -209,7 +209,9 @@ export default function WhyNewportNewsPage() {
                   </div>
                 </div>
                 <p className="text-muted-foreground text-sm mb-6 line-clamp-2">{emp.desc}</p>
-                <Button variant="outline" className="w-full text-primary border-border/50 hover:bg-muted font-medium">Explore Careers</Button>
+                <Button asChild variant="outline" className="w-full text-primary border-border/50 hover:bg-muted font-medium">
+                  <a href={emp.url} target="_blank" rel="noopener noreferrer">Explore Careers</a>
+                </Button>
               </motion.div>
             ))}
           </div>
