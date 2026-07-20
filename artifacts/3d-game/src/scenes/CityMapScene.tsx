@@ -186,7 +186,7 @@ function BuildingExterior({ b, status, onEnter }: {
       )}
 
       {/* Accent band at top */}
-      <mesh position={[0, h + 0.1, 0]} castShadow>
+      <mesh position={[0, h + 0.126, 0]} castShadow>
         <boxGeometry args={[w + 0.2, 0.25, d + 0.2]} />
         <meshStandardMaterial color={isLocked ? '#666' : b.accentColor} roughness={0.5} />
       </mesh>

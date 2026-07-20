@@ -70,7 +70,7 @@ export function TitleScene() {
                 <meshStandardMaterial color={b.color} roughness={0.7} />
               </mesh>
               {/* Highlight roof */}
-              <mesh position={[0, height + 0.1, 0]}>
+              <mesh position={[0, height + 0.101, 0]}>
                 <boxGeometry args={[b.footprint[0] * 0.62, 0.2, b.footprint[0] * 0.62]} />
                 <meshStandardMaterial color={b.accentColor} roughness={0.5} />
               </mesh>
