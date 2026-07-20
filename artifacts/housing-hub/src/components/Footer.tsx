@@ -23,16 +23,16 @@ export function Footer() {
               The City of Newport News Housing Hub connects residents with affordable housing, homeownership programs, and community resources.
             </p>
             <div className="flex items-center gap-4 pt-4">
-              <a href="https://www.facebook.com/cityofnewportnews" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-colors" aria-label="Facebook">
+              <a href="https://www.facebook.com/CityofNewportNews/" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-colors" aria-label="Facebook">
                 <SiFacebook className="w-5 h-5" />
               </a>
-              <a href="https://www.instagram.com/cityofnewportnews" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-colors" aria-label="Instagram">
+              <a href="https://www.instagram.com/cityofnn/" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-colors" aria-label="Instagram">
                 <SiInstagram className="w-5 h-5" />
               </a>
               <a href="https://www.linkedin.com/company/city-of-newport-news" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-colors" aria-label="LinkedIn">
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a href="https://www.youtube.com/user/cityofnewportnews" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-colors" aria-label="YouTube">
+              <a href="https://www.youtube.com/NewportNewsTV" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-colors" aria-label="YouTube">
                 <SiYoutube className="w-5 h-5" />
               </a>
             </div>
