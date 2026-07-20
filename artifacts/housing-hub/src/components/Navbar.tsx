@@ -29,6 +29,7 @@ export function Navbar() {
     { label: 'Neighborhoods', href: '/neighborhoods' },
     { label: 'Journey', href: '/journey' },
     { label: 'Why NN', href: '/why-newport-news' },
+    { label: 'Simulator', href: '/simulator' },
     { label: 'Services', href: '/services' },
     { label: 'Resources', href: '/resources' },
     { label: 'Contact', href: '/contact' },

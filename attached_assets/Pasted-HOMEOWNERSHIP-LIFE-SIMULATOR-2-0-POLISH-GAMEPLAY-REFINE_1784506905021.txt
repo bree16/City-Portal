@@ -1,0 +1,447 @@
+HOMEOWNERSHIP LIFE SIMULATOR 2.0 — POLISH & GAMEPLAY REFINEMENT
+
+The simulator already has an excellent foundation.
+
+Do NOT redesign the overall gameplay or remove existing mechanics.
+
+Instead, refine and polish every aspect of the simulator so it feels like a professional educational game that someone could complete in approximately 5–8 minutes, with each stage lasting about 45–90 seconds.
+
+The objective is to create a memorable experience that teaches first-time homebuyers the complete journey from renting to homeownership in a fun, intuitive way.
+
+PRIORITY #1 — Fix Existing Gameplay Issues
+
+Before adding new features, resolve all current gameplay issues.
+
+Examples:
+
+The Savings Jar currently does not respond properly when clicked.
+Clicking the Savings Jar should immediately open the Budget screen.
+Verify every clickable object works correctly.
+Remove any dead interactions.
+Ensure every stage can always be completed.
+Test every objective from beginning to end.
+
+The player should never wonder whether the game is broken.
+
+PRIORITY #2 — Improve Character Movement
+
+The current click-to-move system feels inaccurate.
+
+Right now, clicking somewhere causes the player to move generally toward that direction rather than exactly where the player clicked.
+
+Update the movement system so that:
+
+Clicking anywhere on the ground moves the player to the exact location clicked.
+Characters stop precisely at the destination.
+Movement is smooth.
+Movement accelerates and decelerates naturally.
+Avoid awkward stopping.
+Avoid overshooting.
+Pathfinding should automatically move around obstacles.
+
+Movement should feel responsive and satisfying.
+
+PRIORITY #3 — Improve Object Interaction
+
+Currently players must click tiny labels like "Landlord."
+
+This is frustrating.
+
+Instead:
+
+Every important object should have multiple interaction points.
+
+For example, if talking to the landlord:
+
+The player should be able to click:
+
+the floating label
+the landlord NPC
+the desk
+the interaction zone around the landlord
+
+All should trigger exactly the same interaction.
+
+Increase interaction radius significantly.
+
+Players should never need pixel-perfect accuracy.
+
+Smart Interaction
+
+Whenever the player walks close to an interactive object:
+
+highlight it
+slightly glow
+enlarge the interaction icon
+display a small prompt
+
+Players should instantly understand:
+
+"I can interact with this."
+
+Better Click Feedback
+
+Whenever the player clicks:
+
+Show:
+
+destination marker
+click ripple
+glowing footprint
+movement indicator
+
+Provide immediate visual feedback.
+
+Improve Character Controller
+
+Movement should feel polished.
+
+Improve:
+
+Walking
+
+Turning
+
+Stopping
+
+Idle animations
+
+Camera following
+
+Collision
+
+The player should feel connected to the character instead of controlling a floating object.
+
+Character Style
+
+The current character creator and character models resemble Roblox.
+
+Redesign the characters using a modern stylized art direction.
+
+Do NOT use:
+
+block heads
+cube limbs
+toy-like proportions
+Roblox avatars
+Minecraft aesthetics
+
+Instead create characters with:
+
+natural human proportions
+rounded anatomy
+expressive faces
+realistic hairstyles
+layered clothing
+detailed hands
+smoother walking
+better idle animations
+
+Aim for a style closer to The Sims than Roblox.
+
+Do NOT make the graphics photorealistic because this is still a browser game.
+
+Instead aim for stylized realism.
+
+Character Creator
+
+Keep all customization features.
+
+Improve presentation.
+
+Include:
+
+Character Name
+
+Skin Tone
+
+Hair Style
+
+Hair Color
+
+Eye Color
+
+Body Type
+
+Clothing Colors
+
+Accessories
+
+Pronouns
+
+Improve:
+
+Lighting
+
+Animations
+
+Spacing
+
+UI
+
+Preview quality
+
+Allow the preview character to:
+
+Rotate
+
+Idle naturally
+
+Wave
+
+Smile
+
+Look around
+
+The character creator should feel modern and polished.
+
+Visual Art Direction
+
+The current environments are too simple.
+
+Increase realism while maintaining browser performance.
+
+Improve:
+
+Lighting
+
+Textures
+
+Materials
+
+Plants
+
+Furniture
+
+Wall art
+
+Decor
+
+Windows
+
+Flooring
+
+Kitchen details
+
+Bathroom details
+
+Outdoor landscaping
+
+Everything should feel lived in.
+
+Artistic Inspiration
+
+Use the attached reference images only as inspiration for:
+
+overall quality
+lighting
+character presentation
+animation
+environment design
+UI polish
+
+Do NOT copy any copyrighted characters or artwork.
+
+Create an original visual identity inspired by the same level of quality.
+
+The desired style is stylized realism, similar to modern indie adventure and life simulation games.
+
+Improve User Interface
+
+The UI should feel premium.
+
+Use:
+
+Glassmorphism
+
+Soft gradients
+
+Blurred panels
+
+Rounded corners
+
+Modern typography
+
+Smooth animations
+
+Elegant buttons
+
+Professional icons
+
+Reduce oversized blue boxes.
+
+Create a cleaner visual hierarchy.
+
+Improve Rooms
+
+Keep the current room-based gameplay.
+
+Simply make every room feel more believable.
+
+Add:
+
+Plants
+
+Pictures
+
+Curtains
+
+Shelves
+
+Books
+
+Kitchen items
+
+Lighting
+
+Area rugs
+
+Wall textures
+
+Small decorations
+
+The rooms should feel welcoming without becoming cluttered.
+
+Keep Gameplay Fast
+
+Do NOT make this a large RPG.
+
+Each stage should remain short.
+
+Target:
+
+45–90 seconds per stage.
+
+Players should always know what to do next.
+
+Avoid lengthy dialogue.
+
+Avoid complicated mechanics.
+
+Each stage should teach one major homeownership concept before moving on.
+
+Stage Flow
+
+Each stage should feel like a short mission.
+
+Examples:
+
+Renting
+Check monthly budget.
+Save money.
+Pay debt.
+Learn budgeting.
+Preparing
+Meet housing counselor.
+Review credit score.
+Complete document checklist.
+House Hunting
+Walk through two or three homes.
+Compare monthly payments.
+Pick your favorite.
+Closing
+Review closing costs.
+Sign paperwork.
+Receive house keys.
+Celebrate becoming a homeowner.
+Move In
+Place a couch.
+Choose a bed.
+Hang artwork.
+Complete your first room.
+
+Every stage should end with a satisfying achievement.
+
+Better Animations
+
+Improve every animation.
+
+Walking
+
+Talking
+
+Turning
+
+Receiving keys
+
+Signing documents
+
+Opening doors
+
+Furniture placement
+
+NPC gestures
+
+Everything should feel smooth.
+
+Improve NPCs
+
+NPCs should feel more alive.
+
+Add:
+
+Idle animations
+
+Head movement
+
+Gestures
+
+Smiles
+
+Phone usage
+
+Looking around
+
+Talking
+
+Walking
+
+Players should immediately recognize important NPCs.
+
+Sound & Feedback
+
+Add subtle sounds.
+
+Footsteps
+
+Button clicks
+
+Paper signing
+
+Door opening
+
+Achievement unlock
+
+Money earned
+
+Notification sounds
+
+Celebration music
+
+Small sounds make the simulator feel much more polished.
+
+Educational Focus
+
+The simulator should remain educational.
+
+Each stage teaches:
+
+Budgeting
+
+Saving
+
+Credit
+
+Housing Counseling
+
+Home Shopping
+
+Mortgage Basics
+
+Closing
+
+Moving
+
+Homeownership
+
+The player should naturally learn these concepts through gameplay instead of reading long paragraphs.

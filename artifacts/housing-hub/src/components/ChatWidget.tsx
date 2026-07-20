@@ -17,35 +17,46 @@ const SUGGESTED_PROMPTS = [
   "How do I contact a counselor?"
 ];
 
-const CANNED_RESPONSES: Record<string, string> = {
-  "Can I qualify for assistance?": "To qualify for most programs, you'll need to meet income limits (typically 80% of area median income), be a Newport News resident, and have a stable income source. Visit our Assistance page or speak with a counselor for a personalized assessment.",
-  "How do I buy my first home?": "Start by checking your affordability with our calculator, then connect with a free housing counselor. Complete a HUD-approved education course and explore down payment assistance programs. Visit our Buy page for the full roadmap.",
-  "What grants are available?": "Newport News offers several programs including Virginia Housing grants, NNRHA down payment assistance, and federal HOME funds. Amounts vary by income and home price. Check our Resources page for full details.",
-  "How do I contact a counselor?": "You can request a free counseling session through our Contact page. Counselors are available Monday–Friday 8am–5pm at (757) 933-2311 or by email at housing@newportnewsva.gov."
-};
-
-const DEFAULT_RESPONSE = "Great question! Please call us at (757) 933-2311 or visit our Contact page for personalized help.";
+const FALLBACK_RESPONSE = "I'm having trouble answering right now. Please call us at (757) 933-2311 or visit our Contact page to reach a housing counselor.";
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { id: 1, text: "Hi! I'm your Newport News Housing Assistant. How can I help you today?", sender: 'bot' }
+    { id: 1, text: "Hi! I'm your Newport News Housing Assistant. Ask me anything about buying, renting, assistance programs, or city services. How can I help you today?", sender: 'bot' }
   ]);
   const [inputValue, setInputValue] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
 
-  const handleSend = (text: string) => {
-    if (!text.trim()) return;
+  const handleSend = async (text: string) => {
+    if (!text.trim() || isTyping) return;
 
     const userMsg: Message = { id: Date.now(), text, sender: 'user' };
-    setMessages(prev => [...prev, userMsg]);
+    let nextMessages: Message[] = [];
+    setMessages(prev => {
+      nextMessages = [...prev, userMsg];
+      return nextMessages;
+    });
     setInputValue('');
+    setIsTyping(true);
 
-    // Simulate thinking delay
-    setTimeout(() => {
-      const botResponse = CANNED_RESPONSES[text] || DEFAULT_RESPONSE;
-      const botMsg: Message = { id: Date.now() + 1, text: botResponse, sender: 'bot' };
-      setMessages(prev => [...prev, botMsg]);
-    }, 500);
+    try {
+      const res = await fetch('/api/assistant/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: nextMessages
+            .filter(m => m.id !== 1)
+            .map(m => ({ role: m.sender === 'user' ? 'user' : 'assistant', content: m.text })),
+        }),
+      });
+      const data = await res.json().catch(() => null);
+      const reply = data?.reply || FALLBACK_RESPONSE;
+      setMessages(prev => [...prev, { id: Date.now() + 1, text: reply, sender: 'bot' }]);
+    } catch {
+      setMessages(prev => [...prev, { id: Date.now() + 1, text: FALLBACK_RESPONSE, sender: 'bot' }]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -116,6 +127,15 @@ export function ChatWidget() {
                   </div>
                 </div>
               ))}
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-white border border-border/50 rounded-2xl rounded-bl-sm shadow-sm p-3 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-primary/40 animate-bounce [animation-delay:0ms]" />
+                    <span className="w-2 h-2 rounded-full bg-primary/40 animate-bounce [animation-delay:150ms]" />
+                    <span className="w-2 h-2 rounded-full bg-primary/40 animate-bounce [animation-delay:300ms]" />
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Suggested Prompts */}
@@ -142,6 +162,7 @@ export function ChatWidget() {
               />
               <Button 
                 onClick={() => handleSend(inputValue)}
+                disabled={isTyping}
                 size="icon"
                 className="bg-accent hover:bg-accent/90 text-white shrink-0 rounded-full w-10 h-10"
               >

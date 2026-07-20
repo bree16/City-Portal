@@ -19,6 +19,7 @@ import EventsPage from '@/pages/EventsPage';
 import SuccessStoriesPage from '@/pages/SuccessStoriesPage';
 import JourneyPage from '@/pages/JourneyPage';
 import QuizPage from '@/pages/QuizPage';
+import SimulatorPage from '@/pages/SimulatorPage';
 import WhyNewportNewsPage from '@/pages/WhyNewportNewsPage';
 import PartnersPage from '@/pages/PartnersPage';
 import NotFound from '@/pages/not-found';
@@ -49,6 +50,7 @@ function Router() {
         <Route path="/neighborhoods" component={NeighborhoodsPage} />
         <Route path="/assistance" component={AssistancePage} />
         <Route path="/journey" component={JourneyPage} />
+        <Route path="/simulator" component={SimulatorPage} />
         <Route path="/why-newport-news" component={WhyNewportNewsPage} />
         <Route path="/partners" component={PartnersPage} />
         <Route path="/quiz" component={QuizPage} />
