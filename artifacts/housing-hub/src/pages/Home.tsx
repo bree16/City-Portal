@@ -83,6 +83,12 @@ export default function HomePage() {
       {/* 1. Hero Section */}
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-primary text-white">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0B2146] to-accent/80 z-0"></div>
+        {/* Animated gradient shimmer layer */}
+        <div className="absolute inset-0 z-0 opacity-30" style={{
+          background: 'linear-gradient(120deg, #14B8A6 0%, #D4AF37 33%, #1E3A5F 66%, #14B8A6 100%)',
+          backgroundSize: '300% 300%',
+          animation: 'gradient-shift 8s ease infinite',
+        }} />
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
             <motion.div 
@@ -103,10 +109,10 @@ export default function HomePage() {
                 Explore affordable housing, homeownership programs, neighborhood resources, and personalized tools—all in one place.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                <Button asChild size="lg" className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-white rounded-full px-8 h-14 text-base font-semibold shadow-lg shadow-accent/20 transition-transform hover:-translate-y-1">
+                <Button asChild size="lg" className="glow-btn w-full sm:w-auto bg-accent hover:bg-accent/90 text-white rounded-full px-8 h-14 text-base font-semibold shadow-lg shadow-accent/20 transition-transform hover:-translate-y-1">
                   <Link href="/buy">Get Started</Link>
                 </Button>
-                <Button asChild size="lg" className="w-full sm:w-auto bg-[#ff007f] hover:bg-[#ff007f]/90 text-white rounded-full px-8 h-14 text-base font-semibold shadow-lg shadow-[#ff007f]/20 transition-transform hover:-translate-y-1 group">
+                <Button asChild size="lg" className="glow-btn w-full sm:w-auto bg-[#ff007f] hover:bg-[#ff007f]/90 text-white rounded-full px-8 h-14 text-base font-semibold shadow-lg shadow-[#ff007f]/20 transition-transform hover:-translate-y-1 group">
                   <Link href="/simulator">
                     <Gamepad2 className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
                     Play the Simulator

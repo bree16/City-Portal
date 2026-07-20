@@ -1,0 +1,149 @@
+1. The Equity Window Is Covering the Dashboard (Highest Priority)
+
+Right now, the Home Dashboard popup is sitting directly on top of the completion screen. It blocks the statistics and competes for attention.
+
+Tell Replit:
+
+Redesign the End-of-Game Flow
+
+The completion experience currently feels cluttered because multiple interfaces are visible at the same time.
+
+When the player reaches the end of the simulator, only one primary interface should be visible.
+
+Current issues:
+
+The Home Dashboard popup covers the completion screen.
+Multiple UI layers compete for attention.
+The player doesn't know what they're supposed to click first.
+
+Instead, redesign the flow as follows:
+
+Step 1
+Display a clean "Congratulations" screen.
+
+Players see:
+
+Final statistics
+Achievements
+Journey summary
+Download Report
+Continue Homeownership Journey
+Start New Journey
+Return to Housing Hub
+
+Nothing else should be open.
+
+Step 2
+
+If the player selects Continue Homeownership Journey, then transition to the Home Dashboard.
+
+Do not open it automatically.
+
+Step 3
+
+Once the Home Dashboard is open:
+
+Hide the Congratulations screen.
+Allow the player to return to it with a "Back" button if desired.
+
+Only one major interface should ever be active at a time.
+
+2. The Popup Feels Like It's Floating Randomly
+
+The dashboard appears to be randomly placed over the page.
+
+It should instead:
+
+Slide in smoothly from the right,
+Expand from the center,
+Or replace the current screen entirely.
+
+Avoid stacking windows on top of each other.
+
+3. The Close Button Doesn't Actually Solve Anything
+
+Even though there's an X, it doesn't solve the workflow because the dashboard shouldn't have opened automatically in the first place.
+
+Instead:
+
+Congratulations Screen
+Player chooses Continue
+Dashboard opens
+
+That sequence is much more intuitive.
+
+4. Statistics Feel Empty
+
+I noticed:
+
+Total Savings Built: 0
+Furniture Purchased: 0 items
+
+If that's accurate because the player skipped those actions, that's okay—but if it's a bug, it should be fixed.
+
+If no furniture was purchased, consider displaying:
+
+No furniture purchased during this playthrough.
+
+instead of simply showing 0 items, which feels unfinished.
+
+5. The Player Card Feels Out of Place
+
+The little avatar box in the upper left looks disconnected from the rest of the layout.
+
+Suggestions:
+
+Make the portrait larger.
+Add the player's name.
+Include:
+Homeowner Status
+Credit Score
+Budget Grade
+Neighborhood
+Completion Percentage
+
+Make it feel like an actual profile card.
+
+6. Dashboard Needs Better Context
+
+The popup immediately jumps into numbers:
+
+Home Value
+Mortgage
+Equity
+
+Without explaining why the player is seeing it.
+
+Add a heading like:
+
+Welcome to Homeownership!
+
+or
+
+Your First Year as a Homeowner
+
+with a short sentence such as:
+
+"Continue managing your home by building equity, making upgrades, and planning your financial future."
+
+That gives the next phase context.
+
+7. Add Celebration
+
+This is a milestone! The end of the simulator should feel rewarding.
+
+Consider subtle effects like:
+
+🎉 Confetti animation
+House key animation
+"Congratulations!" banner
+A badge unlocking with a satisfying animation
+A progress timeline filling to 100%
+
+Keep it tasteful, but make finishing the simulator feel like an achievement.
+
+Overall Goal
+
+The end of the simulator should feel like the conclusion of one chapter and the beginning of another.
+
+The player should first celebrate becoming a homeowner, review their accomplishments, and then choose whether to continue into the post-purchase simulation. The interface should never overwhelm the user with multiple overlapping windows, and every screen should have a single, clear purpose.

@@ -5,7 +5,6 @@ import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChr
 import { useGameStore } from '@/store/gameStore';
 import { PottedPlant, TallPlant, WallArt, Curtains, Rug, Bookshelf, FloorLamp, SideTable, BookRow } from '@/components/decor/DecorKit';
 import { homes } from '@/data/homes';
-import { selectMaintenanceEvent, shouldMaintenanceFire } from '@/data/maintenanceEvents';
 import { GameIcon, GameIconName } from '@/components/ui/GameIcon';
 
 // ── Improvement projects ──────────────────────────────────────────
@@ -71,19 +70,17 @@ export default function HomeLifeScene() {
   const {
     cash, selectedHomeId, homeValue, mortgageBalance,
     improvementsOwned, pendingMaintenance,
-    initHomeLife, setPendingMaintenance, applyMaintenance,
-    buyImprovement, advanceHomeMonth,
+    initHomeLife, applyMaintenance,
+    buyImprovement, advanceHomeLifeMonth,
+    listingOpen, setListingOpen, dashboardOpen, setDashboardOpen,
   } = useGameStore();
 
   const home = homes.find((h) => h.id === selectedHomeId) ?? homes[0];
 
   // Local state
-  const [dashboardOpen, setDashboardOpen] = useState(true);
-  const [listingOpen, setListingOpen] = useState(false);
   const [activeImp, setActiveImp] = useState<string | null>(null);
   const [milestoneToast, setMilestoneToast] = useState<{ pct: number; icon: GameIconName; title: string; tip: string } | null>(null);
   const shownMilestones = useRef<Set<number>>(new Set());
-  const monthsAdvanced = useRef(0);
 
   // Initialize home life stats on mount
   useEffect(() => {
@@ -105,25 +102,7 @@ export default function HomeLifeScene() {
     }
   }, [equityPct]);
 
-  // Monthly payment breakdown
-  const interestPortion = Math.round(mortgageBalance * 0.065 / 12);
-  const taxInsurance   = Math.round(home.price * 0.015 / 12);
-  const principal      = Math.max(0, home.monthlyPayment - interestPortion - taxInsurance);
-
-  // Handle month advance
-  const handlePassMonth = () => {
-    if (pendingMaintenance) return;
-    advanceHomeMonth();
-    monthsAdvanced.current += 1;
-    if (shouldMaintenanceFire(monthsAdvanced.current)) {
-      setPendingMaintenance(selectMaintenanceEvent(monthsAdvanced.current));
-    }
-  };
-
-  // Listing profit
-  const agentFee      = Math.round(homeValue * 0.05);
-  const closingCosts  = Math.round(homeValue * 0.02);
-  const estProfit     = homeValue - agentFee - closingCosts - mortgageBalance;
+  // (All dashboard/listing logic is now in HomeLifeOverlays DraggablePanel — see GamePage.tsx)
 
   return (
     <group>
@@ -278,8 +257,7 @@ export default function HomeLifeScene() {
         </mesh>
       </group>
 
-      {/* ── WALL-MOUNTED SMART DISPLAY (Dashboard) ── */}
-      {/* Display frame */}
+      {/* ── WALL-MOUNTED SMART DISPLAY (decorative + reopen button) ── */}
       <mesh position={[0, 2.8, -7.85]} castShadow>
         <boxGeometry args={[4.8, 2.2, 0.08]} />
         <meshStandardMaterial color="#111827" roughness={0.3} metalness={0.5} />
@@ -292,92 +270,9 @@ export default function HomeLifeScene() {
         {!dashboardOpen ? (
           <ScenePanelReopen onOpen={() => setDashboardOpen(true)} label="Home Dashboard" icon="home" />
         ) : (
-        <div style={{
-          position: 'relative',
-          width: 320, padding: '14px 18px',
-          background: 'rgba(10,18,40,0.98)', border: '1px solid rgba(212,175,55,0.25)',
-          borderRadius: 'var(--glass-radius)', fontFamily: 'var(--display-font)', color: '#fff',
-          boxShadow: '0 0 30px rgba(10,18,40,0.8)',
-        }}>
-          <ScenePanelClose onClose={() => setDashboardOpen(false)} title="Hide Dashboard" />
-          <div style={{ fontSize: 9, fontWeight: 700, color: '#D4AF37', letterSpacing: 2, marginBottom: 10, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-            <GameIcon name="home" size={10} /> Home Dashboard — {home.name}
+          <div style={{ fontSize: 10, color: 'rgba(212,175,55,0.7)', fontFamily: 'Inter,sans-serif', letterSpacing: 2, padding: '6px 10px' }}>
+            DASHBOARD ACTIVE ↗
           </div>
-
-          {/* Key metrics row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 12 }}>
-            {[
-              { label: 'Home Value', value: `$${homeValue.toLocaleString()}`, color: '#4ade80' },
-              { label: 'Mortgage Left', value: `$${mortgageBalance.toLocaleString()}`, color: '#f87171' },
-              { label: 'Equity', value: `${equityPct.toFixed(1)}%`, color: '#D4AF37' },
-            ].map((m) => (
-              <div key={m.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 'var(--glass-radius)', padding: '6px 8px', textAlign: 'center' }}>
-                <div style={{ fontSize: 14, fontWeight: 800, color: m.color }}>{m.value}</div>
-                <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{m.label}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Equity bar */}
-          <div style={{ marginBottom: 12 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'rgba(255,255,255,0.4)', marginBottom: 4 }}>
-              <span>Equity built: ${equityValue.toLocaleString()}</span>
-              <span>{equityPct.toFixed(1)}%</span>
-            </div>
-            <div style={{ height: 6, background: 'rgba(255,255,255,0.08)', borderRadius: 'var(--glass-radius)', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${Math.min(100, equityPct)}%`, background: 'linear-gradient(90deg, var(--gold), #4ade80)', borderRadius: 'var(--glass-radius)', transition: 'width 0.8s ease' }} />
-            </div>
-          </div>
-
-          {/* Monthly breakdown */}
-          <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 'var(--glass-radius)', padding: '8px 10px', marginBottom: 12 }}>
-            <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: 6, letterSpacing: 1 }}>Monthly Payment — ${home.monthlyPayment}/mo</div>
-            {[
-              { label: 'Principal', value: principal, color: '#4ade80' },
-              { label: 'Interest',  value: interestPortion, color: '#f87171' },
-              { label: 'Tax + Insurance', value: taxInsurance, color: '#fbbf24' },
-            ].map((row) => (
-              <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, padding: '2px 0', color: 'rgba(255,255,255,0.7)' }}>
-                <span>{row.label}</span>
-                <span style={{ color: row.color, fontWeight: 700 }}>${row.value}/mo</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Actions */}
-          <button
-            onClick={handlePassMonth}
-            disabled={!!pendingMaintenance}
-            style={{
-              width: '100%', padding: '9px', borderRadius: 'var(--glass-radius)',
-              background: pendingMaintenance ? 'rgba(255,255,255,0.08)' : '#0F766E',
-              color: pendingMaintenance ? 'rgba(255,255,255,0.35)' : '#fff',
-              border: 'none', cursor: pendingMaintenance ? 'default' : 'pointer',
-              fontWeight: 800, fontSize: 12, fontFamily: 'Inter, sans-serif',
-              marginBottom: 6, transition: 'background 0.15s',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
-            }}
-          >
-            {pendingMaintenance ? <><GameIcon name="close" size={12} /> Resolve Maintenance First</> : <>Pass a Month →</>}
-          </button>
-
-          {equityPct >= 15 && (
-            <button
-              onClick={() => setListingOpen(true)}
-              style={{
-                width: '100%', padding: '8px', borderRadius: 'var(--glass-radius)',
-                background: 'linear-gradient(135deg, var(--gold), #F5C842)',
-                color: '#0F172A', border: 'none', cursor: 'pointer',
-                fontWeight: 800, fontSize: 11, fontFamily: 'Inter, sans-serif',
-                boxShadow: '0 0 16px rgba(212,175,55,0.5)',
-                animation: 'pulse 2s infinite',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
-              }}
-            >
-              <GameIcon name="home" size={14} /> List My Home →
-            </button>
-          )}
-        </div>
         )}
       </Html>
 
@@ -511,102 +406,7 @@ export default function HomeLifeScene() {
         </Html>
       )}
 
-      {/* ── LISTING MODAL ── */}
-      {listingOpen && (
-        <Html position={[0, 3.5, 5.5]} center distanceFactor={14}>
-          <div style={{
-            background: 'rgba(9,7,10,0.98)', border: '2px solid rgba(212,175,55,0.5)',
-            borderRadius: 'var(--glass-radius)', padding: '22px 26px', minWidth: 340,
-            fontFamily: 'var(--display-font)', color: '#fff',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.7)', textAlign: 'center',
-          }}>
-            <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'center', color: '#4ade80' }}><GameIcon name="home" size={40} /></div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: '#D4AF37', marginBottom: 4 }}>Ready to Sell?</div>
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 18 }}>Estimated Sale Breakdown</div>
-
-            {[
-              { label: 'Current Market Value', value: homeValue, color: '#4ade80' },
-              { label: 'Agent Commission (5%)', value: -agentFee, color: '#f87171' },
-              { label: 'Closing Costs (2%)', value: -closingCosts, color: '#f87171' },
-              { label: 'Mortgage Payoff', value: -mortgageBalance, color: '#f87171' },
-            ].map((row) => (
-              <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                <span style={{ color: 'rgba(255,255,255,0.65)' }}>{row.label}</span>
-                <span style={{ color: row.color, fontWeight: 700 }}>
-                  {row.value >= 0 ? '' : '−'}${Math.abs(row.value).toLocaleString()}
-                </span>
-              </div>
-            ))}
-
-            <div style={{ marginTop: 14, padding: '12px', background: estProfit > 0 ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)', borderRadius: 'var(--glass-radius)', marginBottom: 14 }}>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>Estimated Profit</div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: estProfit > 0 ? '#4ade80' : '#f87171' }}>
-                {estProfit >= 0 ? '+' : ''}${estProfit.toLocaleString()}
-              </div>
-            </div>
-
-            <div style={{ background: 'rgba(212,175,55,0.1)', borderRadius: 'var(--glass-radius)', padding: '10px 12px', marginBottom: 16, fontSize: 11, color: 'rgba(255,255,255,0.7)', lineHeight: 1.4 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, justifyContent: 'center' }}>
-                <GameIcon name="sparkles" size={14} color="#D4AF37" />
-                <strong style={{ color: '#D4AF37' }}>Dream Home Ahead!</strong>
-              </div>
-              Your equity could fund a larger Newport News home — start your journey toward your forever home!
-            </div>
-
-            {/* Action options */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 4 }}>
-              {/* Pay Down Mortgage */}
-              <button
-                onClick={() => {
-                  const extra = Math.min(5000, Math.floor((cash || 0) * 0.1));
-                  if (extra > 0) {
-                    useGameStore.getState().updateCash(-extra);
-                    useGameStore.setState((s) => ({
-                      mortgageBalance: Math.max(0, s.mortgageBalance - extra),
-                    }));
-                  }
-                  setListingOpen(false);
-                }}
-                disabled={!cash || cash < 500}
-                style={{
-                  padding: '10px 8px', borderRadius: 'var(--glass-radius)',
-                  background: cash >= 500 ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.04)',
-                  color: cash >= 500 ? '#4ade80' : 'rgba(255,255,255,0.3)',
-                  border: `1px solid ${cash >= 500 ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.1)'}`,
-                  cursor: cash >= 500 ? 'pointer' : 'default', fontWeight: 700, fontSize: 10,
-                  fontFamily: 'Inter,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5
-                }}
-              >
-                <GameIcon name="bank" size={12} /> Pay Down Mortgage
-              </button>
-              {/* Refinance */}
-              <button
-                onClick={() => setListingOpen(false)}
-                style={{
-                  padding: '10px 8px', borderRadius: 'var(--glass-radius)',
-                  background: 'rgba(212,175,55,0.1)', color: '#D4AF37',
-                  border: '1px solid rgba(212,175,55,0.3)',
-                  cursor: 'pointer', fontWeight: 700, fontSize: 10,
-                  fontFamily: 'Inter,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5
-                }}
-              >
-                <GameIcon name="chart" size={12} /> Refinance (Coming Soon)
-              </button>
-            </div>
-            <button
-              onClick={() => setListingOpen(false)}
-              style={{
-                width: '100%', padding: '11px', borderRadius: 'var(--glass-radius)',
-                background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)',
-                border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', fontWeight: 700, fontSize: 11,
-                fontFamily: 'Inter,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
-              }}
-            >
-              <GameIcon name="close" size={10} /> Keep Building Equity
-            </button>
-          </div>
-        </Html>
-      )}
+      {/* Listing modal is now a DraggablePanel rendered from GamePage (HomeLifeOverlays) */}
 
       {/* ── EQUITY MILESTONE TOAST ── */}
       <Html position={[0, 0, 0]} style={{ position: 'fixed', bottom: 80, right: 16, pointerEvents: 'none' }}>

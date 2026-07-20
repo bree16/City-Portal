@@ -15,6 +15,8 @@ import { CityExitButton } from '@/components/CityExitButton';
 import { IsometricCamera } from '@/components/IsometricCamera';
 import { GroundPlane } from '@/components/GroundPlane';
 import { PlayerCharacter } from '@/components/characters/PlayerCharacter';
+import { DraggablePanel } from '@/components/ui/DraggablePanel';
+import { homes } from '@/data/homes';
 import CityMapScene from '@/scenes/CityMapScene';
 import HomeInteriorScene from '@/scenes/HomeInteriorScene';
 import HomeLifeScene from '@/scenes/HomeLifeScene';
@@ -302,6 +304,221 @@ function formatTitle(id: string): string {
     .join(' ');
 }
 
+// ── Home-Life Draggable Overlays ──────────────────────────────────
+function HomeLifeOverlays() {
+  const {
+    stage, listingOpen, setListingOpen, dashboardOpen, setDashboardOpen,
+    homeValue, mortgageBalance, cash, selectedHomeId, pendingMaintenance,
+    advanceHomeLifeMonth, updateCash,
+  } = useGameStore();
+
+  if (stage !== 8) return null;
+
+  const home = homes.find((h) => h.id === selectedHomeId) ?? homes[0];
+  const equityValue = Math.max(0, homeValue - mortgageBalance);
+  const equityPct   = homeValue > 0 ? (equityValue / homeValue) * 100 : 0;
+  const interestPortion = Math.round(mortgageBalance * 0.065 / 12);
+  const taxInsurance    = Math.round(home.price * 0.015 / 12);
+  const principal       = Math.max(0, home.monthlyPayment - interestPortion - taxInsurance);
+  const agentFee        = Math.round(homeValue * 0.05);
+  const closingCosts    = Math.round(homeValue * 0.02);
+  const estProfit       = homeValue - agentFee - closingCosts - mortgageBalance;
+
+  const btnBase: React.CSSProperties = {
+    width: '100%', padding: '9px', borderRadius: 'var(--glass-radius)',
+    border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 12,
+    fontFamily: 'Inter, sans-serif', marginBottom: 6, transition: 'background 0.15s',
+    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+  };
+
+  return (
+    <>
+      {dashboardOpen && (
+        <DraggablePanel
+          id="home-dashboard"
+          title="Home Dashboard"
+          icon="home"
+          defaultPosition={{ x: 16, y: 90 }}
+          onClose={() => setDashboardOpen(false)}
+        >
+          <div style={{ width: 300, fontFamily: 'var(--display-font)', color: '#fff' }}>
+            <div style={{ fontSize: 9, fontWeight: 700, color: '#D4AF37', letterSpacing: 2, marginBottom: 10, textAlign: 'center' }}>
+              {home.name}
+            </div>
+
+            {/* Key metrics */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 12 }}>
+              {[
+                { label: 'Home Value',    value: `${homeValue.toLocaleString()}`,   color: '#4ade80' },
+                { label: 'Mortgage Left', value: `${mortgageBalance.toLocaleString()}`, color: '#f87171' },
+                { label: 'Equity',        value: `${equityPct.toFixed(1)}%`,          color: '#D4AF37' },
+              ].map((m) => (
+                <div key={m.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 'var(--glass-radius)', padding: '6px 8px', textAlign: 'center' }}>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: m.color }}>{m.value}</div>
+                  <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{m.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Equity bar */}
+            <div style={{ marginBottom: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'rgba(255,255,255,0.4)', marginBottom: 4 }}>
+                <span>Equity built: ${equityValue.toLocaleString()}</span><span>{equityPct.toFixed(1)}%</span>
+              </div>
+              <div style={{ height: 6, background: 'rgba(255,255,255,0.08)', borderRadius: 'var(--glass-radius)', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${Math.min(100, equityPct)}%`, background: 'linear-gradient(90deg, #D4AF37, #4ade80)', borderRadius: 'var(--glass-radius)', transition: 'width 0.8s ease' }} />
+              </div>
+            </div>
+
+            {/* Monthly breakdown */}
+            <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 'var(--glass-radius)', padding: '8px 10px', marginBottom: 12 }}>
+              <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: 6, letterSpacing: 1 }}>
+                Monthly Payment — ${home.monthlyPayment}/mo
+              </div>
+              {[
+                { label: 'Principal',       value: principal,       color: '#4ade80' },
+                { label: 'Interest',        value: interestPortion, color: '#f87171' },
+                { label: 'Tax + Insurance', value: taxInsurance,    color: '#fbbf24' },
+              ].map((row) => (
+                <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, padding: '2px 0', color: 'rgba(255,255,255,0.7)' }}>
+                  <span>{row.label}</span>
+                  <span style={{ color: row.color, fontWeight: 700 }}>${row.value}/mo</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Pass Month */}
+            <button
+              onClick={advanceHomeLifeMonth}
+              disabled={!!pendingMaintenance}
+              style={{
+                ...btnBase,
+                background: pendingMaintenance ? 'rgba(255,255,255,0.08)' : '#0F766E',
+                color: pendingMaintenance ? 'rgba(255,255,255,0.35)' : '#fff',
+                cursor: pendingMaintenance ? 'default' : 'pointer',
+              }}
+            >
+              {pendingMaintenance
+                ? <><GameIcon name="close" size={12} /> Resolve Maintenance First</>
+                : <>Pass a Month →</>}
+            </button>
+
+            {/* List Home */}
+            {equityPct >= 15 && (
+              <button
+                onClick={() => setListingOpen(true)}
+                style={{
+                  ...btnBase,
+                  background: 'linear-gradient(135deg, #D4AF37, #F5C842)',
+                  color: '#0F172A',
+                  boxShadow: '0 0 16px rgba(212,175,55,0.5)',
+                  animation: 'pulse 2s infinite',
+                }}
+              >
+                <GameIcon name="home" size={14} /> List My Home →
+              </button>
+            )}
+          </div>
+        </DraggablePanel>
+      )}
+
+      {listingOpen && (
+        <DraggablePanel
+          id="listing-modal"
+          title="Ready to Sell?"
+          icon="home"
+          defaultPosition={{ x: Math.max(16, Math.round(window.innerWidth / 2) - 185), y: 90 }}
+          onClose={() => setListingOpen(false)}
+        >
+          <div style={{ width: 340, fontFamily: 'var(--display-font)', color: '#fff', textAlign: 'center' }}>
+            <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'center', color: '#4ade80' }}>
+              <GameIcon name="home" size={40} />
+            </div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 18 }}>Estimated Sale Breakdown</div>
+
+            {[
+              { label: 'Current Market Value',  value:  homeValue,        color: '#4ade80' },
+              { label: 'Agent Commission (5%)', value: -agentFee,         color: '#f87171' },
+              { label: 'Closing Costs (2%)',    value: -closingCosts,     color: '#f87171' },
+              { label: 'Mortgage Payoff',       value: -mortgageBalance,  color: '#f87171' },
+            ].map((row) => (
+              <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <span style={{ color: 'rgba(255,255,255,0.65)' }}>{row.label}</span>
+                <span style={{ color: row.color, fontWeight: 700 }}>
+                  {row.value >= 0 ? '' : '−'}${Math.abs(row.value).toLocaleString()}
+                </span>
+              </div>
+            ))}
+
+            <div style={{ marginTop: 14, padding: '12px', background: estProfit > 0 ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)', borderRadius: 'var(--glass-radius)', marginBottom: 14 }}>
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>Estimated Profit</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: estProfit > 0 ? '#4ade80' : '#f87171' }}>
+                {estProfit >= 0 ? '+' : ''}${estProfit.toLocaleString()}
+              </div>
+            </div>
+
+            <div style={{ background: 'rgba(212,175,55,0.1)', borderRadius: 'var(--glass-radius)', padding: '10px 12px', marginBottom: 16, fontSize: 11, color: 'rgba(255,255,255,0.7)', lineHeight: 1.4 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, justifyContent: 'center' }}>
+                <GameIcon name="sparkles" size={14} color="#D4AF37" />
+                <strong style={{ color: '#D4AF37' }}>Dream Home Ahead!</strong>
+              </div>
+              Your equity could fund a larger Newport News home — start your journey toward your forever home!
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 4 }}>
+              <button
+                onClick={() => {
+                  const extra = Math.min(5000, Math.floor((cash || 0) * 0.1));
+                  if (extra > 0) {
+                    updateCash(-extra);
+                    useGameStore.setState((s) => ({ mortgageBalance: Math.max(0, s.mortgageBalance - extra) }));
+                  }
+                  setListingOpen(false);
+                }}
+                disabled={!cash || cash < 500}
+                style={{
+                  padding: '10px 8px', borderRadius: 'var(--glass-radius)',
+                  background: cash >= 500 ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.04)',
+                  color: cash >= 500 ? '#4ade80' : 'rgba(255,255,255,0.3)',
+                  border: `1px solid ${cash >= 500 ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.1)'}`,
+                  cursor: cash >= 500 ? 'pointer' : 'default', fontWeight: 700, fontSize: 10,
+                  fontFamily: 'Inter,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5
+                }}
+              >
+                <GameIcon name="bank" size={12} /> Pay Down Mortgage
+              </button>
+              <button
+                onClick={() => setListingOpen(false)}
+                style={{
+                  padding: '10px 8px', borderRadius: 'var(--glass-radius)',
+                  background: 'rgba(212,175,55,0.1)', color: '#D4AF37',
+                  border: '1px solid rgba(212,175,55,0.3)', cursor: 'pointer',
+                  fontWeight: 700, fontSize: 10, fontFamily: 'Inter,sans-serif',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5
+                }}
+              >
+                <GameIcon name="chart" size={12} /> Refinance (Coming Soon)
+              </button>
+            </div>
+            <button
+              onClick={() => setListingOpen(false)}
+              style={{
+                width: '100%', padding: '11px', borderRadius: 'var(--glass-radius)',
+                background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)',
+                border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer',
+                fontWeight: 700, fontSize: 11, fontFamily: 'Inter,sans-serif',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
+              }}
+            >
+              <GameIcon name="close" size={10} /> Keep Building Equity
+            </button>
+          </div>
+        </DraggablePanel>
+      )}
+    </>
+  );
+}
+
 export default function GamePage() {
   const { achievements, showResultsCard, setShowResultsCard } = useGameStore();
   const prevAchievements = useRef<string[]>([]);
@@ -333,7 +550,7 @@ export default function GamePage() {
         position: 'relative',
       }}
     >
-      <GameHUD />
+      {!showResultsCard && <GameHUD />}
       <div style={{ position: 'absolute', top: 72, left: 0, right: 0, bottom: 0 }}>
         <Canvas
           shadows
@@ -344,11 +561,12 @@ export default function GamePage() {
           <SceneContents />
         </Canvas>
       </div>
-      <SpeechBubble />
-      <SmartPhone />
-      <LifeEventModal />
-      <CityExitButton />
-      <TourChecklist />
+      {!showResultsCard && <SpeechBubble />}
+      {!showResultsCard && <SmartPhone />}
+      {!showResultsCard && <LifeEventModal />}
+      {!showResultsCard && <CityExitButton />}
+      {!showResultsCard && <TourChecklist />}
+      {!showResultsCard && <HomeLifeOverlays />}
       <SceneTransition />
       <AchievementToast
         isVisible={!!activeToast}

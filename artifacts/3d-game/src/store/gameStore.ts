@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { LifeEvent } from '@/data/lifeEvents';
 import type { MaintenanceEvent } from '@/data/maintenanceEvents';
+import { shouldMaintenanceFire, selectMaintenanceEvent } from '@/data/maintenanceEvents';
 
 export type HairstyleId = 'short' | 'medium' | 'locs' | 'curly' | 'ponytail' | 'fade';
 export type AccessoryId = 'glasses' | 'earrings' | 'hat';
@@ -62,6 +63,12 @@ export interface GameState {
   mortgagePayment: number;
   improvementsOwned: string[];
   pendingMaintenance: MaintenanceEvent | null; // transient
+  /** Months elapsed inside the homelife phase (used for maintenance scheduling). */
+  homeLifeMonths: number;
+  /** Whether the Home Dashboard DraggablePanel is open. */
+  dashboardOpen: boolean;
+  /** Whether the Listing/Sell modal DraggablePanel is open. */
+  listingOpen: boolean;
 
   // Audio preferences — persisted with the save so they survive clearing localStorage-only keys
   musicVolume: number; // 0–1
@@ -105,6 +112,10 @@ export interface GameState {
   setSelectedHome: (id: number) => void;
   buyFurniture: (id: string, price: number) => void;
   setShowResultsCard: (v: boolean) => void;
+  setDashboardOpen: (v: boolean) => void;
+  setListingOpen: (v: boolean) => void;
+  /** Advance one month in homelife: pays mortgage, accrues income, checks maintenance. */
+  advanceHomeLifeMonth: () => void;
   quitToMenu: () => void;
   resetGame: () => void;
 }
@@ -166,6 +177,9 @@ const INITIAL_STATE = {
   mortgageBalance: 0,
   mortgagePayment: 0,
   improvementsOwned: [] as string[],
+  homeLifeMonths: 0,
+  dashboardOpen: true,
+  listingOpen: false,
 };
 
 export const DEFAULT_VOLUME = 0.6;
@@ -179,6 +193,8 @@ const TRANSIENT_FIELDS: (keyof GameState)[] = [
   'phoneOpen',
   'pendingLifeEvent',
   'pendingMaintenance',
+  'listingOpen',
+  'dashboardOpen',
 ];
 
 export const useGameStore = create<GameState>()(
@@ -337,6 +353,25 @@ export const useGameStore = create<GameState>()(
           cash: Math.max(0, s.cash - price),
         })),
       setShowResultsCard: (v) => set({ showResultsCard: v }),
+      setDashboardOpen: (v) => set({ dashboardOpen: v }),
+      setListingOpen: (v) => set({ listingOpen: v }),
+      advanceHomeLifeMonth: () => {
+        const state = useGameStore.getState();
+        if (state.pendingMaintenance) return; // must resolve maintenance first
+        // Re-use the existing mortgage / income logic
+        state.advanceHomeMonth();
+        // Increment month counter and possibly trigger maintenance
+        useGameStore.setState((s) => {
+          const newMonths = s.homeLifeMonths + 1;
+          const maintenance = shouldMaintenanceFire(newMonths)
+            ? selectMaintenanceEvent(newMonths)
+            : null;
+          return {
+            homeLifeMonths: newMonths,
+            ...(maintenance ? { pendingMaintenance: maintenance } : {}),
+          };
+        });
+      },
       // Return to the character screen mid-game. Progress (stage, cash, etc.)
       // stays in the persisted save; only transient/session flags are cleared.
       quitToMenu: () =>

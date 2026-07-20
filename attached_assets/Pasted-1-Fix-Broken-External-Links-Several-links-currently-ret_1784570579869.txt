@@ -1,0 +1,129 @@
+1. Fix Broken External Links
+
+Several links currently return 404 errors or point to the wrong websites.
+
+Please replace them with working, official, and Newport News–specific resources.
+
+Parks & Recreation
+
+The current Parks & Recreation link returns a 404.
+
+Replace it with the official Newport News Parks & Recreation webpage or another valid city-maintained resource.
+
+Arts & Culture
+
+The current Arts & Culture button incorrectly opens an academy in Albuquerque, New Mexico.
+
+This is not related to Newport News.
+
+Replace it with official Newport News arts and culture resources, museums, performing arts venues, galleries, or tourism pages relevant to Newport News.
+
+Pet-Friendly Spaces
+
+The Pet-Friendly Spaces page currently returns a 404.
+
+Replace it with a working Newport News resource highlighting:
+
+Dog parks
+Pet-friendly parks
+Walking trails
+Outdoor recreation
+Pet amenities
+Active Duty Relocation
+
+The Active Duty Relocation link currently redirects to a Military OneSource 404 page.
+
+Replace it with the correct Military OneSource PCS/relocation page or another official military relocation resource.
+
+Verify Every External Link
+
+Before considering this task complete:
+
+Open every external link.
+Confirm it loads successfully.
+Confirm it is relevant.
+Confirm it is not a 404.
+Confirm it relates to Newport News or the intended military resource.
+
+Do not assume a URL is valid.
+
+Actually verify that it works.
+
+2. Premium Website Animations Were NOT Applied
+
+The previous task stated that premium animations and transitions had been added.
+
+However, these changes are not visible on the website.
+
+The visual experience still feels mostly static.
+
+Please actually implement the requested animations.
+
+Research Inspiration
+
+Look at modern award-winning websites for inspiration.
+
+Focus on tasteful, high-quality interactions rather than gimmicks.
+
+Add Premium Transitions
+
+Examples include:
+
+Smooth page transitions
+Section reveal animations
+Animated hero transitions
+Floating UI elements
+Scroll-triggered animations
+Interactive image reveals
+Animated gradients
+Text reveal animations
+Morphing buttons
+Ripple effects
+Smooth hover states
+Expanding cards
+Mouse-follow lighting effects
+Subtle parallax
+Dynamic backgrounds
+Animated dividers
+Loading transitions
+
+These should be visible and make the site feel more engaging while maintaining performance.
+
+Make the Website Feel Memorable
+
+The website should feel polished enough that users immediately notice the quality of the interactions.
+
+Every page should contain thoughtful micro-interactions and transitions.
+
+Avoid making every animation identical.
+
+Different sections should have their own personality while maintaining a consistent design language.
+
+3. Draggable Windows Were NOT Implemented
+
+The popup windows still cannot be dragged.
+
+This feature was requested previously but is still missing.
+
+Every popup window should be movable.
+
+Requirements:
+
+Click and drag the title bar
+Move the window anywhere on screen
+Smooth movement
+Stay within viewport boundaries
+Continue interacting with the application underneath where appropriate
+
+This applies to every popup in the simulator.
+
+4. End-of-Game Menu Still Overlaps
+
+The completion interface is still broken.
+
+Currently:
+
+Windows overlap each other.
+Buttons remain visible behind report screens.
+Important information is blocked.
+The experience feels unfinished.

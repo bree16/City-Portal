@@ -2,6 +2,7 @@
 - [3d-game camera & walls](3d-game-scene-camera.md) — indoor rooms are open boxes (back+left walls only); never wall the +x/+z camera side; no iframe audio gate.
 - [3d-game interaction pattern](3d-game-interaction-pattern.md) — in-world interactables must use onPointerDown + stopPropagation or the ground steals clicks for movement.
 - [3d-game save vs session flags](3d-game-save-flags.md) — gameStarted is session-only; detect a resumable save from stage/careerId, not gameStarted.
+- [3d-game homelife overlays](3d-game-homelife-overlays.md) — dashboard + listing modals are DraggablePanels in GamePage (HomeLifeOverlays); store holds listingOpen/dashboardOpen/homeLifeMonths; advanceHomeLifeMonth calls existing advanceHomeMonth then increments counter and checks maintenance.
 - [Events auto-curation](events-auto-curation.md) — Events page pulls from /api/events; AI refresh must merge with last-good list and validate URLs, since event listing sites are bot-limited.
 - [Clerk auth setup](clerk-auth-setup.md) — whitelabel Clerk wired in api-server + housing-hub; project-reference typecheck gotcha; programmatic test login.
 - [Housing-hub asset alias](housing-hub-assets.md) — `@assets` maps to the repo-root `attached_assets/` dir, not `src/assets`; save generated images there or Vite fails to resolve imports.

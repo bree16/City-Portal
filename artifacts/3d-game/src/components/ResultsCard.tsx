@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import { toPng } from 'html-to-image';
 import { useGameStore } from '@/store/gameStore';
 import { homes } from '@/data/homes';
@@ -62,14 +62,58 @@ function MiniCharacter({ skinTone, hairColor, shirtColor, pantsColor }: {
   );
 }
 
+// ── Confetti celebration ─────────────────────────────────────────
+function Confetti({ active }: { active: boolean }) {
+  const pieces = useMemo(() =>
+    Array.from({ length: 72 }, (_, i) => ({
+      id: i,
+      color: ['#D4AF37','#14B8A6','#F87171','#60A5FA','#A78BFA','#34D399','#FBBF24','#F472B6'][i % 8],
+      left: 4 + (i / 72) * 92,
+      delay: (i * 0.063) % 2.4,
+      duration: 2.0 + (i % 5) * 0.45,
+      size: 5 + (i % 4) * 3,
+      isRect: i % 3 !== 0,
+    })), []);
+
+  if (!active) return null;
+  return (
+    <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 1001, overflow: 'hidden' }}>
+      {pieces.map((p) => (
+        <div
+          key={p.id}
+          style={{
+            position: 'absolute',
+            top: -18,
+            left: `${p.left}%`,
+            width: p.size,
+            height: p.isRect ? Math.round(p.size * 0.45) : p.size,
+            background: p.color,
+            borderRadius: p.isRect ? 2 : '50%',
+            animation: `confetti-fall ${p.duration}s ${p.delay}s ease-in both`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function ResultsCard({ visible, onPlayAgain, onClose }: ResultsCardProps) {
   const { month, creditScore, savings, selectedHomeId, achievements, furnitureOwned, characterAppearance, resetGame } = useGameStore();
+  const [confettiActive, setConfettiActive] = useState(false);
   const home = homes.find((h) => h.id === selectedHomeId) ?? homes[0];
   const creditGain = creditScore - INITIAL_CREDIT;
   const earnedAchievements = achievements.filter((a) => ACHIEVEMENT_META[a]);
   const cardRef = useRef<HTMLDivElement>(null);
   const [downloading, setDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState(false);
+
+  // Fire confetti when card becomes visible
+  useEffect(() => {
+    if (!visible) { setConfettiActive(false); return; }
+    setConfettiActive(true);
+    const t = setTimeout(() => setConfettiActive(false), 3600);
+    return () => clearTimeout(t);
+  }, [visible]);
 
   // ESC closes the card (without resetting game) if onClose is provided
   useEffect(() => {
@@ -118,6 +162,8 @@ export function ResultsCard({ visible, onPlayAgain, onClose }: ResultsCardProps)
   };
 
   return (
+    <>
+    <Confetti active={confettiActive} />
     <AnimatePresence>
       {visible && (
         <motion.div
@@ -188,7 +234,15 @@ export function ResultsCard({ visible, onPlayAgain, onClose }: ResultsCardProps)
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
                 }}>
                   <MiniCharacter {...characterAppearance} />
-                  <span style={{ fontSize: 15, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6 }}>Your Player</span>
+                  <span style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 700 }}>
+                    {characterAppearance.name || 'Player'}
+                  </span>
+                  <span style={{ fontSize: 11, color: 'var(--glass-text-dim)', fontWeight: 500 }}>
+                    {characterAppearance.pronouns || 'they/them'}
+                  </span>
+                  <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>
+                    Credit: {creditScore}
+                  </span>
                 </div>
 
                 {/* Title block */}
@@ -221,8 +275,18 @@ export function ResultsCard({ visible, onPlayAgain, onClose }: ResultsCardProps)
                   subValue={creditGain >= 0 ? `+${creditGain} pts` : `${creditGain} pts`}
                   valueColor={creditGain >= 0 ? '#4ade80' : '#f87171'}
                 />
-                <StatBox icon="bank" label="Total Savings Built" value={`${savings.toLocaleString()}`} />
-                <StatBox icon="furniture" label="Furniture Purchased" value={`${furnitureOwned.length} items`} />
+                <StatBox
+                  icon="bank"
+                  label="Savings at Closing"
+                  value={savings > 0 ? `${savings.toLocaleString()}` : '$0'}
+                  subValue={savings === 0 ? 'Used toward down payment' : undefined}
+                />
+                <StatBox
+                  icon="furniture"
+                  label="Furniture Purchased"
+                  value={furnitureOwned.length > 0 ? `${furnitureOwned.length} item${furnitureOwned.length !== 1 ? 's' : ''}` : 'None yet'}
+                  subValue={furnitureOwned.length === 0 ? 'Ready to furnish!' : undefined}
+                />
               </div>
 
               {/* Achievements */}
@@ -317,6 +381,7 @@ export function ResultsCard({ visible, onPlayAgain, onClose }: ResultsCardProps)
         </motion.div>
       )}
     </AnimatePresence>
+    </>
   );
 }
 
