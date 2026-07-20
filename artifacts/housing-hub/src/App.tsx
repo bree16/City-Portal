@@ -33,6 +33,7 @@ import ShipPage from '@/pages/ShipPage';
 import { HelpLineStrip } from '@/components/HelpLineStrip';
 import { AccessibilityWidget } from '@/components/AccessibilityWidget';
 import { CityLiveFeed } from '@/components/CityLiveFeed';
+import { CityStreetLife } from '@/components/CityStreetLife';
 
 const queryClient = new QueryClient();
 
@@ -167,6 +168,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       <Footer />
       <ChatWidget />
       <AccessibilityWidget />
+      <CityStreetLife />
       <CityLiveFeed />
     </div>
   );
