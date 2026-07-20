@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Home, Menu, X } from 'lucide-react';
+import {
+  Home, Menu, X, Phone, ArrowRight,
+  Building2, KeyRound, MapPin, Route, Sparkles, Gamepad2, Calendar,
+  HeartHandshake, Mail, BookOpen, Trophy, ClipboardCheck, Landmark
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -35,12 +39,35 @@ export function Navbar() {
     { label: 'Contact', href: '/contact' },
   ];
 
-  const mobileLinks = [
-    ...navLinks,
-    { label: 'Resources', href: '/resources' },
-    { label: 'Success Stories', href: '/success-stories' },
-    { label: 'Buyer Checklist', href: '/checklist' },
-    { label: 'SHIP Housing Plan', href: '/ship' },
+  const mobileGroups = [
+    {
+      heading: 'Find a Home',
+      links: [
+        { label: 'Buy', href: '/buy', icon: Building2, desc: 'Listings & financing' },
+        { label: 'Rent', href: '/rent', icon: KeyRound, desc: 'Affordable rentals' },
+        { label: 'Neighborhoods', href: '/neighborhoods', icon: MapPin, desc: 'Find your fit' },
+        { label: 'Why Newport News', href: '/why-newport-news', icon: Sparkles, desc: 'Life in the city' },
+      ],
+    },
+    {
+      heading: 'Plan & Learn',
+      links: [
+        { label: 'Buyer Checklist', href: '/checklist', icon: ClipboardCheck, desc: 'Step-by-step guide' },
+        { label: 'Journey', href: '/journey', icon: Route, desc: 'Your housing path' },
+        { label: 'Simulator', href: '/simulator', icon: Gamepad2, desc: 'Learn through play' },
+        { label: 'SHIP Housing Plan', href: '/ship', icon: Landmark, desc: "The city's roadmap" },
+      ],
+    },
+    {
+      heading: 'Community & Help',
+      links: [
+        { label: 'Events', href: '/events', icon: Calendar, desc: 'Workshops & classes' },
+        { label: 'Resources', href: '/resources', icon: BookOpen, desc: 'Programs & links' },
+        { label: 'Services', href: '/services', icon: HeartHandshake, desc: 'Resident services' },
+        { label: 'Success Stories', href: '/success-stories', icon: Trophy, desc: 'Real neighbors' },
+        { label: 'Contact', href: '/contact', icon: Mail, desc: 'Get in touch' },
+      ],
+    },
   ];
 
   return (
@@ -121,30 +148,80 @@ export function Navbar() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
             id="mobile-nav"
-            className="fixed inset-0 z-40 bg-white pt-24 px-6 flex flex-col xl:hidden overflow-y-auto"
+            className="fixed inset-0 z-40 bg-gradient-to-b from-white via-white to-muted pt-24 px-5 flex flex-col xl:hidden overflow-y-auto"
           >
-            <div className="flex flex-col gap-4 text-lg font-medium pb-8">
-              <Link
-                href="/"
-                className={`py-4 text-lg font-medium border-b border-border flex items-center ${location === '/' ? 'text-accent font-semibold' : 'text-foreground'}`}
+            <div className="flex flex-col gap-6 pb-10 max-w-lg w-full mx-auto">
+              {/* Home shortcut */}
+              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
+                <Link
+                  href="/"
+                  className={`flex items-center gap-3 rounded-2xl px-4 py-3.5 border transition-colors ${
+                    location === '/' ? 'bg-primary text-white border-primary' : 'bg-white border-border hover:border-accent/40'
+                  }`}
+                >
+                  <Home className={`w-5 h-5 ${location === '/' ? 'text-secondary' : 'text-accent'}`} />
+                  <span className="font-bold">Home</span>
+                </Link>
+              </motion.div>
+
+              {mobileGroups.map((group, gi) => (
+                <motion.div
+                  key={group.heading}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + gi * 0.08, duration: 0.3 }}
+                >
+                  <div className="text-[11px] font-bold uppercase tracking-[0.15em] text-muted-foreground mb-2.5 px-1">
+                    {group.heading}
+                  </div>
+                  <div className="bg-white rounded-2xl border border-border overflow-hidden shadow-sm">
+                    {group.links.map((link, li) => {
+                      const isActive = location === link.href || (link.href === '/resources' && location === '/assistance');
+                      return (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className={`group flex items-center gap-3.5 px-4 py-3.5 transition-colors active:bg-muted ${
+                            li > 0 ? 'border-t border-border/60' : ''
+                          } ${isActive ? 'bg-accent/5' : 'hover:bg-muted/60'}`}
+                        >
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform group-active:scale-90 ${
+                            isActive ? 'bg-accent text-white' : 'bg-primary/5 text-primary'
+                          }`}>
+                            <link.icon className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className={`font-semibold leading-tight ${isActive ? 'text-accent' : 'text-foreground'}`}>
+                              {link.label}
+                            </div>
+                            <div className="text-xs text-muted-foreground truncate">{link.desc}</div>
+                          </div>
+                          <ArrowRight className={`w-4 h-4 shrink-0 transition-all -translate-x-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 ${
+                            isActive ? 'text-accent opacity-100 translate-x-0' : 'text-muted-foreground'
+                          }`} />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              ))}
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + mobileGroups.length * 0.08, duration: 0.3 }}
+                className="space-y-3"
               >
-                Home
-              </Link>
-              {mobileLinks.map((link) => {
-                const isActive = location === link.href || (link.href === '/resources' && location === '/assistance');
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`py-4 text-lg font-medium border-b border-border flex items-center ${isActive ? 'text-accent font-semibold' : 'text-foreground'}`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-              <Button asChild className="mt-6 bg-accent hover:bg-accent/90 text-white w-full text-center py-4 text-lg rounded-2xl h-auto font-bold shadow-lg">
-                <Link href="/buy">Get Started</Link>
-              </Button>
+                <Button asChild className="bg-accent hover:bg-accent/90 text-white w-full text-center py-4 text-lg rounded-2xl h-auto font-bold shadow-lg">
+                  <Link href="/buy">Get Started</Link>
+                </Button>
+                <a
+                  href="tel:7579332311"
+                  className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl border border-border bg-white text-primary font-semibold hover:border-accent/40 transition-colors"
+                >
+                  <Phone className="w-4 h-4 text-accent" /> Talk to a person: (757) 933-2311
+                </a>
+              </motion.div>
             </div>
           </motion.div>
         )}
