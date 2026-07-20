@@ -185,7 +185,7 @@ export function CharacterCreator() {
   };
 
   return (
-    <div className="min-h-[100dvh] w-full bg-[#060B19] flex flex-col items-center justify-center p-4 sm:p-8 font-sans overflow-x-hidden text-white/90">
+    <div className="min-h-[100dvh] w-full bg-[#060B19] flex flex-col items-center justify-start lg:justify-center p-4 sm:p-8 font-sans overflow-x-hidden text-white/90">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

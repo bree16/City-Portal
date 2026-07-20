@@ -65,7 +65,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AudioManager>
-          <div className="w-full h-[100dvh] bg-[#110e15] text-white relative overflow-hidden">
+          <div className="w-full h-[100dvh] bg-[#110e15] text-white relative overflow-y-auto overflow-x-hidden">
             <MainApp />
           </div>
         </AudioManager>

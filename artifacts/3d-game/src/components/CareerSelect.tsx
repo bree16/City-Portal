@@ -12,7 +12,7 @@ export function CareerSelect() {
 
   const handleStart = () => {
     if (!selected) return;
-    setCareer(selected.id, selected.monthlyIncome, selected.startingBonus);
+    setCareer(selected.id, selected.monthlyIncome, selected.monthlyExpenses, selected.startingBonus);
   };
 
   return (
@@ -93,6 +93,18 @@ export function CareerSelect() {
                     <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', letterSpacing: 0.8 }}>Monthly Income</span>
                     <span style={{ fontSize: 17, fontWeight: 800, color: '#4ade80' }}>
                       ${career.monthlyIncome.toLocaleString()}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', letterSpacing: 0.8 }}>Monthly Costs</span>
+                    <span style={{ fontSize: 15, fontWeight: 700, color: '#f87171' }}>
+                      −${career.monthlyExpenses.toLocaleString()}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', letterSpacing: 0.8 }}>Left to Save</span>
+                    <span style={{ fontSize: 15, fontWeight: 800, color: 'var(--gold)' }}>
+                      ${(career.monthlyIncome - career.monthlyExpenses).toLocaleString()}/mo
                     </span>
                   </div>
                   <div style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>

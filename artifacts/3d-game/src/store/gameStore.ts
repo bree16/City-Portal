@@ -78,7 +78,7 @@ export interface GameState {
   buyImprovement: (id: string, cost: number, valuePct: number) => void;
   advanceHomeMonth: () => void;
   togglePhone: () => void;
-  setCareer: (id: string, monthlyIncome: number, bonus: { type: 'cash' | 'savings' | 'creditScore'; amount: number }) => void;
+  setCareer: (id: string, monthlyIncome: number, monthlyExpenses: number, bonus: { type: 'cash' | 'savings' | 'creditScore'; amount: number }) => void;
   setPendingLifeEvent: (event: LifeEvent | null) => void;
   applyLifeEvent: () => void;
   startGame: (appearance: CharacterAppearance) => void;
@@ -241,16 +241,21 @@ export const useGameStore = create<GameState>()(
       advanceHomeMonth: () =>
         set((s) => {
           const net = s.monthlyIncome - s.monthlyExpenses;
-          const principalPaid = 200; // simplified principal reduction per month
+          // Real 30-yr amortization: payment from the original loan (90% of home value)
+          // at 6.5% APR; principal = payment minus this month's interest.
+          const monthlyRate = 0.065 / 12;
+          const payment = Math.round(s.homeValue * 0.9 * 0.006321); // 30-yr payment factor at 6.5%
+          const interest = Math.round(s.mortgageBalance * monthlyRate);
+          const principalPaid = Math.max(50, payment - interest);
           return {
             month: s.month + 1,
             cash: Math.max(0, s.cash + net),
             mortgageBalance: Math.max(0, s.mortgageBalance - principalPaid),
           };
         }),
-      setCareer: (id, income, bonus) =>
+      setCareer: (id, income, expenses, bonus) =>
         set((s) => {
-          const base: Partial<GameState> = { careerId: id, monthlyIncome: income };
+          const base: Partial<GameState> = { careerId: id, monthlyIncome: income, monthlyExpenses: expenses };
           if (bonus.type === 'cash') base.cash = s.cash + bonus.amount;
           if (bonus.type === 'savings') base.savings = s.savings + bonus.amount;
           if (bonus.type === 'creditScore') base.creditScore = Math.max(300, Math.min(850, s.creditScore + bonus.amount));
