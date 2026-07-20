@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, BedDouble, Bath, Info, Search, ShieldCheck, Home, AlertCircle, Maximize } from 'lucide-react';
+import { MapPin, BedDouble, Bath, Info, Search, ShieldCheck, Home, AlertCircle, Maximize, ExternalLink } from 'lucide-react';
+import { RENTALS, ZILLOW_ALL_RENTALS, CITY_MARKET } from '@/data/market';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -18,19 +19,22 @@ import rent6 from '@assets/generated_images/rent_6.jpg';
 
 export default function RentPage() {
   const [searchTerm, setSearchTerm] = useState('All');
-  
-  const listings = [
-    { id: 1, name: "Riverside Commons", price: "$950", beds: 2, baths: 1, sqft: "780 sqft", hood: "Hilton Village", img: rent1 },
-    { id: 2, name: "Oak Tree Apartments", price: "$1,100", beds: 3, baths: 2, sqft: "1,050 sqft", hood: "Denbigh", img: rent2 },
-    { id: 3, name: "Harbor View Lofts", price: "$1,350", beds: 1, baths: 1, sqft: "620 sqft", hood: "Oyster Point", img: rent3 },
-    { id: 4, name: "Sunset Gardens", price: "$875", beds: 2, baths: 1, sqft: "840 sqft", hood: "Southeast", img: rent4 },
-    { id: 5, name: "Colonial Heights", price: "$1,200", beds: 3, baths: 2, sqft: "1,200 sqft", hood: "Denbigh", img: rent5 },
-    { id: 6, name: "Beacon Place", price: "$1,450", beds: 2, baths: 2, sqft: "950 sqft", hood: "Hilton Village", img: rent6 },
-  ];
+  const [maxRent, setMaxRent] = useState('');
+  const [minBeds, setMinBeds] = useState('any');
 
-  const filteredListings = searchTerm === 'All' 
-    ? listings 
-    : listings.filter(l => l.hood === searchTerm);
+  // Real Newport News rental communities (advertised 2026 starting rents).
+  const listingImages: Record<number, string> = { 1: rent1, 2: rent2, 3: rent3, 4: rent4, 5: rent5, 6: rent6 };
+  const listings = RENTALS.map((r) => ({ ...r, img: listingImages[r.id] }));
+
+  const maxRentNum = maxRent.trim() === '' ? Infinity : Number(maxRent);
+  const minBedsNum = minBeds === 'any' ? 0 : Number(minBeds);
+
+  const filteredListings = listings.filter(
+    (l) =>
+      (searchTerm === 'All' || l.hood === searchTerm) &&
+      (Number.isNaN(maxRentNum) || l.minRent <= maxRentNum) &&
+      l.maxBeds >= minBedsNum,
+  );
 
   return (
     <div className="flex flex-col w-full pt-20 bg-muted/20 min-h-screen">
@@ -59,15 +63,19 @@ export default function RentPage() {
                 <SelectItem value="Hilton Village">Hilton Village</SelectItem>
                 <SelectItem value="Denbigh">Denbigh</SelectItem>
                 <SelectItem value="Oyster Point">Oyster Point</SelectItem>
+                <SelectItem value="Port Warwick">Port Warwick</SelectItem>
                 <SelectItem value="Southeast">Southeast</SelectItem>
               </SelectContent>
             </Select>
-            <Input 
-              placeholder="Max rent ($)" 
+            <Input
+              placeholder="Max rent ($)"
               type="number"
+              min={0}
+              value={maxRent}
+              onChange={(e) => setMaxRent(e.target.value)}
               className="h-12 bg-white text-foreground border-none"
             />
-            <Select>
+            <Select value={minBeds} onValueChange={setMinBeds}>
               <SelectTrigger className="h-12 bg-white text-foreground border-none">
                 <SelectValue placeholder="Beds" />
               </SelectTrigger>
@@ -88,7 +96,19 @@ export default function RentPage() {
       {/* Listings */}
       <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <h2 className="text-2xl font-bold text-primary mb-8">Rentals Across Newport News</h2>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-primary">Real Rental Communities in Newport News</h2>
+              <p className="text-muted-foreground text-sm mt-1">
+                Citywide average rent is {CITY_MARKET.avgRent}/mo ({CITY_MARKET.updated}); the 2026 fair-market rent for a 2-bedroom is {CITY_MARKET.fmr2Br}. Starting rents below are advertised ranges — always confirm with the property.
+              </p>
+            </div>
+            <Button asChild variant="outline" className="shrink-0 border-primary/20 text-primary hover:bg-primary hover:text-white">
+              <a href={ZILLOW_ALL_RENTALS} target="_blank" rel="noopener noreferrer">
+                Browse all on Zillow <ExternalLink className="w-4 h-4 ml-1.5" />
+              </a>
+            </Button>
+          </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredListings.map((listing, i) => (
@@ -108,11 +128,13 @@ export default function RentPage() {
                     </div>
                   </div>
                   <CardContent className="p-6 flex flex-col flex-1">
-                    <div className="flex justify-between items-start mb-2">
+                    <div className="flex justify-between items-start mb-1">
                       <h3 className="font-bold text-xl text-primary">{listing.name}</h3>
                     </div>
-                    <div className="font-extrabold text-accent text-2xl mb-4">{listing.price}<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
-                    
+                    <p className="text-xs text-muted-foreground flex items-center gap-1 mb-2"><MapPin className="w-3 h-3" />{listing.address}</p>
+                    <div className="font-extrabold text-accent text-2xl mb-1">{listing.price}<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
+                    <p className="text-xs text-muted-foreground mb-4">{listing.priceNote}</p>
+
                     <div className="grid grid-cols-3 gap-2 mb-6">
                       <div className="flex flex-col items-center justify-center p-2 bg-muted rounded-lg text-sm font-medium">
                         <BedDouble className="w-4 h-4 mb-1 text-primary" /> {listing.beds} Bed
@@ -124,9 +146,11 @@ export default function RentPage() {
                         <Maximize className="w-4 h-4 mb-1 text-primary" /> {listing.sqft}
                       </div>
                     </div>
-                    
-                    <Button variant="outline" className="w-full mt-auto border-primary/20 text-primary hover:bg-primary hover:text-white transition-colors">
-                      View Details
+
+                    <Button asChild variant="outline" className="w-full mt-auto border-primary/20 text-primary hover:bg-primary hover:text-white transition-colors">
+                      <a href={listing.url} target="_blank" rel="noopener noreferrer">
+                        View on Zillow <ExternalLink className="w-4 h-4 ml-1.5" />
+                      </a>
                     </Button>
                   </CardContent>
                 </Card>

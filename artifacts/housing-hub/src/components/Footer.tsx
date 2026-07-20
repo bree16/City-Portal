@@ -23,16 +23,16 @@ export function Footer() {
               The City of Newport News Housing Hub connects residents with affordable housing, homeownership programs, and community resources.
             </p>
             <div className="flex items-center gap-4 pt-4">
-              <a href="#" className="text-accent hover:text-white transition-colors" aria-label="Facebook">
+              <a href="https://www.facebook.com/cityofnewportnews" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-colors" aria-label="Facebook">
                 <SiFacebook className="w-5 h-5" />
               </a>
-              <a href="#" className="text-accent hover:text-white transition-colors" aria-label="Instagram">
+              <a href="https://www.instagram.com/cityofnewportnews" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-colors" aria-label="Instagram">
                 <SiInstagram className="w-5 h-5" />
               </a>
-              <a href="#" className="text-accent hover:text-white transition-colors" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/company/city-of-newport-news" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-colors" aria-label="LinkedIn">
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a href="#" className="text-accent hover:text-white transition-colors" aria-label="YouTube">
+              <a href="https://www.youtube.com/user/cityofnewportnews" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-white transition-colors" aria-label="YouTube">
                 <SiYoutube className="w-5 h-5" />
               </a>
             </div>
@@ -58,14 +58,14 @@ export function Footer() {
           <div>
             <h3 className="tracking-widest text-xs uppercase text-white/50 mb-6 border-b border-white/10 pb-2 inline-block">Housing Resources</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-white/70 hover:text-accent transition-colors text-sm">Virginia Housing</a></li>
-              <li><a href="#" className="text-white/70 hover:text-accent transition-colors text-sm">NNRHA</a></li>
-              <li><a href="#" className="text-white/70 hover:text-accent transition-colors text-sm">Homebuyer Education</a></li>
-              <li><a href="#" className="text-white/70 hover:text-accent transition-colors text-sm">Housing Counseling</a></li>
-              <li><a href="#" className="text-white/70 hover:text-accent transition-colors text-sm">Down Payment Assistance</a></li>
-              <li><a href="#" className="text-white/70 hover:text-accent transition-colors text-sm">Emergency Housing</a></li>
-              <li><a href="#" className="text-white/70 hover:text-accent transition-colors text-sm">Fair Housing</a></li>
-              <li><a href="#" className="text-white/70 hover:text-accent transition-colors text-sm">United Way 211</a></li>
+              <li><a href="https://www.virginiahousing.com" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-accent transition-colors text-sm">Virginia Housing</a></li>
+              <li><a href="https://nnrha.com" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-accent transition-colors text-sm">NNRHA</a></li>
+              <li><a href="https://www.virginiahousing.com/homebuyers/homebuyer-education" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-accent transition-colors text-sm">Homebuyer Education</a></li>
+              <li><a href="https://www.hud.gov/i_want_to/talk_to_a_housing_counselor" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-accent transition-colors text-sm">Housing Counseling</a></li>
+              <li><Link href="/assistance" className="text-white/70 hover:text-accent transition-colors text-sm">Down Payment Assistance</Link></li>
+              <li><Link href="/assistance" className="text-white/70 hover:text-accent transition-colors text-sm">Emergency Housing</Link></li>
+              <li><a href="https://www.hud.gov/program_offices/fair_housing_equal_opp" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-accent transition-colors text-sm">Fair Housing</a></li>
+              <li><a href="https://www.211virginia.org" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-accent transition-colors text-sm">United Way 211</a></li>
             </ul>
           </div>
 
@@ -92,9 +92,9 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/50">
             <p>&copy; {new Date().getFullYear()} City of Newport News. All rights reserved.</p>
             <div className="flex items-center gap-6">
-              <a href="#" className="hover:text-white transition-colors">Accessibility</a>
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
+              <a href="https://www.nnva.gov/393/Accessibility" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Accessibility</a>
+              <a href="https://www.nnva.gov/379/Privacy-Policy" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacy Policy</a>
+              <Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link>
             </div>
           </div>
         </div>
