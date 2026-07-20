@@ -215,46 +215,6 @@ function MegaDrone({ color }: { color: string }) {
   );
 }
 
-function BigInfoCard({ card, color, accent }: { card: InfoCard; color: string; accent: string }) {
-  const inner = (
-    <div style={{
-      width: 240,
-      background: 'linear-gradient(145deg, #06122a 0%, #0f2347 60%, #162e55 100%)',
-      border: `2.5px solid ${color}`,
-      borderRadius: 16,
-      padding: '16px 20px 18px',
-      boxShadow: `0 16px 50px rgba(0,0,0,0.65), 0 0 0 1px ${color}30, inset 0 1px 0 rgba(255,255,255,0.06)`,
-      fontFamily: 'Inter, sans-serif',
-      cursor: card.link ? 'pointer' : 'default',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-        <div style={{ fontSize: 8, fontWeight: 900, color: accent, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
-          🏛 Newport News Housing Hub
-        </div>
-        {card.badge && (
-          <span style={{
-            background: `${color}20`, border: `1px solid ${color}50`,
-            borderRadius: 6, padding: '2px 7px', fontSize: 8, fontWeight: 800,
-            color, letterSpacing: '0.05em',
-          }}>{card.badge}</span>
-        )}
-      </div>
-      <div style={{ fontSize: 20, fontWeight: 900, color: '#fff', lineHeight: 1.25, marginBottom: 7 }}>
-        {card.headline}
-      </div>
-      <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', lineHeight: 1.55 }}>{card.sub}</div>
-      <div style={{ marginTop: 12, height: 2, background: `linear-gradient(90deg, ${color}, transparent)`, borderRadius: 1 }} />
-    </div>
-  );
-  if (card.link) {
-    return (
-      <a href={card.link} style={{ textDecoration: 'none', display: 'block', pointerEvents: 'auto' }}>
-        {inner}
-      </a>
-    );
-  }
-  return inner;
-}
 
 function CityBus({ marquee }: { marquee: string }) {
   return (
@@ -348,35 +308,6 @@ function HotAirBalloon({ color, accent }: { color: string; accent: string }) {
   );
 }
 
-function BalloonSign({ card, color, accent }: { card: InfoCard; color: string; accent: string }) {
-  const inner = (
-    <div style={{
-      background: `linear-gradient(135deg, ${color}18, ${color}08)`,
-      border: `2px solid ${color}`,
-      borderRadius: 10,
-      padding: '10px 16px',
-      width: 200,
-      backdropFilter: 'blur(10px)',
-      boxShadow: `0 8px 30px rgba(0,0,0,0.4), 0 0 0 1px ${color}20`,
-      fontFamily: 'Inter, sans-serif',
-      cursor: card.link ? 'pointer' : 'default',
-    }}>
-      <div style={{ fontSize: 8, fontWeight: 800, color: accent, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>
-        🏛 Newport News Housing
-      </div>
-      <div style={{ fontSize: 15, fontWeight: 900, color: '#fff', lineHeight: 1.3, marginBottom: 5 }}>{card.headline}</div>
-      <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.65)', lineHeight: 1.5 }}>{card.sub}</div>
-    </div>
-  );
-  if (card.link) {
-    return (
-      <a href={card.link} style={{ textDecoration: 'none', display: 'block', pointerEvents: 'auto' }}>
-        {inner}
-      </a>
-    );
-  }
-  return inner;
-}
 
 // ─── Flash helper ─────────────────────────────────────────────────────────────
 function useFlash(interval = 220) {
@@ -392,8 +323,7 @@ function useFlash(interval = 220) {
 const DRONE_TOPS = [80, 200, 320, 140, 260];
 
 // ─── Drone Scene ──────────────────────────────────────────────────────────────
-function DroneScene({ color, accent, card }: { color: string; accent: string; card: InfoCard }) {
-  const [cardVisible, setCardVisible] = useState(false);
+function DroneScene({ color }: { color: string }) {
   const [phase, setPhase] = useState<'idle'|'entering'|'hovering'|'exiting'>('idle');
   const [cycleCount, setCycleCount] = useState(0);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -402,21 +332,17 @@ function DroneScene({ color, accent, card }: { color: string; accent: string; ca
     setCycleCount(c => c + 1);
     setPhase('entering');
     timerRef.current = setTimeout(() => {
-      setCardVisible(true);
       setPhase('hovering');
       timerRef.current = setTimeout(() => {
-        setCardVisible(false);
         setPhase('exiting');
-        timerRef.current = setTimeout(() => {
-          setPhase('idle');
-        }, 2500);
-      }, 7000);
+        timerRef.current = setTimeout(() => setPhase('idle'), 2500);
+      }, 6000);
     }, 2800);
   }, []);
 
   useEffect(() => {
-    const initial = setTimeout(runCycle, 2000);
-    return () => clearTimeout(initial);
+    const t = setTimeout(runCycle, 2000);
+    return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
@@ -435,41 +361,16 @@ function DroneScene({ color, accent, card }: { color: string; accent: string; ca
   const droneTop = DRONE_TOPS[cycleCount % DRONE_TOPS.length];
 
   return (
-    <motion.div
-      style={{ position: 'fixed', top: droneTop, right: 0, left: 0, pointerEvents: 'none', zIndex: 9990 }}
-    >
+    <motion.div style={{ position: 'fixed', top: droneTop, right: 0, left: 0, pointerEvents: 'none', zIndex: 9990 }}>
       <motion.div
-        animate={{ x: droneX, y: phase === 'hovering' ? [0, -6, 0] : 0 }}
+        animate={{ x: droneX, y: phase === 'hovering' ? [0, -8, 0] : 0 }}
         transition={phase === 'hovering'
-          ? { y: { duration: 2.5, repeat: Infinity, ease: 'easeInOut' }, x: { duration: 0 } }
+          ? { y: { duration: 2.8, repeat: Infinity, ease: 'easeInOut' }, x: { duration: 0 } }
           : { x: { duration: phase === 'entering' ? 2.8 : 2.5, ease: phase === 'entering' ? [0.22,1,0.36,1] : [0.55,0,0.78,0] }, y: { duration: 0 } }
         }
         style={{ position: 'absolute', left: 0, top: 0 }}
       >
         <MegaDrone color={color} />
-
-        {/* Cable + card */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: -4 }}>
-          {/* Cable */}
-          <motion.div
-            animate={{ height: cardVisible ? 80 : 0, opacity: cardVisible ? 1 : 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            style={{ width: 2, background: `linear-gradient(180deg, ${color}80, rgba(255,255,255,0.3))`, borderRadius: 1 }}
-          />
-          {/* Hook */}
-          <AnimatePresence>
-            {cardVisible && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5, y: -20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.4, y: -20 }}
-                transition={{ type: 'spring', stiffness: 220, damping: 20 }}
-              >
-                <BigInfoCard card={card} color={color} accent={accent} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
       </motion.div>
     </motion.div>
   );
@@ -509,39 +410,19 @@ function BusScene({ ticker }: { ticker: string[] }) {
 }
 
 // ─── Hot Air Balloon Scene ────────────────────────────────────────────────────
-function BalloonScene({ color, accent, card }: { color: string; accent: string; card: InfoCard }) {
-  const [showSign, setShowSign] = useState(false);
+function BalloonScene({ color, accent }: { color: string; accent: string }) {
   return (
     <motion.div
       style={{ position: 'fixed', top: '28%', right: 0, pointerEvents: 'none', zIndex: 9985 }}
       initial={{ x: 200, opacity: 0 }}
       animate={{ x: [200, -600], opacity: [0, 1, 1, 0] }}
       transition={{ times: [0, 0.06, 0.9, 1], duration: 22, delay: 14, repeat: Infinity, repeatDelay: 40, ease: 'linear' }}
-      onUpdate={(l) => { if ((l.x as number) < 100) setShowSign(true); }}
     >
       <motion.div
-        animate={{ y: [0, -12, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        style={{ position: 'relative' }}
+        animate={{ y: [0, -14, 0] }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
       >
         <HotAirBalloon color={color} accent={accent} />
-        {/* Hanging sign on a rope */}
-        <AnimatePresence>
-          {showSign && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.6 }}
-              style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 178 }}
-            >
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ width: 2, height: 28, background: 'rgba(255,255,255,0.4)' }} />
-                <BalloonSign card={card} color={color} accent={accent} />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </motion.div>
     </motion.div>
   );
@@ -782,16 +663,13 @@ export function CityLiveFeed() {
   if (SKIP_PAGES.has(path)) return null;
 
   const data = getPageData(path);
-  // Rotate which card goes to each actor so they all show different content
   const cards = data.cards;
-  const droneCard   = cards[0];
-  const balloonCard = cards[1] ?? cards[0];
 
   return (
     <>
-      <DroneScene   color={data.color} accent={data.accent} card={droneCard} />
+      <DroneScene   color={data.color} />
       <BusScene     ticker={data.ticker} />
-      <BalloonScene color={data.color} accent={data.accent} card={balloonCard} />
+      <BalloonScene color={data.color} accent={data.accent} />
       <StreetSignPost cards={cards} color={data.color} accent={data.accent} />
       <CityHallToast cards={cards} color={data.color} accent={data.accent} />
       <NewsTicker items={data.ticker} />

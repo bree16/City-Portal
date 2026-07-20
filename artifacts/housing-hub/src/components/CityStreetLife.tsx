@@ -1,1102 +1,775 @@
 /**
- * CityStreetLife — living city-life character animation overlay.
- * Scenes: crossing guard + kids, bus stop crowd, cyclists, block party BBQ,
- * homebuyers with keys, nurse, shipbuilder, Zillow browser, dog walker,
- * street musician, drive-thru worker, shoppers, ambulance, police chase.
- * All animated SVG silhouettes. Fixed overlay, pointer-events: none.
+ * CityStreetLife — living city-life character overlay.
+ * Rendered via React Portal directly on document.body so position:fixed
+ * is never broken by parent CSS transforms (e.g. page transition animations).
+ * Each page gets max 3 characters at distinct fixed positions.
+ * Every character reacts uniquely to hover + click.
  */
-import { useEffect, useState, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 
 const SKIP = new Set(['/simulator', '/sign-in', '/sign-up']);
 
-// ─── Tiny SVG character primitives ───────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function Head({ x, y, r = 9, fill = '#FDBCB4' }: { x: number; y: number; r?: number; fill?: string }) {
-  return <circle cx={x} cy={y} r={r} fill={fill} />;
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function Body({ x, y, w = 14, h = 20, fill = '#1E3A5F' }: { x: number; y: number; w?: number; h?: number; fill?: string }) {
-  return <rect x={x - w / 2} y={y} width={w} height={h} rx={4} fill={fill} />;
+// ─── Speech Bubble ────────────────────────────────────────────────────────────
+
+function SpeechBubble({ text, color = '#14B8A6' }: { text: string; color?: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.6, y: 6 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.6, y: 6 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+      style={{
+        position: 'absolute',
+        bottom: '112%', left: '50%',
+        transform: 'translateX(-50%)',
+        background: '#fff',
+        border: `2px solid ${color}`,
+        borderRadius: 10,
+        padding: '7px 13px',
+        fontSize: 12,
+        fontWeight: 700,
+        color: '#0B2146',
+        whiteSpace: 'nowrap',
+        boxShadow: '0 6px 22px rgba(0,0,0,0.18)',
+        zIndex: 10002,
+        pointerEvents: 'none',
+        fontFamily: 'Inter, sans-serif',
+        lineHeight: 1.4,
+      }}
+    >
+      {text}
+      <span style={{
+        position: 'absolute', bottom: -9, left: '50%', transform: 'translateX(-50%)',
+        width: 0, height: 0,
+        borderLeft: '7px solid transparent', borderRight: '7px solid transparent',
+        borderTop: `8px solid ${color}`,
+        display: 'block',
+      }} />
+    </motion.div>
+  );
 }
 
-/** Walking leg pair — uses rotation on <g> so Framer Motion never touches SVG coords */
-function WalkLegs({ x, y, color = '#1A3A6B', delay = 0 }: { x: number; y: number; color?: string; delay?: number }) {
+// ─── Confetti burst ───────────────────────────────────────────────────────────
+
+function Confetti() {
+  const items = ['🎉', '🏡', '⭐', '🎊', '🔑', '🌟'];
   return (
     <>
-      <motion.g
-        animate={{ rotate: [-30, 30, -30] }}
-        style={{ transformOrigin: `${x - 4}px ${y}px` }}
-        transition={{ duration: 0.5, repeat: Infinity, ease: 'easeInOut', delay }}>
-        <line x1={x - 4} y1={y} x2={x - 5} y2={y + 15} stroke={color} strokeWidth={3} strokeLinecap="round" />
-      </motion.g>
-      <motion.g
-        animate={{ rotate: [30, -30, 30] }}
-        style={{ transformOrigin: `${x + 4}px ${y}px` }}
-        transition={{ duration: 0.5, repeat: Infinity, ease: 'easeInOut', delay }}>
-        <line x1={x + 4} y1={y} x2={x + 5} y2={y + 15} stroke={color} strokeWidth={3} strokeLinecap="round" />
-      </motion.g>
+      {items.map((emoji, i) => {
+        const angle = (i / items.length) * Math.PI * 2;
+        return (
+          <motion.div key={i}
+            initial={{ x: 0, y: 0, opacity: 1, scale: 0.5 }}
+            animate={{ x: Math.cos(angle) * 65, y: Math.sin(angle) * 55 - 15, opacity: 0, scale: 1.6 }}
+            transition={{ duration: 1.1, ease: 'easeOut', delay: i * 0.04 }}
+            style={{ position: 'absolute', top: '50%', left: '50%', fontSize: 17, pointerEvents: 'none', zIndex: 10003 }}
+          >{emoji}</motion.div>
+        );
+      })}
     </>
   );
 }
 
-/** Swinging arm pair — same rotation approach */
-function SwingArms({ x, y, shirtColor = '#14B8A6', delay = 0 }: { x: number; y: number; shirtColor?: string; delay?: number }) {
-  return (
-    <>
-      <motion.g
-        animate={{ rotate: [30, -30, 30] }}
-        style={{ transformOrigin: `${x - 5}px ${y + 4}px` }}
-        transition={{ duration: 0.5, repeat: Infinity, ease: 'easeInOut', delay }}>
-        <line x1={x - 5} y1={y + 4} x2={x - 10} y2={y + 14} stroke={shirtColor} strokeWidth={3} strokeLinecap="round" />
-      </motion.g>
-      <motion.g
-        animate={{ rotate: [-30, 30, -30] }}
-        style={{ transformOrigin: `${x + 5}px ${y + 4}px` }}
-        transition={{ duration: 0.5, repeat: Infinity, ease: 'easeInOut', delay }}>
-        <line x1={x + 5} y1={y + 4} x2={x + 10} y2={y + 14} stroke={shirtColor} strokeWidth={3} strokeLinecap="round" />
-      </motion.g>
-    </>
-  );
+// ─── Interactive wrapper ──────────────────────────────────────────────────────
+
+interface CharWrapperProps {
+  style: React.CSSProperties;
+  bubbleColor?: string;
+  bubbleTexts: string[];          // Random one picked on each click
+  showConfetti?: boolean;
+  children: (hovered: boolean, clicked: boolean) => React.ReactNode;
 }
 
-/** Generic walking person SVG person (origin at foot-level center = cx, cy) */
-function WalkingPerson({ cx, cy, skinTone = '#FDBCB4', shirt = '#14B8A6', pants = '#1A3A6B', delay = 0, scale = 1 }:
-  { cx: number; cy: number; skinTone?: string; shirt?: string; pants?: string; delay?: number; scale?: number }) {
-  const h = 50 * scale;
-  const headY = cy - h;
-  const bodyY = headY + 10 * scale;
-  const legsY = bodyY + 20 * scale;
-  return (
-    <g>
-      <Head x={cx} y={headY} r={8 * scale} fill={skinTone} />
-      <Body x={cx} y={bodyY} w={14 * scale} h={20 * scale} fill={shirt} />
-      <WalkLegs x={cx} y={legsY} color={pants} delay={delay} />
-      <SwingArms x={cx} y={bodyY} shirtColor={shirt} delay={delay} />
-    </g>
-  );
-}
+function CharWrapper({ style, bubbleColor = '#14B8A6', bubbleTexts, showConfetti = false, children }: CharWrapperProps) {
+  const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const [bubble, setBubble] = useState('');
+  const [confetti, setConfetti] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
-// ─── Scene 1: Crossing Guard + Children ──────────────────────────────────────
+  const handleClick = useCallback(() => {
+    if (clicked) return;
+    setBubble(pick(bubbleTexts));
+    setClicked(true);
+    if (showConfetti) setConfetti(true);
+    timerRef.current = setTimeout(() => {
+      setClicked(false);
+      setConfetti(false);
+    }, 2800);
+  }, [clicked, bubbleTexts, showConfetti]);
 
-function CrossingGuardScene() {
-  const [active, setActive] = useState(false);
-  const [kidX, setKidX] = useState(-40);
-
-  useEffect(() => {
-    const start = setTimeout(() => {
-      setActive(true);
-      setKidX(-40);
-      const move = setInterval(() => setKidX(x => x + 3), 40);
-      setTimeout(() => { clearInterval(move); setActive(false); setKidX(-40); }, 4500);
-    }, 6000);
-    const repeat = setInterval(() => {
-      setActive(true); setKidX(-40);
-      const move = setInterval(() => setKidX(x => x + 3), 40);
-      setTimeout(() => { clearInterval(move); setActive(false); setKidX(-40); }, 4500);
-    }, 38000);
-    return () => { clearTimeout(start); clearInterval(repeat); };
-  }, []);
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
   return (
-    <AnimatePresence>
-      {active && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          style={{ position: 'fixed', bottom: 38, left: '18%', zIndex: 9970, pointerEvents: 'none' }}>
-          <svg width="320" height="80" viewBox="0 0 320 80">
-            {/* Guard — orange vest, stop sign */}
-            <Head x={30} y={20} fill="#C68642" />
-            <Body x={30} y={30} fill="#FF6B00" />
-            <WalkLegs x={30} y={50} color="#1A3A6B" />
-            {/* Stop sign on pole */}
-            <rect x={38} y={8} width={2} height={32} fill="#888" />
-            <polygon points="49,8 58,5 64,10 64,19 58,24 49,21 43,16" fill="#CC0000" stroke="#fff" strokeWidth="1.5" />
-            <text x="53" y="17" textAnchor="middle" fontSize="5" fill="#fff" fontWeight="900" fontFamily="sans-serif">STOP</text>
-            {/* Crosswalk stripes */}
-            {[60, 90, 120, 150, 180, 210, 240].map(x => (
-              <rect key={x} x={x} y={68} width={18} height={8} rx={1} fill="rgba(255,255,255,0.55)" />
-            ))}
-            {/* Kids walking */}
-            {[0, 1, 2, 3].map(i => (
-              <g key={i} transform={`translate(${kidX + i * 32}, 0)`}>
-                <Head x={0} y={32} r={7} fill={['#FDBCB4','#C68642','#F5D5B0','#8D5524'][i]} />
-                <Body x={0} y={39} w={11} h={15} fill={['#FF6B9D','#60A5FA','#34D399','#FB923C'][i]} />
-                <WalkLegs x={0} y={54} color={['#7C3AED','#1A3A6B','#065F46','#92400E'][i]} delay={i * 0.12} />
-                {/* Backpack */}
-                <rect x={4} y={40} width={7} height={10} rx={2} fill={['#D4AF37','#FF6B9D','#14B8A6','#F87171'][i]} opacity={0.8} />
-              </g>
-            ))}
-          </svg>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-// ─── Scene 2: Bus Stop with Waiting Crowd ────────────────────────────────────
-
-function BusStopScene() {
-  const [busX, setBusX] = useState(1400);
-  const [busPhase, setBusPhase] = useState<'away'|'arriving'|'stopped'|'leaving'>('away');
-
-  useEffect(() => {
-    const run = () => {
-      setBusPhase('arriving'); setBusX(1400);
-      const arrive = setInterval(() => setBusX(x => { if (x <= 520) { clearInterval(arrive); setBusPhase('stopped'); setTimeout(() => { setBusPhase('leaving'); const go = setInterval(() => setBusX(x2 => { if (x2 < -300) { clearInterval(go); setBusPhase('away'); } return x2 - 6; }), 30); }, 3500); return x; } return x - 8; }), 30);
-    };
-    const t1 = setTimeout(run, 3000);
-    const repeat = setInterval(run, 42000);
-    return () => { clearTimeout(t1); clearInterval(repeat); };
-  }, []);
-
-  return (
-    <div style={{ position: 'fixed', top: '42%', right: '4%', zIndex: 9968, pointerEvents: 'none' }}>
-      <svg width="350" height="90" viewBox="0 0 350 90">
-        {/* Bus stop sign pole */}
-        <rect x={10} y={10} width={3} height={68} fill="#666" />
-        <rect x={0} y={10} width={24} height={20} rx={4} fill="#0F3F6A" />
-        <text x={12} y={23} textAnchor="middle" fontSize="6" fill="#FFD700" fontWeight="900" fontFamily="sans-serif">BUS STOP</text>
-
-        {/* Waiting people — 4 of them */}
-        {/* Person 1: on phone */}
-        <Head x={40} y={36} fill="#FDBCB4" />
-        <Body x={40} y={46} fill="#7C3AED" />
-        <line x1={40} y1={50} x2={44} y2={43} stroke="#FDBCB4" strokeWidth={2.5} strokeLinecap="round" />
-        <rect x={44} y={40} width={5} height={7} rx={1} fill="#111" />
-        <line x1={40} y1={66} x2={36} y2={80} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-        <line x1={40} y1={66} x2={44} y2={80} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-        {/* Person 2: reading paper */}
-        <Head x={70} y={34} fill="#C68642" />
-        <Body x={70} y={44} fill="#F87171" />
-        <line x1={65} y1={50} x2={60} y2={58} stroke="#F87171" strokeWidth={2.5} strokeLinecap="round" />
-        <line x1={75} y1={50} x2={80} y2={58} stroke="#F87171" strokeWidth={2.5} strokeLinecap="round" />
-        <rect x={58} y={52} width={24} height={16} rx={2} fill="#fff" opacity={0.85} />
-        <line x1={61} y1={57} x2={79} y2={57} stroke="#ccc" strokeWidth={1} />
-        <line x1={61} y1={61} x2={79} y2={61} stroke="#ccc" strokeWidth={1} />
-        <line x1={70} y1={66} x2={68} y2={80} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-        <line x1={70} y1={66} x2={72} y2={80} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-        {/* Person 3: with child */}
-        <Head x={102} y={34} fill="#F5D5B0" />
-        <Body x={102} y={44} fill="#14B8A6" />
-        <Head x={118} y={50} r={6} fill="#FDBCB4" />
-        <Body x={118} y={56} w={10} h={12} fill="#FF6B9D" />
-        <motion.g animate={{ rotate: [-20, 20, -20] }} style={{ transformOrigin: '107px 50px' }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}>
-          <line x1={107} y1={50} x2={112} y2={58} stroke="#14B8A6" strokeWidth={2.5} strokeLinecap="round" />
-        </motion.g>
-        <line x1={102} y1={66} x2={100} y2={80} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-        <line x1={102} y1={66} x2={104} y2={80} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-        {/* Person 4: headphones + coffee */}
-        <Head x={140} y={34} fill="#8D5524" />
-        {/* Headphones arc */}
-        <path d="M133 34 Q140 26 147 34" stroke="#333" strokeWidth={2} fill="none" strokeLinecap="round" />
-        <circle cx={133} cy={34} r={3} fill="#333" />
-        <circle cx={147} cy={34} r={3} fill="#333" />
-        <Body x={140} y={44} fill="#1E3A5F" />
-        <line x1={135} y1={50} x2={128} y2={60} stroke="#1E3A5F" strokeWidth={2.5} strokeLinecap="round" />
-        <circle cx={126} cy={62} r={4} fill="#8B4513" />
-        <line x1={140} y1={66} x2={138} y2={80} stroke="#111" strokeWidth={3} strokeLinecap="round" />
-        <line x1={140} y1={66} x2={142} y2={80} stroke="#111" strokeWidth={3} strokeLinecap="round" />
-
-        {/* Bench */}
-        <rect x={28} y={75} width={130} height={5} rx={2} fill="#8B6914" />
-        <rect x={35} y={70} width={4} height={10} rx={1} fill="#6B4C11" />
-        <rect x={150} y={70} width={4} height={10} rx={1} fill="#6B4C11" />
-
-        {/* Animated bus */}
-        <g transform={`translate(${busX - 500}, 20)`}>
-          <rect x={0} y={0} width={180} height={52} rx={8} fill="#0F3F6A" />
-          <rect x={0} y={0} width={180} height={12} rx={8} fill="#14517A" />
-          {[10,44,78,112,146].map(x => <rect key={x} x={x} y={5} width={26} height={20} rx={4} fill="#B3E5FC" opacity={0.8} />)}
-          <rect x={6} y={32} width={130} height={14} rx={3} fill="#000e00" />
-          <text x="71" y="42" textAnchor="middle" fontSize="9" fill="#00ff44" fontFamily="monospace" fontWeight="bold">NEWPORT NEWS</text>
-          <rect x={138} y={32} width={36} height={14} rx={3} fill="#D4AF37" />
-          <text x="156" y="42" textAnchor="middle" fontSize="6" fill="#0B2146" fontWeight="900" fontFamily="sans-serif">ROUTE 5</text>
-          {[30, 150].map(cx => <g key={cx}>
-            <circle cx={cx} cy={54} r={10} fill="#111" />
-            <circle cx={cx} cy={54} r={6} fill="#222" />
-            <circle cx={cx} cy={54} r={2.5} fill="#444" />
-          </g>)}
-          {/* Door open when stopped */}
-          {busPhase === 'stopped' && <rect x={152} y={10} width={26} height={30} rx={3} fill="#87CEEB" opacity={0.65} />}
-        </g>
-      </svg>
+    <div
+      style={{ position: 'fixed', zIndex: 9960, cursor: 'pointer', pointerEvents: 'auto', userSelect: 'none', ...style }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={handleClick}
+    >
+      <motion.div
+        animate={{ scale: hovered ? 1.12 : 1, opacity: hovered || clicked ? 1 : 0.72 }}
+        transition={{ duration: 0.18 }}
+        style={{ position: 'relative' }}
+      >
+        {children(hovered, clicked)}
+        <AnimatePresence>
+          {clicked && <SpeechBubble key="bubble" text={bubble} color={bubbleColor} />}
+        </AnimatePresence>
+        <AnimatePresence>
+          {confetti && <Confetti key="confetti" />}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 }
 
-// ─── Scene 3: Bicyclists ──────────────────────────────────────────────────────
+// ─── SVG Primitives ───────────────────────────────────────────────────────────
 
-function BicyclistScene({ delay = 0, fromRight = false, y = 38, shirt = '#34D399', skin = '#FDBCB4' }:
-  { delay?: number; fromRight?: boolean; y?: number; shirt?: string; skin?: string }) {
+function Circ({ cx, cy, r = 9, fill = '#FDBCB4' }: { cx: number; cy: number; r?: number; fill?: string }) {
+  return <circle cx={cx} cy={cy} r={r} fill={fill} />;
+}
+function Rect({ x, y, w = 14, h = 20, rx = 4, fill = '#1E3A5F' }: { x: number; y: number; w?: number; h?: number; rx?: number; fill?: string }) {
+  return <rect x={x - w / 2} y={y} width={w} height={h} rx={rx} fill={fill} />;
+}
+function Leg({ x, y, color = '#1A3A6B', dir = 1, angle = 25 }: { x: number; y: number; color?: string; dir?: 1 | -1; angle?: number }) {
   return (
-    <motion.div
-      style={{ position: 'fixed', bottom: y, [fromRight ? 'right' : 'left']: 0, zIndex: 9966, pointerEvents: 'none' }}
-      initial={{ x: fromRight ? -280 : '110vw' }}
-      animate={{ x: fromRight ? '110vw' : -280 }}
-      transition={{ duration: 10, delay, repeat: Infinity, repeatDelay: 32, ease: 'linear' }}
-    >
-      <svg width="100" height="68" viewBox="0 0 100 68" fill="none">
-        {/* Bike frame */}
-        <circle cx={28} cy={52} r={16} stroke="#555" strokeWidth={3} fill="none" />
-        <circle cx={72} cy={52} r={16} stroke="#555" strokeWidth={3} fill="none" />
-        {/* Frame */}
-        <line x1={28} y1={52} x2={50} y2={28} stroke="#666" strokeWidth={3} strokeLinecap="round" />
-        <line x1={50} y1={28} x2={72} y2={52} stroke="#666" strokeWidth={3} strokeLinecap="round" />
-        <line x1={50} y1={28} x2={28} y2={52} stroke="#666" strokeWidth={2} strokeLinecap="round" />
-        {/* Handlebars */}
-        <line x1={50} y1={28} x2={60} y2={22} stroke="#555" strokeWidth={3} strokeLinecap="round" />
-        <line x1={60} y1={22} x2={64} y2={20} stroke="#555" strokeWidth={3} strokeLinecap="round" />
-        <line x1={60} y1={22} x2={64} y2={24} stroke="#555" strokeWidth={3} strokeLinecap="round" />
-        {/* Seat */}
-        <line x1={50} y1={28} x2={44} y2={26} stroke="#555" strokeWidth={3} strokeLinecap="round" />
-        <rect x={38} y={23} width={12} height={4} rx={2} fill="#333" />
-        {/* Pedals spinning */}
-        <motion.g animate={{ rotate: 360 }} transition={{ duration: 0.4, repeat: Infinity, ease: 'linear' }}
-          style={{ transformOrigin: '50px 44px' }}>
-          <line x1={44} y1={44} x2={56} y2={44} stroke="#888" strokeWidth={2.5} strokeLinecap="round" />
-          <circle cx={44} cy={44} r={3} fill="#999" />
-          <circle cx={56} cy={44} r={3} fill="#999" />
-        </motion.g>
-        {/* Rider */}
-        <circle cx={56} cy={16} r={8} fill={skin} />
-        {/* Helmet */}
-        <path d="M49 14 Q56 6 63 14 Q63 16 56 17 Q49 16 49 14Z" fill="#D4AF37" />
-        <rect x={50} y={22} width={14} height={14} rx={4} fill={shirt} />
-        {/* Arms on bars */}
-        <line x1={56} y1={25} x2={63} y2={22} stroke={shirt} strokeWidth={2.5} strokeLinecap="round" />
-        {/* Legs — animated pedaling */}
-        <motion.g animate={{ rotate: [35, -35, 35] }} style={{ transformOrigin: '52px 34px' }}
-          transition={{ duration: 0.4, repeat: Infinity, ease: 'linear' }}>
-          <line x1={52} y1={34} x2={44} y2={44} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-        </motion.g>
-        <motion.g animate={{ rotate: [-35, 35, -35] }} style={{ transformOrigin: '58px 34px' }}
-          transition={{ duration: 0.4, repeat: Infinity, ease: 'linear' }}>
-          <line x1={58} y1={34} x2={56} y2={44} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-        </motion.g>
-        {/* Wheels spinning spokes */}
-        <motion.line x1={28} y1={36} x2={28} y2={68} stroke="#777" strokeWidth={1.5}
-          animate={{ rotate: 360 }} transition={{ duration: 0.5, repeat: Infinity, ease: 'linear' }}
-          style={{ transformOrigin: '28px 52px' }} />
-        <motion.line x1={12} y1={52} x2={44} y2={52} stroke="#777" strokeWidth={1.5}
-          animate={{ rotate: 360 }} transition={{ duration: 0.5, repeat: Infinity, ease: 'linear' }}
-          style={{ transformOrigin: '28px 52px' }} />
-      </svg>
-    </motion.div>
+    <motion.g animate={{ rotate: [dir * angle, -dir * angle, dir * angle] }}
+      style={{ transformOrigin: `${x}px ${y}px` }}
+      transition={{ duration: 0.55, repeat: Infinity, ease: 'easeInOut' }}>
+      <line x1={x} y1={y} x2={x + dir * 3} y2={y + 16} stroke={color} strokeWidth={3} strokeLinecap="round" />
+    </motion.g>
+  );
+}
+function Arm({ x, y, color = '#14B8A6', dir = 1, angle = 22 }: { x: number; y: number; color?: string; dir?: 1 | -1; angle?: number }) {
+  return (
+    <motion.g animate={{ rotate: [-dir * angle, dir * angle, -dir * angle] }}
+      style={{ transformOrigin: `${x}px ${y}px` }}
+      transition={{ duration: 0.55, repeat: Infinity, ease: 'easeInOut' }}>
+      <line x1={x} y1={y} x2={x + dir * 8} y2={y + 12} stroke={color} strokeWidth={2.5} strokeLinecap="round" />
+    </motion.g>
   );
 }
 
-// ─── Scene 4: Block Party / BBQ ──────────────────────────────────────────────
+// ─── Character 1: Cyclist ─────────────────────────────────────────────────────
 
-function BlockPartyScene() {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 10000);
-    const hide = setInterval(() => { setVisible(v => !v); }, 35000);
-    return () => { clearTimeout(t); clearInterval(hide); };
-  }, []);
-
+function CharCyclist({ hovered, clicked }: { hovered: boolean; clicked: boolean }) {
+  const speed = clicked ? 0.12 : hovered ? 0.25 : 0.45;
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }}
-          transition={{ duration: 0.8 }}
-          style={{ position: 'fixed', top: '38%', left: '4%', zIndex: 9965, pointerEvents: 'none' }}>
-          <svg width="280" height="110" viewBox="0 0 280 110">
-            {/* BBQ grill */}
-            <ellipse cx={40} cy={60} rx={22} ry={10} fill="#333" />
-            <rect x={26} y={55} width={28} height={5} rx={2} fill="#555" />
-            <rect x={32} y={60} width={4} height={24} rx={2} fill="#444" />
-            <rect x={44} y={60} width={4} height={24} rx={2} fill="#444" />
-            {/* Grill grates */}
-            {[28,34,40,46,52].map(x => <line key={x} x1={x} y1={55} x2={x} y2={60} stroke="#888" strokeWidth={1.5} />)}
-            {/* Smoke puffs */}
-            {[0,1,2].map(i => (
-              <motion.circle key={i} cx={40 + (i - 1) * 6} cy={40} r={6}
-                fill="rgba(180,180,180,0.45)"
-                animate={{ y: [-5,-18,-5], opacity: [0.5, 0, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay: i * 0.5 }} />
-            ))}
-            {/* Food on grill */}
-            <rect x={30} y={52} width={8} height={3} rx={1} fill="#8B4513" />
-            <rect x={42} y={52} width={8} height={3} rx={1} fill="#CC5500" />
-
-            {/* Dancer 1 — waving */}
-            <Head x={90} y={28} fill="#FDBCB4" />
-            <Body x={90} y={38} fill="#FF6B9D" />
-            <motion.g animate={{ rotate: [25, -25, 25] }} style={{ transformOrigin: '85px 44px' }}
-              transition={{ duration: 0.8, repeat: Infinity }}>
-              <line x1={85} y1={44} x2={75} y2={36} stroke="#FF6B9D" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-            <motion.g animate={{ rotate: [-25, 25, -25] }} style={{ transformOrigin: '95px 44px' }}
-              transition={{ duration: 0.8, repeat: Infinity, delay: 0.4 }}>
-              <line x1={95} y1={44} x2={105} y2={36} stroke="#FF6B9D" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-            <line x1={90} y1={58} x2={86} y2={74} stroke="#7C3AED" strokeWidth={3} strokeLinecap="round" />
-            <line x1={90} y1={58} x2={94} y2={74} stroke="#7C3AED" strokeWidth={3} strokeLinecap="round" />
-
-            {/* Dancer 2 — grooving */}
-            <Head x={130} y={30} fill="#8D5524" />
-            <Body x={130} y={40} fill="#14B8A6" />
-            <motion.rect x={118} y={38} width={8} height={3} rx={1} fill="#D4AF37"
-              animate={{ rotate: [-15, 15, -15] }} style={{ transformOrigin: '122px 40px' }}
-              transition={{ duration: 0.6, repeat: Infinity }} />
-            <motion.g animate={{ rotate: [30, -30, 30] }} style={{ transformOrigin: '125px 44px' }}
-              transition={{ duration: 0.5, repeat: Infinity }}>
-              <line x1={125} y1={44} x2={116} y2={52} stroke="#14B8A6" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-            <motion.g animate={{ rotate: [-30, 30, -30] }} style={{ transformOrigin: '135px 44px' }}
-              transition={{ duration: 0.5, repeat: Infinity }}>
-              <line x1={135} y1={44} x2={144} y2={52} stroke="#14B8A6" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-            <motion.g animate={{ rotate: [-20, 20, -20] }} style={{ transformOrigin: '130px 58px' }}
-              transition={{ duration: 0.5, repeat: Infinity }}>
-              <line x1={130} y1={58} x2={124} y2={72} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-            <line x1={130} y1={58} x2={136} y2={72} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-
-            {/* Dancer 3 — holding cup, swaying */}
-            <Head x={170} y={28} fill="#F5D5B0" />
-            <Body x={170} y={38} fill="#FB923C" />
-            <motion.g animate={{ rotate: [-8, 8, -8] }} style={{ transformOrigin: '170px 48px' }}
-              transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}>
-              <line x1={175} y1={44} x2={184} y2={40} stroke="#FB923C" strokeWidth={3} strokeLinecap="round" />
-              <rect x={183} y={36} width={6} height={8} rx={2} fill="#D4AF37" />
-            </motion.g>
-            <line x1={165} y1={44} x2={156} y2={52} stroke="#FB923C" strokeWidth={3} strokeLinecap="round" />
-            <line x1={170} y1={58} x2={167} y2={72} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            <motion.g animate={{ rotate: [-18, 18, -18] }} style={{ transformOrigin: '170px 58px' }}
-              transition={{ duration: 0.6, repeat: Infinity }}>
-              <line x1={170} y1={58} x2={174} y2={72} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-
-            {/* Waving homebuyer 4 */}
-            <Head x={220} y={26} fill="#C68642" />
-            <Body x={220} y={36} fill="#34D399" />
-            <motion.line x1={225} y1={40} x2={236} y2={30} stroke="#34D399" strokeWidth={3} strokeLinecap="round"
-              animate={{ rotate: [-20, 20, -20] }} style={{ transformOrigin: '225px 40px' }}
-              transition={{ duration: 0.5, repeat: Infinity }} />
-            <line x1={215} y1={40} x2={206} y2={50} stroke="#34D399" strokeWidth={3} strokeLinecap="round" />
-            <line x1={220} y1={56} x2={217} y2={70} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            <line x1={220} y1={56} x2={223} y2={70} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-
-            {/* Music notes floating */}
-            {[0,1,2].map(i => (
-              <motion.text key={i} x={155 + i * 18} y={20} fontSize="14" fill="#D4AF37"
-                animate={{ y: [20, 6, 20], opacity: [0.9, 0.2, 0.9] }}
-                transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.5 }}>♪</motion.text>
-            ))}
-
-            {/* Ground shadow */}
-            <ellipse cx={140} cy={105} rx={120} ry={5} fill="rgba(0,0,0,0.12)" />
-          </svg>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-// ─── Scene 5: Homebuyer with keys ────────────────────────────────────────────
-
-function HomebuyerScene() {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 14000);
-    const cycle = setInterval(() => setVisible(v => !v), 30000);
-    return () => { clearTimeout(t); clearInterval(cycle); };
-  }, []);
-
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-          style={{ position: 'fixed', top: '16%', right: '6%', zIndex: 9975, pointerEvents: 'none' }}>
-          <svg width="180" height="130" viewBox="0 0 180 130">
-            {/* Little house */}
-            <polygon points="90,10 140,40 140,110 40,110 40,40" fill="#D4AF37" />
-            <polygon points="90,10 150,45 30,45" fill="#14B8A6" />
-            <rect x={72} y={75} width={36} height={35} rx={3} fill="#8B4513" />
-            {/* Windows */}
-            <rect x={48} y={55} width={22} height={22} rx={3} fill="#87CEEB" opacity={0.8} />
-            <rect x={108} y={55} width={22} height={22} rx={3} fill="#87CEEB" opacity={0.8} />
-            <line x1={59} y1={55} x2={59} y2={77} stroke="#ccc" strokeWidth={1.5} />
-            <line x1={48} y1={66} x2={70} y2={66} stroke="#ccc" strokeWidth={1.5} />
-            {/* SOLD sign */}
-            <rect x={115} y={85} width={35} height={20} rx={3} fill="#CC0000" />
-            <text x="132" y="98" textAnchor="middle" fontSize="9" fill="#fff" fontWeight="900" fontFamily="sans-serif">SOLD!</text>
-            <rect x={130} y={105} width={3} height={20} fill="#888" />
-
-            {/* Person */}
-            <Head x={30} y={72} fill="#F5D5B0" />
-            <Body x={30} y={82} fill="#1E3A5F" />
-            {/* Waving arm with keys */}
-            <motion.g animate={{ rotate: [-25, 15, -25] }} style={{ transformOrigin: '34px 85px' }}
-              transition={{ duration: 0.6, repeat: Infinity }}>
-              <line x1={34} y1={85} x2={48} y2={74} stroke="#1E3A5F" strokeWidth={3} strokeLinecap="round" />
-              {/* Keys */}
-              <circle cx={52} cy={71} r={4} fill="#D4AF37" stroke="#B8960C" strokeWidth={1} />
-              <circle cx={52} cy={71} r={2} fill="none" stroke="#B8960C" strokeWidth={1} />
-              <rect x={54} y={72} width={6} height={2} rx={1} fill="#D4AF37" />
-              <rect x={54} y={68} width={6} height={2} rx={1} fill="#D4AF37" />
-            </motion.g>
-            <line x1={26} y1={85} x2={18} y2={95} stroke="#1E3A5F" strokeWidth={3} strokeLinecap="round" />
-            <line x1={30} y1={100} x2={27} y2={115} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            <line x1={30} y1={100} x2={33} y2={115} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-
-            {/* Confetti */}
-            {['#FF6B9D','#14B8A6','#D4AF37','#60A5FA','#34D399','#FB923C'].map((c, i) => (
-              <motion.rect key={i} x={10 + i * 26} y={0} width={5} height={5} rx={1} fill={c}
-                animate={{ y: [0, 50, 0], rotate: [0, 360, 0], opacity: [1, 0.4, 1] }}
-                transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3, ease: 'easeInOut' }} />
-            ))}
-          </svg>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-// ─── Scene 6: Walking workers (nurse, shipbuilder) ────────────────────────────
-
-function WorkerWalker({ type, delay = 0, fromRight = false }: { type: 'nurse'|'shipbuilder'|'shopper'|'dogwalker'; delay?: number; fromRight?: boolean }) {
-  const configs = {
-    nurse: { shirt: '#fff', pants: '#B3E5FC', skin: '#C68642', hat: true, label: '🏥' },
-    shipbuilder: { shirt: '#FF6B00', pants: '#1A3A6B', skin: '#F5D5B0', hat: false, label: '⚓' },
-    shopper: { shirt: '#FF6B9D', pants: '#7C3AED', skin: '#FDBCB4', hat: false, label: '🛍️' },
-    dogwalker: { shirt: '#34D399', pants: '#1A3A6B', skin: '#8D5524', hat: false, label: '🐕' },
-  };
-  const c = configs[type];
-
-  return (
-    <motion.div
-      style={{ position: 'fixed', bottom: 38, [fromRight ? 'right' : 'left']: 0, zIndex: 9967, pointerEvents: 'none' }}
-      initial={{ x: fromRight ? -140 : '108vw' }}
-      animate={{ x: fromRight ? '108vw' : -140 }}
-      transition={{ duration: 13, delay, repeat: Infinity, repeatDelay: 28, ease: 'linear' }}
-    >
-      <svg width="140" height="80" viewBox="0 0 140 80">
-        {/* Label badge floating above */}
-        <text x="30" y="8" textAnchor="middle" fontSize="16">{c.label}</text>
-
-        {/* Person */}
-        <Head x={30} y={24} fill={c.skin} />
-        {/* Nurse hat */}
-        {type === 'nurse' && (
-          <>
-            <rect x={22} y={14} width={16} height={10} rx={2} fill="#fff" />
-            <line x1={30} y1={14} x2={30} y2={24} stroke="#CC0000" strokeWidth={2} />
-            <line x1={25} y1={18} x2={35} y2={18} stroke="#CC0000" strokeWidth={2} />
-          </>
-        )}
-        {/* Hard hat */}
-        {type === 'shipbuilder' && (
-          <path d="M21 22 Q30 12 39 22 L39 24 L21 24Z" fill="#FFD700" />
-        )}
-        <Body x={30} y={34} fill={c.shirt} />
-        {/* Stethoscope for nurse */}
-        {type === 'nurse' && (
-          <path d="M25 38 Q20 45 25 50 Q30 55 35 50" stroke="#333" strokeWidth={1.5} fill="none" strokeLinecap="round" />
-        )}
-        {/* Tool belt for shipbuilder */}
-        {type === 'shipbuilder' && (
-          <rect x={23} y={48} width={14} height={4} rx={1} fill="#8B4513" />
-        )}
-        {/* Shopping bags */}
-        {type === 'shopper' && (
-          <>
-            <motion.g animate={{ rotate: [-10, 10, -10] }} style={{ transformOrigin: '20px 52px' }}
-              transition={{ duration: 0.5, repeat: Infinity }}>
-              <line x1={25} y1={44} x2={18} y2={55} stroke="#FF6B9D" strokeWidth={2.5} strokeLinecap="round" />
-              <rect x={12} y={52} width={12} height={14} rx={2} fill="#D4AF37" />
-              <path d="M15 52 Q18 48 21 52" stroke="#B8960C" strokeWidth={1.5} fill="none" />
-            </motion.g>
-            <motion.g animate={{ rotate: [10, -10, 10] }} style={{ transformOrigin: '40px 52px' }}
-              transition={{ duration: 0.5, repeat: Infinity }}>
-              <line x1={35} y1={44} x2={42} y2={55} stroke="#FF6B9D" strokeWidth={2.5} strokeLinecap="round" />
-              <rect x={36} y={52} width={12} height={14} rx={2} fill="#14B8A6" />
-              <path d="M39 52 Q42 48 45 52" stroke="#0F9A8C" strokeWidth={1.5} fill="none" />
-            </motion.g>
-          </>
-        )}
-        {/* Dog */}
-        {type === 'dogwalker' && (
-          <g transform="translate(50, 36)">
-            {/* Leash — static curve */}
-            <path d="M-22 18 Q-8 24 0 20" stroke="#8B4513" strokeWidth={1.5} fill="none" />
-            {/* Dog body */}
-            <ellipse cx={10} cy={24} rx={14} ry={8} fill="#C68642" />
-            {/* Head */}
-            <circle cx={22} cy={20} r={7} fill="#A0522D" />
-            {/* Ear */}
-            <ellipse cx={26} cy={15} rx={4} ry={6} fill="#8B4513" />
-            {/* Tail wagging — rotate group */}
-            <motion.g animate={{ rotate: [-30, 30, -30] }} style={{ transformOrigin: '-2px 22px' }}
-              transition={{ duration: 0.4, repeat: Infinity }}>
-              <path d="M-2 22 Q-10 14 -6 8" stroke="#C68642" strokeWidth={3} fill="none" strokeLinecap="round" />
-            </motion.g>
-            {/* Legs */}
-            <line x1={2} y1={30} x2={0} y2={42} stroke="#A0522D" strokeWidth={2.5} strokeLinecap="round" />
-            <line x1={8} y1={31} x2={6} y2={43} stroke="#A0522D" strokeWidth={2.5} strokeLinecap="round" />
-            <line x1={16} y1={31} x2={14} y2={43} stroke="#A0522D" strokeWidth={2.5} strokeLinecap="round" />
-            <line x1={22} y1={30} x2={20} y2={42} stroke="#A0522D" strokeWidth={2.5} strokeLinecap="round" />
-          </g>
-        )}
-        <WalkLegs x={30} y={54} color={c.pants} />
-        <SwingArms x={30} y={34} shirtColor={c.shirt} />
-      </svg>
-    </motion.div>
-  );
-}
-
-// ─── Scene 7: Zillow Browser ──────────────────────────────────────────────────
-
-function ZillowBrowserScene() {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 18000);
-    const c = setInterval(() => setVisible(v => !v), 40000);
-    return () => { clearTimeout(t); clearInterval(c); };
-  }, []);
-
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div initial={{ opacity: 0, x: 80 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 80 }}
-          transition={{ type: 'spring', stiffness: 180, damping: 22 }}
-          style={{ position: 'fixed', top: '26%', right: '20%', zIndex: 9974, pointerEvents: 'none' }}>
-          <svg width="200" height="130" viewBox="0 0 200 130">
-            {/* Desk */}
-            <rect x={0} y={110} width={200} height={8} rx={3} fill="#8B6914" />
-            <rect x={10} y={118} width={8} height={12} rx={2} fill="#6B4C11" />
-            <rect x={182} y={118} width={8} height={12} rx={2} fill="#6B4C11" />
-
-            {/* Laptop */}
-            <rect x={30} y={72} width={110} height={72} rx={6} fill="#1E3A5F" />
-            <rect x={34} y={76} width={102} height={64} rx={4} fill="#0A1628" />
-            {/* Screen content — mini Zillow interface */}
-            <rect x={36} y={78} width={98} height={12} rx={2} fill="#fff" opacity={0.9} />
-            <text x="85" y="87" textAnchor="middle" fontSize="7" fill="#006AFF" fontWeight="900" fontFamily="sans-serif">🏠 zillow.com/newport-news</text>
-            {/* House cards floating/scrolling */}
-            {[0,1,2].map(i => (
-              <motion.g key={i}
-                animate={{ y: [0, -4, 0] }}
-                transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}>
-                <rect x={38 + i * 34} y={95} width={30} height={36} rx={3} fill="#fff" opacity={0.85} />
-                <rect x={38 + i * 34} y={95} width={30} height={16} rx={3} fill={['#14B8A6','#D4AF37','#60A5FA'][i]} opacity={0.7} />
-                <text x={53 + i * 34} y={104} textAnchor="middle" fontSize="6" fill="#fff" fontWeight="800">🏡</text>
-                <text x={53 + i * 34} y={116} textAnchor="middle" fontSize="5" fill="#1E3A5F" fontWeight="700">${['285K','320K','210K'][i]}</text>
-                <text x={53 + i * 34} y={124} textAnchor="middle" fontSize="4" fill="#666">{['Denbigh','Hilton','SE'][i]}</text>
-              </motion.g>
-            ))}
-            {/* Keyboard */}
-            <rect x={30} y={144} width={110} height={6} rx={2} fill="#333" />
-            {/* Hinge */}
-            <rect x={80} y={142} width={40} height={4} rx={2} fill="#1A1A2E" />
-
-            {/* Person sitting */}
-            <Head x={110} y={56} fill="#FDBCB4" />
-            <Body x={110} y={66} w={16} h={22} fill="#7C3AED" />
-            {/* Arms on keyboard */}
-            <line x1={103} y1={74} x2={90} y2={88} stroke="#7C3AED" strokeWidth={3} strokeLinecap="round" />
-            <motion.g animate={{ rotate: [-25, 25, -25] }} style={{ transformOrigin: '117px 74px' }}
-              transition={{ duration: 0.4, repeat: Infinity }}>
-              <line x1={117} y1={74} x2={120} y2={88} stroke="#7C3AED" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-            {/* Thought bubble — house */}
-            <motion.g animate={{ opacity: [0.6, 1, 0.6], scale: [0.95, 1, 0.95] }} style={{ transformOrigin: '148px 28px' }}
-              transition={{ duration: 2, repeat: Infinity }}>
-              <circle cx={128} cy={46} r={4} fill="rgba(255,255,255,0.6)" />
-              <circle cx={136} cy={38} r={6} fill="rgba(255,255,255,0.7)" />
-              <circle cx={148} cy={32} r={10} fill="rgba(255,255,255,0.8)" />
-              <text x="148" y="36" textAnchor="middle" fontSize="12">🏡</text>
-            </motion.g>
-            {/* Cursor blinking */}
-            <motion.rect x={104} y={85} width={1.5} height={8} fill="#0A1628"
-              animate={{ opacity: [1, 0, 1] }} transition={{ duration: 0.8, repeat: Infinity }} />
-          </svg>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-// ─── Scene 8: Street Musician ─────────────────────────────────────────────────
-
-function StreetMusicianScene() {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 22000);
-    const c = setInterval(() => setVisible(v => !v), 48000);
-    return () => { clearTimeout(t); clearInterval(c); };
-  }, []);
-
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          style={{ position: 'fixed', top: '52%', left: '12%', zIndex: 9964, pointerEvents: 'none' }}>
-          <svg width="120" height="120" viewBox="0 0 120 120">
-            {/* Ground */}
-            <rect x={0} y={108} width={120} height={4} rx={2} fill="rgba(255,255,255,0.15)" />
-            {/* Hat case / tip jar */}
-            <ellipse cx={30} cy={110} rx={18} ry={6} fill="#333" />
-            <ellipse cx={30} cy={108} rx={18} ry={5} fill="#1A1A1A" />
-            <text x="30" y="112" textAnchor="middle" fontSize="7" fill="#D4AF37">TIPS 🙏</text>
-            {/* Person */}
-            <Head x={75} y={28} fill="#C68642" />
-            {/* Beanie */}
-            <ellipse cx={75} cy={22} rx={11} ry={8} fill="#D4AF37" />
-            <rect x={64} y={19} width={22} height={6} rx={3} fill="#D4AF37" />
-            <circle cx={75} cy={14} r={4} fill="#FF6B9D" />
-            <Body x={75} y={38} fill="#1E3A5F" />
-            {/* Guitar body */}
-            <ellipse cx={58} cy={72} rx={14} ry={16} fill="#8B4513" />
-            <ellipse cx={58} cy={56} rx={8} ry={10} fill="#8B4513" />
-            <rect x={55} y={42} width={6} height={20} rx={2} fill="#A0522D" />
-            {/* Guitar hole */}
-            <circle cx={58} cy={72} r={5} fill="rgba(0,0,0,0.4)" />
-            {/* Strings */}
-            {[54,57,60,63].map(x => <line key={x} x1={x} y1={42} x2={x} y2={88} stroke="rgba(255,255,255,0.6)" strokeWidth={0.8} />)}
-            {/* Playing arm */}
-            <motion.g animate={{ rotate: [-18, 18, -18] }} style={{ transformOrigin: '70px 44px' }}
-              transition={{ duration: 0.3, repeat: Infinity }}>
-              <line x1={70} y1={44} x2={62} y2={62} stroke="#1E3A5F" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-            <line x1={80} y1={44} x2={90} y2={60} stroke="#1E3A5F" strokeWidth={3} strokeLinecap="round" />
-            <line x1={75} y1={58} x2={72} y2={74} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            <line x1={75} y1={58} x2={78} y2={74} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            {/* Music notes — use translateY on group, not SVG y attr */}
-            {['♩','♪','♫'].map((n, i) => (
-              <motion.g key={i}
-                animate={{ y: [0, -20, 0], opacity: [1, 0, 1] }}
-                transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}>
-                <text x={88 + i * 10} y={35} fontSize="14" fill="#D4AF37">{n}</text>
-              </motion.g>
-            ))}
-            {/* Coin tossed — translateY on group */}
-            <motion.g animate={{ y: [0, 28, 0], opacity: [0, 1, 0] }}
-              transition={{ duration: 2.5, repeat: Infinity, delay: 1.5 }}>
-              <circle cx={30} cy={80} r={4} fill="#D4AF37" />
-            </motion.g>
-          </svg>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-// ─── Scene 9: Drive-thru Fast Food ───────────────────────────────────────────
-
-function FastFoodScene() {
-  const [carX, setCarX] = useState(1400);
-  const [phase, setPhase] = useState<'away'|'arriving'|'ordering'|'leaving'>('away');
-  useEffect(() => {
-    const run = () => {
-      setPhase('arriving'); setCarX(1400);
-      const arrive = setInterval(() => {
-        setCarX(x => {
-          if (x <= 700) {
-            clearInterval(arrive);
-            setPhase('ordering');
-            setTimeout(() => {
-              setPhase('leaving');
-              const go = setInterval(() => setCarX(x2 => {
-                if (x2 < -300) { clearInterval(go); setPhase('away'); }
-                return x2 - 6;
-              }), 30);
-            }, 3000);
-          }
-          return x - 7;
-        });
-      }, 30);
-    };
-    const t = setTimeout(run, 8000);
-    const r = setInterval(run, 50000);
-    return () => { clearTimeout(t); clearInterval(r); };
-  }, []);
-
-  return (
-    <div style={{ position: 'fixed', bottom: 38, left: 0, right: 0, zIndex: 9963, pointerEvents: 'none' }}>
-      <svg width="100%" height="110" viewBox={`0 0 1280 110`} preserveAspectRatio="none">
-        {/* Fast food shack */}
-        <rect x={640} y={20} width={120} height={80} rx={5} fill="#FF6B00" />
-        <polygon points="630,20 770,20 770,10 630,10" fill="#CC3300" />
-        <text x="700" y="42" textAnchor="middle" fontSize="11" fill="#fff" fontWeight="900" fontFamily="sans-serif">🍔 QUICK EATS</text>
-        {/* Window */}
-        <rect x={655} y={48} width={50} height={35} rx={3} fill="#B3E5FC" opacity={0.8} />
-        {/* Worker in window */}
-        <circle cx={680} cy={60} r={8} fill="#F5D5B0" />
-        <rect x={672} y={68} width={16} height={12} rx={3} fill="#fff" />
-        {/* Hat */}
-        <rect x={674} y={50} width={12} height={8} rx={2} fill="#CC3300" />
-        {/* Waving hand with bag */}
-        {phase === 'ordering' && (
-          <motion.g animate={{ rotate: [-10, 10, -10] }} style={{ transformOrigin: '694px 65px' }}
-            transition={{ duration: 0.5, repeat: Infinity }}>
-            <line x1={688} y1={65} x2={698} y2={58} stroke="#fff" strokeWidth={2.5} strokeLinecap="round" />
-            <rect x={696} y={52} width={10} height={14} rx={2} fill="#D4AF37" />
-            <text x="701" y="62" textAnchor="middle" fontSize="8">🍟</text>
+    <svg width="90" height="70" viewBox="0 0 90 70" style={{ overflow: 'visible' }}>
+      {/* Wheels */}
+      {[18, 72].map(cx => (
+        <g key={cx}>
+          <circle cx={cx} cy={54} r={14} fill="none" stroke="#333" strokeWidth={2.5} />
+          <motion.g animate={{ rotate: 360 }} style={{ transformOrigin: `${cx}px 54px` }}
+            transition={{ duration: speed, repeat: Infinity, ease: 'linear' }}>
+            <line x1={cx - 14} y1={54} x2={cx + 14} y2={54} stroke="#555" strokeWidth={1.5} />
+            <line x1={cx} y1={40} x2={cx} y2={68} stroke="#555" strokeWidth={1.5} />
           </motion.g>
-        )}
-        {/* Car */}
-        <g transform={`translate(${carX - 1280}, 45)`}>
-          {/* Car body */}
-          <rect x={0} y={20} width={120} height={40} rx={8} fill="#14517A" />
-          <rect x={10} y={10} width={80} height={32} rx={8} fill="#1E6B9A" />
-          {/* Windows */}
-          <rect x={15} y={14} width={28} height={22} rx={4} fill="#87CEEB" opacity={0.8} />
-          <rect x={50} y={14} width={28} height={22} rx={4} fill="#87CEEB" opacity={0.8} />
-          {/* Person in car */}
-          <circle cx={65} cy={22} r={7} fill="#C68642" />
-          {/* Wheels */}
-          {[20, 100].map(x => <g key={x}>
-            <circle cx={x} cy={62} r={12} fill="#111" />
-            <circle cx={x} cy={62} r={7} fill="#222" />
-            <motion.line x1={x-7} y1={62} x2={x+7} y2={62} stroke="#444" strokeWidth={2}
-              animate={{ rotate: 360 }} transition={{ duration: 0.4, repeat: Infinity, ease: 'linear' }}
-              style={{ transformOrigin: `${x}px 62px` }} />
-          </g>)}
-          {/* Order sign */}
-          {phase === 'ordering' && (
-            <motion.rect x={-60} y={15} width={55} height={25} rx={4} fill="#fff" opacity={0.9}
-              animate={{ opacity: [0.9, 1, 0.9] }} transition={{ duration: 0.5, repeat: Infinity }}>
-            </motion.rect>
-          )}
-          {phase === 'ordering' && (
-            <text x="-32" y="30" textAnchor="middle" fontSize="8" fill="#CC3300" fontWeight="800" fontFamily="sans-serif">
-              Order here! 🎤
-            </text>
-          )}
+          <circle cx={cx} cy={54} r={3} fill="#555" />
         </g>
-      </svg>
-    </div>
+      ))}
+      {/* Frame */}
+      <line x1={18} y1={54} x2={45} y2={30} stroke="#666" strokeWidth={2.5} />
+      <line x1={45} y1={30} x2={72} y2={54} stroke="#666" strokeWidth={2.5} />
+      <line x1={45} y1={30} x2={45} y2={54} stroke="#666" strokeWidth={2.5} />
+      <line x1={40} y1={54} x2={50} y2={54} stroke="#666" strokeWidth={2.5} />
+      {/* Handlebar */}
+      <line x1={45} y1={30} x2={60} y2={26} stroke="#888" strokeWidth={2} />
+      {/* Rider */}
+      <Circ cx={52} cy={16} fill="#F5D5B0" />
+      {/* Helmet */}
+      <path d="M44 14 Q52 6 60 14 Q60 16 52 17 Q44 16 44 14Z" fill="#D4AF37" />
+      <Rect x={52} y={22} w={12} h={12} fill="#14B8A6" />
+      {/* Pedaling legs */}
+      <motion.g animate={{ rotate: 360 }} style={{ transformOrigin: '45px 54px' }}
+        transition={{ duration: speed * 1.5, repeat: Infinity, ease: 'linear' }}>
+        <line x1={45} y1={46} x2={38} y2={56} stroke="#1A3A6B" strokeWidth={2.5} strokeLinecap="round" />
+        <line x1={45} y1={62} x2={52} y2={52} stroke="#1A3A6B" strokeWidth={2.5} strokeLinecap="round" />
+      </motion.g>
+      {/* Arms */}
+      <line x1={52} y1={26} x2={60} y2={28} stroke="#14B8A6" strokeWidth={2.5} strokeLinecap="round" />
+      {/* Excited wave on click */}
+      {clicked && (
+        <motion.g initial={{ rotate: 0 }} animate={{ rotate: [0, -40, 0, -40, 0] }}
+          style={{ transformOrigin: '52px 30px' }}
+          transition={{ duration: 0.8 }}>
+          <line x1={52} y1={30} x2={44} y2={22} stroke="#14B8A6" strokeWidth={2.5} strokeLinecap="round" />
+          <text x="38" y="18" fontSize="12">👋</text>
+        </motion.g>
+      )}
+    </svg>
   );
 }
 
-// ─── Scene 10: Ambulance ──────────────────────────────────────────────────────
+// ─── Character 2: Homebuyer Celebration ──────────────────────────────────────
 
-function AmbulanceScene({ delay = 0 }: { delay?: number }) {
-  const [lit, setLit] = useState(false);
-  useEffect(() => { const id = setInterval(() => setLit(v => !v), 200); return () => clearInterval(id); }, []);
+function CharHomebuyer({ hovered, clicked }: { hovered: boolean; clicked: boolean }) {
   return (
-    <motion.div
-      style={{ position: 'fixed', bottom: 38, left: 0, zIndex: 9982, pointerEvents: 'none' }}
-      initial={{ x: '108vw' }}
-      animate={{ x: -360 }}
-      transition={{ duration: 7, delay, repeat: Infinity, repeatDelay: 52, ease: 'linear' }}
+    <svg width="90" height="120" viewBox="0 0 90 120" style={{ overflow: 'visible' }}>
+      {/* Mini SOLD house */}
+      <polygon points="45,8 75,28 75,78 15,78 15,28" fill="#D4AF37" opacity={0.9} />
+      <polygon points="45,8 80,32 10,32" fill="#14B8A6" />
+      <rect x={32} y={52} width={26} height={26} rx={2} fill="#8B4513" />
+      <rect x={20} y={38} width={16} height={16} rx={2} fill="#87CEEB" opacity={0.8} />
+      <rect x={54} y={38} width={16} height={16} rx={2} fill="#87CEEB" opacity={0.8} />
+      {/* SOLD sign */}
+      <rect x={60} y={68} width={28} height={12} rx={2} fill="#CC0000" />
+      <text x="74" y="77" textAnchor="middle" fontSize="7" fill="#fff" fontWeight="900" fontFamily="sans-serif">SOLD!</text>
+      {/* Person */}
+      <motion.g animate={{ y: hovered ? [0, -4, 0] : [0, -2, 0] }}
+        transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}>
+        <Circ cx={45} cy={92} fill="#C68642" />
+        <Rect x={45} y={101} w={14} h={16} fill="#14B8A6" />
+        {/* Keys held up */}
+        <motion.g animate={{ rotate: clicked ? [0, 20, -20, 20, 0] : [0, 8, 0] }}
+          style={{ transformOrigin: '56px 104px' }}
+          transition={{ duration: clicked ? 0.5 : 1.8, repeat: clicked ? 3 : Infinity }}>
+          <line x1={56} y1={104} x2={68} y2={96} stroke="#14B8A6" strokeWidth={2.5} strokeLinecap="round" />
+          <text x="70" y="94" fontSize="13">🔑</text>
+        </motion.g>
+        <line x1={34} y1={104} x2={24} y2={112} stroke="#14B8A6" strokeWidth={2.5} strokeLinecap="round" />
+        <line x1={45} y1={117} x2={41} y2={120} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+        <line x1={45} y1={117} x2={49} y2={120} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+      </motion.g>
+    </svg>
+  );
+}
+
+// ─── Character 3: Dog Walker ──────────────────────────────────────────────────
+
+function CharDogWalker({ hovered, clicked }: { hovered: boolean; clicked: boolean }) {
+  return (
+    <svg width="100" height="90" viewBox="0 0 100 90" style={{ overflow: 'visible' }}>
+      {/* Person */}
+      <Circ cx={28} cy={14} fill="#FDBCB4" />
+      <Rect x={28} y={22} w={14} h={18} fill="#7C3AED" />
+      <Arm x={22} y={26} color="#7C3AED" dir={-1} />
+      {/* Leash arm — straight toward dog */}
+      <line x1={34} y1={26} x2={52} y2={34} stroke="#7C3AED" strokeWidth={2.5} strokeLinecap="round" />
+      {/* Leash rope */}
+      <path d="M52 34 Q60 42 70 38" stroke="#8B4513" strokeWidth={1.5} fill="none" />
+      <Leg x={24} y={40} color="#1A3A6B" dir={-1} />
+      <Leg x={32} y={40} color="#1A3A6B" dir={1} />
+      {/* Dog */}
+      <motion.g animate={{ y: clicked ? [0, -12, 0, -8, 0] : hovered ? [0, -5, 0] : [0, -2, 0] }}
+        transition={{ duration: clicked ? 0.7 : 1.5, repeat: clicked ? 2 : Infinity, ease: 'easeOut' }}>
+        <ellipse cx={74} cy={44} rx={14} ry={8} fill="#C68642" />
+        <circle cx={86} cy={40} r={7} fill="#A0522D" />
+        <ellipse cx={90} cy={36} rx={4} ry={5} fill="#8B4513" />
+        {/* Tail */}
+        <motion.g animate={{ rotate: [-30, 30, -30] }} style={{ transformOrigin: '62px 42px' }}
+          transition={{ duration: 0.4, repeat: Infinity }}>
+          <path d="M62 42 Q54 36 56 30" stroke="#C68642" strokeWidth={3} fill="none" strokeLinecap="round" />
+        </motion.g>
+        {/* Legs */}
+        <line x1={68} y1={50} x2={66} y2={62} stroke="#A0522D" strokeWidth={2} strokeLinecap="round" />
+        <line x1={74} y1={51} x2={72} y2={63} stroke="#A0522D" strokeWidth={2} strokeLinecap="round" />
+        <line x1={80} y1={51} x2={78} y2={63} stroke="#A0522D" strokeWidth={2} strokeLinecap="round" />
+        {/* Sit text on click */}
+        {clicked && <text x="74" y="30" textAnchor="middle" fontSize="11">🐾</text>}
+      </motion.g>
+    </svg>
+  );
+}
+
+// ─── Character 4: Street Musician ─────────────────────────────────────────────
+
+function CharMusician({ hovered, clicked }: { hovered: boolean; clicked: boolean }) {
+  const noteScale = clicked ? 2 : hovered ? 1.4 : 1;
+  return (
+    <svg width="90" height="110" viewBox="0 0 90 110" style={{ overflow: 'visible' }}>
+      {/* Hat */}
+      <ellipse cx={40} cy={14} rx={12} ry={8} fill="#D4AF37" />
+      <rect x={30} y={8} width={20} height={6} rx={1} fill="#B8971F" />
+      <Circ cx={40} cy={22} fill="#C68642" />
+      <Rect x={40} y={30} w={14} h={18} fill="#1E3A5F" />
+      {/* Guitar body */}
+      <ellipse cx={30} cy={60} rx={10} ry={13} fill="#8B4513" />
+      <ellipse cx={30} cy={72} rx={12} ry={14} fill="#A0522D" />
+      <rect x={28} y={38} width={4} height={28} rx={2} fill="#6B3410" />
+      {/* Strings */}
+      {[29, 31, 33].map(x => <line key={x} x1={x} y1={40} x2={x} y2={82} stroke="rgba(255,255,255,0.5)" strokeWidth={0.8} />)}
+      {/* Playing arm */}
+      <motion.g animate={{ rotate: clicked ? [-25, 25, -25, 25, -25] : [-18, 18, -18] }}
+        style={{ transformOrigin: '50px 34px' }}
+        transition={{ duration: clicked ? 0.25 : 0.35, repeat: Infinity }}>
+        <line x1={50} y1={34} x2={38} y2={52} stroke="#1E3A5F" strokeWidth={2.5} strokeLinecap="round" />
+      </motion.g>
+      <line x1={30} y1={34} x2={20} y2={46} stroke="#1E3A5F" strokeWidth={2.5} strokeLinecap="round" />
+      <line x1={40} y1={48} x2={37} y2={64} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+      <line x1={40} y1={48} x2={43} y2={64} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+      {/* Tip jar */}
+      <ellipse cx={14} cy={92} rx={10} ry={5} fill="#222" />
+      <text x="14" y="96" textAnchor="middle" fontSize="6" fill="#D4AF37">TIPS</text>
+      {/* Music notes */}
+      {['♩', '♪', '♫'].map((n, i) => (
+        <motion.g key={i}
+          animate={{ y: [0, -22 * noteScale, 0], opacity: [1, 0, 1] }}
+          transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.55 }}>
+          <text x={60 + i * 11} y={35} fontSize={13 * noteScale} fill="#D4AF37" fontWeight="bold">{n}</text>
+        </motion.g>
+      ))}
+    </svg>
+  );
+}
+
+// ─── Character 5: Bench Sitter ────────────────────────────────────────────────
+
+function CharBenchSitter({ hovered, clicked }: { hovered: boolean; clicked: boolean }) {
+  return (
+    <svg width="110" height="80" viewBox="0 0 110 80" style={{ overflow: 'visible' }}>
+      {/* Bench */}
+      <rect x={5} y={52} width={100} height={6} rx={2} fill="#8B6914" />
+      <rect x={5} y={46} width={100} height={6} rx={2} fill="#A0792A" />
+      {[12, 100].map(x => <rect key={x} x={x} y={44} width={5} height={18} rx={2} fill="#6B4C11" />)}
+      {/* Backrest */}
+      <rect x={5} y={30} width={100} height={5} rx={2} fill="#A0792A" />
+      {[20, 55, 90].map(x => <rect key={x} x={x} y={35} width={3} height={16} rx={1} fill="#8B6914" />)}
+      {/* Person */}
+      <motion.g animate={{ rotate: hovered || clicked ? [0, 5, -5, 5, 0] : [0, 2, -2, 0] }}
+        style={{ transformOrigin: '55px 30px' }}
+        transition={{ duration: hovered || clicked ? 0.5 : 3, repeat: Infinity }}>
+        <Circ cx={55} cy={20} fill="#8D5524" />
+        <Rect x={55} y={28} w={16} h={16} fill="#60A5FA" />
+        {/* Coffee cup */}
+        <motion.g animate={{ rotate: clicked ? [0, 15, -10, 0] : 0 }}
+          style={{ transformOrigin: '68px 36px' }}
+          transition={{ duration: 0.5 }}>
+          <line x1={62} y1={32} x2={72} y2={28} stroke="#60A5FA" strokeWidth={2.5} strokeLinecap="round" />
+          <rect x={70} y={22} width={8} height={10} rx={2} fill="#8B4513" />
+          <path d="M70 22 Q74 18 78 22" stroke="#8B4513" strokeWidth={1} fill="none" />
+        </motion.g>
+        {/* Other arm with phone */}
+        <motion.g animate={{ rotate: clicked ? [0, -20, 0] : 0 }}
+          style={{ transformOrigin: '48px 34px' }}>
+          <line x1={48} y1={32} x2={36} y2={36} stroke="#60A5FA" strokeWidth={2.5} strokeLinecap="round" />
+          {!clicked && <rect x={30} y={32} width={8} height={12} rx={2} fill="#111" />}
+          {clicked && <text x="28" y="36" fontSize="14">👋</text>}
+        </motion.g>
+        {/* Seated legs */}
+        <line x1={48} y1={44} x2={46} y2={58} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+        <line x1={62} y1={44} x2={64} y2={58} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+      </motion.g>
+    </svg>
+  );
+}
+
+// ─── Character 6: Counselor at Desk ──────────────────────────────────────────
+
+function CharCounselor({ hovered, clicked }: { hovered: boolean; clicked: boolean }) {
+  return (
+    <svg width="120" height="100" viewBox="0 0 120 100" style={{ overflow: 'visible' }}>
+      {/* Desk */}
+      <rect x={20} y={60} width={100} height={7} rx={3} fill="#8B6914" />
+      <rect x={24} y={67} width={6} height={24} rx={2} fill="#6B4C11" />
+      <rect x={110} y={67} width={6} height={24} rx={2} fill="#6B4C11" />
+      {/* Laptop */}
+      <rect x={35} y={30} width={66} height={42} rx={4} fill="#1E3A5F" />
+      <rect x={38} y={33} width={60} height={36} rx={3} fill="#0A1628" />
+      {/* Screen glow */}
+      <rect x={40} y={35} width={56} height={12} rx={2} fill="#fff" opacity={0.9} />
+      <text x="68" y="44" textAnchor="middle" fontSize="7" fill="#006AFF" fontWeight="900" fontFamily="sans-serif">Newport News Housing</text>
+      {/* House cards on screen */}
+      {[42, 68, 94].map((x, i) => (
+        <motion.g key={i} animate={{ y: [0, -3, 0] }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}>
+          <rect x={x} y={49} width={20} height={16} rx={2} fill={['#14B8A6', '#D4AF37', '#60A5FA'][i]} opacity={0.7} />
+          <text x={x + 10} y={59} textAnchor="middle" fontSize="5" fill="#fff">🏡</text>
+        </motion.g>
+      ))}
+      {/* Cursor blink */}
+      <motion.rect x={95} y={36} width={1.5} height={10} fill="#0A1628"
+        animate={{ opacity: [1, 0, 1] }} transition={{ duration: 0.9, repeat: Infinity }} />
+      {/* Keyboard */}
+      <rect x={35} y={72} width={66} height={4} rx={2} fill="#333" />
+      {/* Hinge */}
+      <rect x={60} y={70} width={20} height={3} rx={1} fill="#1A1A2E" />
+      {/* Person */}
+      <Circ cx={82} cy={20} fill="#F5D5B0" />
+      <Rect x={82} y={28} w={14} h={16} fill="#0B2146" />
+      {/* Typing arms */}
+      <motion.g animate={{ rotate: clicked ? [-30, 30, -30] : [-10, 10, -10] }}
+        style={{ transformOrigin: '76px 34px' }}
+        transition={{ duration: clicked ? 0.15 : 0.4, repeat: Infinity }}>
+        <line x1={76} y1={34} x2={60} y2={52} stroke="#0B2146" strokeWidth={2.5} strokeLinecap="round" />
+      </motion.g>
+      <motion.g animate={{ rotate: clicked ? [30, -30, 30] : [10, -10, 10] }}
+        style={{ transformOrigin: '88px 34px' }}
+        transition={{ duration: clicked ? 0.15 : 0.4, repeat: Infinity }}>
+        <line x1={88} y1={34} x2={100} y2={50} stroke="#0B2146" strokeWidth={2.5} strokeLinecap="round" />
+      </motion.g>
+      {/* Look-up head tilt on click */}
+      {clicked && <text x="86" y="16" textAnchor="middle" fontSize="12">👀</text>}
+    </svg>
+  );
+}
+
+// ─── Character 7: Shipbuilder ─────────────────────────────────────────────────
+
+function CharShipbuilder({ hovered, clicked }: { hovered: boolean; clicked: boolean }) {
+  return (
+    <svg width="80" height="100" viewBox="0 0 80 100" style={{ overflow: 'visible' }}>
+      {/* Hard hat */}
+      <path d="M24 28 Q40 16 56 28 L56 32 L24 32Z" fill="#FFD700" />
+      <rect x={24} y={27} width={32} height={6} rx={2} fill="#CC9900" />
+      <Circ cx={40} cy={38} fill="#F5D5B0" />
+      <Rect x={40} y={46} w={16} h={20} fill="#FF6B00" />
+      {/* Blueprints in arm */}
+      <motion.g animate={{ rotate: hovered || clicked ? [-5, 5, -5] : [-2, 2, -2] }}
+        style={{ transformOrigin: '30px 52px' }}
+        transition={{ duration: 1.2, repeat: Infinity }}>
+        <line x1={30} y1={52} x2={14} y2={60} stroke="#FF6B00" strokeWidth={2.5} strokeLinecap="round" />
+        <rect x={4} y={56} width={22} height={16} rx={2} fill="#87CEEB" opacity={0.9} />
+        {[0, 1, 2].map(i => <line key={i} x1={6} y1={61 + i * 4} x2={24} y2={61 + i * 4} stroke="#1E3A5F" strokeWidth={1} />)}
+      </motion.g>
+      {/* Wrench arm */}
+      <motion.g animate={{ rotate: clicked ? [0, -30, 30, -30, 0] : [0, -10, 10, 0] }}
+        style={{ transformOrigin: '50px 50px' }}
+        transition={{ duration: clicked ? 0.4 : 2, repeat: clicked ? 2 : Infinity }}>
+        <line x1={50} y1={50} x2={64} y2={44} stroke="#FF6B00" strokeWidth={2.5} strokeLinecap="round" />
+        <text x="66" y="42" fontSize="14">🔧</text>
+      </motion.g>
+      {/* Legs */}
+      <line x1={36} y1={66} x2={32} y2={82} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+      <line x1={44} y1={66} x2={48} y2={82} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+      {/* HII badge */}
+      <rect x={30} y={52} width={20} height={8} rx={2} fill="#0B2146" />
+      <text x="40" y="58" textAnchor="middle" fontSize="5" fill="#D4AF37" fontWeight="900">HII ⚓</text>
+      {/* Thumbs up on click */}
+      {clicked && (
+        <motion.text x="56" y="32" textAnchor="middle" fontSize="18"
+          initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1.3, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}>👍</motion.text>
+      )}
+    </svg>
+  );
+}
+
+// ─── Character 8: Nurse ───────────────────────────────────────────────────────
+
+function CharNurse({ hovered, clicked }: { hovered: boolean; clicked: boolean }) {
+  return (
+    <svg width="80" height="100" viewBox="0 0 80 100" style={{ overflow: 'visible' }}>
+      {/* Nurse cap */}
+      <rect x={28} y={8} width={24} height={10} rx={2} fill="#fff" />
+      <line x1={40} y1={8} x2={40} y2={18} stroke="#CC0000" strokeWidth={2} />
+      <line x1={33} y1={12} x2={47} y2={12} stroke="#CC0000" strokeWidth={2} />
+      <Circ cx={40} cy={24} fill="#FDBCB4" />
+      <Rect x={40} y={32} w={16} h={20} fill="#fff" />
+      {/* Scrub pants */}
+      <rect x={32} y={52} width={16} height={20} rx={3} fill="#B3E5FC" />
+      {/* Stethoscope */}
+      <path d="M34 38 Q26 46 32 52 Q38 58 44 52" stroke="#333" strokeWidth={1.5} fill="none" strokeLinecap="round" />
+      <circle cx={44} cy={52} r={3} fill="#555" />
+      {/* Clipboard arm */}
+      <motion.g animate={{ rotate: clicked ? [-15, 15, -15, 0] : hovered ? [-8, 8, -8] : [-4, 4, -4] }}
+        style={{ transformOrigin: '46px 38px' }}
+        transition={{ duration: clicked ? 0.3 : 1.5, repeat: clicked ? 3 : Infinity }}>
+        <line x1={46} y1={38} x2={58} y2={44} stroke="#fff" strokeWidth={2.5} strokeLinecap="round" />
+        <rect x={57} y={40} width={14} height={18} rx={2} fill="#fff" stroke="#14B8A6" strokeWidth={1.5} />
+        {[0, 1, 2].map(i => <line key={i} x1={59} y1={46 + i * 4} x2={69} y2={46 + i * 4} stroke="#14B8A6" strokeWidth={1} />)}
+      </motion.g>
+      <line x1={34} y1={38} x2={22} y2={46} stroke="#fff" strokeWidth={2.5} strokeLinecap="round" />
+      {/* Shoes */}
+      <rect x={30} y={70} width={10} height={6} rx={2} fill="#fff" />
+      <rect x={42} y={70} width={10} height={6} rx={2} fill="#fff" />
+      {/* Heart on click */}
+      {clicked && (
+        <motion.text x="22" y="36" textAnchor="middle" fontSize="16"
+          initial={{ y: 36, opacity: 0 }} animate={{ y: 20, opacity: [0, 1, 1, 0] }}
+          transition={{ duration: 1.5 }}>❤️</motion.text>
+      )}
+    </svg>
+  );
+}
+
+// ─── Character 9: Kids Running ────────────────────────────────────────────────
+
+function CharKidsRunning({ hovered, clicked }: { hovered: boolean; clicked: boolean }) {
+  const speed = clicked ? 0.18 : hovered ? 0.3 : 0.5;
+  return (
+    <svg width="100" height="80" viewBox="0 0 100 80" style={{ overflow: 'visible' }}>
+      {/* Kid 1 */}
+      <motion.g animate={{ y: [0, -6, 0] }} transition={{ duration: speed, repeat: Infinity }}>
+        <Circ cx={28} cy={22} r={9} fill="#FDBCB4" />
+        {/* Pigtails */}
+        <line x1={22} y1={16} x2={16} y2={10} stroke="#8B4513" strokeWidth={2} strokeLinecap="round" />
+        <line x1={34} y1={16} x2={40} y2={10} stroke="#8B4513" strokeWidth={2} strokeLinecap="round" />
+        <Rect x={28} y={30} w={12} h={14} fill="#FF6B9D" />
+        <Leg x={24} y={44} color="#1A3A6B" dir={-1} angle={35} />
+        <Leg x={32} y={44} color="#1A3A6B" dir={1} angle={35} />
+        <Arm x={22} y={33} color="#FF6B9D" dir={-1} angle={35} />
+        <Arm x={34} y={33} color="#FF6B9D" dir={1} angle={35} />
+        {clicked && <text x="28" y="10" textAnchor="middle" fontSize="14">🌟</text>}
+      </motion.g>
+      {/* Kid 2 */}
+      <motion.g animate={{ y: [0, -6, 0] }} transition={{ duration: speed, repeat: Infinity, delay: speed / 2 }}>
+        <Circ cx={72} cy={22} r={9} fill="#C68642" />
+        {/* Cap */}
+        <path d="M63 18 Q72 10 81 18 L81 20 L63 20Z" fill="#14B8A6" />
+        <Rect x={72} y={30} w={12} h={14} fill="#60A5FA" />
+        <Leg x={68} y={44} color="#1A3A6B" dir={1} angle={35} />
+        <Leg x={76} y={44} color="#1A3A6B" dir={-1} angle={35} />
+        <Arm x={66} y={33} color="#60A5FA" dir={-1} angle={35} />
+        <Arm x={78} y={33} color="#60A5FA" dir={1} angle={35} />
+        {clicked && <text x="72" y="10" textAnchor="middle" fontSize="14">🎉</text>}
+      </motion.g>
+      {/* Ground */}
+      <rect x={0} y={68} width={100} height={2} rx={1} fill="rgba(255,255,255,0.2)" />
+    </svg>
+  );
+}
+
+// ─── Character 10: Family Group ───────────────────────────────────────────────
+
+function CharFamilyGroup({ hovered, clicked }: { hovered: boolean; clicked: boolean }) {
+  return (
+    <svg width="120" height="100" viewBox="0 0 120 100" style={{ overflow: 'visible' }}>
+      {/* Dad */}
+      <motion.g animate={{ rotate: hovered || clicked ? [-6, 6, -6] : [-2, 2, -2] }}
+        style={{ transformOrigin: '28px 50px' }}
+        transition={{ duration: hovered || clicked ? 0.4 : 2.5, repeat: Infinity }}>
+        <Circ cx={28} cy={20} fill="#8D5524" />
+        <Rect x={28} y={28} w={16} h={20} fill="#1E3A5F" />
+        <line x1={22} y1={32} x2={14} y2={44} stroke="#1E3A5F" strokeWidth={2.5} strokeLinecap="round" />
+        <motion.g animate={{ rotate: clicked ? [-40, 40, -40, 40, 0] : [-20, 20, -20] }}
+          style={{ transformOrigin: '34px 32px' }}
+          transition={{ duration: clicked ? 0.25 : 1.2, repeat: clicked ? 4 : Infinity }}>
+          <line x1={34} y1={32} x2={44} y2={24} stroke="#1E3A5F" strokeWidth={2.5} strokeLinecap="round" />
+        </motion.g>
+        <line x1={24} y1={48} x2={22} y2={64} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+        <line x1={32} y1={48} x2={34} y2={64} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+      </motion.g>
+      {/* Mom */}
+      <motion.g animate={{ rotate: hovered || clicked ? [6, -6, 6] : [2, -2, 2] }}
+        style={{ transformOrigin: '62px 50px' }}
+        transition={{ duration: hovered || clicked ? 0.4 : 2.2, repeat: Infinity, delay: 0.3 }}>
+        <Circ cx={62} cy={22} fill="#FDBCB4" />
+        {/* Hair */}
+        <path d="M52 20 Q62 12 72 20 L72 18 Q62 8 52 18Z" fill="#5C2D0E" />
+        <Rect x={62} y={30} w={14} h={18} fill="#D4AF37" />
+        <motion.g animate={{ rotate: clicked ? [-40, 40, -40, 40, 0] : [-18, 18, -18] }}
+          style={{ transformOrigin: '56px 34px' }}
+          transition={{ duration: clicked ? 0.25 : 1.4, repeat: clicked ? 4 : Infinity }}>
+          <line x1={56} y1={34} x2={46} y2={26} stroke="#D4AF37" strokeWidth={2.5} strokeLinecap="round" />
+        </motion.g>
+        <line x1={68} y1={34} x2={76} y2={44} stroke="#D4AF37" strokeWidth={2.5} strokeLinecap="round" />
+        <line x1={58} y1={48} x2={56} y2={64} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+        <line x1={66} y1={48} x2={68} y2={64} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
+      </motion.g>
+      {/* Child */}
+      <motion.g animate={{ y: [0, -5, 0] }} transition={{ duration: 1, repeat: Infinity }}>
+        <Circ cx={95} cy={38} r={8} fill="#C68642" />
+        <Rect x={95} y={44} w={10} h={14} fill="#34D399" />
+        <motion.g animate={{ rotate: clicked ? [-50, 50, -50, 50, 0] : [-25, 25, -25] }}
+          style={{ transformOrigin: '91px 48px' }}
+          transition={{ duration: clicked ? 0.2 : 1, repeat: clicked ? 5 : Infinity }}>
+          <line x1={91} y1={48} x2={82} y2={42} stroke="#34D399" strokeWidth={2} strokeLinecap="round" />
+        </motion.g>
+        <motion.g animate={{ rotate: clicked ? [50, -50, 50, -50, 0] : [25, -25, 25] }}
+          style={{ transformOrigin: '99px 48px' }}
+          transition={{ duration: clicked ? 0.2 : 1, repeat: clicked ? 5 : Infinity }}>
+          <line x1={99} y1={48} x2={106} y2={42} stroke="#34D399" strokeWidth={2} strokeLinecap="round" />
+        </motion.g>
+        <line x1={92} y1={58} x2={90} y2={68} stroke="#1A3A6B" strokeWidth={2.5} strokeLinecap="round" />
+        <line x1={98} y1={58} x2={100} y2={68} stroke="#1A3A6B" strokeWidth={2.5} strokeLinecap="round" />
+        {clicked && <text x="95" y="30" textAnchor="middle" fontSize="12">😄</text>}
+      </motion.g>
+    </svg>
+  );
+}
+
+// ─── Page-scene map ───────────────────────────────────────────────────────────
+
+type SceneDef = {
+  id: string;
+  Char: React.ComponentType<{ hovered: boolean; clicked: boolean }>;
+  style: React.CSSProperties;
+  bubbleTexts: string[];
+  bubbleColor?: string;
+  showConfetti?: boolean;
+};
+
+const PAGE_SCENES: Record<string, SceneDef[]> = {
+  '/': [
+    { id: 'a', Char: CharCyclist, style: { top: '28%', right: '3%' },
+      bubbleTexts: ['Love biking in Newport News! 🚴', 'Clean city, great trails! 🌿', 'Cycling to my new home! 🏡'] },
+    { id: 'b', Char: CharHomebuyer, style: { bottom: 90, left: '8%' },
+      bubbleTexts: ['I bought my home! 🔑🏡', 'Best decision ever! 🎉', 'Newport News forever! ⭐'],
+      bubbleColor: '#D4AF37', showConfetti: true },
+    { id: 'c', Char: CharDogWalker, style: { top: '60%', left: '2%' },
+      bubbleTexts: ['Best neighborhood walks! 🐕', 'Woof! Great city! 🐾', 'Every block is beautiful here!'] },
+  ],
+  '/buy': [
+    { id: 'a', Char: CharCounselor, style: { top: '22%', right: '2%' },
+      bubbleTexts: ['Free HUD counseling! 📞', 'Call (757) 933-2311 🏠', 'I can help you find a program!'] },
+    { id: 'b', Char: CharHomebuyer, style: { top: '52%', left: '3%' },
+      bubbleTexts: ['Your keys are waiting! 🔑', 'First-time buyer grants help! 💰', 'You can do this! 🏡'],
+      bubbleColor: '#D4AF37', showConfetti: true },
+    { id: 'c', Char: CharBenchSitter, style: { bottom: 90, right: '12%' },
+      bubbleTexts: ['I used the calculator above! ↑', 'Rent vs. buy changed my mind!', 'Great tool up there! 👆'] },
+  ],
+  '/rent': [
+    { id: 'a', Char: CharFamilyGroup, style: { top: '20%', right: '2%' },
+      bubbleTexts: ['Found our perfect rental! 🏠', 'Newport News is home! ❤️', 'Great neighborhood for families!'] },
+    { id: 'b', Char: CharNurse, style: { top: '55%', left: '3%' },
+      bubbleTexts: ['Good rental = good health! 💙', 'I found mine through this site!', 'Stable housing matters! 🏥'] },
+    { id: 'c', Char: CharKidsRunning, style: { bottom: 90, left: '35%' },
+      bubbleTexts: ['We love our neighborhood! 🌟', 'Best parks in Newport News! 🎉', 'So much space to run!'] },
+  ],
+  '/neighborhoods': [
+    { id: 'a', Char: CharCyclist, style: { top: '38%', right: '3%' },
+      bubbleTexts: ['Hilton Village is amazing! 🚴', 'Denbigh has the best parks!', 'Oyster Point for the win! 🏙️'] },
+    { id: 'b', Char: CharFamilyGroup, style: { top: '62%', left: '2%' },
+      bubbleTexts: ['We chose Southeast! 🏡', 'Our neighborhood is perfect!', 'Every area has something special!'] },
+    { id: 'c', Char: CharDogWalker, style: { top: '20%', left: '4%' },
+      bubbleTexts: ['50+ parks to walk in! 🐕', '14 miles of trails! 🐾', 'Best dog-walking city!'] },
+  ],
+  '/assistance': [
+    { id: 'a', Char: CharCounselor, style: { top: '26%', right: '3%' },
+      bubbleTexts: ['I can help you apply! 📋', 'Free guidance available! 🤝', 'No appointment needed!'] },
+    { id: 'b', Char: CharNurse, style: { top: '55%', left: '3%' },
+      bubbleTexts: ['2-1-1 helped my family! 💙', 'Emergency help is one call away!', 'You\'re not alone! ❤️'] },
+    { id: 'c', Char: CharFamilyGroup, style: { bottom: 90, right: '10%' },
+      bubbleTexts: ['We got eviction help! 🙏', 'Don\'t wait — call today!', 'Programs saved our home! 🏡'],
+      showConfetti: true },
+  ],
+  '/journey': [
+    { id: 'a', Char: CharKidsRunning, style: { top: '22%', right: '3%' },
+      bubbleTexts: ['Our parents bought a home! 🌟', 'Homeownership is possible!', 'Start your journey today! 🎉'] },
+    { id: 'b', Char: CharCounselor, style: { bottom: 90, left: '5%' },
+      bubbleTexts: ['Step 1: check your credit! 📊', 'Free counseling at step 2!', 'I\'ll walk you through it all!'] },
+    { id: 'c', Char: CharHomebuyer, style: { top: '50%', right: '4%' },
+      bubbleTexts: ['Every path leads home! 🔑', 'Rent, buy, repair — we cover all!', 'Your journey starts here! 🏡'],
+      bubbleColor: '#D4AF37', showConfetti: true },
+  ],
+  '/events': [
+    { id: 'a', Char: CharMusician, style: { top: '24%', left: '3%' },
+      bubbleTexts: ['♪ Beyond the Keys Aug 8! ♪', '♫ Free workshops every month!', '♩ Come join us! 🎶'] },
+    { id: 'b', Char: CharFamilyGroup, style: { top: '52%', right: '3%' },
+      bubbleTexts: ['We loved the last workshop! 🎉', 'Free events = great value!', 'Bring the whole family! ❤️'] },
+    { id: 'c', Char: CharKidsRunning, style: { bottom: 90, left: '40%' },
+      bubbleTexts: ['Bank On program is free! ⭐', 'Can\'t wait for the expo!', 'Register now — it\'s free!'] },
+  ],
+  '/contact': [
+    { id: 'a', Char: CharCounselor, style: { top: '24%', right: '3%' },
+      bubbleTexts: ['(757) 933-2311 📞', 'Mon–Fri 8am–5pm!', 'Walk-ins welcome too!'] },
+    { id: 'b', Char: CharBenchSitter, style: { top: '56%', left: '4%' },
+      bubbleTexts: ['They replied in 2 days! ✉️', 'Great team here!', '2400 Washington Ave! 📍'] },
+    { id: 'c', Char: CharNurse, style: { bottom: 90, right: '15%' },
+      bubbleTexts: ['Free HUD counseling here! 💙', 'They really helped me!', 'Certified advisors! ⭐'] },
+  ],
+  '/resources': [
+    { id: 'a', Char: CharShipbuilder, style: { top: '28%', right: '3%' },
+      bubbleTexts: ['SHIP Plan is working! ⚓', 'HII supports Newport News!', 'New housing incoming! 🏗️'] },
+    { id: 'b', Char: CharBenchSitter, style: { top: '60%', left: '4%' },
+      bubbleTexts: ['Virginia Housing saves! 💰', 'Below-market rates are real!', 'I read the SHIP Plan — great stuff!'] },
+    { id: 'c', Char: CharCounselor, style: { bottom: 90, left: '38%' },
+      bubbleTexts: ['HUD counseling is free! 📋', 'Download the checklist! ✅', 'Resources for every situation!'] },
+  ],
+  '/services': [
+    { id: 'a', Char: CharShipbuilder, style: { top: '26%', right: '4%' },
+      bubbleTexts: ['City services are great! 🏙️', 'NN-ALERT kept me safe!', 'City jobs open now! 💼'] },
+    { id: 'b', Char: CharCyclist, style: { top: '56%', left: '3%' },
+      bubbleTexts: ['Paid my bill online! 💳', 'newportnewsva.gov is fast!', 'City is so well-organized! 👍'] },
+    { id: 'c', Char: CharDogWalker, style: { bottom: 90, right: '14%' },
+      bubbleTexts: ['Reported a sidewalk issue! 🐕', 'City fixed it in 3 days!', 'Great city services! 🌆'] },
+  ],
+  '/quiz': [
+    { id: 'a', Char: CharCounselor, style: { top: '22%', right: '3%' },
+      bubbleTexts: ['Take the quiz above! ↑', '7 questions, 2 minutes!', 'I matched 4 programs!'] },
+    { id: 'b', Char: CharKidsRunning, style: { top: '55%', left: '3%' },
+      bubbleTexts: ['Our family used the quiz! 🌟', 'Found grants we didn\'t know about!', 'So easy to use! 🎉'] },
+    { id: 'c', Char: CharHomebuyer, style: { bottom: 90, right: '10%' },
+      bubbleTexts: ['Quiz matched my programs! 🔑', 'Results in seconds! ⭐', 'Best tool on the site!'],
+      bubbleColor: '#D4AF37' },
+  ],
+  '/why-newport-news': [
+    { id: 'a', Char: CharShipbuilder, style: { top: '24%', right: '3%' },
+      bubbleTexts: ['HII — largest VA employer! ⚓', 'Proud Newport News builder!', 'This city built the fleet!'] },
+    { id: 'b', Char: CharCyclist, style: { top: '55%', left: '3%' },
+      bubbleTexts: ['14 miles of trails! 🚴', 'Noland Trail is incredible!', 'Best cycling city in VA!'] },
+    { id: 'c', Char: CharFamilyGroup, style: { bottom: 90, right: '12%' },
+      bubbleTexts: ['Newport News is home! ❤️', 'Military, workers, families — all here!', 'Best city in Hampton Roads!'] },
+  ],
+  '/success-stories': [
+    { id: 'a', Char: CharHomebuyer, style: { top: '20%', right: '3%' },
+      bubbleTexts: ['I bought at 26! 🔑', 'City grants made it happen!', 'Your story could be next! 🏡'],
+      bubbleColor: '#D4AF37', showConfetti: true },
+    { id: 'b', Char: CharFamilyGroup, style: { top: '52%', left: '3%' },
+      bubbleTexts: ['We\'re homeowners now! 🎉', 'Counseling changed everything!', 'Best decision for our family! ❤️'],
+      showConfetti: true },
+    { id: 'c', Char: CharMusician, style: { bottom: 90, left: '30%' },
+      bubbleTexts: ['♪ Every story matters! ♫', '♩ Share yours today!', '♫ Newport News sings! 🎶'] },
+  ],
+  '/checklist': [
+    { id: 'a', Char: CharCounselor, style: { top: '24%', right: '3%' },
+      bubbleTexts: ['Step 1: credit check! ✅', 'Aim for 620+ first!', 'I\'ll walk through every step!'] },
+    { id: 'b', Char: CharNurse, style: { top: '55%', left: '3%' },
+      bubbleTexts: ['Financial health matters! 💙', 'Save 3–6 months expenses!', 'Healthy finances = home ready!'] },
+    { id: 'c', Char: CharKidsRunning, style: { bottom: 90, right: '12%' },
+      bubbleTexts: ['We\'re ready to move in! 🌟', 'Checklist really helped! 🎉', 'Dad finished all the steps!'] },
+  ],
+  '/ship': [
+    { id: 'a', Char: CharShipbuilder, style: { top: '26%', right: '3%' },
+      bubbleTexts: ['Building more homes! 🏗️', 'SHIP Plan is bold! ⚓', 'Missing Middle is the key!'] },
+    { id: 'b', Char: CharCounselor, style: { top: '56%', left: '4%' },
+      bubbleTexts: ['4 pillars: Reform, Production, Affordability, Preservation!', 'This plan will help thousands!', 'Great housing policy! 📋'] },
+    { id: 'c', Char: CharFamilyGroup, style: { bottom: 90, left: '35%' },
+      bubbleTexts: ['SHIP Plan = more homes! 🏡', 'Duplexes coming to our street!', 'Policy that works! ✅'] },
+  ],
+  '/partners': [
+    { id: 'a', Char: CharCounselor, style: { top: '22%', right: '3%' },
+      bubbleTexts: ['Virginia Housing is great! 💰', 'NNRHA helped my family!', 'Dial 2-1-1 anytime! 📞'] },
+    { id: 'b', Char: CharShipbuilder, style: { top: '55%', left: '3%' },
+      bubbleTexts: ['HII and city work together! ⚓', 'Proud partner of Newport News!', 'Community investment! 🏗️'] },
+    { id: 'c', Char: CharFamilyGroup, style: { bottom: 90, right: '10%' },
+      bubbleTexts: ['Partners made it possible! 🤝', 'United Way 2-1-1 saved us!', 'Federal + city = results! ✅'] },
+  ],
+};
+
+// ─── Individual scene renderer ────────────────────────────────────────────────
+
+function SceneCard({ scene }: { scene: SceneDef }) {
+  return (
+    <CharWrapper
+      style={scene.style}
+      bubbleTexts={scene.bubbleTexts}
+      bubbleColor={scene.bubbleColor}
+      showConfetti={scene.showConfetti}
     >
-      <svg width="200" height="76" viewBox="0 0 200 76">
-        <rect x={4} y={14} width={192} height={48} rx={8} fill="#fff" />
-        <rect x={4} y={14} width={192} height={48} rx={8} fill="none" stroke="#CC0000" strokeWidth={3} />
-        <rect x={4} y={14} width={192} height={14} rx={8} fill="#CC0000" />
-        {/* Cross symbol */}
-        <rect x={84} y={18} width={32} height={8} rx={2} fill="#fff" />
-        <rect x={96} y={14} width={8} height={16} rx={2} fill="#fff" />
-        {/* Lights */}
-        <rect x={8} y={14} width={20} height={12} rx={3} fill={lit ? '#FF0000' : '#660000'} />
-        <rect x={172} y={14} width={20} height={12} rx={3} fill={lit ? '#0000FF' : '#000066'} />
-        {/* Siren glow — scale instead of r */}
-        <motion.circle cx={18} cy={20} r={8} fill={lit ? '#FF000066' : 'transparent'}
-          animate={{ scale: [0.4, 1.8, 0.4] }}
-          style={{ transformOrigin: '18px 20px' }}
-          transition={{ duration: 0.4, repeat: Infinity }} />
-        {/* Windows */}
-        {[14, 100, 146].map(x => <rect key={x} x={x} y={20} width={30} height={22} rx={4} fill="#B3E5FC" opacity={0.8} />)}
-        <text x="120" y="52" textAnchor="middle" fontSize="9" fill="#CC0000" fontWeight="900" fontFamily="sans-serif">AMBULANCE</text>
-        {/* Wheels */}
-        {[36, 162].map(cx => <g key={cx}><circle cx={cx} cy={66} r={10} fill="#111" /><circle cx={cx} cy={66} r={6} fill="#222" /></g>)}
-      </svg>
-    </motion.div>
+      {(hovered, clicked) => <scene.Char hovered={hovered} clicked={clicked} />}
+    </CharWrapper>
   );
 }
 
-// ─── Scene 11: Police Chase ───────────────────────────────────────────────────
-
-function PoliceChaseScene({ delay = 0, fromRight = false }: { delay?: number; fromRight?: boolean }) {
-  const [policeFlash, setPoliceFlash] = useState(false);
-  useEffect(() => { const id = setInterval(() => setPoliceFlash(v => !v), 180); return () => clearInterval(id); }, []);
-  const dir = fromRight ? -1 : 1;
-  return (
-    <motion.div
-      style={{ position: 'fixed', bottom: 38, [fromRight ? 'right' : 'left']: 0, zIndex: 9980, pointerEvents: 'none' }}
-      initial={{ x: fromRight ? -520 : '115vw' }}
-      animate={{ x: fromRight ? '115vw' : -520 }}
-      transition={{ duration: 6, delay, repeat: Infinity, repeatDelay: 45, ease: 'linear' }}
-    >
-      <svg width="420" height="68" viewBox={`0 0 420 68`} transform={fromRight ? 'scale(-1,1)' : undefined}>
-        {/* Fleeing car */}
-        <rect x={4} y={10} width={140} height={44} rx={8} fill="#CC0000" />
-        <rect x={14} y={4} width={100} height={32} rx={8} fill="#AA0000" />
-        {[18,74,114].map(x=><rect key={x} x={x} y={8} width={26} height={22} rx={4} fill="#87CEEB" opacity={0.7}/>)}
-        {[20,124].map(cx=><g key={cx}><circle cx={cx} cy={56} r={10} fill="#111"/><circle cx={cx} cy={56} r={6} fill="#222"/></g>)}
-        <motion.text x="72" y="40" textAnchor="middle" fontSize="10"
-          animate={{ opacity: [0,1,0] }} transition={{ duration: 0.3, repeat: Infinity }}>💨</motion.text>
-        {/* Police car */}
-        <rect x={200} y={12} width={200} height={44} rx={8} fill="#1E3A5F" />
-        <rect x={210} y={4} width={160} height={32} rx={8} fill="#0F2347" />
-        <rect x={220} y={4} width={140} height={6} rx={2} fill="#fff" />
-        {[214,270,332].map(x=><rect key={x} x={x} y={8} width={28} height={22} rx={4} fill="#B3E5FC" opacity={0.7}/>)}
-        {/* Lights on roof */}
-        <rect x={255} y={2} width={16} height={6} rx={2} fill={policeFlash ? '#FF0000' : '#660000'} />
-        <rect x={280} y={2} width={16} height={6} rx={2} fill={policeFlash ? '#0000FF' : '#000066'} />
-        <rect x={305} y={2} width={16} height={6} rx={2} fill={policeFlash ? '#FF0000' : '#660000'} />
-        {[216,372].map(cx=><g key={cx}><circle cx={cx} cy={58} r={10} fill="#111"/><circle cx={cx} cy={58} r={6} fill="#222"/></g>)}
-        <text x="292" y="44" textAnchor="middle" fontSize="8" fill="#fff" fontWeight="900" fontFamily="sans-serif">POLICE</text>
-      </svg>
-    </motion.div>
-  );
-}
-
-// ─── Scene 12: People on benches / sitting, reading, chatting ────────────────
-
-function SittingCrowdScene() {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 26000);
-    const c = setInterval(() => setVisible(v => !v), 55000);
-    return () => { clearTimeout(t); clearInterval(c); };
-  }, []);
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          style={{ position: 'fixed', top: '60%', left: '32%', zIndex: 9962, pointerEvents: 'none' }}>
-          <svg width="240" height="90" viewBox="0 0 240 90">
-            {/* Park bench */}
-            <rect x={10} y={65} width={220} height={6} rx={2} fill="#8B6914" />
-            <rect x={10} y={58} width={220} height={6} rx={2} fill="#A0792A" />
-            {[20, 220].map(x=><rect key={x} x={x} y={56} width={5} height={20} rx={2} fill="#6B4C11"/>)}
-            {/* Person 1: chatting */}
-            <Head x={45} y={26} fill="#FDBCB4" />
-            <Body x={45} y={36} w={14} h={18} fill="#60A5FA" />
-            <motion.g animate={{ rotate: [20, -20, 20] }} style={{ transformOrigin: '40px 40px' }}
-              transition={{ duration: 1, repeat: Infinity }}>
-              <line x1={40} y1={40} x2={30} y2={48} stroke="#60A5FA" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-            <motion.g animate={{ rotate: [-20, 20, -20] }} style={{ transformOrigin: '50px 40px' }}
-              transition={{ duration: 1, repeat: Infinity, delay: 0.5 }}>
-              <line x1={50} y1={40} x2={60} y2={46} stroke="#60A5FA" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-            {/* Legs on bench */}
-            <line x1={40} y1={54} x2={38} y2={65} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            <line x1={50} y1={54} x2={52} y2={65} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            {/* Speech bubble */}
-            <rect x={2} y={8} width={50} height={16} rx={6} fill="#fff" opacity={0.85} />
-            <polygon points="18,24 24,24 20,30" fill="#fff" opacity={0.85} />
-            <text x="27" y="19" textAnchor="middle" fontSize="7" fill="#1E3A5F" fontWeight="700">Let's buy!</text>
-            {/* Person 2 */}
-            <Head x={100} y={28} fill="#8D5524" />
-            <Body x={100} y={38} w={14} h={18} fill="#34D399" />
-            {/* Phone in hand */}
-            <line x1={106} y1={42} x2={112} y2={36} stroke="#34D399" strokeWidth={3} strokeLinecap="round" />
-            <rect x={112} y={31} width={8} height={12} rx={2} fill="#111" />
-            <motion.rect x={113} y={32} width={6} height={10} rx={1} fill="#87CEEB"
-              animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 1.2, repeat: Infinity }} />
-            <line x1={95} y1={42} x2={88} y2={50} stroke="#34D399" strokeWidth={3} strokeLinecap="round" />
-            <line x1={95} y1={56} x2={93} y2={65} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            <line x1={105} y1={56} x2={107} y2={65} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            {/* Person 3 — with ice cream */}
-            <Head x={160} y={26} fill="#F5D5B0" />
-            <Body x={160} y={36} w={14} h={18} fill="#A78BFA" />
-            <line x1={166} y1={40} x2={174} y2={32} stroke="#A78BFA" strokeWidth={3} strokeLinecap="round" />
-            {/* Ice cream cone */}
-            <polygon points="174,32 180,32 177,42" fill="#D4AF37" />
-            <circle cx={177} cy={28} r={8} fill="#FF6B9D" />
-            <circle cx={177} cy={26} r={6} fill="#FFB3CC" opacity={0.7} />
-            <line x1={154} y1={40} x2={146} y2={50} stroke="#A78BFA" strokeWidth={3} strokeLinecap="round" />
-            <line x1={154} y1={54} x2={152} y2={65} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            <line x1={164} y1={54} x2={166} y2={65} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            {/* Squirrel on bench arm */}
-            <circle cx={210} cy={50} r={6} fill="#8B4513" />
-            <ellipse cx={216} cy={47} rx={3} ry={5} fill="#A0522D" />
-            <motion.g animate={{ rotate: [-25, 25, -25] }} style={{ transformOrigin: '204px 48px' }}
-              transition={{ duration: 0.8, repeat: Infinity }}>
-              <path d="M204 48 Q198 40 204 36" stroke="#8B4513" strokeWidth={2.5} fill="none" strokeLinecap="round" />
-            </motion.g>
-            <circle cx={218} cy={46} r={2} fill="#FFF" />
-            <circle cx={213} cy={49} r={2} fill="#D4AF37" />
-          </svg>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-// ─── Scene 13: Shipbuilder at work ────────────────────────────────────────────
-
-function ShipbuilderWorkScene() {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 30000);
-    const c = setInterval(() => setVisible(v => !v), 60000);
-    return () => { clearTimeout(t); clearInterval(c); };
-  }, []);
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -60 }}
-          style={{ position: 'fixed', top: '30%', left: '55%', zIndex: 9960, pointerEvents: 'none' }}>
-          <svg width="200" height="120" viewBox="0 0 200 120">
-            {/* Ship hull being built */}
-            <rect x={20} y={60} width={160} height={50} rx={4} fill="#1E3A5F" opacity={0.8} />
-            <ellipse cx={100} cy={60} rx={80} ry={8} fill="#0F2347" />
-            {/* Porthole windows */}
-            {[40, 70, 100, 130, 160].map(x => <circle key={x} cx={x} cy={80} r={8} fill="none" stroke="#D4AF37" strokeWidth={2} />)}
-            {/* Scaffolding */}
-            <rect x={0} y={20} width={4} height={90} fill="#666" />
-            <rect x={196} y={20} width={4} height={90} fill="#666" />
-            {[20,40,60,80].map(y=><rect key={y} x={0} y={y} width={200} height={3} fill="#555" opacity={0.6}/>)}
-            {/* Anchor logo */}
-            <text x="100" y="98" textAnchor="middle" fontSize="24" fill="#D4AF37" opacity={0.6}>⚓</text>
-            {/* Worker 1 with welding */}
-            <Head x={55} y={32} fill="#F5D5B0" />
-            {/* Hard hat */}
-            <path d="M45 30 Q55 20 65 30 L65 33 L45 33Z" fill="#FFD700" />
-            <rect x={45} y={29} width={20} height={5} rx={2} fill="#CC9900" />
-            <Body x={55} y={42} fill="#FF6B00" />
-            {/* Welding arm — sparks */}
-            <motion.g animate={{ rotate: [-15, 15, -15] }} style={{ transformOrigin: '60px 50px' }}
-              transition={{ duration: 0.3, repeat: Infinity }}>
-              <line x1={60} y1={50} x2={72} y2={60} stroke="#FF6B00" strokeWidth={3} strokeLinecap="round" />
-              <motion.circle cx={72} cy={60} r={3} fill="#FFD700"
-                animate={{ scale: [0.6, 1.8, 0.6], opacity: [1, 0.3, 1] }}
-                style={{ transformOrigin: '72px 60px' }}
-                transition={{ duration: 0.2, repeat: Infinity }} />
-              {/* Sparks — translateY on groups */}
-              {[0,1,2,3].map(i => (
-                <motion.g key={i}
-                  animate={{ y: [0, -6, 0], opacity: [1, 0, 1] }}
-                  transition={{ duration: 0.3, repeat: Infinity, delay: i * 0.07 }}>
-                  <line x1={72} y1={60} x2={72 + (i - 1.5) * 6} y2={54}
-                    stroke="#FFD700" strokeWidth={1.5} strokeLinecap="round" />
-                </motion.g>
-              ))}
-            </motion.g>
-            <line x1={50} y1={50} x2={42} y2={60} stroke="#FF6B00" strokeWidth={3} strokeLinecap="round" />
-            <line x1={55} y1={60} x2={52} y2={75} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            <line x1={55} y1={60} x2={58} y2={75} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-
-            {/* Worker 2 with blueprints */}
-            <Head x={140} y={30} fill="#C68642" />
-            <path d="M130 28 Q140 18 150 28 L150 31 L130 31Z" fill="#FFD700" />
-            <Body x={140} y={40} fill="#FF6B00" />
-            <line x1={135} y1={46} x2={122} y2={54} stroke="#FF6B00" strokeWidth={3} strokeLinecap="round" />
-            <rect x={110} y={50} width={30} height={22} rx={2} fill="#87CEEB" opacity={0.9} />
-            {[0,1,2].map(i=><line key={i} x1={113} y1={56+i*5} x2={137} y2={56+i*5} stroke="#1E3A5F" strokeWidth={1}/>)}
-            <line x1={140} y1={58} x2={138} y2={74} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            <line x1={140} y1={58} x2={142} y2={74} stroke="#1A3A6B" strokeWidth={3} strokeLinecap="round" />
-            <motion.g animate={{ rotate: [15, -15, 15] }} style={{ transformOrigin: '145px 46px' }}
-              transition={{ duration: 1, repeat: Infinity }}>
-              <line x1={145} y1={46} x2={152} y2={54} stroke="#FF6B00" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-
-            {/* HII badge */}
-            <rect x={80} y={18} width={40} height={14} rx={4} fill="#0B2146" opacity={0.8} />
-            <text x="100" y="28" textAnchor="middle" fontSize="8" fill="#D4AF37" fontWeight="900" fontFamily="sans-serif">HII ⚓</text>
-          </svg>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-// ─── Scene 14: Nurse at work / walking ───────────────────────────────────────
-
-function NurseWorkScene() {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 36000);
-    const c = setInterval(() => setVisible(v => !v), 62000);
-    return () => { clearTimeout(t); clearInterval(c); };
-  }, []);
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          style={{ position: 'fixed', top: '14%', right: '28%', zIndex: 9959, pointerEvents: 'none' }}>
-          <svg width="160" height="110" viewBox="0 0 160 110">
-            {/* Medical cart */}
-            <rect x={90} y={50} width={60} height={50} rx={4} fill="#fff" stroke="#14B8A6" strokeWidth={2} />
-            <rect x={90} y={50} width={60} height={16} rx={4} fill="#14B8A6" />
-            <text x="120" y="62" textAnchor="middle" fontSize="9" fill="#fff" fontWeight="900">🏥 CARE</text>
-            {/* Clipboard & supplies */}
-            <rect x={96} y={72} width={20} height={24} rx={2} fill="#fff" stroke="#ccc" strokeWidth={1} />
-            {[0,1,2].map(i=><line key={i} x1={98} y1={78+i*6} x2={114} y2={78+i*6} stroke="#ccc" strokeWidth={1}/>)}
-            {/* Medicine bottles */}
-            <rect x={122} y={72} width={10} height={18} rx={3} fill="#FF6B9D" />
-            <rect x={135} y={70} width={10} height={20} rx={3} fill="#34D399" />
-            {/* Wheels */}
-            {[96, 144].map(cx => <circle key={cx} cx={cx} cy={102} r={5} fill="#999" />)}
-
-            {/* Nurse */}
-            <Head x={60} y={22} fill="#FDBCB4" />
-            {/* Nurse cap */}
-            <rect x={50} y={12} width={20} height={10} rx={2} fill="#fff" />
-            <line x1={60} y1={12} x2={60} y2={22} stroke="#CC0000" strokeWidth={2} />
-            <line x1={54} y1={16} x2={66} y2={16} stroke="#CC0000" strokeWidth={2} />
-            <Body x={60} y={32} fill="#fff" />
-            {/* Scrub pants */}
-            <rect x={52} y={50} width={16} height={20} rx={3} fill="#B3E5FC" />
-            {/* Stethoscope */}
-            <path d="M55 38 Q48 46 54 52 Q60 58 66 52" stroke="#333" strokeWidth={1.5} fill="none" strokeLinecap="round" />
-            <circle cx={66} cy={52} r={3} fill="#555" />
-            {/* Holding clipboard */}
-            <motion.g animate={{ rotate: [-15, 15, -15] }} style={{ transformOrigin: '65px 40px' }}
-              transition={{ duration: 1.5, repeat: Infinity }}>
-              <line x1={65} y1={40} x2={80} y2={48} stroke="#fff" strokeWidth={3} strokeLinecap="round" />
-            </motion.g>
-            <rect x={78} y={44} width={16} height={20} rx={2} fill="#fff" stroke="#14B8A6" strokeWidth={1.5} />
-            {[0,1,2].map(i=><line key={i} x1={80} y1={50+i*5} x2={92} y2={50+i*5} stroke="#14B8A6" strokeWidth={1}/>)}
-            <line x1={55} y1={40} x2={48} y2={50} stroke="#fff" strokeWidth={3} strokeLinecap="round" />
-            {/* Shoes */}
-            <rect x={52} y={68} width={10} height={6} rx={2} fill="#fff" />
-            <rect x={62} y={68} width={10} height={6} rx={2} fill="#fff" />
-
-            {/* Heart icon */}
-            <motion.text x="60" y="12" textAnchor="middle" fontSize="12" fill="#FF6B9D"
-              animate={{ scale: [1, 1.3, 1], opacity: [0.8, 1, 0.8] }}
-              style={{ transformOrigin: '60px 12px' }}
-              transition={{ duration: 1.5, repeat: Infinity }}>❤️</motion.text>
-          </svg>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-// ─── Main overlay ─────────────────────────────────────────────────────────────
+// ─── Main export ──────────────────────────────────────────────────────────────
 
 export function CityStreetLife() {
   const [location] = useLocation();
   const path = location.split('?')[0];
+
   if (SKIP.has(path)) return null;
 
-  return (
+  const scenes = PAGE_SCENES[path] ?? PAGE_SCENES['/'];
+
+  // Render via portal directly on document.body so position:fixed is never
+  // broken by CSS transforms applied to parent page elements (e.g. page transitions).
+  return createPortal(
     <>
-      {/* Always-on background actors */}
-      <CrossingGuardScene />
-      <BusStopScene />
-      <BicyclistScene delay={2} shirt="#34D399" skin="#FDBCB4" />
-      <BicyclistScene delay={22} fromRight shirt="#FB923C" skin="#C68642" y={44} />
-      <BicyclistScene delay={44} shirt="#60A5FA" skin="#F5D5B0" y={38} />
-      <WorkerWalker type="nurse"       delay={4}  />
-      <WorkerWalker type="shipbuilder" delay={18} fromRight />
-      <WorkerWalker type="shopper"     delay={30} />
-      <WorkerWalker type="dogwalker"   delay={10} fromRight />
-      <BlockPartyScene />
-      <HomebuyerScene />
-      <ZillowBrowserScene />
-      <StreetMusicianScene />
-      <FastFoodScene />
-      <SittingCrowdScene />
-      <ShipbuilderWorkScene />
-      <NurseWorkScene />
-      <AmbulanceScene delay={5} />
-      <AmbulanceScene delay={60} />
-      <PoliceChaseScene delay={12} />
-      <PoliceChaseScene delay={55} fromRight />
-    </>
+      {scenes.map(scene => (
+        <SceneCard key={scene.id} scene={scene} />
+      ))}
+    </>,
+    document.body,
   );
 }
