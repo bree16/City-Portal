@@ -168,8 +168,6 @@ function Layout({ children }: { children: React.ReactNode }) {
       <Footer />
       <ChatWidget />
       <AccessibilityWidget />
-      <CityStreetLife />
-      <CityLiveFeed />
     </div>
   );
 }
@@ -240,6 +238,8 @@ function ClerkProviderWithRoutes() {
         <ClerkQueryClientCacheInvalidator />
         <TooltipProvider>
           <Router />
+          <CityStreetLife />
+          <CityLiveFeed />
           <Toaster />
         </TooltipProvider>
       </QueryClientProvider>

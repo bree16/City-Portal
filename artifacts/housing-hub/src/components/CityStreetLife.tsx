@@ -6,7 +6,6 @@
  * Every character reacts uniquely to hover + click.
  */
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 
@@ -121,7 +120,7 @@ function CharWrapper({ style, bubbleColor = '#14B8A6', bubbleTexts, showConfetti
 
   return (
     <div
-      style={{ position: 'absolute', cursor: 'pointer', pointerEvents: 'auto', userSelect: 'none', ...style }}
+      style={{ position: 'fixed', cursor: 'pointer', pointerEvents: 'auto', userSelect: 'none', ...style }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={handleClick}
@@ -747,9 +746,9 @@ function SceneCard({ scene }: { scene: SceneDef }) {
 }
 
 // ─── Main export ──────────────────────────────────────────────────────────────
-// We portal into #city-overlay — a div that lives in index.html as a SIBLING of
-// #root, completely outside the React app tree.  Nothing React does (Framer Motion
-// transforms, AnimatePresence, etc.) can ever affect elements rendered there.
+// Rendered as a direct sibling of <Router /> in App.tsx — outside Layout,
+// outside PageTransition, outside AnimatePresence.  Each character uses
+// position:fixed directly so it is always pinned to the viewport.
 
 export function CityStreetLife() {
   const [location] = useLocation();
@@ -757,13 +756,7 @@ export function CityStreetLife() {
 
   if (SKIP.has(path)) return null;
 
-  const container = document.getElementById('city-overlay');
-  if (!container) return null;
-
   const scenes = PAGE_SCENES[path] ?? PAGE_SCENES['/'];
 
-  return createPortal(
-    <>{scenes.map(scene => <SceneCard key={scene.id} scene={scene} />)}</>,
-    container,
-  );
+  return <>{scenes.map(scene => <SceneCard key={scene.id} scene={scene} />)}</>;
 }

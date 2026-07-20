@@ -4,7 +4,6 @@
  * Page-aware: pulls relevant stats per route. Fixed overlay, pointer-events: none (except toasts).
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 
@@ -488,8 +487,9 @@ function NewsTicker({ items }: { items: string[] }) {
 // StreetSignPost removed — was causing unwanted bottom-left popup
 
 // ─── Main component ───────────────────────────────────────────────────────────
-// Renders into #city-overlay — a div in index.html that is a SIBLING of #root,
-// completely outside the React tree, so no React transforms can break position:fixed.
+// Rendered as a direct child of TooltipProvider in App.tsx — outside Layout,
+// outside PageTransition, outside AnimatePresence.  Every child element uses
+// position:fixed directly so they are always pinned to the viewport.
 
 const SKIP_PAGES = new Set(['/simulator', '/sign-in', '/sign-up']);
 
@@ -499,18 +499,14 @@ export function CityLiveFeed() {
 
   if (SKIP_PAGES.has(path)) return null;
 
-  const container = document.getElementById('city-overlay');
-  if (!container) return null;
-
   const data = getPageData(path);
 
-  return createPortal(
+  return (
     <>
       <DroneScene   color={data.color} />
       <BusScene     ticker={data.ticker} />
       <BalloonScene color={data.color} accent={data.accent} />
       <NewsTicker   items={data.ticker} />
-    </>,
-    container,
+    </>
   );
 }
