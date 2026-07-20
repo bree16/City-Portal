@@ -138,10 +138,10 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
               padding: '10px 24px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
-              <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--ink)', letterSpacing: '0.12em',  }}>
+              <span style={{ fontSize: 15, fontWeight: 800, color: 'var(--ink)', letterSpacing: '0.12em',  }}>
                 Newport News Housing Hub
               </span>
-              <span style={{ fontSize: 11, color: 'var(--ink)', fontWeight: 700 }}>
+              <span style={{ fontSize: 14, color: 'var(--ink)', fontWeight: 700 }}>
                 Path to Your First Home
               </span>
             </div>
@@ -160,12 +160,12 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
                 }}>
                   <MiniCharacter {...characterAppearance} />
-                  <span style={{ fontSize: 10, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6 }}>Your Player</span>
+                  <span style={{ fontSize: 13, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6 }}>Your Player</span>
                 </div>
 
                 {/* Title block */}
                 <div style={{ flex: 1, paddingTop: 8 }}>
-                  <div style={{ fontSize: 11, color: 'var(--teal)', fontWeight: 700, letterSpacing: '0.1em', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <div style={{ fontSize: 14, color: 'var(--teal)', fontWeight: 700, letterSpacing: '0.1em', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
                     <GameIcon name="celebration" size={14} /> Journey Complete!
                   </div>
                   <div style={{ fontSize: 22, fontWeight: 900, color: 'var(--glass-text)', lineHeight: 1.2, marginBottom: 8 }}>
@@ -175,8 +175,8 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                     background: 'rgba(0,240,255,0.14)', borderRadius: 0, padding: '8px 12px',
                     border: '1px solid rgba(20,184,161,0.3)',
                   }}>
-                    <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--gold)' }}>{home.name}</div>
-                    <div style={{ fontSize: 12, color: 'var(--glass-text-dim)', marginTop: 2 }}>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--gold)' }}>{home.name}</div>
+                    <div style={{ fontSize: 15, color: 'var(--glass-text-dim)', marginTop: 2 }}>
                       {home.neighborhood} · ${home.price.toLocaleString()}
                     </div>
                   </div>
@@ -200,7 +200,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
               {/* Achievements */}
               {earnedAchievements.length > 0 && (
                 <div style={{ marginBottom: 22 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: '0.1em', marginBottom: 10 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: '0.1em', marginBottom: 10 }}>
                     Achievements Earned
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -213,7 +213,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                           display: 'flex', alignItems: 'center', gap: 6,
                         }}>
                           <GameIcon name={meta.icon} size={14} />
-                          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--gold)' }}>{meta.label}</span>
+                          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--gold)' }}>{meta.label}</span>
                         </div>
                       );
                     })}
@@ -228,7 +228,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                 disabled={downloading}
                 className="glass-btn-primary"
                 style={{
-                  width: '100%', padding: '12px 16px', fontWeight: 700, fontSize: 13,
+                  width: '100%', padding: '12px 16px', fontWeight: 700, fontSize: 16,
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                   marginBottom: 10, cursor: downloading ? 'wait' : 'pointer',
                 }}
@@ -238,7 +238,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                 {downloading ? 'Creating your image…' : 'Download My Results Card'}
               </button>
               {downloadError && (
-                <div data-no-export style={{ fontSize: 11, color: '#f87171', marginBottom: 10, textAlign: 'center' }}>
+                <div data-no-export style={{ fontSize: 14, color: '#f87171', marginBottom: 10, textAlign: 'center' }}>
                   Something went wrong creating the image — try a regular screenshot instead.
                 </div>
               )}
@@ -249,7 +249,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                   onClick={handlePlayAgain}
                   className="glass-btn"
                   style={{
-                    flex: 1, padding: '12px 16px', fontWeight: 700, fontSize: 13,
+                    flex: 1, padding: '12px 16px', fontWeight: 700, fontSize: 16,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
                   }}
                 >
@@ -261,7 +261,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                   rel="noopener noreferrer"
                   className="glass-btn-primary"
                   style={{
-                    flex: 1.4, padding: '12px 16px', fontSize: 13,
+                    flex: 1.4, padding: '12px 16px', fontSize: 16,
                     textDecoration: 'none', textAlign: 'center',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
                   }}
@@ -288,10 +288,10 @@ function StatBox({ icon, label, value, subValue, valueColor }: {
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
         <GameIcon name={icon} size={14} />
-        <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: '0.08em' }}>{label}</span>
+        <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: '0.08em' }}>{label}</span>
       </div>
-      <div style={{ fontSize: 16, fontWeight: 800, color: valueColor ?? 'var(--glass-text)' }}>{value}</div>
-      {subValue && <div style={{ fontSize: 11, color: valueColor ?? 'var(--glass-text-dim)', fontWeight: 600, marginTop: 2 }}>{subValue}</div>}
+      <div style={{ fontSize: 18, fontWeight: 800, color: valueColor ?? 'var(--glass-text)' }}>{value}</div>
+      {subValue && <div style={{ fontSize: 14, color: valueColor ?? 'var(--glass-text-dim)', fontWeight: 600, marginTop: 2 }}>{subValue}</div>}
     </div>
   );
 }

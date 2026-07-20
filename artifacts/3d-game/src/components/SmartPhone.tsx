@@ -87,20 +87,20 @@ function ProgressApp() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '0 4px' }}>
       <div style={{ background: 'var(--teal-grad)', borderRadius: 16, padding: 16, color: '#fff', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
-        <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, opacity: 0.8, marginBottom: 4 }}>Current Stage {stage}</div>
+        <div style={{ fontSize: 15, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, opacity: 0.8, marginBottom: 4 }}>Current Stage {stage}</div>
         <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 12 }}>{STAGE_NAMES[stage] || 'Done'}</div>
-        <div style={{ fontSize: 13, background: 'rgba(0,0,0,0.25)', padding: '10px 12px', borderRadius: 10, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+        <div style={{ fontSize: 16, background: 'rgba(0,0,0,0.25)', padding: '10px 12px', borderRadius: 10, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
           <GameIcon name="target" size={16} color="var(--gold)" style={{ marginTop: 2 }} />
           <span style={{ lineHeight: 1.4, fontWeight: 500 }}>{OBJECTIVES.find(o => o.stage === stage)?.text || 'Journey complete!'}</span>
         </div>
       </div>
 
-      <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, marginTop: 8 }}>Timeline</div>
+      <div style={{ fontSize: 15, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, marginTop: 8 }}>Timeline</div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, background: 'rgba(255,255,255,0.05)', padding: '14px 16px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.08)' }}>
         <GameIcon name="calendar" size={28} color="var(--sky-blue)" />
         <div>
-          <div style={{ fontSize: 15, fontWeight: 800, color: '#fff' }}>Month {month}</div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>Of 36 months total</div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: '#fff' }}>Month {month}</div>
+          <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>Of 36 months total</div>
         </div>
       </div>
       
@@ -112,13 +112,13 @@ function ProgressApp() {
             <div key={obj.stage} style={{ display: 'flex', gap: 12, opacity: isPast ? 0.5 : (isCurrent ? 1 : 0.3) }}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div style={{ width: 28, height: 28, borderRadius: '50%', background: isPast ? 'var(--teal)' : (isCurrent ? 'var(--gold)' : 'rgba(255,255,255,0.1)'), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  {isPast ? <GameIcon name="check" size={14} color="#fff" /> : <span style={{ fontSize: 12, fontWeight: 800, color: isCurrent ? '#000' : '#fff' }}>{obj.stage}</span>}
+                  {isPast ? <GameIcon name="check" size={14} color="#fff" /> : <span style={{ fontSize: 15, fontWeight: 800, color: isCurrent ? '#000' : '#fff' }}>{obj.stage}</span>}
                 </div>
                 {obj.stage < 7 && <div style={{ width: 2, height: 36, background: isPast ? 'var(--teal)' : 'rgba(255,255,255,0.1)', margin: '4px 0' }} />}
               </div>
               <div style={{ paddingTop: 4, paddingBottom: 24 }}>
-                <div style={{ fontSize: 14, fontWeight: isCurrent ? 800 : 600, color: '#fff', marginBottom: 4 }}>{STAGE_NAMES[obj.stage]}</div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', lineHeight: 1.4 }}>{obj.text}</div>
+                <div style={{ fontSize: 17, fontWeight: isCurrent ? 800 : 600, color: '#fff', marginBottom: 4 }}>{STAGE_NAMES[obj.stage]}</div>
+                <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.6)', lineHeight: 1.4 }}>{obj.text}</div>
               </div>
             </div>
           );
@@ -187,7 +187,7 @@ function AssistantApp() {
               padding: '12px 16px',
               borderRadius: m.role === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
               maxWidth: '85%',
-              fontSize: 13,
+              fontSize: 16,
               lineHeight: 1.5,
               color: '#fff',
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
@@ -199,7 +199,7 @@ function AssistantApp() {
                 {m.links.map((l, i) => (
                   <button key={i} onClick={() => window.open(l.href, '_blank')} style={{ 
                     background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: 12, padding: '10px 14px', fontSize: 12, color: '#fff', fontWeight: 600,
+                    borderRadius: 12, padding: '10px 14px', fontSize: 15, color: '#fff', fontWeight: 600,
                     textAlign: 'left', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer'
                   }}>
                     <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{l.label}</span>
@@ -212,7 +212,7 @@ function AssistantApp() {
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
                 {m.suggestions.map((s, i) => (
                   <button key={i} onClick={() => send(s)} style={{ 
-                    fontSize: 12, fontWeight: 600, padding: '8px 12px', background: 'rgba(255,255,255,0.05)', 
+                    fontSize: 15, fontWeight: 600, padding: '8px 12px', background: 'rgba(255,255,255,0.05)', 
                     border: '1px solid var(--teal)', borderRadius: 16, color: 'var(--teal)', cursor: 'pointer'
                   }}>
                     {s}
@@ -222,7 +222,7 @@ function AssistantApp() {
             )}
           </div>
         ))}
-        {loading && <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginLeft: 8, fontWeight: 500 }}>Assistant is typing...</div>}
+        {loading && <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.5)', marginLeft: 8, fontWeight: 500 }}>Assistant is typing...</div>}
       </div>
       <div style={{ padding: '12px 0 0', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
         <form onSubmit={e => { e.preventDefault(); send(input); }} style={{ display: 'flex', gap: 8 }}>
@@ -232,7 +232,7 @@ function AssistantApp() {
             placeholder="Ask a question..."
             style={{ 
               flex: 1, background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.15)', 
-              borderRadius: 24, padding: '10px 16px', fontSize: 13, color: '#fff', outline: 'none',
+              borderRadius: 24, padding: '10px 16px', fontSize: 16, color: '#fff', outline: 'none',
               fontFamily: 'Inter, sans-serif'
             }}
           />
@@ -257,8 +257,8 @@ function NotificationsApp() {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: 200, gap: 16, color: 'rgba(255,255,255,0.5)' }}>
         <GameIcon name="bell" size={40} />
-        <div style={{ fontSize: 15, fontWeight: 700 }}>No Notifications</div>
-        <div style={{ fontSize: 13 }}>Events will appear here.</div>
+        <div style={{ fontSize: 18, fontWeight: 700 }}>No Notifications</div>
+        <div style={{ fontSize: 16 }}>Events will appear here.</div>
       </div>
     );
   }
@@ -280,8 +280,8 @@ function NotificationsApp() {
             <GameIcon name="info" size={20} color="var(--gold)" />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 14, color: '#fff', fontWeight: 600, lineHeight: 1.4 }}>{ev}</div>
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginTop: 6, fontWeight: 500, textTransform: 'uppercase', letterSpacing: 0.5 }}>Recently</div>
+            <div style={{ fontSize: 17, color: '#fff', fontWeight: 600, lineHeight: 1.4 }}>{ev}</div>
+            <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', marginTop: 6, fontWeight: 500, textTransform: 'uppercase', letterSpacing: 0.5 }}>Recently</div>
           </div>
         </div>
       ))}
@@ -296,10 +296,10 @@ function SettingsApp() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: '0 4px' }}>
       <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: '20px' }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 20 }}>Audio Settings</div>
+        <div style={{ fontSize: 15, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 20 }}>Audio Settings</div>
         
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 15, fontWeight: 600, color: '#fff' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 18, fontWeight: 600, color: '#fff' }}>
             <GameIcon name={muted ? "audio-off" : "audio"} size={20} color={muted ? "#f87171" : "#fff"} /> Master Mute
           </div>
           <button onClick={toggleMute} style={{ width: 48, height: 26, borderRadius: 13, background: muted ? 'rgba(255,255,255,0.2)' : 'var(--teal)', position: 'relative', cursor: 'pointer', border: 'none', transition: 'background 0.2s' }}>
@@ -309,14 +309,14 @@ function SettingsApp() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: 12 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 16, fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: 12 }}>
               <span>Music Volume</span>
               <span>{Math.round(musicVolume * 100)}%</span>
             </div>
             <input type="range" min={0} max={100} value={Math.round(musicVolume * 100)} onChange={e => setMusicVolume(Number(e.target.value)/100)} style={{ width: '100%', accentColor: 'var(--teal)', cursor: 'pointer' }} />
           </div>
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: 12 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 16, fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: 12 }}>
               <span>SFX Volume</span>
               <span>{Math.round(sfxVolume * 100)}%</span>
             </div>
@@ -370,7 +370,7 @@ function BudgetApp() {
 
   const Bar = ({ value, color, label }: { value: number; color: string; label: string }) => (
     <div style={{ marginBottom: 12 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'rgba(255,255,255,0.6)', marginBottom: 6, fontWeight: 500 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 15, color: 'rgba(255,255,255,0.6)', marginBottom: 6, fontWeight: 500 }}>
         <span>{label}</span>
         <span style={{ fontWeight: 800, color: '#fff' }}>${value.toLocaleString()}/mo</span>
       </div>
@@ -393,19 +393,19 @@ function BudgetApp() {
           { label: 'Surplus', value: `${surplus.toLocaleString()}`, color: surplus >= 0 ? '#4ade80' : '#f87171', icon: surplus >= 0 ? 'trend-up' as GameIconName : 'trend-down' as GameIconName },
         ].map(({ label, value, color, icon }) => (
           <div key={label} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: '14px 16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}><GameIcon name={icon} size={12} /> {label}</div>
+            <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}><GameIcon name={icon} size={12} /> {label}</div>
             <div style={{ fontSize: 18, fontWeight: 800, color }}>{value}</div>
           </div>
         ))}
       </div>
-      <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: 1 }}>Monthly Budget</div>
+      <div style={{ fontSize: 15, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: 1 }}>Monthly Budget</div>
       <Bar value={monthlyIncome}   color="var(--teal)" label="Income" />
       <Bar value={monthlyExpenses} color="#C0392B" label="Expenses" />
       <div style={{
         marginTop: 16, padding: '12px 16px', borderRadius: 12,
         background: surplus >= 0 ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)',
         border: `1px solid ${surplus >= 0 ? 'rgba(74,222,128,0.3)' : 'rgba(248,113,113,0.3)'}`,
-        fontSize: 13, color: surplus >= 0 ? '#4ade80' : '#f87171', fontWeight: 700,
+        fontSize: 16, color: surplus >= 0 ? '#4ade80' : '#f87171', fontWeight: 700,
         display: 'flex', alignItems: 'center', gap: 8, lineHeight: 1.4
       }}>
         <GameIcon name={surplus >= 0 ? 'check' : 'warning'} size={16} />
@@ -428,7 +428,7 @@ function CreditApp() {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 4px' }}>
       <CreditArc score={creditScore} />
       <div style={{ width: '100%', marginTop: 12 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10 }}>Score Milestones</div>
+        <div style={{ fontSize: 15, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10 }}>Score Milestones</div>
         {[
           { score: 620, label: 'FHA Loan Minimum', met: creditScore >= 620 },
           { score: 660, label: 'Better Interest Rate', met: creditScore >= 660 },
@@ -442,12 +442,12 @@ function CreditApp() {
             border: `1px solid ${met ? 'rgba(74,222,128,0.2)' : 'rgba(255,255,255,0.08)'}`
           }}>
             <span style={{ display: 'flex' }}><GameIcon name={met ? 'check' : 'uncheck'} size={16} color={met ? '#4ade80' : 'rgba(255,255,255,0.3)'} /></span>
-            <span style={{ fontSize: 13, color: met ? '#4ade80' : 'rgba(255,255,255,0.5)', fontWeight: 600 }}>{score} — {label}</span>
+            <span style={{ fontSize: 16, color: met ? '#4ade80' : 'rgba(255,255,255,0.5)', fontWeight: 600 }}>{score} — {label}</span>
           </div>
         ))}
-        <div style={{ marginTop: 20, fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10 }}>How to Improve</div>
+        <div style={{ marginTop: 20, fontSize: 15, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10 }}>How to Improve</div>
         {TIPS.map((t, i) => (
-          <div key={i} style={{ display: 'flex', gap: 10, marginBottom: 10, fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>
+          <div key={i} style={{ display: 'flex', gap: 10, marginBottom: 10, fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>
             <span style={{ display: 'flex', marginTop: 2 }}><GameIcon name={t.icon} size={16} color="var(--gold)" /></span><span>{t.text}</span>
           </div>
         ))}
@@ -463,8 +463,8 @@ function HousingApp() {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 250, gap: 16, color: 'rgba(255,255,255,0.5)', textAlign: 'center', padding: 20 }}>
         <GameIcon name="lock" size={40} />
-        <div style={{ fontSize: 16, fontWeight: 800, color: '#fff' }}>Unlocks in Stage 3</div>
-        <div style={{ fontSize: 13, lineHeight: 1.5 }}>Visit the counselor first to start your home search.</div>
+        <div style={{ fontSize: 18, fontWeight: 800, color: '#fff' }}>Unlocks in Stage 3</div>
+        <div style={{ fontSize: 16, lineHeight: 1.5 }}>Visit the counselor first to start your home search.</div>
       </div>
     );
   }
@@ -481,20 +481,20 @@ function HousingApp() {
           }}>
             <div style={{ height: 56, background: h.color, display: 'flex', alignItems: 'center', padding: '0 16px', gap: 10 }}>
               <GameIcon name="home" size={24} color="#fff" />
-              <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>{h.name}</div>
-              {selected && <div style={{ marginLeft: 'auto', background: 'var(--gold)', color: '#000', fontSize: 10, fontWeight: 800, padding: '4px 8px', borderRadius: 8 }}>SELECTED</div>}
+              <div style={{ fontSize: 18, fontWeight: 800, color: '#fff', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>{h.name}</div>
+              {selected && <div style={{ marginLeft: 'auto', background: 'var(--gold)', color: '#000', fontSize: 13, fontWeight: 800, padding: '4px 8px', borderRadius: 8 }}>SELECTED</div>}
             </div>
             <div style={{ padding: '14px 16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
                 <span style={{ fontSize: 18, fontWeight: 800, color: '#fff' }}>${h.price.toLocaleString()}</span>
-                <span style={{ fontSize: 14, color: 'var(--teal)', fontWeight: 700 }}>${h.monthlyPayment}/mo</span>
+                <span style={{ fontSize: 17, color: 'var(--teal)', fontWeight: 700 }}>${h.monthlyPayment}/mo</span>
               </div>
-              <div style={{ display: 'flex', gap: 12, fontSize: 12, color: 'rgba(255,255,255,0.6)', marginBottom: 12 }}>
+              <div style={{ display: 'flex', gap: 12, fontSize: 15, color: 'rgba(255,255,255,0.6)', marginBottom: 12 }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="bed" size={14} /> {h.beds}bd</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="bath" size={14} /> {h.baths}ba</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="ruler" size={14} /> {h.sqft.toLocaleString()} sqft</span>
               </div>
-              <div style={{ display: 'flex', gap: 10, fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>
+              <div style={{ display: 'flex', gap: 10, fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="walk" size={12} /> Walk {h.walkability}</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="school" size={12} /> Schools {h.schools}</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="car" size={12} /> {h.commute}min</span>
@@ -502,7 +502,7 @@ function HousingApp() {
               <button
                 onClick={() => { getAudioEngine().play('click'); setSelectedHome(h.id); setPhoneOpen(false); }}
                 style={{
-                  width: '100%', padding: '12px', fontWeight: 700, fontSize: 13, borderRadius: 12,
+                  width: '100%', padding: '12px', fontWeight: 700, fontSize: 16, borderRadius: 12,
                   background: selected ? 'var(--teal)' : 'rgba(255,255,255,0.1)', color: '#fff',
                   border: selected ? 'none' : '1px solid rgba(255,255,255,0.15)', cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s'
@@ -524,7 +524,7 @@ function DocumentsApp() {
   const stageGate = stage >= 5;
   return (
     <div style={{ padding: '0 4px' }}>
-      <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginBottom: 16, lineHeight: 1.5, background: 'rgba(255,255,255,0.05)', padding: '12px 16px', borderRadius: 12 }}>
+      <div style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)', marginBottom: 16, lineHeight: 1.5, background: 'rgba(255,255,255,0.05)', padding: '12px 16px', borderRadius: 12 }}>
         {stageGate
           ? "Documents you've submitted to the bank for your mortgage application."
           : "You'll gather these documents at the bank in Stage 5."}
@@ -541,13 +541,13 @@ function DocumentsApp() {
           }}>
             <span style={{ display: 'flex', color: done ? '#4ade80' : 'rgba(255,255,255,0.3)' }}><GameIcon name={done ? 'check' : 'documents'} size={24} /></span>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: done ? '#4ade80' : '#fff' }}>{label}</div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{detail}</div>
+              <div style={{ fontSize: 17, fontWeight: 700, color: done ? '#4ade80' : '#fff' }}>{label}</div>
+              <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{detail}</div>
             </div>
           </div>
         );
       })}
-      <div style={{ marginTop: 20, padding: '14px 16px', borderRadius: 16, background: 'rgba(255,234,0,0.08)', border: '1px solid rgba(255,234,0,0.2)', fontSize: 12, color: 'rgba(255,234,0,0.9)', lineHeight: 1.5, display: 'flex', gap: 10 }}>
+      <div style={{ marginTop: 20, padding: '14px 16px', borderRadius: 16, background: 'rgba(255,234,0,0.08)', border: '1px solid rgba(255,234,0,0.2)', fontSize: 15, color: 'rgba(255,234,0,0.9)', lineHeight: 1.5, display: 'flex', gap: 10 }}>
         <GameIcon name="lightbulb" size={18} style={{ marginTop: 2, flexShrink: 0 }} /> <span>Gather these docs early — missing documents are the #1 cause of mortgage delays.</span>
       </div>
     </div>
@@ -559,7 +559,7 @@ function AchievementsApp() {
   const { achievements } = useGameStore();
   return (
     <div style={{ padding: '0 4px' }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ fontSize: 15, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
         <span>Awards</span>
         <span>{achievements.length} / {ACHIEVEMENT_DEFS.length}</span>
       </div>
@@ -577,8 +577,8 @@ function AchievementsApp() {
               <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center' }}>
                 <GameIcon name={earned ? icon : 'lock'} size={32} color={earned ? "var(--gold)" : "#fff"} />
               </div>
-              <div style={{ fontSize: 13, fontWeight: 800, color: earned ? 'var(--gold)' : 'rgba(255,255,255,0.7)', marginBottom: 6 }}>{label}</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', lineHeight: 1.4 }}>{desc}</div>
+              <div style={{ fontSize: 16, fontWeight: 800, color: earned ? 'var(--gold)' : 'rgba(255,255,255,0.7)', marginBottom: 6 }}>{label}</div>
+              <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', lineHeight: 1.4 }}>{desc}</div>
             </div>
           );
         })}
@@ -714,7 +714,7 @@ export function SmartPhone() {
               onPointerDown={(e) => dragControls.start(e)}
               style={{ padding: '16px 20px 12px', touchAction: 'none', cursor: maximized ? 'default' : 'grab', flexShrink: 0, position: 'relative' }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, color: '#fff', fontWeight: 600 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 16, color: '#fff', fontWeight: 600 }}>
                 <span style={{ width: 60 }}>M{month}</span>
                 {/* Dynamic Island / Notch */}
                 <div style={{ width: 80, height: 24, borderRadius: 12, background: '#000', border: '1px solid rgba(255,255,255,0.05)', position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 12, boxShadow: 'inset 0 -1px 2px rgba(255,255,255,0.1)' }} />
@@ -747,10 +747,10 @@ export function SmartPhone() {
             {/* App Header (when in app) */}
             {activeApp && (
               <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)', gap: 12, flexShrink: 0 }}>
-                <button onClick={() => { getAudioEngine().play('click'); setActiveApp(null); }} style={{ background: 'transparent', border: 'none', color: 'var(--teal)', display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: 15, fontWeight: 600, padding: '4px 0' }}>
+                <button onClick={() => { getAudioEngine().play('click'); setActiveApp(null); }} style={{ background: 'transparent', border: 'none', color: 'var(--teal)', display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: 18, fontWeight: 600, padding: '4px 0' }}>
                   <GameIcon name="arrow-left" size={18} /> Back
                 </button>
-                <div style={{ flex: 1, textAlign: 'center', fontSize: 16, fontWeight: 800, color: '#fff', paddingRight: 60 }}>
+                <div style={{ flex: 1, textAlign: 'center', fontSize: 18, fontWeight: 800, color: '#fff', paddingRight: 60 }}>
                   {APPS.find(a => a.id === activeApp)?.label}
                 </div>
               </div>
@@ -784,7 +784,7 @@ export function SmartPhone() {
                           >
                             <GameIcon name={app.icon} size={30} />
                           </button>
-                          <span style={{ fontSize: 11, fontWeight: 600, color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
+                          <span style={{ fontSize: 14, fontWeight: 600, color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
                             {app.label}
                           </span>
                         </div>
@@ -836,8 +836,8 @@ export function SmartPhone() {
                 <GameIcon name="phone" size={16} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <span style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.2 }}>Phone</span>
-                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)' }}>Tap to open</span>
+                <span style={{ fontSize: 16, fontWeight: 700, lineHeight: 1.2 }}>Phone</span>
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>Tap to open</span>
               </div>
             </button>
           </motion.div>

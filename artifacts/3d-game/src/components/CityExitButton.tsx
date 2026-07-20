@@ -46,7 +46,7 @@ export function CityExitButton() {
         alignItems: 'center',
         gap: 6,
         padding: '8px 14px',
-        fontSize: 12,
+        fontSize: 15,
         fontWeight: 700,
       }}
     >

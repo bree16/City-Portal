@@ -124,7 +124,7 @@ export function InteractionZone({
               color: '#fff',
               borderRadius: 0,
               padding: '5px 12px',
-              fontSize: 12,
+              fontSize: 15,
               fontWeight: 800,
               fontFamily: 'Inter, sans-serif',
               whiteSpace: 'nowrap',

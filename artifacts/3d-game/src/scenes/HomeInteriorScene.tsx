@@ -32,8 +32,8 @@ interface HomeTheme {
 
 const HOME_THEMES: Record<number, HomeTheme> = {
   1: {
-    wallColor: '#F8FAFC', floorColor: '#64748B', bedroomFloorColor: '#A0522D',
-    accentColor: '#1E3A8A', ceilingColor: '#F8FAFC',
+    wallColor: '#E9E4DA', floorColor: '#64748B', bedroomFloorColor: '#A0522D',
+    accentColor: '#1E3A8A', ceilingColor: '#E9E4DA',
     hasFireplace: true, hasKitchenIsland: false,
     features: {
       entry: [{ pos: [-4, 0.6, 7], icon: 'home', label: 'Crown Molding', tip: 'Original 1940s crown molding — a sign of quality craftsmanship that adds character and value.' }],
@@ -56,8 +56,8 @@ const HOME_THEMES: Record<number, HomeTheme> = {
     },
   },
   2: {
-    wallColor: '#E2E8F0', floorColor: '#8B5A2B', bedroomFloorColor: '#64748B',
-    accentColor: '#0F766E', ceilingColor: '#E2E8F0',
+    wallColor: '#DDD8CE', floorColor: '#8B5A2B', bedroomFloorColor: '#64748B',
+    accentColor: '#0F766E', ceilingColor: '#DDD8CE',
     hasFireplace: false, hasKitchenIsland: false,
     features: {
       entry: [{ pos: [-4, 0.6, 7], icon: 'home', label: 'Ranch Layout', tip: 'Single-level ranch homes are fully accessible — perfect for long-term aging in place.' }],
@@ -80,8 +80,8 @@ const HOME_THEMES: Record<number, HomeTheme> = {
     },
   },
   3: {
-    wallColor: '#F8FAFC', floorColor: '#A0522D', bedroomFloorColor: '#E2E8F0',
-    accentColor: '#D4AF37', ceilingColor: '#F8FAFC',
+    wallColor: '#E9E4DA', floorColor: '#A0522D', bedroomFloorColor: '#DDD8CE',
+    accentColor: '#D4AF37', ceilingColor: '#E9E4DA',
     hasFireplace: false, hasKitchenIsland: true,
     features: {
       entry: [{ pos: [-4, 0.6, 7], icon: 'sparkles', label: 'Modern Finishes', tip: 'Contemporary design with clean lines throughout — highly attractive to modern buyers.' }],
@@ -104,8 +104,8 @@ const HOME_THEMES: Record<number, HomeTheme> = {
     },
   },
   4: {
-    wallColor: '#E2E8F0', floorColor: '#64748B', bedroomFloorColor: '#8B5A2B',
-    accentColor: '#0F766E', ceilingColor: '#E2E8F0',
+    wallColor: '#DDD8CE', floorColor: '#64748B', bedroomFloorColor: '#8B5A2B',
+    accentColor: '#0F766E', ceilingColor: '#DDD8CE',
     hasFireplace: false, hasKitchenIsland: false,
     features: {
       entry: [{ pos: [-4, 0.6, 7], icon: 'trend-up', label: 'Equity Opportunity', tip: 'At $168k — 30% below neighborhood median — strong appreciation potential as the area develops.' }],
@@ -415,7 +415,7 @@ export default function HomeInteriorScene() {
       {/* Coffee table */}
       <mesh position={[-1.5, 0.28, 2.2]} castShadow>
         <boxGeometry args={[2.2, 0.08, 1.0]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.4} metalness={0.05} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.4} metalness={0.05} />
       </mesh>
       {([-0.9, 0.9] as number[]).map((lx) =>
         ([-0.35, 0.35] as number[]).map((lz) => (
@@ -432,7 +432,7 @@ export default function HomeInteriorScene() {
       </mesh>
       <mesh position={[2.5, 1.3, 2.1]} castShadow>
         <boxGeometry args={[2.0, 1.3, 0.09]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.2} metalness={0.6} />
+        <meshStandardMaterial color="#E9E4DA" roughness={0.2} metalness={0.6} />
       </mesh>
 
       {/* Fireplace (home 1 only) */}
@@ -444,7 +444,7 @@ export default function HomeInteriorScene() {
           </mesh>
           <mesh position={[0, 0.6, 0.2]} castShadow>
             <boxGeometry args={[1.4, 1.2, 0.2]} />
-            <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
+            <meshStandardMaterial color="#E9E4DA" roughness={0.9} />
           </mesh>
           <pointLight position={[0, 0.8, 0.5]} intensity={1.2} color="#4682B4" distance={5} decay={2} />
         </group>
@@ -453,7 +453,7 @@ export default function HomeInteriorScene() {
       {/* ── KITCHEN FURNITURE ── */}
       <mesh position={[6.5, 0.45, 0]} castShadow>
         <boxGeometry args={[1.2, 0.9, 5]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.7} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.7} />
       </mesh>
       <mesh position={[6.5, 0.95, 0]} castShadow>
         <boxGeometry args={[1.3, 0.08, 5.2]} />
@@ -466,7 +466,7 @@ export default function HomeInteriorScene() {
       {/* Stove */}
       <mesh position={[6.5, 0.95, 1.2]} castShadow>
         <boxGeometry args={[0.7, 0.08, 0.65]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.3} metalness={0.5} />
+        <meshStandardMaterial color="#E9E4DA" roughness={0.3} metalness={0.5} />
       </mesh>
       {/* Kitchen island (home 3) */}
       {theme.hasKitchenIsland && (
@@ -483,7 +483,7 @@ export default function HomeInteriorScene() {
       </mesh>
       <mesh position={[-5.5, 0.6, -1.5]} castShadow>
         <boxGeometry args={[3.0, 0.4, 2.3]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.95} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.95} />
       </mesh>
       <mesh position={[-5.5, 0.85, -2.3]} castShadow>
         <boxGeometry args={[1.8, 0.2, 0.5]} />
@@ -507,7 +507,7 @@ export default function HomeInteriorScene() {
       {/* ── BACKYARD / PATIO ── */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.04, -4.5]} receiveShadow>
         <planeGeometry args={[6, 2]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.9} />
       </mesh>
       {/* Patio chairs */}
       {([-1.5, 1.5] as number[]).map((px) => (
@@ -525,7 +525,7 @@ export default function HomeInteriorScene() {
       {/* Patio table */}
       <mesh position={[0, 0.36, -5.5]} castShadow>
         <cylinderGeometry args={[0.04, 0.04, 0.72, 6]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.5} metalness={0.3} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.5} metalness={0.3} />
       </mesh>
       <mesh position={[0, 0.4, -5.5]} castShadow>
         <cylinderGeometry args={[0.5, 0.5, 0.08, 12]} />
@@ -535,7 +535,7 @@ export default function HomeInteriorScene() {
       {([-4, -2, 0, 2, 4] as number[]).map((fx) => (
         <mesh key={fx} position={[fx, 0.75, -8]} castShadow>
           <boxGeometry args={[0.08, 1.5, 0.08]} />
-          <meshStandardMaterial color="#E2E8F0" roughness={0.8} />
+          <meshStandardMaterial color="#DDD8CE" roughness={0.8} />
         </mesh>
       ))}
       <mesh position={[0, 1.2, -8]} castShadow>
@@ -552,7 +552,7 @@ export default function HomeInteriorScene() {
         <group key={`l${lx}`}>
           <mesh position={[lx, 2.85, lz]}>
             <cylinderGeometry args={[0.18, 0.22, 0.16, 10]} />
-            <meshStandardMaterial color="#F8FAFC" roughness={0.3} metalness={0.6} />
+            <meshStandardMaterial color="#E9E4DA" roughness={0.3} metalness={0.6} />
           </mesh>
           <mesh position={[lx, 2.78, lz]}>
             <cylinderGeometry args={[0.15, 0.15, 0.04, 10]} />

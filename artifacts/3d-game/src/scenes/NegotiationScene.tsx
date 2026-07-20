@@ -61,21 +61,17 @@ export default function NegotiationScene() {
       {/* Walls */}
       <mesh position={[0, 2.5, -7]} receiveShadow>
         <boxGeometry args={[18, 5, 0.2]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
+        <meshStandardMaterial color="#E9E4DA" roughness={0.9} />
       </mesh>
       <mesh position={[-9, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 14]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
-      </mesh>
-      <mesh position={[9, 2.5, 0]} receiveShadow>
-        <boxGeometry args={[0.2, 5, 14]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.9} />
       </mesh>
 
       {/* Ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[18, 14]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={1} />
+        <meshStandardMaterial color="#E9E4DA" roughness={1} />
       </mesh>
 
       {/* Pendant lights over table */}
@@ -173,7 +169,6 @@ export default function NegotiationScene() {
       <TallPlant position={[7, 0, -5]} scale={1.1} />
       {/* Framed art on side walls, facing inward */}
       <WallArt position={[-8.85, 3.0, -2]} rotation={[0, Math.PI / 2, 0]} color="#4682B4" w={1.3} h={0.9} />
-      <WallArt position={[8.85, 3.0, -2]} rotation={[0, -Math.PI / 2, 0]} color="#5F9EA0" w={1.3} h={0.9} />
       {/* Subtle wall clock on back wall, beside the house photo */}
       <WallClock position={[4, 3.0, -6.88]} rotation={[0, 0, 0]} />
 

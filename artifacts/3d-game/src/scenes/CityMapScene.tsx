@@ -33,11 +33,11 @@ function StreetLight({ position }: { position: [number, number, number] }) {
     <group position={position}>
       <mesh castShadow>
         <cylinderGeometry args={[0.06, 0.08, 4.5, 6]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.5} metalness={0.4} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.5} metalness={0.4} />
       </mesh>
       <mesh position={[0.5, 2.0, 0]} rotation={[0, 0, Math.PI / 2]}>
         <cylinderGeometry args={[0.04, 0.04, 1.0, 5]} />
-        <meshStandardMaterial color="#E2E8F0" metalness={0.5} />
+        <meshStandardMaterial color="#DDD8CE" metalness={0.5} />
       </mesh>
       <mesh position={[1.0, 2.0, 0]} castShadow>
         <sphereGeometry args={[0.14, 8, 8]} />
@@ -64,7 +64,7 @@ function ParkedCar({ position, color, rotation = 0 }: { position: [number, numbe
         ([-0.42, 0.42] as number[]).map((z) => (
           <mesh key={`${x}${z}`} position={[x, 0.12, z]} rotation={[Math.PI / 2, 0, 0]}>
             <cylinderGeometry args={[0.14, 0.14, 0.1, 8]} />
-            <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
+            <meshStandardMaterial color="#E9E4DA" roughness={0.9} />
           </mesh>
         ))
       )}
@@ -220,7 +220,7 @@ function BuildingExterior({ b, status, onEnter }: {
             borderRadius: 'var(--glass-radius)',
             fontSize: 11,
             fontWeight: 700,
-            color: isLocked ? '#888' : isCurrent ? '#F8FAFC' : '#fff',
+            color: isLocked ? '#888' : isCurrent ? '#E9E4DA' : '#fff',
             whiteSpace: 'nowrap',
             fontFamily: 'Inter,sans-serif',
             border: `1px solid ${isLocked ? '#555' : isCurrent ? '#F0C050' : 'rgba(255,255,255,0.2)'}`,
@@ -338,7 +338,7 @@ export default function CityMapScene() {
       {([-2, -1, 0, 1, 2] as number[]).map((i) => (
         <mesh key={`cw-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, 0.025, i * 0.8 - 0.5]}>
           <planeGeometry args={[0.6, 0.55]} />
-          <meshStandardMaterial color="#F8FAFC" roughness={0.9} transparent opacity={0.7} />
+          <meshStandardMaterial color="#E9E4DA" roughness={0.9} transparent opacity={0.7} />
         </mesh>
       ))}
 

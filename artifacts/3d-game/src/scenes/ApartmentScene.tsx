@@ -91,21 +91,17 @@ export default function ApartmentScene() {
       {/* Walls */}
       <mesh position={[0, 2.5, -6]} receiveShadow>
         <boxGeometry args={[14, 5, 0.2]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
+        <meshStandardMaterial color="#E9E4DA" roughness={0.9} />
       </mesh>
       <mesh position={[-7, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 12]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
-      </mesh>
-      <mesh position={[7, 2.5, 0]} receiveShadow>
-        <boxGeometry args={[0.2, 5, 12]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.9} />
       </mesh>
 
       {/* Ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]} receiveShadow>
         <planeGeometry args={[14, 12]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={1} />
+        <meshStandardMaterial color="#E9E4DA" roughness={1} />
       </mesh>
 
       {/* Ceiling light — emissive glow */}
@@ -166,11 +162,11 @@ export default function ApartmentScene() {
       <group position={[3, 0, -5.5]}>
         <mesh position={[0, 0.35, 0]} castShadow>
           <boxGeometry args={[1.8, 0.7, 0.42]} />
-          <meshStandardMaterial color="#F8FAFC" roughness={0.3} metalness={0.4} />
+          <meshStandardMaterial color="#E9E4DA" roughness={0.3} metalness={0.4} />
         </mesh>
         <mesh position={[0, 1.0, -0.12]} castShadow>
           <boxGeometry args={[1.6, 0.9, 0.08]} />
-          <meshStandardMaterial color="#F8FAFC" emissive="#E0F0FF" emissiveIntensity={0.5} roughness={0.1} metalness={0.3} />
+          <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.5} roughness={0.1} metalness={0.3} />
         </mesh>
         <pointLight position={[3, 1.2, -5.2]} intensity={0.3} color="#4682B4" distance={3} />
       </group>
@@ -201,18 +197,18 @@ export default function ApartmentScene() {
           onPointerOut={() => { document.body.style.cursor = 'auto'; }}
         >
           <boxGeometry args={[0.65, 0.04, 0.45]} />
-          <meshStandardMaterial color="#E2E8F0" roughness={0.2} metalness={0.6} emissive="#E0F0FF" emissiveIntensity={0.2} />
+          <meshStandardMaterial color="#DDD8CE" roughness={0.2} metalness={0.6} emissive="#E0F0FF" emissiveIntensity={0.2} />
         </mesh>
         {/* Laptop screen */}
         <mesh position={[0, 0.62, -0.28]} castShadow>
           <boxGeometry args={[0.65, 0.42, 0.04]} />
-          <meshStandardMaterial color="#F8FAFC" roughness={0.2} metalness={0.5} emissive="#E0F0FF" emissiveIntensity={0.7} />
+          <meshStandardMaterial color="#E9E4DA" roughness={0.2} metalness={0.5} emissive="#E0F0FF" emissiveIntensity={0.7} />
         </mesh>
         <pointLight position={[5, 0.9, 1.2]} intensity={0.3} color="#5F9EA0" distance={2} />
         <Html position={[0, 0.95, 0]} center distanceFactor={9}>
           <div onPointerDown={(e) => { e.stopPropagation(); openDialogue('laptop'); }} style={{
             background: completedInteractions.includes('laptop') ? '#4ade80' : '#0F766E',
-            color: completedInteractions.includes('laptop') ? '#F8FAFC' : '#fff',
+            color: completedInteractions.includes('laptop') ? '#E9E4DA' : '#fff',
             fontSize: 10, padding: '3px 8px', borderRadius: 'var(--glass-radius)',
             whiteSpace: 'nowrap', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif',
             display: 'flex', alignItems: 'center', gap: 6
@@ -249,7 +245,7 @@ export default function ApartmentScene() {
         <Html position={[0, 0.75, 0]} center distanceFactor={9}>
           <div onPointerDown={(e) => { e.stopPropagation(); openDialogue('piggybank'); }} style={{
             background: completedInteractions.includes('piggybank') ? '#4ade80' : '#D4AF37',
-            color: completedInteractions.includes('piggybank') ? '#F8FAFC' : '#F8FAFC',
+            color: completedInteractions.includes('piggybank') ? '#E9E4DA' : '#E9E4DA',
             fontSize: 10, padding: '3px 8px', borderRadius: 'var(--glass-radius)',
             whiteSpace: 'nowrap', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif',
             display: 'flex', alignItems: 'center', gap: 6
@@ -264,7 +260,7 @@ export default function ApartmentScene() {
       <group position={[-4.5, 0, -4.5]}>
         <mesh position={[0, 0.5, 0]} castShadow>
           <boxGeometry args={[3.0, 1.0, 0.65]} />
-          <meshStandardMaterial color="#E2E8F0" roughness={0.7} />
+          <meshStandardMaterial color="#DDD8CE" roughness={0.7} />
         </mesh>
         <mesh position={[0, 1.06, 0]} castShadow>
           <boxGeometry args={[3.1, 0.08, 0.75]} />
@@ -299,8 +295,6 @@ export default function ApartmentScene() {
       <Curtains position={[-2, 1.65, -5.75]} width={2.9} height={2.6} color="#5F9EA0" />
       {/* Framed art on back wall, right of window */}
       <WallArt position={[3, 2.4, -5.88]} rotation={[0, 0, 0]} color="#5F9EA0" w={1.0} h={0.75} />
-      {/* Wall clock on right wall, facing inward */}
-      <WallClock position={[6.88, 3.0, -1]} rotation={[0, -Math.PI / 2, 0]} />
       {/* Floor lamp in cozy corner near sofa */}
       <FloorLamp position={[6.4, 0, -3.4]} />
       {/* Potted plant against the left wall */}

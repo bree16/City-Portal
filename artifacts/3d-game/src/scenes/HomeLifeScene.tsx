@@ -142,20 +142,16 @@ export default function HomeLifeScene() {
       {/* ── WALLS ── */}
       <mesh position={[0, 2.5, -8]} receiveShadow>
         <boxGeometry args={[20, 5, 0.2]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
+        <meshStandardMaterial color="#E9E4DA" roughness={0.9} />
       </mesh>
       <mesh position={[-10, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
-      </mesh>
-      <mesh position={[10, 2.5, 0]} receiveShadow>
-        <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.9} />
       </mesh>
       {/* Ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[20, 16]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={1} />
+        <meshStandardMaterial color="#E9E4DA" roughness={1} />
       </mesh>
 
       {/* ── LIGHTS ── */}
@@ -172,11 +168,11 @@ export default function HomeLifeScene() {
       {/* ── WINDOWS ── */}
       <mesh position={[-2, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[3.5, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <pointLight position={[0, 3.0, -7]} intensity={1.4} color="#5F9EA0" distance={14} decay={2} />
 
@@ -198,12 +194,12 @@ export default function HomeLifeScene() {
       </mesh>
       <mesh position={[2.5, 1.2, -2.6]} castShadow>
         <boxGeometry args={[2.0, 1.2, 0.09]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.2} metalness={0.6} />
+        <meshStandardMaterial color="#E9E4DA" roughness={0.2} metalness={0.6} />
       </mesh>
       {/* Dining table */}
       <mesh position={[0, 0.5, 2.5]} castShadow>
         <boxGeometry args={[1.8, 0.1, 1.0]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.5} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.5} />
       </mesh>
       {/* Desk area */}
       <mesh position={[-5.5, 0.5, 2.5]} castShadow>
@@ -238,8 +234,6 @@ export default function HomeLifeScene() {
       {/* Curtains framing the back windows (windows at z=-7.85) */}
       <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#D2B48C" />
       <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#D2B48C" />
-      {/* Wall art on right wall (faces -x) */}
-      <WallArt position={[9.85, 2.9, 4]} rotation={[0, -Math.PI / 2, 0]} color="#4682B4" w={1.3} h={0.95} />
       {/* Wall art on left wall (faces +x), above bookshelf area */}
       <WallArt position={[-9.85, 3.0, 1.5]} rotation={[0, Math.PI / 2, 0]} color="#5F9EA0" w={1.2} h={0.9} />
       {/* Books + clutter on coffee table */}
@@ -270,7 +264,7 @@ export default function HomeLifeScene() {
         {([[-0.18, 1.22], [0.18, 1.22], [-0.18, 1.58], [0.18, 1.58]] as [number, number][]).map(([bx, bz], i) => (
           <mesh key={i} position={[0.55 + bx, 0.99, bz]}>
             <cylinderGeometry args={[0.11, 0.11, 0.015, 12]} />
-            <meshStandardMaterial color="#F8FAFC" roughness={0.5} />
+            <meshStandardMaterial color="#E9E4DA" roughness={0.5} />
           </mesh>
         ))}
         {/* Fridge at end of counter */}
@@ -280,7 +274,7 @@ export default function HomeLifeScene() {
         </mesh>
         <mesh position={[0.1, 1.55, -2.4]}>
           <boxGeometry args={[0.03, 0.5, 0.05]} />
-          <meshStandardMaterial color="#F8FAFC" metalness={0.6} roughness={0.3} />
+          <meshStandardMaterial color="#E9E4DA" metalness={0.6} roughness={0.3} />
         </mesh>
       </group>
 
@@ -448,7 +442,7 @@ export default function HomeLifeScene() {
                     style={{
                       width: '100%', padding: '9px', borderRadius: 'var(--glass-radius)',
                       background: cash >= imp.cost ? '#D4AF37' : 'rgba(255,255,255,0.08)',
-                      color: cash >= imp.cost ? '#F8FAFC' : 'rgba(255,255,255,0.35)',
+                      color: cash >= imp.cost ? '#E9E4DA' : 'rgba(255,255,255,0.35)',
                       border: 'none', cursor: cash >= imp.cost ? 'pointer' : 'default',
                       fontWeight: 800, fontSize: 12, fontFamily: 'Inter,sans-serif',
                     }}
@@ -492,7 +486,7 @@ export default function HomeLifeScene() {
                 style={{
                   flex: 1, padding: '12px', borderRadius: 'var(--glass-radius)',
                   background: cash >= pendingMaintenance.cost ? '#4ade80' : 'rgba(255,255,255,0.08)',
-                  color: cash >= pendingMaintenance.cost ? '#F8FAFC' : 'rgba(255,255,255,0.35)',
+                  color: cash >= pendingMaintenance.cost ? '#E9E4DA' : 'rgba(255,255,255,0.35)',
                   border: 'none', cursor: cash >= pendingMaintenance.cost ? 'pointer' : 'default',
                   fontWeight: 800, fontSize: 12, fontFamily: 'Inter,sans-serif',
                 }}
@@ -586,7 +580,7 @@ export default function HomeLifeScene() {
               transition={{ duration: 0.4, type: 'spring', stiffness: 200, damping: 20 }}
               onAnimationComplete={() => setTimeout(() => setMilestoneToast(null), 4500)}
               style={{
-                background: '#F8FAFC', border: '2px solid var(--gold)',
+                background: '#E9E4DA', border: '2px solid var(--gold)',
                 borderRadius: 'var(--glass-radius)', padding: '14px 18px', minWidth: 260,
                 fontFamily: 'Inter,sans-serif', pointerEvents: 'none',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.5)',

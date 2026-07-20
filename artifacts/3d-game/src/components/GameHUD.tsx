@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Home, Volume2, VolumeX, Smartphone, ChevronUp, ChevronDown, LogOut } from 'lucide-react';
 import { useGameStore } from '@/store/gameStore';
 import { useAudioControls } from '@/components/AudioManager';
@@ -106,7 +106,7 @@ function ObjectiveCard({ stage, onClose }: { stage: number; onClose: () => void 
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap' }}>
         <GameIcon name={obj.icon} size={16} />
-        <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 11, letterSpacing: 0.6, marginRight: 2 }}>Next</span>
+        <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 14, letterSpacing: 0.6, marginRight: 2 }}>Next</span>
         <span style={{ color: 'var(--glass-text)' }}>{obj.text}</span>
       </div>
     </DraggablePanel>
@@ -115,9 +115,20 @@ function ObjectiveCard({ stage, onClose }: { stage: number; onClose: () => void 
 
 // ── Main HUD ─────────────────────────────────────────────────────
 
+function useIsNarrow(breakpoint = 720) {
+  const [narrow, setNarrow] = useState(() => window.innerWidth < breakpoint);
+  useEffect(() => {
+    const onResize = () => setNarrow(window.innerWidth < breakpoint);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [breakpoint]);
+  return narrow;
+}
+
 export function GameHUD() {
   const { stage, month, cash, savings, creditScore, resetGame, quitToMenu, characterAppearance, togglePhone, phoneOpen, lifeEventLog, currentLocation, playerPosition } = useGameStore();
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
+  const isNarrow = useIsNarrow();
   const { muted, toggleMute, musicVolume, setMusicVolume, sfxVolume, setSfxVolume } = useAudioControls();
 
   const playerName = characterAppearance.name?.trim() || 'Player';
@@ -145,8 +156,10 @@ export function GameHUD() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '8px 16px',
-          margin: '10px 12px 0',
+          flexWrap: 'wrap',
+          rowGap: 6,
+          padding: isNarrow ? '6px 10px' : '8px 16px',
+          margin: isNarrow ? '8px 8px 0' : '10px 12px 0',
           pointerEvents: 'auto',
         }}
       >
@@ -155,16 +168,16 @@ export function GameHUD() {
           <div style={{ background: 'var(--teal-grad)', padding: 6, borderRadius: 0, display: 'flex', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3)' }}>
             <Home size={16} color="#fff" />
           </div>
-          <div style={{ lineHeight: 1.25 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--glass-text)' }}>Newport News</div>
-            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', letterSpacing: 0.8 }}>Housing Hub</div>
-          </div>
+          {!isNarrow && <div style={{ lineHeight: 1.25 }}>
+            <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--glass-text)' }}>Newport News</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--gold)', letterSpacing: 0.8 }}>Housing Hub</div>
+          </div>}
           <div
             className="glass-chip"
             style={{
               marginLeft: 6,
               padding: '4px 12px',
-              fontSize: 11,
+              fontSize: 14,
               fontWeight: 700,
               color: 'var(--glass-text-dim)',
               maxWidth: 130,
@@ -182,7 +195,7 @@ export function GameHUD() {
 
         {/* Center: location + stage + month */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-          <div style={{ fontSize: 10, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <div style={{ fontSize: 13, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6, display: 'flex', alignItems: 'center', gap: 4 }}>
             {isCity ? <><GameIcon name="map" size={12} /> Newport News City</> : <><GameIcon name="pin" size={12} /> Month {month} of 36</>}
           </div>
           <div
@@ -191,7 +204,7 @@ export function GameHUD() {
               borderRadius: 0,
               background: isCity ? 'var(--teal-grad)' : 'var(--gold-grad)',
               color: 'var(--ink)',
-              fontSize: 11,
+              fontSize: 14,
               fontWeight: 800,
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.35)',
             }}
@@ -206,9 +219,9 @@ export function GameHUD() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 12,
-            padding: '6px 16px',
-            fontSize: 13,
+            gap: isNarrow ? 8 : 12,
+            padding: isNarrow ? '5px 10px' : '6px 16px',
+            fontSize: 16,
             fontWeight: 700,
             color: 'var(--glass-text)',
           }}
@@ -248,9 +261,9 @@ export function GameHUD() {
             >
               {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
             </button>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {!isNarrow && <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', letterSpacing: 0.5 }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', letterSpacing: 0.5 }}>
                   Music
                 </span>
                 <input
@@ -270,7 +283,7 @@ export function GameHUD() {
                 />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', letterSpacing: 0.5 }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', letterSpacing: 0.5 }}>
                   SFX
                 </span>
                 <input
@@ -289,14 +302,14 @@ export function GameHUD() {
                   }}
                 />
               </div>
-            </div>
+            </div>}
           </div>
           <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.16)' }} />
           <button
             onClick={() => { getAudioEngine().play('click'); resetGame(); }}
             className="glass-btn"
             style={{
-              fontSize: 10,
+              fontSize: 13,
               fontWeight: 700,
               letterSpacing: 0.5,
               padding: '4px 10px',
@@ -309,7 +322,7 @@ export function GameHUD() {
             title="Quit to Menu"
             className="glass-btn"
             style={{
-              fontSize: 10,
+              fontSize: 13,
               fontWeight: 700,
               letterSpacing: 0.5,
               padding: '4px 10px',
@@ -319,7 +332,7 @@ export function GameHUD() {
             }}
           >
             <LogOut size={11} />
-            Quit to Menu
+            {isNarrow ? 'Quit' : 'Quit to Menu'}
           </button>
         </div>
       </div>
@@ -356,7 +369,7 @@ export function GameHUD() {
             <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--glass-text)', marginBottom: 8 }}>
               Quit to Menu?
             </div>
-            <div style={{ fontSize: 13, color: 'var(--glass-text-dim)', lineHeight: 1.5, marginBottom: 20 }}>
+            <div style={{ fontSize: 16, color: 'var(--glass-text-dim)', lineHeight: 1.5, marginBottom: 20 }}>
               You'll return to the character screen. Your progress is saved automatically, so you can continue later — or start fresh.
             </div>
             <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
@@ -366,7 +379,7 @@ export function GameHUD() {
                 style={{
                   flex: 1,
                   padding: '10px 0',
-                  fontSize: 13,
+                  fontSize: 16,
                   fontWeight: 700,
                 }}
               >
@@ -382,7 +395,7 @@ export function GameHUD() {
                 style={{
                   flex: 1,
                   padding: '10px 0',
-                  fontSize: 13,
+                  fontSize: 16,
                   fontWeight: 800,
                 }}
               >
@@ -470,7 +483,7 @@ export function GameHUD() {
               gap: 6,
               padding: '7px 14px',
               color: 'var(--glass-text-dim)',
-              fontSize: 11,
+              fontSize: 14,
               fontWeight: 700,
               letterSpacing: 0.5,
               cursor: 'pointer',
@@ -492,14 +505,14 @@ export function GameHUD() {
                 padding: '12px 14px',
               }}
             >
-              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: 1, marginBottom: 8 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: 1, marginBottom: 8 }}>
                 Recent Events
               </div>
               {lifeEventLog.map((title, i) => (
                 <div
                   key={i}
                   style={{
-                    fontSize: 12,
+                    fontSize: 15,
                     color: i === 0 ? 'var(--gold)' : 'var(--glass-text-dim)',
                     padding: '4px 0',
                     borderBottom: i < lifeEventLog.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
@@ -544,7 +557,7 @@ export function GameHUD() {
                 alignItems: 'center',
                 gap: 6,
                 padding: '6px 12px',
-                fontSize: 11,
+                fontSize: 14,
                 fontWeight: 800,
                 color: 'var(--glass-text)',
                 cursor: 'pointer',
@@ -564,7 +577,7 @@ export function GameHUD() {
                 alignItems: 'center',
                 gap: 6,
                 padding: '6px 12px',
-                fontSize: 11,
+                fontSize: 14,
                 fontWeight: 800,
                 color: 'var(--glass-text)',
                 cursor: 'pointer',

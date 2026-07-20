@@ -98,7 +98,7 @@ export function SpeechBubble() {
                 justifyContent: 'center',
                 color: line.speaker === 'You' ? 'var(--ink)' : '#fff',
                 fontWeight: 800,
-                fontSize: 16,
+                fontSize: 18,
                 flexShrink: 0,
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3)',
               }}
@@ -107,10 +107,10 @@ export function SpeechBubble() {
             </div>
 
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: line.speaker === 'You' ? 'var(--gold)' : 'var(--teal)', marginBottom: 4, letterSpacing: 0.6 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: line.speaker === 'You' ? 'var(--gold)' : 'var(--teal)', marginBottom: 4, letterSpacing: 0.6 }}>
                 {line.speaker === 'You' ? playerName : line.speaker}
               </div>
-              <p style={{ fontSize: 14, color: 'var(--glass-text)', lineHeight: 1.55, margin: 0 }}>
+              <p style={{ fontSize: 17, color: 'var(--glass-text)', lineHeight: 1.55, margin: 0 }}>
                 {displayText}
               </p>
               {displayTip && (
@@ -121,7 +121,7 @@ export function SpeechBubble() {
                     borderRadius: 0,
                     background: 'rgba(212,168,67,0.12)',
                     border: 'var(--glass-border-gold)',
-                    fontSize: 12,
+                    fontSize: 15,
                     color: 'var(--gold)',
                     lineHeight: 1.4,
                     display: 'flex',
@@ -155,7 +155,7 @@ export function SpeechBubble() {
               className={isLast ? 'glass-btn-primary' : 'glass-btn-accent'}
               style={{
                 padding: '8px 20px',
-                fontSize: 13,
+                fontSize: 16,
               }}
             >
               {isLast ? 'Got it!' : 'Continue →'}

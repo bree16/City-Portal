@@ -68,21 +68,17 @@ export default function CounselorOfficeScene() {
       {/* Walls */}
       <mesh position={[0, 2.5, -7]} receiveShadow>
         <boxGeometry args={[16, 5, 0.2]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
+        <meshStandardMaterial color="#E9E4DA" roughness={0.9} />
       </mesh>
       <mesh position={[-8, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 14]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
-      </mesh>
-      <mesh position={[8, 2.5, 0]} receiveShadow>
-        <boxGeometry args={[0.2, 5, 14]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.9} />
       </mesh>
 
       {/* Ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[16, 14]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={1} />
+        <meshStandardMaterial color="#E9E4DA" roughness={1} />
       </mesh>
 
       {/* Ceiling lights */}
@@ -120,7 +116,7 @@ export default function CounselorOfficeScene() {
         {/* Monitor */}
         <mesh position={[0.4, 0.55, -0.15]} castShadow>
           <boxGeometry args={[0.55, 0.36, 0.05]} />
-          <meshStandardMaterial color="#E2E8F0" roughness={0.2} metalness={0.4} emissive="#E0F0FF" emissiveIntensity={0.6} />
+          <meshStandardMaterial color="#DDD8CE" roughness={0.2} metalness={0.4} emissive="#E0F0FF" emissiveIntensity={0.6} />
         </mesh>
         <pointLight position={[2.5, 0.8, -2.8]} intensity={0.2} color="#4682B4" distance={2} />
         {/* Papers */}
@@ -167,8 +163,8 @@ export default function CounselorOfficeScene() {
       </mesh>
       <Html position={[-3.5, 2.95, -6.7]} center distanceFactor={10}>
         <div onPointerDown={(e) => { e.stopPropagation(); openDialogue('whiteboard'); }} style={{
-          background: completedInteractions.includes('whiteboard') ? '#D4AF37' : '#F8FAFC',
-          color: completedInteractions.includes('whiteboard') ? '#F8FAFC' : '#fff',
+          background: completedInteractions.includes('whiteboard') ? '#D4AF37' : '#E9E4DA',
+          color: completedInteractions.includes('whiteboard') ? '#E9E4DA' : '#fff',
           fontSize: 10, padding: '3px 10px', borderRadius: 'var(--glass-radius)',
           whiteSpace: 'nowrap', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif',
           display: 'flex', alignItems: 'center', gap: 6
@@ -203,7 +199,7 @@ export default function CounselorOfficeScene() {
         <Html position={[0, 1.55, 0]} center distanceFactor={10}>
           <div onPointerDown={(e) => { e.stopPropagation(); openDialogue('filing'); }} style={{
             background: completedInteractions.includes('filing') ? '#D4AF37' : '#1E3A8A',
-            color: completedInteractions.includes('filing') ? '#F8FAFC' : '#fff',
+            color: completedInteractions.includes('filing') ? '#E9E4DA' : '#fff',
             fontSize: 10, padding: '3px 10px', borderRadius: 'var(--glass-radius)',
             whiteSpace: 'nowrap', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif',
             display: 'flex', alignItems: 'center', gap: 6

@@ -76,21 +76,17 @@ export default function BankScene() {
       {/* Walls */}
       <mesh position={[0, 2.5, -8]} receiveShadow>
         <boxGeometry args={[20, 5, 0.2]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
+        <meshStandardMaterial color="#E9E4DA" roughness={0.9} />
       </mesh>
       <mesh position={[-10, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
-      </mesh>
-      <mesh position={[10, 2.5, 0]} receiveShadow>
-        <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.9} />
       </mesh>
 
       {/* Ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[20, 16]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={1} />
+        <meshStandardMaterial color="#E9E4DA" roughness={1} />
       </mesh>
 
       {/* Fluorescent ceiling lights */}
@@ -131,7 +127,7 @@ export default function BankScene() {
       {/* Bank sign on back wall — glowing */}
       <mesh position={[0, 3.6, -7.85]} castShadow>
         <boxGeometry args={[6.5, 0.75, 0.12]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#a8cfe8" emissiveIntensity={0.1} roughness={0.5} />
+        <meshStandardMaterial color="#E9E4DA" emissive="#a8cfe8" emissiveIntensity={0.1} roughness={0.5} />
       </mesh>
       <Html position={[0, 3.6, -7.7]} center distanceFactor={16}>
         <div style={{ color: '#D4AF37', fontWeight: 800, fontSize: 14, whiteSpace: 'nowrap', fontFamily: 'var(--display-font)', display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -158,7 +154,7 @@ export default function BankScene() {
       <group position={[-8, 0, -5]}>
         <mesh position={[0, 1.0, 0]} castShadow>
           <boxGeometry args={[0.8, 2.0, 0.5]} />
-          <meshStandardMaterial color="#F8FAFC" roughness={0.3} metalness={0.5} />
+          <meshStandardMaterial color="#E9E4DA" roughness={0.3} metalness={0.5} />
         </mesh>
         <mesh position={[0, 1.2, 0.26]} castShadow>
           <boxGeometry args={[0.5, 0.35, 0.05]} />
@@ -212,8 +208,8 @@ export default function BankScene() {
           </mesh>
           <Html position={[0, 0.34, 0]} center distanceFactor={10}>
             <div onPointerDown={(e) => { e.stopPropagation(); if (!completedInteractions.includes(doc.id)) completeInteraction(doc.id); }} style={{
-              background: completedInteractions.includes(doc.id) ? '#D4AF37' : '#F8FAFC',
-              color: completedInteractions.includes(doc.id) ? '#F8FAFC' : '#fff',
+              background: completedInteractions.includes(doc.id) ? '#D4AF37' : '#E9E4DA',
+              color: completedInteractions.includes(doc.id) ? '#E9E4DA' : '#fff',
               fontSize: 10, padding: '3px 8px', borderRadius: 'var(--glass-radius)',
               whiteSpace: 'nowrap', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif',
               display: 'flex', alignItems: 'center', gap: 6
@@ -231,7 +227,6 @@ export default function BankScene() {
       <TallPlant position={[9, 0, 6.5]} scale={1.1} />
       {/* Framed art on side walls, facing inward */}
       <WallArt position={[-9.85, 3.0, -3]} rotation={[0, Math.PI / 2, 0]} color="#4682B4" w={1.3} h={0.9} />
-      <WallArt position={[9.85, 3.0, -3]} rotation={[0, -Math.PI / 2, 0]} color="#5F9EA0" w={1.3} h={0.9} />
       {/* Wall clock above the bank sign area, right of it */}
       <WallClock position={[4.5, 3.6, -7.82]} rotation={[0, 0, 0]} />
       {/* Waiting-area side table with magazines/mug between chairs */}

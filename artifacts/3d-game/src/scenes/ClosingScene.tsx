@@ -83,7 +83,7 @@ export default function ClosingScene() {
       getAudioEngine().play('celebration');
       updateSavings(-12000);
       addAchievement('homeowner');
-      confetti({ particleCount: 130, spread: 80, origin: { y: 0.6 }, colors: ['#D4AF37', '#0F766E', '#F8FAFC', '#fff', '#FFD700'] });
+      confetti({ particleCount: 130, spread: 80, origin: { y: 0.6 }, colors: ['#D4AF37', '#0F766E', '#E9E4DA', '#fff', '#FFD700'] });
       setTimeout(() => confetti({ particleCount: 80, spread: 100, origin: { x: 0.15, y: 0.5 }, colors: ['#D4AF37', '#fff'] }), 400);
       setTimeout(() => confetti({ particleCount: 80, spread: 100, origin: { x: 0.85, y: 0.5 }, colors: ['#0F766E', '#fff'] }), 700);
     }
@@ -106,20 +106,16 @@ export default function ClosingScene() {
       {/* Walls */}
       <mesh position={[0, 2.5, -7]} receiveShadow>
         <boxGeometry args={[18, 5, 0.2]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
+        <meshStandardMaterial color="#E9E4DA" roughness={0.9} />
       </mesh>
       <mesh position={[-9, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 14]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
-      </mesh>
-      <mesh position={[9, 2.5, 0]} receiveShadow>
-        <boxGeometry args={[0.2, 5, 14]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.9} />
       </mesh>
       {/* Ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[18, 14]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={1} />
+        <meshStandardMaterial color="#E9E4DA" roughness={1} />
       </mesh>
 
       {/* Chandelier — glowing warm gold */}
@@ -207,7 +203,7 @@ export default function ClosingScene() {
       {/* Deed frame on wall */}
       <mesh position={[-3.5, 2.2, -6.85]} castShadow>
         <boxGeometry args={[2.2, 1.6, 0.08]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
+        <meshStandardMaterial color="#E9E4DA" roughness={0.9} />
       </mesh>
       <mesh position={[-3.5, 2.2, -6.78]}>
         <boxGeometry args={[2.3, 1.7, 0.06]} />
@@ -238,8 +234,6 @@ export default function ClosingScene() {
       <WallClock position={[3.5, 3.0, -6.85]} rotation={[Math.PI / 2, 0, 0]} />
       {/* Wall art on left wall (faces +x) */}
       <WallArt position={[-8.85, 3.0, 2]} rotation={[0, Math.PI / 2, 0]} color="#4682B4" w={1.4} h={1.0} />
-      {/* Wall art on right wall (faces -x) */}
-      <WallArt position={[8.85, 3.0, -2]} rotation={[0, -Math.PI / 2, 0]} color="#5F9EA0" w={1.3} h={1.0} />
       {/* Tall plants flanking corners */}
       <TallPlant position={[-7.8, 0, 5.5]} scale={1.05} />
       <TallPlant position={[7.8, 0, 5.5]} scale={1.05} />
@@ -273,7 +267,7 @@ export default function ClosingScene() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                   width: '100%', padding: '13px 16px', borderRadius: 'var(--glass-radius)', marginBottom: 10,
                   background: i < step ? 'rgba(74,222,128,0.18)' : i === step ? '#D4AF37' : 'rgba(255,255,255,0.06)',
-                  color: i === step ? '#F8FAFC' : i < step ? '#4ade80' : 'rgba(255,255,255,0.4)',
+                  color: i === step ? '#E9E4DA' : i < step ? '#4ade80' : 'rgba(255,255,255,0.4)',
                   border: i < step ? '1px solid rgba(74,222,128,0.5)' : 'none',
                   cursor: i === step ? 'pointer' : 'default',
                   fontWeight: 700, fontSize: 13, fontFamily: 'Inter, sans-serif', transition: 'all 0.2s',

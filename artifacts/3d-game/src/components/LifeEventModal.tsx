@@ -61,7 +61,7 @@ export function LifeEventModal() {
                   display: 'inline-block',
                   padding: '3px 12px',
                   border: 'var(--glass-border-gold)',
-                  fontSize: 10, fontWeight: 700, color: 'var(--gold)',
+                  fontSize: 13, fontWeight: 700, color: 'var(--gold)',
                   letterSpacing: 1, marginBottom: 10,
                 }}>
                   Life Event
@@ -73,7 +73,7 @@ export function LifeEventModal() {
 
               {/* Description */}
               <p style={{
-                fontSize: 13, color: 'var(--glass-text-dim)',
+                fontSize: 16, color: 'var(--glass-text-dim)',
                 lineHeight: 1.6, textAlign: 'center', marginBottom: 20,
               }}>
                 {pendingLifeEvent.description}
@@ -88,7 +88,7 @@ export function LifeEventModal() {
                   : 'rgba(248,113,113,0.12)',
                 border: `1px solid ${pendingLifeEvent.effect.delta >= 0 ? 'rgba(74,222,128,0.3)' : 'rgba(248,113,113,0.3)'}`,
               }}>
-                <div style={{ fontSize: 11, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <div style={{ fontSize: 14, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6, display: 'flex', alignItems: 'center', gap: 4 }}>
                   <GameIcon name={EFFECT_LABELS[pendingLifeEvent.effect.type]?.icon || 'warning'} size={14} />
                   {EFFECT_LABELS[pendingLifeEvent.effect.type]?.label || 'Effect'}
                 </div>
@@ -109,10 +109,10 @@ export function LifeEventModal() {
                 background: 'rgba(212,168,67,0.1)',
                 border: 'var(--glass-border-gold)',
               }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', marginBottom: 4, letterSpacing: 0.8, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--gold)', marginBottom: 4, letterSpacing: 0.8, display: 'flex', alignItems: 'center', gap: 4 }}>
                   <GameIcon name="lightbulb" size={12} /> Financial Tip
                 </div>
-                <p style={{ fontSize: 12, color: 'var(--glass-text-dim)', lineHeight: 1.5, margin: 0 }}>
+                <p style={{ fontSize: 15, color: 'var(--glass-text-dim)', lineHeight: 1.5, margin: 0 }}>
                   {pendingLifeEvent.lesson}
                 </p>
               </div>
@@ -122,7 +122,7 @@ export function LifeEventModal() {
                 onClick={applyLifeEvent}
                 className="glass-btn-primary"
                 style={{
-                  width: '100%', padding: '14px', fontSize: 15,
+                  width: '100%', padding: '14px', fontSize: 18,
                 }}
               >
                 Got it! Continue →

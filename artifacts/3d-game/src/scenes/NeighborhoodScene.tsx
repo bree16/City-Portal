@@ -10,7 +10,7 @@ import { Bush, FlowerBed, TallPlant } from '@/components/decor/DecorKit';
 import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChrome';
 import { GameIcon } from '@/components/ui/GameIcon';
 
-const HOUSE_COLORS = ['#F8FAFC', '#B0C4DE', '#F5F5DC', '#B22222'];
+const HOUSE_COLORS = ['#E9E4DA', '#B0C4DE', '#F5F5DC', '#B22222'];
 const ROOF_COLORS = ['#333333', '#4A3C31', '#2F4F4F', '#3A3A3A'];
 
 const AGENTS: Array<Omit<NPCDef, 'position' | 'rotation'>> = [
@@ -87,7 +87,7 @@ export default function NeighborhoodScene() {
       {/* Sky backdrop */}
       <mesh position={[0, 8, -25]}>
         <planeGeometry args={[80, 24]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={1} side={2} />
+        <meshStandardMaterial color="#E9E4DA" roughness={1} side={2} />
       </mesh>
       {/* Clouds */}
       {[[-12, 10, -20], [8, 12, -22], [20, 9, -18]].map(([x, y, z], i) => (
@@ -141,13 +141,13 @@ export default function NeighborhoodScene() {
             {[-1.8, 1.8].map((wx) => (
               <mesh key={wx} position={[wx, 1.5, 2.28]} castShadow>
                 <boxGeometry args={[1.0, 0.85, 0.1]} />
-                <meshStandardMaterial color="#F8FAFC" emissive="#FFF0D4" emissiveIntensity={0.5} roughness={0.1} />
+                <meshStandardMaterial color="#E9E4DA" emissive="#FFF0D4" emissiveIntensity={0.5} roughness={0.1} />
               </mesh>
             ))}
             {/* Side window */}
             <mesh position={[2.76, 1.5, 0]} castShadow>
               <boxGeometry args={[0.1, 0.8, 0.9]} />
-              <meshStandardMaterial color="#F8FAFC" emissive="#a8cfe8" emissiveIntensity={0.1} roughness={0.1} />
+              <meshStandardMaterial color="#E9E4DA" emissive="#a8cfe8" emissiveIntensity={0.1} roughness={0.1} />
             </mesh>
             {/* Window glow */}
             <pointLight position={[0, 1.8, 2.5]} intensity={0.4} color="#D2B48C" distance={3} />

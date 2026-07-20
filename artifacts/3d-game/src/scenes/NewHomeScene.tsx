@@ -114,21 +114,17 @@ export default function NewHomeScene() {
       {/* Walls */}
       <mesh position={[0, 2.5, -8]} receiveShadow>
         <boxGeometry args={[20, 5, 0.2]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
+        <meshStandardMaterial color="#E9E4DA" roughness={0.9} />
       </mesh>
       <mesh position={[-10, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
-      </mesh>
-      <mesh position={[10, 2.5, 0]} receiveShadow>
-        <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
+        <meshStandardMaterial color="#DDD8CE" roughness={0.9} />
       </mesh>
 
       {/* Ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[20, 16]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={1} />
+        <meshStandardMaterial color="#E9E4DA" roughness={1} />
       </mesh>
 
       {/* Ceiling lights */}
@@ -145,15 +141,15 @@ export default function NewHomeScene() {
       {/* Windows — warm sunlight */}
       <mesh position={[-2, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[3.5, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[-9.85, 1.8, 1]} castShadow>
         <boxGeometry args={[0.12, 1.5, 2.0]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#E0F0FF" emissiveIntensity={0.6} roughness={0.05} />
+        <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.6} roughness={0.05} />
       </mesh>
       <pointLight position={[0, 3.0, -7]} intensity={1.2} color="#5F9EA0" distance={12} />
 
@@ -187,8 +183,6 @@ export default function NewHomeScene() {
       {/* Curtains framing the back windows (windows at z=-7.85) */}
       <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#4682B4" />
       <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#4682B4" />
-      {/* Wall art on right wall (faces -x), away from door/slots */}
-      <WallArt position={[9.85, 2.9, -3]} rotation={[0, -Math.PI / 2, 0]} color="#5F9EA0" w={1.3} h={0.95} />
       {/* Welcoming plants in corners */}
       <TallPlant position={[-8.5, 0, -6.5]} scale={1.0} />
       <PottedPlant position={[8.5, 0, -6.5]} scale={1.05} />
@@ -232,7 +226,7 @@ export default function NewHomeScene() {
             <Html position={[0, placed ? slot.size[1] + 0.55 : 0.55, 0]} center distanceFactor={10}>
               <div onPointerDown={(e) => { e.stopPropagation(); if (!placed) { if (activeSlot !== slot.id) getAudioEngine().play('click'); setActiveSlot(activeSlot === slot.id ? null : slot.id); } }} style={{
                 background: placed ? '#0F766E' : '#D4AF37',
-                color: placed ? '#fff' : '#F8FAFC',
+                color: placed ? '#fff' : '#E9E4DA',
                 fontSize: 10, padding: '3px 10px', borderRadius: 'var(--glass-radius)',
                 whiteSpace: 'nowrap', fontWeight: 700,
                 cursor: placed ? 'default' : 'pointer', fontFamily: 'Inter, sans-serif',
@@ -262,7 +256,7 @@ export default function NewHomeScene() {
                       <button onClick={() => handleBuy(slot.id, opt.id, opt.price)} disabled={cash < opt.price} style={{
                         padding: '5px 12px', borderRadius: 'var(--glass-radius)',
                         background: cash >= opt.price ? '#D4AF37' : 'rgba(255,255,255,0.08)',
-                        color: cash >= opt.price ? '#F8FAFC' : 'rgba(255,255,255,0.35)',
+                        color: cash >= opt.price ? '#E9E4DA' : 'rgba(255,255,255,0.35)',
                         border: 'none', cursor: cash >= opt.price ? 'pointer' : 'default',
                         fontWeight: 700, fontSize: 11, fontFamily: 'Inter, sans-serif', flexShrink: 0,
                       }}>

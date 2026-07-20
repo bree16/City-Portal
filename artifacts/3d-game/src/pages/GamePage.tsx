@@ -185,7 +185,7 @@ function TourChecklist() {
       fontFamily: 'Inter, sans-serif', minWidth: 178,
       marginTop: 4,
     }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color: '#ffea00', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: '#ffea00', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
         <GameIcon name="search-home" size={14} /> Tour Checklist
       </div>
       {TOUR_ROOMS.map((room) => {
@@ -194,7 +194,7 @@ function TourChecklist() {
         return (
           <div key={room} style={{
             display: 'flex', alignItems: 'center', gap: 8,
-            fontSize: 11, padding: '3px 0',
+            fontSize: 14, padding: '3px 0',
             color: seen ? '#4ade80' : 'rgba(255,255,255,0.45)',
             fontWeight: seen ? 700 : 400,
           }}>
@@ -212,7 +212,7 @@ function TourChecklist() {
           marginTop: 8, padding: '4px 8px', borderRadius: 6,
           background: 'rgba(10,143,126,0.18)',
           border: '1px solid rgba(10,143,126,0.4)',
-          fontSize: 10, fontWeight: 700, color: '#00f0ff', textAlign: 'center',
+          fontSize: 13, fontWeight: 700, color: '#00f0ff', textAlign: 'center',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4
         }}>
           <GameIcon name="sparkles" size={12} /> Fully Inspected!
@@ -221,14 +221,14 @@ function TourChecklist() {
       <button onClick={handleOffer} style={{
         marginTop: 10, width: '100%', padding: '8px', borderRadius: 8,
         background: '#ffea00', color: '#09070a', border: 'none',
-        cursor: 'pointer', fontWeight: 800, fontSize: 11,
+        cursor: 'pointer', fontWeight: 800, fontSize: 14,
         fontFamily: 'Inter, sans-serif',
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
       }}>
         {allDone ? <><GameIcon name="home" size={12} /> Make an Offer →</> : 'Make an Offer →'}
       </button>
       {!allDone && (
-        <div style={{ marginTop: 6, fontSize: 9, color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>
+        <div style={{ marginTop: 6, fontSize: 12, color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>
           Walk through all rooms to fully inspect
         </div>
       )}
