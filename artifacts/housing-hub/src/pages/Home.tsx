@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { 
   Home, Building2, Calculator, MapPin, 
   GraduationCap, HandHeart, ArrowRight, Star,
-  Calendar, MapPin as MapPinIcon, Users, DollarSign, Percent, Banknote, Search, Trash2
+  MapPin as MapPinIcon, Users, DollarSign, Percent, Banknote, Search, Trash2, Gamepad2, TrendingUp, Brush, Key
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,7 +13,6 @@ import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from '@/components/ui/badge';
 import heroIllustration from '@assets/generated_images/hero_illustration.png';
-import heroPremium from '@assets/generated_images/hero_premium.jpg';
 import hiltonImage from '@assets/generated_images/hilton_village.jpg';
 import denbighImage from '@assets/generated_images/denbigh.jpg';
 import oysterImage from '@assets/generated_images/oyster_point.jpg';
@@ -106,8 +105,11 @@ export default function HomePage() {
                 <Button asChild size="lg" className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-white rounded-full px-8 h-14 text-base font-semibold shadow-lg shadow-accent/20 transition-transform hover:-translate-y-1">
                   <Link href="/buy">Get Started</Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="w-full sm:w-auto rounded-full px-8 h-14 text-base font-semibold bg-transparent border-white/30 text-white hover:bg-white/10 hover:text-white transition-colors">
-                  <a href="#programs">Learn More</a>
+                <Button asChild size="lg" className="w-full sm:w-auto bg-[#ff007f] hover:bg-[#ff007f]/90 text-white rounded-full px-8 h-14 text-base font-semibold shadow-lg shadow-[#ff007f]/20 transition-transform hover:-translate-y-1 group">
+                  <Link href="/simulator">
+                    <Gamepad2 className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+                    Play the Simulator
+                  </Link>
                 </Button>
               </div>
             </motion.div>
@@ -204,6 +206,124 @@ export default function HomePage() {
                 </Link>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* NEW: Simulator Featured Section */}
+      <section className="py-24 bg-[#0a0a0e] relative overflow-hidden text-white">
+        {/* Decorative ambient gradients */}
+        <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[60%] bg-[#ff007f] rounded-full blur-[120px] opacity-20 pointer-events-none"></div>
+        <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[50%] bg-[#00f0ff] rounded-full blur-[120px] opacity-20 pointer-events-none"></div>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Content */}
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1a1a24] border border-[#ff007f]/30 text-[#ffea00] text-sm font-bold tracking-wide uppercase">
+                <Gamepad2 className="w-4 h-4" />
+                Interactive Experience
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold leading-tight">
+                Learn Homeownership <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff007f] to-[#ffea00]">Through Play</span>
+              </h2>
+              <p className="text-lg text-white/80 leading-relaxed max-w-xl">
+                Buying your first home can feel overwhelming. Our interactive simulator breaks the process into simple, engaging steps that help you understand budgeting, credit, mortgages, closing, and homeownership before making real-world decisions.
+              </p>
+              
+              <div className="grid sm:grid-cols-2 gap-x-6 gap-y-4 pt-4">
+                {[
+                  { icon: Calculator, label: "Learn to Budget" },
+                  { icon: TrendingUp, label: "Improve Your Credit" },
+                  { icon: Building2, label: "Tour Homes" },
+                  { icon: Banknote, label: "Understand Mortgages" },
+                  { icon: Key, label: "Experience Closing Day" },
+                  { icon: Brush, label: "Decorate Your First Home" },
+                ].map((item, idx) => (
+                  <motion.div 
+                    key={item.label}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="flex items-center gap-3 text-sm font-medium hover:text-[#00f0ff] transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[#ffea00]">
+                      <item.icon className="w-4 h-4" />
+                    </div>
+                    {item.label}
+                  </motion.div>
+                ))}
+              </div>
+
+              <div className="pt-6">
+                <Button asChild size="lg" className="w-full sm:w-auto bg-[#ff007f] hover:bg-[#ff007f]/90 text-white rounded-full px-8 h-14 text-base font-bold shadow-[0_0_20px_rgba(255,0,127,0.3)] transition-transform hover:-translate-y-1">
+                  <Link href="/simulator">Play the Simulator Free</Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Right: Stylized Preview Mockup */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="relative w-full aspect-square md:aspect-video lg:aspect-square max-w-lg mx-auto"
+            >
+              {/* Back panel */}
+              <motion.div 
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-10 right-0 w-[80%] aspect-video bg-[#110e15] rounded-xl border-2 border-[#00f0ff] shadow-[8px_8px_0px_#00f0ff] overflow-hidden"
+              >
+                <div className="h-6 bg-[#00f0ff]/10 border-b border-[#00f0ff] flex items-center px-3 gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-[#00f0ff]/40"></div>
+                  <div className="w-2 h-2 rounded-full bg-[#00f0ff]/40"></div>
+                  <div className="w-2 h-2 rounded-full bg-[#00f0ff]/40"></div>
+                </div>
+                <div className="p-4 flex flex-col gap-3 h-full">
+                  <div className="w-1/2 h-4 bg-[#00f0ff]/20 rounded"></div>
+                  <div className="w-3/4 h-4 bg-[#00f0ff]/20 rounded"></div>
+                  <div className="mt-auto flex justify-between">
+                    <div className="w-12 h-12 bg-[#00f0ff]/20 rounded-lg"></div>
+                    <div className="w-12 h-12 bg-[#00f0ff]/20 rounded-lg"></div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Front panel */}
+              <motion.div 
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute bottom-10 left-0 w-[85%] aspect-video bg-[#110e15] rounded-xl border-2 border-[#ff007f] shadow-[-8px_8px_0px_#ff007f] overflow-hidden z-10"
+              >
+                <div className="h-6 bg-[#ff007f]/10 border-b border-[#ff007f] flex items-center px-3 gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-[#ff007f]/40"></div>
+                  <div className="w-2 h-2 rounded-full bg-[#ff007f]/40"></div>
+                  <div className="w-2 h-2 rounded-full bg-[#ff007f]/40"></div>
+                </div>
+                <div className="p-5 flex items-center gap-4 h-full relative">
+                  <div className="w-16 h-20 bg-[#ffea00] rounded border-2 border-black absolute right-6 bottom-4 rotate-12 flex items-center justify-center">
+                    <Star className="text-black w-8 h-8" />
+                  </div>
+                  <div className="flex-1 space-y-3">
+                    <div className="w-full h-8 bg-[#ff007f]/20 rounded border border-[#ff007f]/30"></div>
+                    <div className="w-2/3 h-8 bg-[#ff007f]/20 rounded border border-[#ff007f]/30"></div>
+                  </div>
+                </div>
+              </motion.div>
+              
+              {/* Floating badge */}
+              <motion.div 
+                animate={{ rotate: [0, 5, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-[20%] left-[5%] z-20 bg-[#ffea00] text-black font-extrabold px-4 py-2 rounded-lg border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] rotate-[-6deg]"
+              >
+                LEVEL UP!
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>

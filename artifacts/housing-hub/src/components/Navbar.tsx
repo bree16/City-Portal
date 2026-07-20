@@ -28,15 +28,15 @@ export function Navbar() {
     { label: 'Rent', href: '/rent' },
     { label: 'Neighborhoods', href: '/neighborhoods' },
     { label: 'Journey', href: '/journey' },
-    { label: 'Why NN', href: '/why-newport-news' },
+    { label: 'Why Newport News', href: '/why-newport-news' },
     { label: 'Simulator', href: '/simulator' },
     { label: 'Services', href: '/services' },
-    { label: 'Resources', href: '/resources' },
     { label: 'Contact', href: '/contact' },
   ];
 
   const mobileLinks = [
     ...navLinks,
+    { label: 'Resources', href: '/resources' },
     { label: 'Events', href: '/events' },
     { label: 'Success Stories', href: '/success-stories' },
   ];
@@ -53,11 +53,11 @@ export function Navbar() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 z-50" data-testid="link-home">
+            <Link href="/" className="flex items-center gap-2 z-50 mr-8 lg:mr-16" data-testid="link-home">
               <div className={`p-2 rounded-lg ${isScrolled || !isHomepage || isMobileMenuOpen ? 'bg-primary/10 text-primary' : 'bg-white/20 text-white backdrop-blur-sm'}`}>
                 <Home className="w-6 h-6" />
               </div>
-              <span className={`font-bold text-xl tracking-tight transition-colors ${
+              <span className={`font-bold text-xl whitespace-nowrap tracking-tight transition-colors ${
                 isScrolled || !isHomepage || isMobileMenuOpen ? 'bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent' : 'bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent'
               }`}>
                 Housing Hub
@@ -65,15 +65,15 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-8">
-              <div className="flex gap-6">
+            <nav className="hidden xl:flex items-center gap-8 flex-1 justify-between">
+              <div className="flex gap-6 lg:gap-8 items-center">
                 {navLinks.map((link) => {
                   const isActive = location === link.href || (link.href === '/resources' && location === '/assistance');
                   return (
                     <Link
                       key={link.href}
                       href={link.href}
-                      className={`text-sm transition-colors relative py-1 ${
+                      className={`text-base whitespace-nowrap transition-colors relative py-1 ${
                         isScrolled || !isHomepage
                           ? isActive ? 'text-accent font-semibold' : 'text-foreground/80 hover:text-accent font-medium'
                           : isActive ? 'text-white font-semibold' : 'text-white/90 hover:text-white font-medium'
@@ -88,19 +88,21 @@ export function Navbar() {
                   );
                 })}
               </div>
-              <Button asChild className="bg-accent hover:bg-accent/90 text-white rounded-full px-6 font-medium shadow-sm transition-transform hover:-translate-y-0.5">
+              <Button asChild className="bg-accent hover:bg-accent/90 text-white rounded-full px-6 font-medium shadow-sm transition-transform hover:-translate-y-0.5 whitespace-nowrap">
                 <Link href="/buy">Get Started</Link>
               </Button>
             </nav>
 
             {/* Mobile Menu Toggle */}
             <button
-              className={`md:hidden p-2 z-50 rounded-md transition-colors ${
+              className={`xl:hidden p-2 z-50 rounded-md transition-colors ${
                 isScrolled || !isHomepage || isMobileMenuOpen ? 'text-foreground' : 'text-white'
               }`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="button-mobile-menu"
               aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-nav"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -116,7 +118,8 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-white pt-24 px-6 flex flex-col md:hidden overflow-y-auto"
+            id="mobile-nav"
+            className="fixed inset-0 z-40 bg-white pt-24 px-6 flex flex-col xl:hidden overflow-y-auto"
           >
             <div className="flex flex-col gap-4 text-lg font-medium pb-8">
               <Link
