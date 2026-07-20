@@ -34,9 +34,9 @@ const SLIDES: Slide[] = [
   {
     kind: 'Event',
     image: eventFair,
-    title: "Newport News Housing Fair",
-    meta: "Sep 3, 2026 • Convention Center",
-    desc: "Meet lenders, landlords, and housing counselors — a full day of resources and networking.",
+    title: "Beyond the Keys Homeowner Workshop",
+    meta: "Aug 8, 2026 • The Legacy of HOPE Foundation",
+    desc: "A free in-person workshop on managing and maintaining your home — for new and seasoned homeowners.",
     href: "/events",
   },
   {
@@ -68,9 +68,9 @@ const SLIDES: Slide[] = [
   {
     kind: 'Event',
     image: eventClass,
-    title: "First-Time Buyer Class",
-    meta: "Sep 10, 2026 • Online (Zoom)",
-    desc: "HUD-approved homebuyer education — required for most city assistance programs.",
+    title: "Home & Healthy Living Expo",
+    meta: "Sep 24, 2026 • Newport News",
+    desc: "A community expo connecting residents with home, wellness, and lifestyle resources and local pros.",
     href: "/events",
   },
 ];
