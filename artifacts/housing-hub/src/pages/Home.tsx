@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { 
   Home, Building2, Calculator, MapPin, 
   GraduationCap, HandHeart, ArrowRight, Star,
-  Calendar, MapPin as MapPinIcon, Users, DollarSign, Percent, Banknote, Search
+  Calendar, MapPin as MapPinIcon, Users, DollarSign, Percent, Banknote, Search, Trash2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -533,6 +533,53 @@ export default function HomePage() {
                       <p className="text-white/80 text-sm line-clamp-2">{hood.desc}</p>
                     </div>
                   </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Resident Services Teaser */}
+      <section className="py-24 bg-muted/30 border-t border-border/50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div className="max-w-2xl">
+              <Badge className="bg-accent/10 text-accent hover:bg-accent/20 border-none mb-4 px-4 py-1">Resident Services Hub</Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Everything You Need After Moving In</h2>
+              <p className="text-muted-foreground text-lg">Everything you need to live, work, and thrive in Newport News—all in one place.</p>
+            </div>
+            <Button asChild className="bg-accent hover:bg-accent/90 text-white rounded-full px-6 h-12">
+              <Link href="/services">
+                Explore All Services <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { icon: Banknote, title: "Pay Utility Bill", desc: "Quick and easy online payments." },
+              { icon: Trash2, title: "Trash & Recycling", desc: "Find your collection day." },
+              { icon: MapPinIcon, title: "Report an Issue", desc: "Help us keep our city beautiful." },
+              { icon: Users, title: "Community Events", desc: "Discover what's happening." }
+            ].map((service, i) => (
+              <motion.div
+                key={service.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+              >
+                <Link href="/services" className="block group h-full">
+                  <Card className="h-full border-border/50 shadow-sm hover:shadow-md transition-all duration-300 group-hover:border-accent/30 bg-white">
+                    <CardContent className="p-6 flex flex-col items-center text-center">
+                      <div className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mb-4 text-accent group-hover:bg-accent group-hover:text-white transition-colors">
+                        <service.icon className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-lg font-bold text-primary mb-2">{service.title}</h3>
+                      <p className="text-sm text-muted-foreground">{service.desc}</p>
+                    </CardContent>
+                  </Card>
                 </Link>
               </motion.div>
             ))}

@@ -22,6 +22,7 @@ import QuizPage from '@/pages/QuizPage';
 import WhyNewportNewsPage from '@/pages/WhyNewportNewsPage';
 import PartnersPage from '@/pages/PartnersPage';
 import NotFound from '@/pages/not-found';
+import ServicesPage from '@/pages/ServicesPage';
 import { AccessibilityWidget } from '@/components/AccessibilityWidget';
 
 const queryClient = new QueryClient();
@@ -53,6 +54,7 @@ function Router() {
         <Route path="/quiz" component={QuizPage} />
         <Route path="/resources" component={ResourcesPage} />
         <Route path="/events" component={EventsPage} />
+        <Route path="/services" component={ServicesPage} />
         <Route path="/success-stories" component={SuccessStoriesPage} />
         <Route path="/contact" component={ContactPage} />
         <Route component={NotFound} />
