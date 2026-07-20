@@ -7,6 +7,7 @@ import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
 import { homes } from '@/data/homes';
 import { Bush, FlowerBed, TallPlant } from '@/components/decor/DecorKit';
+import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChrome';
 
 const HOUSE_COLORS = ['#110e15', '#2b0a3d', '#1a0521', '#1a0a2a'];
 const ROOF_COLORS = ['#ff007f', '#00f0ff', '#ffea00', '#ff007f'];
@@ -21,6 +22,7 @@ const AGENTS: Array<Omit<NPCDef, 'position' | 'rotation'>> = [
 export default function NeighborhoodScene() {
   const { openDialogue, setSelectedHome, startNegotiation, startHomeTour, setTransitioning, addAchievement } = useGameStore();
   const [viewingHome, setViewingHome] = useState<number | null>(null);
+  const [instructionsOpen, setInstructionsOpen] = useState(true);
 
   // Go straight to the negotiation table (skip tour)
   const handleSelectHome = (homeId: number) => {
@@ -262,14 +264,20 @@ export default function NeighborhoodScene() {
 
       {/* Instructions */}
       <Html position={[0, 5, 8]} center distanceFactor={16}>
+        {!instructionsOpen ? (
+          <ScenePanelReopen onOpen={() => setInstructionsOpen(true)} label="❓ Instructions" />
+        ) : (
         <div style={{
+          position: 'relative',
           background: 'rgba(9,7,10,0.88)', borderRadius: 0, padding: '12px 20px',
           color: '#fff', fontFamily: 'var(--display-font)', fontSize: 12,
           textAlign: 'center', backdropFilter: 'blur(8px)',
         }}>
+          <ScenePanelClose onClose={() => setInstructionsOpen(false)} title="Hide Instructions" />
           <div style={{ fontWeight: 700, color: '#ffea00', marginBottom: 4 }}>House Hunting!</div>
           <div style={{ color: 'rgba(255,255,255,0.7)' }}>Click the real estate agents to view each listing</div>
         </div>
+        )}
       </Html>
     </group>
   );

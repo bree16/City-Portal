@@ -3,6 +3,7 @@ import { Html } from '@react-three/drei';
 import { useGameStore } from '@/store/gameStore';
 import { getAudioEngine } from '@/hooks/useGameAudio';
 import { PottedPlant, TallPlant, WallArt, Curtains } from '@/components/decor/DecorKit';
+import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChrome';
 import { motion } from 'framer-motion';
 
 const FURNITURE_SLOTS = [
@@ -63,6 +64,7 @@ export default function NewHomeScene() {
   const [activeSlot, setActiveSlot] = useState<string | null>(null);
   const [purchaseCount, setPurchaseCount] = useState(0);
   const [tip, setTip] = useState<string | null>(null);
+  const [welcomeOpen, setWelcomeOpen] = useState(true);
 
   const FINANCIAL_TIPS = [
     "Keep 3-6 months of expenses in an emergency fund for unexpected repairs!",
@@ -277,16 +279,22 @@ export default function NewHomeScene() {
 
       {/* Welcome banner */}
       <Html position={[0, 5.2, -4]} center distanceFactor={18}>
+        {!welcomeOpen ? (
+          <ScenePanelReopen onOpen={() => setWelcomeOpen(true)} label="🏡 Welcome Info" />
+        ) : (
         <div style={{
+          position: 'relative',
           background: 'rgba(255,234,0,0.95)', borderRadius: 0, padding: '12px 28px',
           color: '#09070a', fontFamily: 'var(--display-font)', textAlign: 'center',
           boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
         }}>
+          <ScenePanelClose onClose={() => setWelcomeOpen(false)} title="Hide Welcome" />
           <div style={{ fontSize: 18, fontWeight: 800 }}>🏡 Welcome Home!</div>
           <div style={{ fontSize: 12, marginTop: 4, fontWeight: 600 }}>
             Budget: <strong>${cash.toLocaleString()}</strong> | Click golden spots to furnish
           </div>
         </div>
+        )}
       </Html>
 
       {/* Begin Home Life button — primary CTA after furniture */}

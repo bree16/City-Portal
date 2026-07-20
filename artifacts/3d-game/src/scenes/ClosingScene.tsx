@@ -4,6 +4,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
+import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChrome';
 import { useGameStore } from '@/store/gameStore';
 import { getAudioEngine } from '@/hooks/useGameAudio';
 import { PottedPlant, TallPlant, WallArt, WallClock } from '@/components/decor/DecorKit';
@@ -68,6 +69,7 @@ export default function ClosingScene() {
   const { openDialogue, completeInteraction, updateSavings, setStage, setTransitioning, addAchievement } = useGameStore();
   const [step, setStep] = useState(0);
   const [celebrating, setCelebrating] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(true);
 
   const handleStep = (idx: number) => {
     if (idx !== step) return;
@@ -249,12 +251,17 @@ export default function ClosingScene() {
 
       {/* Signing steps panel */}
       <Html position={[0, 5, 4.5]} center distanceFactor={15}>
+        {!panelOpen ? (
+          <ScenePanelReopen onOpen={() => setPanelOpen(true)} label={celebrating ? '🏡 Continue' : '📋 Closing Steps'} />
+        ) : (
         <div style={{
+          position: 'relative',
           background: 'rgba(9,7,10,0.97)', borderRadius: 0, padding: '20px 24px', minWidth: 360,
           color: '#fff', fontFamily: 'var(--display-font)', backdropFilter: 'blur(12px)',
           border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
           textAlign: 'center',
         }}>
+          <ScenePanelClose onClose={() => setPanelOpen(false)} title="Hide Steps" />
           {!celebrating ? (
             <>
               <div style={{ fontSize: 15, fontWeight: 800, marginBottom: 4, color: '#ffea00' }}>Closing Day — Final Steps</div>
@@ -294,6 +301,7 @@ export default function ClosingScene() {
             </>
           )}
         </div>
+        )}
       </Html>
     </group>
   );

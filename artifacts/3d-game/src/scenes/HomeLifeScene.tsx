@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Html } from '@react-three/drei';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChrome';
 import { useGameStore } from '@/store/gameStore';
 import { PottedPlant, TallPlant, WallArt, Curtains, Rug, Bookshelf, FloorLamp, SideTable, BookRow } from '@/components/decor/DecorKit';
 import { homes } from '@/data/homes';
@@ -76,6 +77,7 @@ export default function HomeLifeScene() {
   const home = homes.find((h) => h.id === selectedHomeId) ?? homes[0];
 
   // Local state
+  const [dashboardOpen, setDashboardOpen] = useState(true);
   const [listingOpen, setListingOpen] = useState(false);
   const [activeImp, setActiveImp] = useState<string | null>(null);
   const [milestoneToast, setMilestoneToast] = useState<{ pct: number; icon: string; title: string; tip: string } | null>(null);
@@ -292,12 +294,17 @@ export default function HomeLifeScene() {
         <meshStandardMaterial color="#1E3A5F" emissive="#1E3A5F" emissiveIntensity={0.3} roughness={0.2} />
       </mesh>
       <Html position={[0, 2.8, -7.6]} center distanceFactor={14}>
+        {!dashboardOpen ? (
+          <ScenePanelReopen onOpen={() => setDashboardOpen(true)} label="🏠 Home Dashboard" />
+        ) : (
         <div style={{
+          position: 'relative',
           width: 320, padding: '14px 18px',
           background: 'rgba(10,18,40,0.98)', border: '1px solid rgba(255,234,0,0.25)',
           borderRadius: 0, fontFamily: 'var(--display-font)', color: '#fff',
           boxShadow: '0 0 30px rgba(10,18,40,0.8)',
         }}>
+          <ScenePanelClose onClose={() => setDashboardOpen(false)} title="Hide Dashboard" />
           <div style={{ fontSize: 9, fontWeight: 700, color: '#ffea00', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 10, textAlign: 'center' }}>
             🏠 Home Dashboard — {home.name}
           </div>
@@ -374,6 +381,7 @@ export default function HomeLifeScene() {
             </button>
           )}
         </div>
+        )}
       </Html>
 
       {/* ── IMPROVEMENT SPOTS ── */}

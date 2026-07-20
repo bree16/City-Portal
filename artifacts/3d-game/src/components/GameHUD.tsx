@@ -34,9 +34,45 @@ function worldToMap(wx: number, wz: number): { x: number; y: number } {
   };
 }
 
+// ── Reusable corner close button (comic UI theme) ────────────────
+
+function PanelCloseButton({ onClose, title = 'Close' }: { onClose: () => void; title?: string }) {
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); getAudioEngine().play('click'); onClose(); }}
+      title={title}
+      aria-label={title}
+      style={{
+        position: 'absolute',
+        top: -10,
+        right: -10,
+        zIndex: 5,
+        width: 22,
+        height: 22,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'var(--magenta)',
+        color: '#fff',
+        border: '2px solid var(--ink)',
+        borderRadius: 0,
+        boxShadow: '2px 2px 0px var(--gold)',
+        cursor: 'pointer',
+        fontFamily: 'var(--display-font)',
+        fontWeight: 800,
+        fontSize: 12,
+        lineHeight: 1,
+        pointerEvents: 'auto',
+      }}
+    >
+      ✕
+    </button>
+  );
+}
+
 // ── Mini-map ─────────────────────────────────────────────────────
 
-function MiniMap({ playerPosition }: { playerPosition: [number, number, number] }) {
+function MiniMap({ playerPosition, onClose }: { playerPosition: [number, number, number]; onClose: () => void }) {
   const px = worldToMap(playerPosition[0], playerPosition[2]);
 
   return (
@@ -51,6 +87,7 @@ function MiniMap({ playerPosition }: { playerPosition: [number, number, number] 
         pointerEvents: 'none',
       }}
     >
+      <PanelCloseButton onClose={onClose} title="Hide City Map" />
       <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 5, textAlign: 'center', fontFamily: 'var(--display-font)' }}>
         City Map
       </div>
@@ -98,7 +135,7 @@ function MiniMap({ playerPosition }: { playerPosition: [number, number, number] 
 
 // ── Objective Card ───────────────────────────────────────────────
 
-function ObjectiveCard({ stage }: { stage: number }) {
+function ObjectiveCard({ stage, onClose }: { stage: number; onClose: () => void }) {
   const obj = OBJECTIVES.find((o) => o.stage === stage) ?? OBJECTIVES[0];
 
   return (
@@ -123,6 +160,7 @@ function ObjectiveCard({ stage }: { stage: number }) {
         maxWidth: '90vw',
       }}
     >
+      <PanelCloseButton onClose={onClose} title="Hide Objective" />
       <span>{obj.icon}</span>
       <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: 0.6, marginRight: 2 }}>Next</span>
       <span style={{ color: 'var(--glass-text)' }}>{obj.text}</span>
@@ -139,6 +177,8 @@ export function GameHUD() {
 
   const playerName = characterAppearance.name?.trim() || 'Player';
   const [logExpanded, setLogExpanded] = useState(false);
+  const [showMiniMap, setShowMiniMap] = useState(true);
+  const [showObjective, setShowObjective] = useState(true);
   const isCity = currentLocation === 'city';
 
   return (
@@ -530,10 +570,67 @@ export function GameHUD() {
       )}
 
       {/* ── Mini-map (only in city) ── */}
-      {isCity && <MiniMap playerPosition={playerPosition} />}
+      {isCity && showMiniMap && <MiniMap playerPosition={playerPosition} onClose={() => setShowMiniMap(false)} />}
 
       {/* ── Objective card (only in city) ── */}
-      {isCity && <ObjectiveCard stage={stage} />}
+      {isCity && showObjective && <ObjectiveCard stage={stage} onClose={() => setShowObjective(false)} />}
+
+      {/* ── Reopen chips for closed HUD panels (only in city) ── */}
+      {isCity && (!showMiniMap || !showObjective) && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 76,
+            left: 12,
+            zIndex: 33,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 6,
+            pointerEvents: 'none',
+          }}
+        >
+          {!showObjective && (
+            <button
+              onClick={() => { getAudioEngine().play('click'); setShowObjective(true); }}
+              className="glass-chip"
+              title="Show Objective"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '6px 12px',
+                fontSize: 11,
+                fontWeight: 800,
+                color: 'var(--glass-text)',
+                cursor: 'pointer',
+                pointerEvents: 'auto',
+              }}
+            >
+              🎯 Objective
+            </button>
+          )}
+          {!showMiniMap && (
+            <button
+              onClick={() => { getAudioEngine().play('click'); setShowMiniMap(true); }}
+              className="glass-chip"
+              title="Show City Map"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '6px 12px',
+                fontSize: 11,
+                fontWeight: 800,
+                color: 'var(--glass-text)',
+                cursor: 'pointer',
+                pointerEvents: 'auto',
+              }}
+            >
+              🗺️ Map
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

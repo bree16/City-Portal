@@ -1,0 +1,196 @@
+Create a Cinematic Main Menu / Title Screen
+
+The simulator should no longer begin immediately on the Character Creator screen.
+
+Instead, create a polished, modern Title Screen that serves as the introduction to the Homeownership Simulator.
+
+This should feel like launching a real game while still maintaining a professional, educational purpose.
+
+The title screen should match the branding, colors, typography, and overall design language of the Newport News Housing Hub.
+
+Overall Feeling
+
+The first impression should make users think:
+
+"This looks like a real interactive experience."
+
+The screen should feel exciting, polished, welcoming, and memorable without becoming overly flashy.
+
+Title
+
+Create a large cinematic title.
+
+Examples:
+
+🏡 Newport News Housing Hub
+
+Path to Your First Home
+
+An Interactive Homeownership Simulator
+
+Use professional typography with subtle animations.
+
+Include a short subtitle:
+
+Learn the journey from renting to homeownership through an interactive educational experience.
+
+Background
+
+Replace the plain background with a cinematic animated scene inspired by Newport News.
+
+Possible background elements:
+
+Newport News skyline
+Waterfront
+Neighborhood homes
+Parks
+Trees gently moving
+Clouds
+Morning sunlight
+Evening city lights
+Birds flying
+Cars driving in the distance
+Families walking
+People walking dogs
+
+The background should have subtle movement.
+
+Avoid static images.
+
+Main Menu
+
+Display a clean, modern menu with options such as:
+
+▶ Play
+
+👤 Continue (if a saved game exists)
+
+🎮 Character Creator
+
+⚙ Settings
+
+🏆 Achievements
+
+📖 How to Play
+
+💾 Load Game
+
+🎵 Audio
+
+❓ About the Simulator
+
+🚪 Exit to Housing Hub
+
+Only enable features that are already implemented. If a feature is not available yet, display it as disabled or hide it until it exists.
+
+Play Button
+
+The Play button should be the largest and most noticeable element.
+
+Selecting Play should begin the player's journey and transition smoothly into the Character Creator.
+
+Character creation should become part of the onboarding process instead of the first screen users see.
+
+About the Simulator
+
+Include a short explanation.
+
+Example:
+
+"This interactive simulator helps first-time homebuyers learn about budgeting, credit, home shopping, mortgages, closing, and homeownership through a fun, guided experience."
+
+Keep it concise.
+
+Animated Background
+
+The background should feel alive.
+
+Examples:
+
+Clouds slowly moving
+Trees gently swaying
+Water shimmering
+Soft lighting changes
+Birds flying occasionally
+Slow camera movement
+
+Animations should remain subtle and not distract from the menu.
+
+Music & Audio
+
+Play calm, welcoming background music that reflects optimism and community.
+
+Include subtle ambient sounds such as:
+
+Birds
+Breeze
+Waterfront ambience
+Neighborhood sounds
+
+Allow players to mute audio in Settings.
+
+Smooth Transitions
+
+Transitions should feel polished.
+
+Examples:
+
+Fade in when launching the simulator.
+Smooth camera movement.
+Fade between menu selections.
+Elegant transition into Character Creation.
+Fade into the first stage after customization.
+
+Avoid abrupt screen changes.
+
+Character Creator Flow
+
+Do not launch directly into character creation.
+
+The new flow should be:
+
+Title Screen
+
+↓
+
+Play
+
+↓
+
+Brief Introduction
+
+↓
+
+Character Creator
+
+↓
+
+Stage 1 – Renting
+
+This creates a more natural onboarding experience.
+
+Save System
+
+If a player has already started the simulator:
+
+The title screen should show:
+
+▶ Continue Journey
+
+instead of forcing them to start over.
+
+Also provide:
+
+New Game
+
+This should reset all progress after confirmation.
+
+Branding
+
+Use the Newport News Housing Hub branding throughout.
+
+The title screen should immediately communicate that this is an official educational experience connected to the Housing Hub.
+
+Maintain consistent colors, typography, icons, and visual style with the rest of the website.
+
+Overall Goal

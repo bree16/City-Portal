@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Html } from '@react-three/drei';
+import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChrome';
 import { InteractionZone } from '@/components/InteractionZone';
 import { SceneObstacles } from '@/components/SceneObstacles';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
@@ -28,6 +30,7 @@ const LANDLORD: NPCDef = {
 };
 
 export default function ApartmentScene() {
+  const [panelOpen, setPanelOpen] = useState(true);
   const {
     openDialogue,
     completedInteractions,
@@ -331,7 +334,11 @@ export default function ApartmentScene() {
 
       {/* Streamlined action panel */}
       <Html position={[0, 4.0, 4.5]} center distanceFactor={14}>
+        {!panelOpen ? (
+          <ScenePanelReopen onOpen={() => setPanelOpen(true)} label="📋 Stage 1 Steps" />
+        ) : (
         <div style={{
+          position: 'relative',
           background: 'rgba(9,7,10,0.96)',
           borderRadius: 0,
           padding: '18px 22px',
@@ -342,6 +349,7 @@ export default function ApartmentScene() {
           border: '1px solid rgba(255,255,255,0.12)',
           boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
         }}>
+          <ScenePanelClose onClose={() => setPanelOpen(false)} title="Hide Steps" />
           <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 4, color: '#ffea00' }}>
             Stage 1 — Getting Ready
           </div>
@@ -417,6 +425,7 @@ export default function ApartmentScene() {
             </div>
           )}
         </div>
+        )}
       </Html>
     </group>
   );

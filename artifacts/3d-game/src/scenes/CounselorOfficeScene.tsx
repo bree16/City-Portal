@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Html } from '@react-three/drei';
+import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChrome';
 import { InteractionZone } from '@/components/InteractionZone';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
@@ -31,6 +33,7 @@ const TASKS = [
 ];
 
 export default function CounselorOfficeScene() {
+  const [panelOpen, setPanelOpen] = useState(true);
   const { openDialogue, completedInteractions, setStage, setTransitioning, addAchievement } =
     useGameStore();
 
@@ -251,7 +254,11 @@ export default function CounselorOfficeScene() {
 
       {/* Task checklist panel */}
       <Html position={[-4, 4, 4]} center distanceFactor={15}>
+        {!panelOpen ? (
+          <ScenePanelReopen onOpen={() => setPanelOpen(true)} label="📋 Task Checklist" />
+        ) : (
         <div style={{
+          position: 'relative',
           background: 'rgba(9,7,10,0.96)',
           borderRadius: 0, padding: '18px 20px', minWidth: 300,
           color: '#fff', fontFamily: 'var(--display-font)',
@@ -259,6 +266,7 @@ export default function CounselorOfficeScene() {
           border: '1px solid rgba(255,255,255,0.12)',
           boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
         }}>
+          <ScenePanelClose onClose={() => setPanelOpen(false)} title="Hide Checklist" />
           <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 2, color: '#ffea00' }}>
             Getting Ready to Buy
           </div>
@@ -298,6 +306,7 @@ export default function CounselorOfficeScene() {
             </div>
           )}
         </div>
+        )}
       </Html>
     </group>
   );

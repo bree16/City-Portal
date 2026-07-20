@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Html } from '@react-three/drei';
+import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChrome';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
 import { useGameStore } from '@/store/gameStore';
@@ -26,6 +27,7 @@ const SELLER: NPCDef = {
 export default function NegotiationScene() {
   const { selectedHomeId, openDialogue, setStage, setTransitioning, updateSavings, addAchievement } = useGameStore();
   const home = homes.find((h) => h.id === selectedHomeId) ?? homes[0];
+  const [panelOpen, setPanelOpen] = useState(true);
   const [offerPct, setOfferPct] = useState(100);
   const [hasInspection, setHasInspection] = useState(true);
   const [outcome, setOutcome] = useState<'accepted' | 'counter' | 'rejected' | 'competing' | null>(null);
@@ -178,11 +180,16 @@ export default function NegotiationScene() {
 
       {/* Offer panel */}
       <Html position={[0, 4.5, 4.5]} center distanceFactor={15}>
+        {!panelOpen ? (
+          <ScenePanelReopen onOpen={() => setPanelOpen(true)} label="🤝 Your Offer" />
+        ) : (
         <div style={{
+          position: 'relative',
           background: 'rgba(9,7,10,0.97)', borderRadius: 0, padding: '20px 22px', minWidth: 360,
           color: '#fff', fontFamily: 'var(--display-font)', backdropFilter: 'blur(12px)',
           border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
         }}>
+          <ScenePanelClose onClose={() => setPanelOpen(false)} title="Hide Offer" />
           <div style={{ fontSize: 15, fontWeight: 800, marginBottom: 4, color: '#ffea00' }}>Your Offer</div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', marginBottom: 18 }}>
             {home.name} — Listed at ${home.price.toLocaleString()}
@@ -254,6 +261,7 @@ export default function NegotiationScene() {
             </div>
           )}
         </div>
+        )}
       </Html>
     </group>
   );

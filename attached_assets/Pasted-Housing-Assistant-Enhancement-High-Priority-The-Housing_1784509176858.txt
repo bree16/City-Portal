@@ -1,0 +1,262 @@
+Housing Assistant Enhancement (High Priority)
+
+The Housing Assistant currently does not understand much of the website's content.
+
+Instead of defaulting to:
+
+"I'm having trouble answering that right now. Please contact a housing counselor..."
+
+the assistant should actively use the information already available throughout the website.
+
+The Housing Assistant should function as a knowledgeable virtual guide for the entire Housing Hub.
+
+Build a Knowledge Base
+
+The assistant should automatically use information from every page of the website as its knowledge source.
+
+This includes, but is not limited to:
+
+Home page
+Buy
+Rent
+Neighborhoods
+Housing Journey
+Why Newport News
+Resident Services
+Resources
+Community Partners
+Events
+Success Stories
+Contact
+Homeownership Simulator
+Program Eligibility Quiz
+Affordability Calculator
+
+Whenever new content is added to the website, the assistant should automatically include that content in its searchable knowledge base without requiring manual updates.
+
+Dynamic Knowledge
+
+The assistant should not rely on a hardcoded list of responses.
+
+Instead:
+
+Read page content.
+Index headings.
+Index descriptions.
+Index FAQs.
+Index service cards.
+Index buttons.
+Index program descriptions.
+Index resource sections.
+
+When users ask questions, search the website content first before falling back to a generic response.
+
+Understand Website Features
+
+The assistant should know about every feature that exists.
+
+Examples:
+
+Housing Journey
+
+Eligibility Quiz
+
+Affordability Calculator
+
+Homeownership Simulator
+
+Resident Services
+
+Neighborhood Explorer
+
+Community Partners
+
+Events
+
+Resources
+
+Why Newport News
+
+If users ask:
+
+"What is the simulator?"
+
+or
+
+"How do I use the affordability calculator?"
+
+the assistant should explain those features and provide a direct link.
+
+Resident Services Knowledge
+
+The assistant should answer questions about all resident services.
+
+Examples:
+
+Water utilities
+
+Trash collection
+
+Recycling
+
+Transit
+
+Jobs
+
+Pet services
+
+Libraries
+
+Schools
+
+Health resources
+
+Government services
+
+DMV
+
+Community events
+
+Emergency contacts
+
+Voting
+
+Permits
+
+If information exists on the website, the assistant should summarize it.
+
+Context Awareness
+
+The assistant should understand different ways users ask the same question.
+
+For example:
+
+Pets
+
+Dog
+
+Dogs
+
+Cats
+
+Animal
+
+Pet License
+
+Dog Park
+
+Pet Adoption
+
+Animal Shelter
+
+All should lead to the Pet Services section.
+
+Likewise:
+
+Water Bill
+
+Utilities
+
+Water Service
+
+Start Water
+
+Pay Water
+
+Utility Account
+
+All should route to Water & Utilities.
+
+The assistant should recognize common synonyms and related phrases.
+
+Intelligent Search
+
+When answering questions:
+
+Search the website's content.
+Find the most relevant section.
+Summarize the information.
+Offer a button such as:
+
+Go to Pet Services
+
+Go to Utilities
+
+View Resident Services
+
+Learn More
+
+Apply Now
+
+Take the Eligibility Quiz
+
+The assistant should help users navigate, not just answer.
+
+Smart Suggestions
+
+After answering, suggest related resources.
+
+Example:
+
+User:
+
+"I have a dog."
+
+Assistant:
+
+"You may also be interested in:
+
+🐶 Pet Services
+
+🌳 Dog Parks
+
+🏠 Pet-Friendly Neighborhoods
+
+📋 Pet Licensing
+
+🏡 Pet-Friendly Rentals"
+
+This makes the assistant feel helpful and conversational.
+
+Search Everything
+
+The assistant should search all available website content, including:
+
+Page titles
+Card titles
+Paragraphs
+FAQ sections
+Resources
+Buttons
+Neighborhood descriptions
+Service cards
+Event listings
+
+The goal is to answer questions using information already available on the website.
+
+Only Fall Back When Necessary
+
+The current fallback response appears too frequently.
+
+Do not display the generic "Please contact a housing counselor" message unless:
+
+The requested information truly does not exist anywhere on the website.
+The user asks for personalized legal, financial, or housing advice beyond the scope of the site.
+
+For general website questions, always try to answer first.
+
+Conversation Memory
+
+Within a single conversation, remember what the user has already asked.
+
+For example:
+
+User:
+
+"I have two dogs."
+
+Later:
+
+"What parks should I visit?"
+
+The assistant should understand the earlier context and suggest dog-friendly parks without requiring the user to repeat themselves.

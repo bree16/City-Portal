@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Html } from '@react-three/drei';
+import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChrome';
 import { InteractionZone } from '@/components/InteractionZone';
 import { NPCCharacter } from '@/components/characters/NPCCharacter';
 import type { NPCDef } from '@/components/characters/NPCCharacter';
@@ -43,6 +44,7 @@ export default function BankScene() {
   } = useGameStore();
 
   const [approved, setApproved] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(true);
   // Only need 2 of 4 docs
   const docsSubmitted = DOCS.filter((d) => completedInteractions.includes(d.id)).length;
   const enoughDocs = docsSubmitted >= 2;
@@ -242,7 +244,11 @@ export default function BankScene() {
 
       {/* Application status panel */}
       <Html position={[6, 4.5, 2]} center distanceFactor={15}>
+        {!panelOpen ? (
+          <ScenePanelReopen onOpen={() => setPanelOpen(true)} label="📋 Mortgage Application" />
+        ) : (
         <div style={{
+          position: 'relative',
           background: 'rgba(9,7,10,0.97)',
           borderRadius: 0, padding: '18px 22px', minWidth: 300,
           color: '#fff', fontFamily: 'var(--display-font)',
@@ -250,6 +256,7 @@ export default function BankScene() {
           border: '1px solid rgba(255,255,255,0.12)',
           boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
         }}>
+          <ScenePanelClose onClose={() => setPanelOpen(false)} title="Hide Application" />
           <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 2, color: '#ffea00' }}>
             Mortgage Application
           </div>
@@ -307,6 +314,7 @@ export default function BankScene() {
             </div>
           )}
         </div>
+        )}
       </Html>
     </group>
   );
