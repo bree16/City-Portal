@@ -1,29 +1,50 @@
 import { Router, type IRouter } from "express";
 import { openai } from "@workspace/integrations-openai-ai-server";
+import { retrieveContext, KNOWN_ROUTES } from "../lib/siteKnowledge";
 
 const router: IRouter = Router();
 
-const SYSTEM_PROMPT = `You are the Newport News Housing Assistant, a friendly and knowledgeable chat helper on the Newport News Housing Hub website. Answer questions using the website's information below. Keep answers concise (2-4 sentences), warm, and practical. Use plain language.
+function buildSystemPrompt(context: string): string {
+  return `You are the Newport News Housing Hub's virtual guide — a friendly, knowledgeable assistant on the Housing Hub website. Your job is to answer questions using the SITE CONTENT provided below and to help users navigate the site.
 
-WEBSITE KNOWLEDGE:
-- The Housing Hub is the digital front door to Newport News, Virginia for housing and city services.
-- Pages: Buy (first-time homebuyer roadmap, affordability calculator), Rent (rental listings and renter resources), Neighborhoods (explore Newport News neighborhoods), Assistance (down payment and housing assistance programs), Journey (step-by-step homebuying journey), Why Newport News, Partners, Quiz (find your path), Resources, Events, Success Stories, Contact, Services (Resident Services Hub), Simulator (play the "Path to Your First Home" game).
-- Homebuying help: free HUD-approved housing counselors, homebuyer education courses, affordability calculator, down payment assistance.
-- Assistance programs: Virginia Housing grants, NNRHA down payment assistance, federal HOME funds. Most programs require meeting income limits (typically 80% of area median income), Newport News residency, and stable income.
-- Counselors: available Monday-Friday 8am-5pm at (757) 933-2311 or housing@newportnewsva.gov. Free counseling sessions can be requested via the Contact page.
-- Resident Services Hub (/services): water & utilities, trash & recycling (schedules, bulk pickup), public transportation (bus routes, park-and-ride), pet services (licensing, adoption, dog parks), jobs & careers, public safety, transportation & DMV, government services (taxes, permits, voting, records), library & learning, health & wellness, schools & education, community events. Quick actions include Pay Utility Bill, Report an Issue, Apply for City Jobs, Find My Trash Day, Register a Pet, Find Transit, Upcoming Events, Emergency Contacts.
-- Simulator (/simulator): a free 3D game where players pick a career, save money, build credit, tour homes, negotiate, and close on their first home in a virtual Newport News. Great for learning the homebuying process hands-on.
+CORE RULES:
+- ALWAYS try to answer from the SITE CONTENT below before using any fallback.
+- Only use the "contact a counselor" fallback when the information truly is not on the site, or when the user needs personalized legal or financial advice. In that case, give the phone (757) 933-2311, the email housing@newportnewsva.gov, and point them to the Contact page (/contact).
+- Never invent program amounts, rates, or eligibility details that are not in the site content.
+- Keep replies concise and warm: 2-4 sentences, plain text only (no markdown, asterisks, or bullet lists).
 
-RULES:
-- Only answer using the knowledge above and general, safe homebuying/renting guidance.
-- If you don't know the answer, are unsure, or the question needs personalized/legal/financial specifics, say so honestly and recommend requesting an agent: suggest calling (757) 933-2311, emailing housing@newportnewsva.gov, or using the Contact page to connect with a housing counselor.
-- When relevant, point the user to the specific page on the site (e.g. "Check the Assistance page").
-- Never invent program amounts, rates, or eligibility details not listed here.
-- Respond in plain text only — no markdown, no asterisks, no bullet lists.`;
+SITE FEATURES YOU CAN GUIDE PEOPLE TO (use these exact routes):
+- Simulator (/simulator): free 3D game "Path to Your First Home" to learn homebuying hands-on.
+- Eligibility Quiz (/quiz): find your path and which programs you may qualify for.
+- Affordability Calculator (on the Buy page, /buy): estimate what home you can afford.
+- Housing Journey (/journey): step-by-step homebuying journey.
+- Resident Services (/services): everyday city services (water, trash, transit, pets, jobs, permits, and more).
+- Neighborhood Explorer (/neighborhoods): explore Newport News neighborhoods.
+- Resources (/resources), Events (/events), Partners (/partners), Why Newport News (/why-newport-news), Assistance (/assistance), Rent (/rent), Contact (/contact).
+
+SITE CONTENT (retrieved for this question):
+${context || "(No specific page content matched; rely on the site features list above and recommend the most relevant page.)"}
+
+OUTPUT FORMAT:
+Respond with STRICT JSON matching this shape, and nothing else:
+{
+  "reply": "your concise plain-text answer",
+  "links": [{"label": "short action label", "href": "/internal-route"}],
+  "suggestions": ["short follow-up question", "another related topic"]
+}
+- "links": 0 to 3 items, internal routes only (e.g. {"label":"Go to Pet Services","href":"/services"}). Only use routes that exist on the site. Omit links if none are relevant.
+- "suggestions": 0 to 4 short related follow-up questions or topics the user might ask next.
+- Do not include any text outside the JSON object.`;
+}
 
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
+}
+
+interface AssistantLink {
+  label: string;
+  href: string;
 }
 
 // Simple in-memory rate limiter: max 20 requests per 5 minutes per IP
@@ -48,6 +69,82 @@ function isRateLimited(ip: string): boolean {
   return bucket.count > RATE_LIMIT;
 }
 
+const KNOWN_ROUTE_SET = new Set(KNOWN_ROUTES);
+
+const FALLBACK_REPLY =
+  "I'm not sure about that one. You can reach a housing counselor at (757) 933-2311 or through our Contact page.";
+
+/**
+ * Defensively parse the model output into { reply, links, suggestions }.
+ * Falls back to treating raw text as the reply if JSON parsing fails.
+ * Whitelists hrefs to known internal routes and caps counts/lengths.
+ */
+function parseAssistantOutput(raw: string): {
+  reply: string;
+  links: AssistantLink[];
+  suggestions: string[];
+} {
+  const trimmed = (raw ?? "").trim();
+  let parsed: unknown = null;
+
+  if (trimmed) {
+    try {
+      parsed = JSON.parse(trimmed);
+    } catch {
+      // Try to salvage a JSON object embedded in surrounding text.
+      const start = trimmed.indexOf("{");
+      const end = trimmed.lastIndexOf("}");
+      if (start !== -1 && end > start) {
+        try {
+          parsed = JSON.parse(trimmed.slice(start, end + 1));
+        } catch {
+          parsed = null;
+        }
+      }
+    }
+  }
+
+  if (!parsed || typeof parsed !== "object") {
+    return { reply: trimmed || FALLBACK_REPLY, links: [], suggestions: [] };
+  }
+
+  const obj = parsed as Record<string, unknown>;
+
+  const reply =
+    typeof obj["reply"] === "string" && obj["reply"].trim().length > 0
+      ? obj["reply"].trim().slice(0, 2000)
+      : trimmed && !trimmed.startsWith("{")
+        ? trimmed.slice(0, 2000)
+        : FALLBACK_REPLY;
+
+  const links: AssistantLink[] = [];
+  if (Array.isArray(obj["links"])) {
+    for (const item of obj["links"]) {
+      if (links.length >= 3) break;
+      if (!item || typeof item !== "object") continue;
+      const li = item as Record<string, unknown>;
+      const label = typeof li["label"] === "string" ? li["label"].trim() : "";
+      const href = typeof li["href"] === "string" ? li["href"].trim() : "";
+      if (!label || !href) continue;
+      // Whitelist: internal routes only.
+      if (!KNOWN_ROUTE_SET.has(href)) continue;
+      links.push({ label: label.slice(0, 60), href });
+    }
+  }
+
+  const suggestions: string[] = [];
+  if (Array.isArray(obj["suggestions"])) {
+    for (const s of obj["suggestions"]) {
+      if (suggestions.length >= 4) break;
+      if (typeof s !== "string") continue;
+      const clean = s.trim();
+      if (clean) suggestions.push(clean.slice(0, 120));
+    }
+  }
+
+  return { reply, links, suggestions };
+}
+
 router.post("/assistant/chat", async (req, res) => {
   try {
     const ip = req.ip ?? "unknown";
@@ -56,6 +153,8 @@ router.post("/assistant/chat", async (req, res) => {
         error: "rate_limited",
         reply:
           "You've sent quite a few messages — please wait a few minutes, or call us at (757) 933-2311 for immediate help.",
+        links: [],
+        suggestions: [],
       });
       return;
     }
@@ -85,22 +184,35 @@ router.post("/assistant/chat", async (req, res) => {
           : { role: "user" as const, content };
       });
 
+    // Retrieve relevant site content based on the latest user question
+    // (plus a little recent context for follow-ups like "what parks?").
+    const recentUserText = history
+      .slice(-4)
+      .map((m) => m.content)
+      .join(" ");
+    const context = retrieveContext(recentUserText, 6000, 6);
+
     const completion = await openai.chat.completions.create({
       model: "gpt-5.6-luna",
       max_completion_tokens: 8192,
-      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...history],
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: buildSystemPrompt(context) },
+        ...history,
+      ],
     });
 
-    const reply =
-      completion.choices[0]?.message?.content?.trim() ||
-      "I'm not sure about that one. You can reach a housing counselor at (757) 933-2311 or through our Contact page.";
-    res.json({ reply });
+    const raw = completion.choices[0]?.message?.content ?? "";
+    const { reply, links, suggestions } = parseAssistantOutput(raw);
+    res.json({ reply, links, suggestions });
   } catch (err) {
     req.log?.error?.(err);
     res.status(500).json({
       error: "assistant_unavailable",
       reply:
         "I'm having trouble answering right now. Please call us at (757) 933-2311 or visit the Contact page to reach a housing counselor.",
+      links: [],
+      suggestions: [],
     });
   }
 });
