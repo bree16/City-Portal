@@ -25,27 +25,27 @@ export default function QuizPage() {
   const back = () => { setDirection(-1); setStep(s => Math.max(0, s-1)); };
   const reset = () => { setStep(0); setAnswers(Array(7).fill('')); };
 
-  const results = [];
-  results.push({ icon: Users, name: "Free Housing Counseling", desc: "Every Newport News resident qualifies for a free session with a certified housing counselor." });
+  const results: { icon: typeof Users; name: string; desc: string; url: string }[] = [];
+  results.push({ icon: Users, name: "Free Housing Counseling", desc: "Every Newport News resident qualifies for a free session with a certified housing counselor.", url: "https://www.hud.gov/counseling" });
   if (answers[0]?.includes('renting') || answers[0]?.includes('unhoused')) {
-    results.push({ icon: Home, name: "Section 8 Voucher Program", desc: "Housing Choice Vouchers help low-income families afford private market rentals." });
-    results.push({ icon: Shield, name: "Emergency Rental Assistance", desc: "Immediate help for residents facing eviction or inability to pay rent due to hardship." });
+    results.push({ icon: Home, name: "Section 8 Voucher Program", desc: "Housing Choice Vouchers help low-income families afford private market rentals.", url: "https://nnrha.net/" });
+    results.push({ icon: Shield, name: "Emergency Rental Assistance", desc: "Immediate help for residents facing eviction or inability to pay rent due to hardship.", url: "https://www.dhcd.virginia.gov/homelessnesshousing-crisis-resources" });
   }
   if (answers[1] === "Yes, I've never owned a home") {
-    results.push({ icon: Home, name: "First-Time Homebuyer Program", desc: "Special loan products and grants designed specifically for first-time buyers in Virginia." });
-    results.push({ icon: DollarSign, name: "Down Payment Assistance", desc: "Get help covering your down payment and closing costs through city and state programs." });
+    results.push({ icon: Home, name: "First-Time Homebuyer Program", desc: "Special loan products and grants designed specifically for first-time buyers in Virginia.", url: "https://www.virginiahousing.com/homebuyers" });
+    results.push({ icon: DollarSign, name: "Down Payment Assistance", desc: "Get help covering your down payment and closing costs through city and state programs.", url: "https://www.virginiahousing.com/homebuyers/down-payment-assistance-grant" });
   }
   if (answers[2] === "Under $30,000" || answers[2] === "$30,000 – $50,000") {
-    results.push({ icon: DollarSign, name: "Virginia Housing Grants", desc: "State-funded grants for low-to-moderate income residents pursuing homeownership." });
-    results.push({ icon: Users, name: "Community Action Programs", desc: "Local agencies providing wrap-around support including housing, utilities, and food assistance." });
+    results.push({ icon: DollarSign, name: "Virginia Housing Grants", desc: "State-funded grants for low-to-moderate income residents pursuing homeownership.", url: "https://www.virginiahousing.com/" });
+    results.push({ icon: Users, name: "Community Action Programs", desc: "Local agencies providing wrap-around support including housing, utilities, and food assistance.", url: "https://www.hrcapinc.org/" });
   }
   if (answers[4]?.includes('veteran') || answers[4]?.includes('active')) {
-    results.push({ icon: Shield, name: "VA Home Loan Program", desc: "Zero down payment loans for eligible veterans and active duty service members." });
-    results.push({ icon: Shield, name: "Veteran Housing Assistance", desc: "Specialized programs for veterans including transitional housing and VA-backed counseling." });
+    results.push({ icon: Shield, name: "VA Home Loan Program", desc: "Zero down payment loans for eligible veterans and active duty service members.", url: "https://www.va.gov/housing-assistance/home-loans/" });
+    results.push({ icon: Shield, name: "Veteran Housing Assistance", desc: "Specialized programs for veterans including transitional housing and VA-backed counseling.", url: "https://www.va.gov/homeless/nationalcallcenter.asp" });
   }
   if (answers[6] === "Repair my home") {
-    results.push({ icon: Hammer, name: "Home Repair Assistance", desc: "City programs to help low-income homeowners make critical home repairs." });
-    results.push({ icon: Hammer, name: "Weatherization Program", desc: "Free energy efficiency improvements for income-qualifying Newport News homeowners." });
+    results.push({ icon: Hammer, name: "Home Repair Assistance", desc: "City programs to help low-income homeowners make critical home repairs.", url: "https://nnrha.net/" });
+    results.push({ icon: Hammer, name: "Weatherization Program", desc: "Free energy efficiency improvements for income-qualifying homeowners via Hampton Roads Community Action.", url: "https://www.hrcapinc.org/" });
   }
 
   const variants = {
@@ -121,7 +121,7 @@ export default function QuizPage() {
                           <div className="font-semibold text-primary mb-1">{r.name}</div>
                           <div className="text-sm text-muted-foreground">{r.desc}</div>
                         </div>
-                        <Link href="/resources"><button className="text-accent text-sm font-medium hover:underline shrink-0">Learn More</button></Link>
+                        <a href={r.url} target="_blank" rel="noopener noreferrer" className="text-accent text-sm font-medium hover:underline shrink-0">Apply / Learn More</a>
                       </div>
                     ))}
                   </div>

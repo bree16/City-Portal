@@ -75,13 +75,13 @@ export default function BuyPage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className={`relative flex flex-col sm:flex-row items-center gap-8 ${i % 2 === 0 ? 'sm:flex-row-reverse' : ''}`}
+                  className={`relative flex flex-row items-start sm:items-center gap-5 sm:gap-8 ${i % 2 === 0 ? 'sm:flex-row-reverse' : ''}`}
                 >
                   <div className={`flex-1 w-full ${i % 2 === 0 ? 'sm:text-left' : 'sm:text-right'} text-left`}>
-                    <h3 className="text-2xl font-bold text-primary mb-2">{s.title}</h3>
-                    <p className="text-muted-foreground text-lg">{s.desc}</p>
+                    <h3 className="text-xl sm:text-2xl font-bold text-primary mb-2">{s.title}</h3>
+                    <p className="text-muted-foreground text-base sm:text-lg">{s.desc}</p>
                   </div>
-                  <div className="shrink-0 w-16 h-16 rounded-full bg-primary text-white font-extrabold text-2xl flex items-center justify-center relative z-10 shadow-lg border-4 border-white">
+                  <div className="order-first sm:order-none shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-primary text-white font-extrabold text-xl sm:text-2xl flex items-center justify-center relative z-10 shadow-lg border-4 border-white">
                     {s.step}
                   </div>
                   <div className="flex-1 hidden sm:block"></div>

@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react';
+import { toPng } from 'html-to-image';
 import { useGameStore } from '@/store/gameStore';
 import { homes } from '@/data/homes';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -64,6 +66,36 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
   const home = homes.find((h) => h.id === selectedHomeId) ?? homes[0];
   const creditGain = creditScore - INITIAL_CREDIT;
   const earnedAchievements = achievements.filter((a) => ACHIEVEMENT_META[a]);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState(false);
+
+  const handleDownload = async () => {
+    if (!cardRef.current || downloading) return;
+    setDownloading(true);
+    setDownloadError(false);
+    const el = cardRef.current;
+    const prevTransform = el.style.transform;
+    try {
+      // Neutralize any in-flight entry animation transform so the capture is never scaled/offset
+      el.style.transform = 'none';
+      const dataUrl = await toPng(el, {
+        pixelRatio: 2,
+        backgroundColor: '#110e15',
+        filter: (node) => !(node instanceof HTMLElement && node.dataset.noExport !== undefined),
+      });
+      const link = document.createElement('a');
+      link.download = 'my-newport-news-homebuying-journey.png';
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Failed to export results card:', err);
+      setDownloadError(true);
+    } finally {
+      el.style.transform = prevTransform;
+      setDownloading(false);
+    }
+  };
 
   const handlePlayAgain = () => {
     resetGame();
@@ -87,6 +119,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
           }}
         >
           <motion.div
+            ref={cardRef}
             className="glass-panel-strong glass-sheen"
             initial={{ scale: 0.85, y: 40, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -188,20 +221,30 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                 </div>
               )}
 
-              {/* Screenshot tip */}
-              <div style={{
-                background: 'rgba(20,184,161,0.12)', borderRadius: 0, padding: '8px 14px',
-                border: '1px solid rgba(20,184,161,0.25)', marginBottom: 18,
-                display: 'flex', alignItems: 'center', gap: 8,
-              }}>
+              {/* Share */}
+              <button
+                data-no-export
+                onClick={handleDownload}
+                disabled={downloading}
+                className="glass-btn-primary"
+                style={{
+                  width: '100%', padding: '12px 16px', fontWeight: 700, fontSize: 13,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  marginBottom: 10, cursor: downloading ? 'wait' : 'pointer',
+                }}
+                data-testid="button-download-card"
+              >
                 <GameIcon name="camera" size={16} />
-                <span style={{ fontSize: 11, color: 'var(--glass-text-dim)', lineHeight: 1.4 }}>
-                  Take a screenshot to share your homebuying journey!
-                </span>
-              </div>
+                {downloading ? 'Creating your image…' : 'Download My Results Card'}
+              </button>
+              {downloadError && (
+                <div data-no-export style={{ fontSize: 11, color: '#f87171', marginBottom: 10, textAlign: 'center' }}>
+                  Something went wrong creating the image — try a regular screenshot instead.
+                </div>
+              )}
 
               {/* CTAs */}
-              <div style={{ display: 'flex', gap: 10 }}>
+              <div data-no-export style={{ display: 'flex', gap: 10 }}>
                 <button
                   onClick={handlePlayAgain}
                   className="glass-btn"
