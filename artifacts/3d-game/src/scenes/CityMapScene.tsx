@@ -143,7 +143,7 @@ function BuildingExterior({ b, status, onEnter }: {
         <FlowerBed position={[-1.6, 0, 3.3]} w={1.8} d={0.6} />
         <FlowerBed position={[1.6, 0, 3.3]} w={1.8} d={0.6} />
         <Html position={[0, 3.5, 0]} center distanceFactor={14}>
-          <div style={{ background: 'rgba(13,43,94,0.88)', padding: '4px 10px', borderRadius: 8, fontSize: 11, fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', fontFamily: 'Inter,sans-serif' }}>
+          <div style={{ background: 'rgba(9,7,10,0.88)', padding: '4px 10px', borderRadius: 0, fontSize: 11, fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', fontFamily: 'var(--display-font)' }}>
             {b.icon} {b.name}
           </div>
         </Html>
@@ -214,12 +214,12 @@ function BuildingExterior({ b, status, onEnter }: {
         <div
           onClick={() => { if (!isLocked && b.hasInterior) onEnter(b.id); }}
           style={{
-            background: isLocked ? 'rgba(40,40,40,0.9)' : isCurrent ? 'rgba(212,168,67,0.95)' : 'rgba(13,43,94,0.9)',
+            background: isLocked ? 'rgba(40,40,40,0.9)' : isCurrent ? 'rgba(255,234,0,0.95)' : 'rgba(9,7,10,0.9)',
             padding: '5px 12px',
-            borderRadius: 8,
+            borderRadius: 0,
             fontSize: 11,
             fontWeight: 700,
-            color: isLocked ? '#888' : isCurrent ? '#0D2B5E' : '#fff',
+            color: isLocked ? '#888' : isCurrent ? '#09070a' : '#fff',
             whiteSpace: 'nowrap',
             fontFamily: 'Inter,sans-serif',
             border: `1px solid ${isLocked ? '#555' : isCurrent ? '#F0C050' : 'rgba(255,255,255,0.2)'}`,

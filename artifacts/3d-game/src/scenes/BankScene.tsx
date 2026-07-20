@@ -130,7 +130,7 @@ export default function BankScene() {
         <meshStandardMaterial color="#0D2B5E" emissive="#0D2B5E" emissiveIntensity={0.3} roughness={0.5} />
       </mesh>
       <Html position={[0, 3.6, -7.7]} center distanceFactor={16}>
-        <div style={{ color: '#D4A843', fontWeight: 800, fontSize: 14, whiteSpace: 'nowrap', fontFamily: 'Inter, sans-serif' }}>
+        <div style={{ color: '#ffea00', fontWeight: 800, fontSize: 14, whiteSpace: 'nowrap', fontFamily: 'var(--display-font)' }}>
           🏛 Newport News Community Bank
         </div>
       </Html>
@@ -197,9 +197,9 @@ export default function BankScene() {
           </mesh>
           <Html position={[0, 0.34, 0]} center distanceFactor={10}>
             <div onClick={() => { if (!completedInteractions.includes(doc.id)) completeInteraction(doc.id); }} style={{
-              background: completedInteractions.includes(doc.id) ? '#4ade80' : '#0D2B5E',
-              color: completedInteractions.includes(doc.id) ? '#0D2B5E' : '#fff',
-              fontSize: 10, padding: '3px 8px', borderRadius: 6,
+              background: completedInteractions.includes(doc.id) ? '#4ade80' : '#09070a',
+              color: completedInteractions.includes(doc.id) ? '#09070a' : '#fff',
+              fontSize: 10, padding: '3px 8px', borderRadius: 0,
               whiteSpace: 'nowrap', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif',
             }}>
               {completedInteractions.includes(doc.id) ? '✓ ' : ''}{doc.label}
@@ -231,14 +231,14 @@ export default function BankScene() {
       {/* Application status panel */}
       <Html position={[6, 4.5, 2]} center distanceFactor={15}>
         <div style={{
-          background: 'rgba(13,43,94,0.97)',
-          borderRadius: 18, padding: '18px 22px', minWidth: 300,
-          color: '#fff', fontFamily: 'Inter, sans-serif',
+          background: 'rgba(9,7,10,0.97)',
+          borderRadius: 0, padding: '18px 22px', minWidth: 300,
+          color: '#fff', fontFamily: 'var(--display-font)',
           backdropFilter: 'blur(12px)',
           border: '1px solid rgba(255,255,255,0.12)',
           boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
         }}>
-          <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 2, color: '#D4A843' }}>
+          <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 2, color: '#ffea00' }}>
             Mortgage Application
           </div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 14 }}>
@@ -248,7 +248,7 @@ export default function BankScene() {
           {DOCS.map((d) => (
             <div key={d.id} style={{
               display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8,
-              padding: '8px 12px', borderRadius: 10,
+              padding: '8px 12px', borderRadius: 0,
               background: completedInteractions.includes(d.id) ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.05)',
               border: completedInteractions.includes(d.id) ? '1px solid rgba(74,222,128,0.4)' : '1px solid rgba(255,255,255,0.08)',
               fontSize: 12,
@@ -261,8 +261,8 @@ export default function BankScene() {
 
           {enoughDocs && !approved && (
             <button onClick={handleApprove} style={{
-              marginTop: 12, width: '100%', padding: '12px', borderRadius: 12,
-              background: '#0A8F7E', color: '#fff', border: 'none',
+              marginTop: 12, width: '100%', padding: '12px', borderRadius: 0,
+              background: '#00f0ff', color: '#fff', border: 'none',
               cursor: 'pointer', fontWeight: 800, fontSize: 13, fontFamily: 'Inter, sans-serif',
             }}>
               Submit Application →
@@ -272,7 +272,7 @@ export default function BankScene() {
           {approved && (
             <div>
               <div style={{
-                marginTop: 14, padding: '14px', borderRadius: 12,
+                marginTop: 14, padding: '14px', borderRadius: 0,
                 background: 'rgba(74,222,128,0.12)',
                 border: '1px solid rgba(74,222,128,0.4)',
               }}>
@@ -285,10 +285,10 @@ export default function BankScene() {
                 </div>
               </div>
               <button onClick={handleAdvance} style={{
-                marginTop: 12, width: '100%', padding: '12px', borderRadius: 12,
-                background: '#D4A843', color: '#0D2B5E', border: 'none',
+                marginTop: 12, width: '100%', padding: '12px', borderRadius: 0,
+                background: '#ffea00', color: '#09070a', border: 'none',
                 cursor: 'pointer', fontWeight: 800, fontSize: 13, fontFamily: 'Inter, sans-serif',
-                boxShadow: '0 4px 20px rgba(212,168,67,0.4)',
+                boxShadow: '0 4px 20px rgba(255,234,0,0.4)',
               }}>
                 Proceed to Closing! →
               </button>

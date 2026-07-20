@@ -42,7 +42,7 @@ export function SceneTransition() {
             position: 'fixed',
             inset: 0,
             zIndex: 50,
-            background: '#0D2B5E',
+            background: '#09070a',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -61,7 +61,7 @@ export function SceneTransition() {
               style={{
                 fontSize: 12,
                 fontWeight: 700,
-                color: '#D4A843',
+                color: '#ffea00',
                 textTransform: 'uppercase',
                 letterSpacing: 3,
                 marginBottom: 12,
@@ -83,7 +83,7 @@ export function SceneTransition() {
                   key={i}
                   animate={{ opacity: [0.3, 1, 0.3] }}
                   transition={{ repeat: Infinity, duration: 1.2, delay: i * 0.2 }}
-                  style={{ width: 8, height: 8, borderRadius: '50%', background: '#D4A843' }}
+                  style={{ width: 8, height: 8, borderRadius: '50%', background: '#ffea00' }}
                 />
               ))}
             </div>

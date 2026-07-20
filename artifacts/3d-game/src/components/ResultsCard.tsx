@@ -79,7 +79,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
           transition={{ duration: 0.4 }}
           style={{
             position: 'fixed', inset: 0, zIndex: 1000,
-            background: 'rgba(5, 15, 40, 0.92)',
+            background: 'rgba(17, 14, 21, 0.92)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             padding: '16px',
             backdropFilter: 'blur(8px)',
@@ -119,8 +119,8 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                 {/* Character */}
                 <div style={{
                   flexShrink: 0,
-                  background: 'rgba(212,168,67,0.1)',
-                  borderRadius: 16,
+                  background: 'rgba(255,234,0,0.1)',
+                  borderRadius: 0,
                   padding: '12px 10px 6px',
                   border: 'var(--glass-border-gold)',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
@@ -138,7 +138,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                     You're a Newport News Homeowner!
                   </div>
                   <div style={{
-                    background: 'rgba(10,143,126,0.14)', borderRadius: 10, padding: '8px 12px',
+                    background: 'rgba(0,240,255,0.14)', borderRadius: 0, padding: '8px 12px',
                     border: '1px solid rgba(20,184,161,0.3)',
                   }}>
                     <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--gold)' }}>{home.name}</div>
@@ -189,7 +189,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
 
               {/* Screenshot tip */}
               <div style={{
-                background: 'rgba(20,184,161,0.12)', borderRadius: 10, padding: '8px 14px',
+                background: 'rgba(20,184,161,0.12)', borderRadius: 0, padding: '8px 14px',
                 border: '1px solid rgba(20,184,161,0.25)', marginBottom: 18,
                 display: 'flex', alignItems: 'center', gap: 8,
               }}>
@@ -238,7 +238,7 @@ function StatBox({ icon, label, value, subValue, valueColor }: {
   return (
     <div style={{
       background: 'rgba(255,255,255,0.06)',
-      borderRadius: 12, padding: '12px 14px',
+      borderRadius: 0, padding: '12px 14px',
       border: '1px solid rgba(255,255,255,0.1)',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>

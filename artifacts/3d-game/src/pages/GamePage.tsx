@@ -176,7 +176,7 @@ function TourChecklist() {
   return (
     <div style={{
       position: 'fixed', top: 120, left: 12, zIndex: 32,
-      background: 'rgba(13,43,94,0.92)',
+      background: 'rgba(17,14,21,0.92)',
       border: '1px solid rgba(255,255,255,0.12)',
       borderRadius: 12, padding: '12px 14px',
       backdropFilter: 'blur(12px)',
@@ -184,7 +184,7 @@ function TourChecklist() {
       fontFamily: 'Inter, sans-serif', minWidth: 178,
       marginTop: 4,
     }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color: '#D4A843', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: '#ffea00', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
         🏠 Tour Checklist
       </div>
       {TOUR_ROOMS.map((room) => {
@@ -206,14 +206,14 @@ function TourChecklist() {
           marginTop: 8, padding: '4px 8px', borderRadius: 6,
           background: 'rgba(10,143,126,0.18)',
           border: '1px solid rgba(10,143,126,0.4)',
-          fontSize: 10, fontWeight: 700, color: '#0A8F7E', textAlign: 'center',
+          fontSize: 10, fontWeight: 700, color: '#00f0ff', textAlign: 'center',
         }}>
           ✨ Fully Inspected!
         </div>
       )}
       <button onClick={handleOffer} style={{
         marginTop: 10, width: '100%', padding: '8px', borderRadius: 8,
-        background: '#D4A843', color: '#0D2B5E', border: 'none',
+        background: '#ffea00', color: '#09070a', border: 'none',
         cursor: 'pointer', fontWeight: 800, fontSize: 11,
         fontFamily: 'Inter, sans-serif',
       }}>
@@ -321,7 +321,7 @@ export default function GamePage() {
         width: '100vw',
         height: '100dvh',
         overflow: 'hidden',
-        background: '#0D2B5E',
+        background: '#09070a',
         position: 'relative',
       }}
     >

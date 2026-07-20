@@ -148,7 +148,7 @@ export default function NegotiationScene() {
         <meshStandardMaterial color={home.color} roughness={0.8} />
       </mesh>
       <Html position={[0, 2.2, -6.7]} center distanceFactor={14}>
-        <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, fontWeight: 700, color: '#fff', textShadow: '0 1px 3px rgba(0,0,0,0.8)', textAlign: 'center' }}>
+        <div style={{ fontFamily: 'var(--display-font)', fontSize: 10, fontWeight: 700, color: '#fff', textShadow: '0 1px 3px rgba(0,0,0,0.8)', textAlign: 'center' }}>
           {home.name}
         </div>
       </Html>
@@ -179,11 +179,11 @@ export default function NegotiationScene() {
       {/* Offer panel */}
       <Html position={[0, 4.5, 4.5]} center distanceFactor={15}>
         <div style={{
-          background: 'rgba(13,43,94,0.97)', borderRadius: 18, padding: '20px 22px', minWidth: 360,
-          color: '#fff', fontFamily: 'Inter, sans-serif', backdropFilter: 'blur(12px)',
+          background: 'rgba(9,7,10,0.97)', borderRadius: 0, padding: '20px 22px', minWidth: 360,
+          color: '#fff', fontFamily: 'var(--display-font)', backdropFilter: 'blur(12px)',
           border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
         }}>
-          <div style={{ fontSize: 15, fontWeight: 800, marginBottom: 4, color: '#D4A843' }}>Your Offer</div>
+          <div style={{ fontSize: 15, fontWeight: 800, marginBottom: 4, color: '#ffea00' }}>Your Offer</div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', marginBottom: 18 }}>
             {home.name} — Listed at ${home.price.toLocaleString()}
           </div>
@@ -193,29 +193,29 @@ export default function NegotiationScene() {
               <div style={{ marginBottom: 16 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, fontSize: 12 }}>
                   <span style={{ color: 'rgba(255,255,255,0.7)' }}>Offer Amount</span>
-                  <span style={{ color: '#D4A843', fontWeight: 800 }}>${offerPrice.toLocaleString()} ({offerPct}%)</span>
+                  <span style={{ color: '#ffea00', fontWeight: 800 }}>${offerPrice.toLocaleString()} ({offerPct}%)</span>
                 </div>
                 <input type="range" min={88} max={108} value={offerPct}
                   onChange={(e) => setOfferPct(Number(e.target.value))}
-                  style={{ width: '100%', accentColor: '#D4A843' }} />
+                  style={{ width: '100%', accentColor: '#ffea00' }} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>
                   <span>Low (risky)</span><span>Above ask (competitive)</span>
                 </div>
               </div>
               <label style={{
                 display: 'flex', alignItems: 'center', gap: 10, fontSize: 12, marginBottom: 18,
-                cursor: 'pointer', padding: '10px 12px', borderRadius: 10,
-                background: hasInspection ? 'rgba(10,143,126,0.18)' : 'rgba(255,255,255,0.05)',
-                border: hasInspection ? '1px solid rgba(10,143,126,0.5)' : '1px solid rgba(255,255,255,0.1)',
+                cursor: 'pointer', padding: '10px 12px', borderRadius: 0,
+                background: hasInspection ? 'rgba(0,240,255,0.18)' : 'rgba(255,255,255,0.05)',
+                border: hasInspection ? '1px solid rgba(0,240,255,0.5)' : '1px solid rgba(255,255,255,0.1)',
               }}>
                 <input type="checkbox" checked={hasInspection} onChange={(e) => setHasInspection(e.target.checked)}
-                  style={{ accentColor: '#0A8F7E', width: 16, height: 16 }} />
+                  style={{ accentColor: '#00f0ff', width: 16, height: 16 }} />
                 <span>Include Inspection Contingency</span>
-                <span style={{ color: '#0A8F7E', fontSize: 10, marginLeft: 'auto' }}>Recommended!</span>
+                <span style={{ color: '#00f0ff', fontSize: 10, marginLeft: 'auto' }}>Recommended!</span>
               </label>
               <button onClick={submitOffer} style={{
-                width: '100%', padding: '13px', borderRadius: 12, background: '#D4A843',
-                color: '#0D2B5E', border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 14, fontFamily: 'Inter, sans-serif',
+                width: '100%', padding: '13px', borderRadius: 0, background: '#ffea00',
+                color: '#09070a', border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 14, fontFamily: 'var(--display-font)',
               }}>Submit Offer →</button>
             </>
           ) : (
@@ -224,7 +224,7 @@ export default function NegotiationScene() {
                 <div style={{ fontSize: 40, marginBottom: 10 }}>🎉</div>
                 <div style={{ fontWeight: 800, color: '#4ade80', fontSize: 16, marginBottom: 8 }}>Offer Accepted!</div>
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', marginBottom: 18 }}>Earnest money of $2,500 is due to secure the deal.</div>
-                <button onClick={handleAccept} style={{ width: '100%', padding: '13px', borderRadius: 12, background: '#4ade80', color: '#0D2B5E', border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 13, fontFamily: 'Inter, sans-serif' }}>
+                <button onClick={handleAccept} style={{ width: '100%', padding: '13px', borderRadius: 0, background: '#4ade80', color: '#09070a', border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 13, fontFamily: 'var(--display-font)' }}>
                   Pay Earnest Money ($2,500) & Proceed →
                 </button>
               </>)}
@@ -233,21 +233,21 @@ export default function NegotiationScene() {
                 <div style={{ fontWeight: 800, color: '#fbbf24', fontSize: 16, marginBottom: 8 }}>Counter Offer!</div>
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', marginBottom: 18 }}>Seller counters at ${(offerPrice + 8000).toLocaleString()}. Accept?</div>
                 <div style={{ display: 'flex', gap: 10 }}>
-                  <button onClick={handleAccept} style={{ flex: 1, padding: '11px', borderRadius: 10, background: '#4ade80', color: '#0D2B5E', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 12, fontFamily: 'Inter, sans-serif' }}>Accept Counter</button>
-                  <button onClick={() => setOutcome(null)} style={{ flex: 1, padding: '11px', borderRadius: 10, background: 'rgba(255,255,255,0.08)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 12, fontFamily: 'Inter, sans-serif' }}>Negotiate Again</button>
+                  <button onClick={handleAccept} style={{ flex: 1, padding: '11px', borderRadius: 0, background: '#4ade80', color: '#09070a', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 12, fontFamily: 'var(--display-font)' }}>Accept Counter</button>
+                  <button onClick={() => setOutcome(null)} style={{ flex: 1, padding: '11px', borderRadius: 0, background: 'rgba(255,255,255,0.08)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 12, fontFamily: 'var(--display-font)' }}>Negotiate Again</button>
                 </div>
               </>)}
               {outcome === 'rejected' && (<>
                 <div style={{ fontSize: 40, marginBottom: 10 }}>😞</div>
                 <div style={{ fontWeight: 800, color: '#f87171', fontSize: 16, marginBottom: 8 }}>Offer Rejected</div>
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', marginBottom: 18 }}>Your offer was too low. Try a higher amount.</div>
-                <button onClick={() => setOutcome(null)} style={{ width: '100%', padding: '13px', borderRadius: 12, background: '#D4A843', color: '#0D2B5E', border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 13, fontFamily: 'Inter, sans-serif' }}>Try Again →</button>
+                <button onClick={() => setOutcome(null)} style={{ width: '100%', padding: '13px', borderRadius: 0, background: '#ffea00', color: '#09070a', border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 13, fontFamily: 'var(--display-font)' }}>Try Again →</button>
               </>)}
               {outcome === 'competing' && (<>
                 <div style={{ fontSize: 40, marginBottom: 10 }}>⚡</div>
                 <div style={{ fontWeight: 800, color: '#fbbf24', fontSize: 16, marginBottom: 8 }}>Competing Offer!</div>
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', marginBottom: 18 }}>Another buyer appeared! Raise your offer to compete.</div>
-                <button onClick={() => { setOfferPct(Math.min(108, offerPct + 3)); setOutcome(null); }} style={{ width: '100%', padding: '13px', borderRadius: 12, background: '#D4A843', color: '#0D2B5E', border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 13, fontFamily: 'Inter, sans-serif' }}>
+                <button onClick={() => { setOfferPct(Math.min(108, offerPct + 3)); setOutcome(null); }} style={{ width: '100%', padding: '13px', borderRadius: 0, background: '#ffea00', color: '#09070a', border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 13, fontFamily: 'var(--display-font)' }}>
                   Raise Offer & Resubmit →
                 </button>
               </>)}

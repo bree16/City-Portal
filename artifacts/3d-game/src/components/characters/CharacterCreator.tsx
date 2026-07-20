@@ -53,7 +53,7 @@ function SwatchRow({ label, colors, value, onChange }: SwatchRowProps) {
               borderRadius: '50%',
               background: c,
               border: value === c ? '3px solid #fff' : '2px solid transparent',
-              boxShadow: value === c ? '0 0 0 2px #D4A843' : 'none',
+              boxShadow: value === c ? '0 0 0 2px #ffea00' : 'none',
               cursor: 'pointer',
               transform: value === c ? 'scale(1.2)' : 'scale(1)',
               transition: 'all 0.15s',
@@ -185,7 +185,7 @@ export function CharacterCreator() {
   const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '9px 12px',
-    borderRadius: 10,
+    borderRadius: 0,
     border: nameError ? '1.5px solid #e74c3c' : '1.5px solid rgba(255,255,255,0.18)',
     background: 'rgba(255,255,255,0.08)',
     color: '#fff',
@@ -205,7 +205,7 @@ export function CharacterCreator() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #0D2B5E 0%, #0A4A3E 50%, #0D2B5E 100%)',
+        background: 'linear-gradient(135deg, #09070a 0%, #0A4A3E 50%, #09070a 100%)',
         padding: '24px 16px',
         boxSizing: 'border-box',
         fontFamily: 'Inter, sans-serif',
@@ -235,7 +235,7 @@ export function CharacterCreator() {
             <div
               style={{
                 height: 260,
-                borderRadius: 18,
+                borderRadius: 0,
                 overflow: 'hidden',
                 background: 'rgba(255,255,255,0.07)',
                 boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
@@ -249,10 +249,10 @@ export function CharacterCreator() {
                 onClick={playWave}
                 style={{
                   padding: '5px 12px',
-                  borderRadius: 16,
-                  border: emote === 'wave' ? '1.5px solid #D4A843' : '1.5px solid rgba(255,255,255,0.2)',
-                  background: emote === 'wave' ? 'rgba(212,168,67,0.18)' : 'rgba(255,255,255,0.06)',
-                  color: emote === 'wave' ? '#D4A843' : 'rgba(255,255,255,0.7)',
+                  borderRadius: 0,
+                  border: emote === 'wave' ? '1.5px solid #ffea00' : '1.5px solid rgba(255,255,255,0.2)',
+                  background: emote === 'wave' ? 'rgba(255,234,0,0.18)' : 'rgba(255,255,255,0.06)',
+                  color: emote === 'wave' ? '#ffea00' : 'rgba(255,255,255,0.7)',
                   fontSize: 11,
                   fontWeight: 700,
                   cursor: 'pointer',
@@ -277,14 +277,14 @@ export function CharacterCreator() {
                     onClick={() => update('pronouns')(p)}
                     style={{
                       padding: '4px 10px',
-                      borderRadius: 20,
+                      borderRadius: 0,
                       border: appearance.pronouns === p
-                        ? '1.5px solid #D4A843'
+                        ? '1.5px solid #ffea00'
                         : '1.5px solid rgba(255,255,255,0.2)',
                       background: appearance.pronouns === p
-                        ? 'rgba(212,168,67,0.18)'
+                        ? 'rgba(255,234,0,0.18)'
                         : 'rgba(255,255,255,0.06)',
-                      color: appearance.pronouns === p ? '#D4A843' : 'rgba(255,255,255,0.65)',
+                      color: appearance.pronouns === p ? '#ffea00' : 'rgba(255,255,255,0.65)',
                       fontSize: 11,
                       fontWeight: 700,
                       cursor: 'pointer',
@@ -305,14 +305,14 @@ export function CharacterCreator() {
               flex: 1,
               minWidth: 280,
               background: 'rgba(255,255,255,0.09)',
-              borderRadius: 20,
+              borderRadius: 0,
               padding: '20px 20px 18px',
               backdropFilter: 'blur(12px)',
               border: '1px solid rgba(255,255,255,0.12)',
               boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
             }}
           >
-            <h2 style={{ color: '#D4A843', fontSize: 15, fontWeight: 700, marginTop: 0, marginBottom: 16 }}>
+            <h2 style={{ color: '#ffea00', fontSize: 15, fontWeight: 700, marginTop: 0, marginBottom: 16 }}>
               Create Your Character
             </h2>
 
@@ -350,12 +350,12 @@ export function CharacterCreator() {
                       alignItems: 'center',
                       gap: 2,
                       padding: '6px 8px',
-                      borderRadius: 10,
+                      borderRadius: 0,
                       border: appearance.hairstyle === id
-                        ? '2px solid #D4A843'
+                        ? '2px solid #ffea00'
                         : '2px solid rgba(255,255,255,0.14)',
                       background: appearance.hairstyle === id
-                        ? 'rgba(212,168,67,0.15)'
+                        ? 'rgba(255,234,0,0.15)'
                         : 'rgba(255,255,255,0.05)',
                       cursor: 'pointer',
                       transition: 'all 0.15s',
@@ -390,7 +390,7 @@ export function CharacterCreator() {
                 step={0.05}
                 value={appearance.bodyScale}
                 onChange={(e) => update('bodyScale')(parseFloat(e.target.value))}
-                style={{ width: '100%', accentColor: '#D4A843', cursor: 'pointer' }}
+                style={{ width: '100%', accentColor: '#ffea00', cursor: 'pointer' }}
               />
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>
                 <span>Slimmer</span>
@@ -412,12 +412,12 @@ export function CharacterCreator() {
                       alignItems: 'center',
                       gap: 3,
                       padding: '7px 10px',
-                      borderRadius: 10,
+                      borderRadius: 0,
                       border: appearance.accessories.includes(id)
-                        ? '2px solid #D4A843'
+                        ? '2px solid #ffea00'
                         : '2px solid rgba(255,255,255,0.14)',
                       background: appearance.accessories.includes(id)
-                        ? 'rgba(212,168,67,0.15)'
+                        ? 'rgba(255,234,0,0.15)'
                         : 'rgba(255,255,255,0.05)',
                       cursor: 'pointer',
                       transition: 'all 0.15s',
@@ -439,15 +439,15 @@ export function CharacterCreator() {
                   marginTop: 4,
                   width: '100%',
                   padding: '13px',
-                  borderRadius: 12,
-                  background: '#D4A843',
-                  color: '#0D2B5E',
+                  borderRadius: 0,
+                  background: '#ffea00',
+                  color: '#09070a',
                   border: 'none',
                   cursor: 'pointer',
                   fontWeight: 800,
                   fontSize: 15,
                   transition: 'all 0.15s',
-                  boxShadow: '0 4px 20px rgba(212,168,67,0.4)',
+                  boxShadow: '0 4px 20px rgba(255,234,0,0.4)',
                   fontFamily: 'Inter, sans-serif',
                 }}
                 onMouseEnter={(e) => { (e.target as HTMLButtonElement).style.transform = 'scale(1.02)'; }}
@@ -463,15 +463,15 @@ export function CharacterCreator() {
                 marginTop: hasSavedGame ? 9 : 4,
                 width: '100%',
                 padding: '13px',
-                borderRadius: 12,
-                background: hasSavedGame ? 'rgba(255,255,255,0.1)' : '#D4A843',
-                color: hasSavedGame ? 'rgba(255,255,255,0.8)' : '#0D2B5E',
+                borderRadius: 0,
+                background: hasSavedGame ? 'rgba(255,255,255,0.1)' : '#ffea00',
+                color: hasSavedGame ? 'rgba(255,255,255,0.8)' : '#09070a',
                 border: hasSavedGame ? '1px solid rgba(255,255,255,0.2)' : 'none',
                 cursor: 'pointer',
                 fontWeight: 800,
                 fontSize: 15,
                 transition: 'all 0.15s',
-                boxShadow: hasSavedGame ? 'none' : '0 4px 20px rgba(212,168,67,0.4)',
+                boxShadow: hasSavedGame ? 'none' : '0 4px 20px rgba(255,234,0,0.4)',
                 fontFamily: 'Inter, sans-serif',
               }}
               onMouseEnter={(e) => { (e.target as HTMLButtonElement).style.transform = 'scale(1.02)'; }}

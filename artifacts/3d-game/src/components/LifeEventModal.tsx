@@ -81,7 +81,7 @@ export function LifeEventModal() {
               {/* Financial impact */}
               <div style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
-                padding: '14px 18px', borderRadius: 14, marginBottom: 18,
+                padding: '14px 18px', borderRadius: 0, marginBottom: 18,
                 background: pendingLifeEvent.effect.delta >= 0
                   ? 'rgba(74,222,128,0.12)'
                   : 'rgba(248,113,113,0.12)',
@@ -103,8 +103,8 @@ export function LifeEventModal() {
 
               {/* Lesson */}
               <div style={{
-                padding: '12px 14px', borderRadius: 12, marginBottom: 22,
-                background: 'rgba(212,168,67,0.1)',
+                padding: '12px 14px', borderRadius: 0, marginBottom: 22,
+                background: 'rgba(255,234,0,0.1)',
                 border: 'var(--glass-border-gold)',
               }}>
                 <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.8 }}>

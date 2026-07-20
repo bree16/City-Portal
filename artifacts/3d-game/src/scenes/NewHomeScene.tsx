@@ -227,9 +227,9 @@ export default function NewHomeScene() {
             )}
             <Html position={[0, placed ? slot.size[1] + 0.55 : 0.55, 0]} center distanceFactor={10}>
               <div onClick={() => { if (!placed) { if (activeSlot !== slot.id) getAudioEngine().play('click'); setActiveSlot(activeSlot === slot.id ? null : slot.id); } }} style={{
-                background: placed ? '#0A8F7E' : '#D4A843',
-                color: placed ? '#fff' : '#0D2B5E',
-                fontSize: 10, padding: '3px 10px', borderRadius: 6,
+                background: placed ? '#00f0ff' : '#ffea00',
+                color: placed ? '#fff' : '#09070a',
+                fontSize: 10, padding: '3px 10px', borderRadius: 0,
                 whiteSpace: 'nowrap', fontWeight: 700,
                 cursor: placed ? 'default' : 'pointer', fontFamily: 'Inter, sans-serif',
               }}>
@@ -239,24 +239,24 @@ export default function NewHomeScene() {
             {activeSlot === slot.id && !placed && (
               <Html position={[0, 1.8, 0]} center distanceFactor={10}>
                 <div style={{
-                  background: 'rgba(13,43,94,0.97)', borderRadius: 14, padding: '14px 18px',
-                  minWidth: 230, color: '#fff', fontFamily: 'Inter, sans-serif',
+                  background: 'rgba(9,7,10,0.97)', borderRadius: 0, padding: '14px 18px',
+                  minWidth: 230, color: '#fff', fontFamily: 'var(--display-font)',
                   boxShadow: '0 8px 32px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.12)',
                 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 12, color: '#D4A843' }}>Choose {slot.label}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 12, color: '#ffea00' }}>Choose {slot.label}</div>
                   {slot.options.map((opt) => (
                     <div key={opt.id} style={{
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                       marginBottom: 8, padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.08)',
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div style={{ width: 14, height: 14, borderRadius: 3, background: opt.color, flexShrink: 0 }} />
+                        <div style={{ width: 14, height: 14, borderRadius: 0, background: opt.color, flexShrink: 0 }} />
                         <span style={{ fontSize: 12 }}>{opt.name}</span>
                       </div>
                       <button onClick={() => handleBuy(slot.id, opt.id, opt.price)} disabled={cash < opt.price} style={{
-                        padding: '5px 12px', borderRadius: 8,
-                        background: cash >= opt.price ? '#D4A843' : 'rgba(255,255,255,0.08)',
-                        color: cash >= opt.price ? '#0D2B5E' : 'rgba(255,255,255,0.35)',
+                        padding: '5px 12px', borderRadius: 0,
+                        background: cash >= opt.price ? '#ffea00' : 'rgba(255,255,255,0.08)',
+                        color: cash >= opt.price ? '#09070a' : 'rgba(255,255,255,0.35)',
                         border: 'none', cursor: cash >= opt.price ? 'pointer' : 'default',
                         fontWeight: 700, fontSize: 11, fontFamily: 'Inter, sans-serif', flexShrink: 0,
                       }}>
@@ -278,8 +278,8 @@ export default function NewHomeScene() {
       {/* Welcome banner */}
       <Html position={[0, 5.2, -4]} center distanceFactor={18}>
         <div style={{
-          background: 'rgba(212,168,67,0.95)', borderRadius: 16, padding: '12px 28px',
-          color: '#0D2B5E', fontFamily: 'Inter, sans-serif', textAlign: 'center',
+          background: 'rgba(255,234,0,0.95)', borderRadius: 0, padding: '12px 28px',
+          color: '#09070a', fontFamily: 'var(--display-font)', textAlign: 'center',
           boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
         }}>
           <div style={{ fontSize: 18, fontWeight: 800 }}>🏡 Welcome Home!</div>
@@ -301,15 +301,15 @@ export default function NewHomeScene() {
           }}
           style={{
             padding: '14px 32px',
-            borderRadius: 50,
-            background: 'linear-gradient(135deg, #D4A843 0%, #F5C842 100%)',
-            color: '#0D2B5E',
+            borderRadius: 0,
+            background: 'linear-gradient(135deg, #ffea00 0%, #F5C842 100%)',
+            color: '#09070a',
             fontWeight: 800,
             fontSize: 15,
             border: 'none',
             cursor: 'pointer',
             fontFamily: 'Inter, sans-serif',
-            boxShadow: '0 8px 32px rgba(212,168,67,0.55)',
+            boxShadow: '0 8px 32px rgba(255,234,0,0.55)',
             whiteSpace: 'nowrap',
             letterSpacing: '0.02em',
           }}
@@ -327,12 +327,12 @@ export default function NewHomeScene() {
           onClick={() => setShowResultsCard(true)}
           style={{
             padding: '12px 28px',
-            borderRadius: 50,
-            background: 'linear-gradient(135deg, #0A8F7E 0%, #0D2B5E 100%)',
+            borderRadius: 0,
+            background: 'linear-gradient(135deg, #00f0ff 0%, #09070a 100%)',
             color: '#fff',
             fontWeight: 800,
             fontSize: 14,
-            border: '2px solid rgba(212,168,67,0.7)',
+            border: '2px solid rgba(255,234,0,0.7)',
             cursor: 'pointer',
             fontFamily: 'Inter, sans-serif',
             boxShadow: '0 8px 28px rgba(0,0,0,0.45)',
@@ -348,12 +348,12 @@ export default function NewHomeScene() {
       {tip && (
         <Html position={[0, 4.2, 5]} center distanceFactor={16}>
           <div style={{
-            background: 'rgba(10,143,126,0.95)', borderRadius: 14, padding: '12px 18px',
-            maxWidth: 300, color: '#fff', fontFamily: 'Inter, sans-serif',
+            background: 'rgba(0,240,255,0.95)', borderRadius: 0, padding: '12px 18px',
+            maxWidth: 300, color: '#fff', fontFamily: 'var(--display-font)',
             boxShadow: '0 8px 32px rgba(0,0,0,0.3)', textAlign: 'center',
             fontSize: 12, lineHeight: 1.5,
           }}>
-            <div style={{ fontWeight: 700, marginBottom: 4, color: '#D4A843' }}>💡 Financial Tip</div>
+            <div style={{ fontWeight: 700, marginBottom: 4, color: '#ffea00' }}>💡 Financial Tip</div>
             {tip}
           </div>
         </Html>

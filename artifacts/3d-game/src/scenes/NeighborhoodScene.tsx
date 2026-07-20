@@ -199,13 +199,13 @@ export default function NeighborhoodScene() {
             {viewingHome === home.id && (
               <Html position={[0, 5.5, 0]} center distanceFactor={13}>
                 <div style={{
-                  background: '#fff', borderRadius: 14, padding: '16px', minWidth: 210,
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.25)', fontFamily: 'Inter, sans-serif',
-                  border: '2px solid #0D2B5E',
+                  background: '#fff', borderRadius: 0, padding: '16px', minWidth: 210,
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.25)', fontFamily: 'var(--display-font)',
+                  border: '2px solid #09070a',
                 }}>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: '#0D2B5E', marginBottom: 2 }}>{home.name}</div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: '#09070a', marginBottom: 2 }}>{home.name}</div>
                   <div style={{ fontSize: 11, color: '#777', marginBottom: 10 }}>{home.neighborhood}</div>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: '#0A8F7E', marginBottom: 8 }}>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: '#00f0ff', marginBottom: 8 }}>
                     ${home.price.toLocaleString()}
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 8px', fontSize: 11, marginBottom: 10 }}>
@@ -220,17 +220,17 @@ export default function NeighborhoodScene() {
                     Est. payment: <strong>${home.monthlyPayment}/mo</strong>
                   </div>
                   <button onClick={() => handleStartTour(home.id)} style={{
-                    width: '100%', padding: '9px', borderRadius: 8,
-                    background: '#0A8F7E', color: '#fff', border: 'none',
+                    width: '100%', padding: '9px', borderRadius: 0,
+                    background: '#00f0ff', color: '#fff', border: 'none',
                     cursor: 'pointer', fontWeight: 800, fontSize: 12, fontFamily: 'Inter, sans-serif',
                     marginBottom: 6,
                   }}>
                     🏠 Schedule Tour →
                   </button>
                   <button onClick={() => handleSelectHome(home.id)} style={{
-                    width: '100%', padding: '7px', borderRadius: 8,
-                    background: 'rgba(212,168,67,0.15)', color: '#D4A843',
-                    border: '1px solid rgba(212,168,67,0.4)',
+                    width: '100%', padding: '7px', borderRadius: 0,
+                    background: 'rgba(255,234,0,0.15)', color: '#ffea00',
+                    border: '1px solid rgba(255,234,0,0.4)',
                     cursor: 'pointer', fontWeight: 700, fontSize: 11, fontFamily: 'Inter, sans-serif',
                   }}>
                     Skip Tour — Make an Offer
@@ -263,11 +263,11 @@ export default function NeighborhoodScene() {
       {/* Instructions */}
       <Html position={[0, 5, 8]} center distanceFactor={16}>
         <div style={{
-          background: 'rgba(13,43,94,0.88)', borderRadius: 14, padding: '12px 20px',
-          color: '#fff', fontFamily: 'Inter, sans-serif', fontSize: 12,
+          background: 'rgba(9,7,10,0.88)', borderRadius: 0, padding: '12px 20px',
+          color: '#fff', fontFamily: 'var(--display-font)', fontSize: 12,
           textAlign: 'center', backdropFilter: 'blur(8px)',
         }}>
-          <div style={{ fontWeight: 700, color: '#D4A843', marginBottom: 4 }}>House Hunting!</div>
+          <div style={{ fontWeight: 700, color: '#ffea00', marginBottom: 4 }}>House Hunting!</div>
           <div style={{ color: 'rgba(255,255,255,0.7)' }}>Click the real estate agents to view each listing</div>
         </div>
       </Html>

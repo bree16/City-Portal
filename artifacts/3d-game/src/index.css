@@ -216,121 +216,129 @@
 
 /* ── Premium glass UI system (game HUD/dialogs) ─────────────── */
 :root {
-  --glass-bg: linear-gradient(160deg, rgba(23, 42, 84, 0.62) 0%, rgba(10, 22, 48, 0.72) 100%);
-  --glass-bg-strong: linear-gradient(160deg, rgba(21, 38, 76, 0.82) 0%, rgba(8, 18, 40, 0.9) 100%);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.14);
-  --glass-border-gold: 1px solid rgba(212, 168, 67, 0.38);
-  --glass-blur: blur(18px) saturate(1.5);
-  --glass-shadow: 0 8px 32px rgba(2, 8, 24, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  --glass-shadow-lg: 0 24px 64px rgba(2, 8, 24, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.14);
-  --glass-radius: 16px;
-  --glass-radius-lg: 24px;
-  --gold: #D4A843;
-  --gold-grad: linear-gradient(120deg, #E5BC55 0%, #D4A843 55%, #C29532 100%);
-  --teal: #14B8A1;
-  --teal-grad: linear-gradient(120deg, #17CBB2 0%, #0A8F7E 100%);
-  --ink: #0D2B5E;
-  --glass-text: rgba(255, 255, 255, 0.92);
-  --glass-text-dim: rgba(255, 255, 255, 0.6);
-  --glass-text-faint: rgba(255, 255, 255, 0.42);
-  --glass-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --glass-bg: #110e15;
+  --glass-bg-strong: #09070a;
+  --glass-border: 3px solid #ff007f;
+  --glass-border-gold: 3px solid #ffea00;
+  --glass-blur: none;
+  --glass-shadow: 6px 6px 0px #ff007f;
+  --glass-shadow-lg: 8px 8px 0px #ff007f;
+  --glass-radius: 0px;
+  --glass-radius-lg: 0px;
+  --gold: #ffea00;
+  --gold-grad: #ffea00;
+  --teal: #00f0ff;
+  --teal-grad: #00f0ff;
+  --ink: #09070a;
+  --glass-text: #ffffff;
+  --glass-text-dim: #e2dced;
+  --glass-text-faint: #a097b6;
+  --glass-ease: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --display-font: 'Bricolage Grotesque', sans-serif;
+  --magenta: #ff007f;
 }
 
 .glass-panel {
   background: var(--glass-bg);
   border: var(--glass-border);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
-  border-radius: var(--glass-radius);
+  box-shadow: 6px 6px 0px var(--magenta);
+  border-radius: 0px;
+  transform: rotate(-1deg);
+  font-family: var(--display-font);
 }
 
 .glass-panel-strong {
   background: var(--glass-bg-strong);
   border: var(--glass-border);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow-lg);
-  border-radius: var(--glass-radius-lg);
+  box-shadow: 8px 8px 0px var(--magenta);
+  border-radius: 0px;
+  transform: rotate(1deg);
+  font-family: var(--display-font);
 }
 
 .glass-chip {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 999px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: var(--glass-bg);
+  border: 2px solid var(--gold);
+  border-radius: 0px;
+  box-shadow: 3px 3px 0px var(--gold);
+  font-family: var(--display-font);
+  text-transform: uppercase;
+  font-weight: 800;
 }
 
 .glass-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: var(--glass-bg);
+  border: 2px solid var(--teal);
   color: var(--glass-text);
-  border-radius: 10px;
+  border-radius: 0px;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: background 0.18s var(--glass-ease), border-color 0.18s var(--glass-ease),
-    transform 0.14s var(--glass-ease), box-shadow 0.18s var(--glass-ease);
+  font-family: var(--display-font);
+  font-weight: 800;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0px var(--teal);
+  transition: transform 0.1s var(--glass-ease), box-shadow 0.1s var(--glass-ease);
 }
 .glass-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.24);
-  transform: translateY(-1px);
+  background: var(--teal);
+  color: var(--ink);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--magenta);
+  border-color: var(--magenta);
 }
 .glass-btn:active {
-  transform: translateY(0) scale(0.97);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--magenta);
 }
 
 .glass-btn-primary {
-  background: var(--gold-grad);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: var(--gold);
+  border: 3px solid var(--ink);
   color: var(--ink);
-  border-radius: 12px;
+  border-radius: 0px;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--display-font);
   font-weight: 800;
-  box-shadow: 0 4px 18px rgba(212, 168, 67, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  transition: filter 0.18s var(--glass-ease), transform 0.14s var(--glass-ease),
-    box-shadow 0.18s var(--glass-ease);
+  text-transform: uppercase;
+  box-shadow: 5px 5px 0px var(--magenta);
+  transition: transform 0.1s var(--glass-ease), box-shadow 0.1s var(--glass-ease);
 }
 .glass-btn-primary:hover {
-  filter: brightness(1.07);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(212, 168, 67, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0px var(--magenta);
 }
 .glass-btn-primary:active {
-  transform: translateY(0) scale(0.97);
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0px var(--magenta);
 }
 
 .glass-btn-accent {
-  background: var(--teal-grad);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: var(--magenta);
+  border: 3px solid var(--ink);
   color: #fff;
-  border-radius: 12px;
+  border-radius: 0px;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  box-shadow: 0 4px 18px rgba(10, 143, 126, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  transition: filter 0.18s var(--glass-ease), transform 0.14s var(--glass-ease);
+  font-family: var(--display-font);
+  font-weight: 800;
+  text-transform: uppercase;
+  box-shadow: 5px 5px 0px var(--gold);
+  transition: transform 0.1s var(--glass-ease), box-shadow 0.1s var(--glass-ease);
 }
-.glass-btn-accent:hover { filter: brightness(1.08); transform: translateY(-1px); }
-.glass-btn-accent:active { transform: translateY(0) scale(0.97); }
+.glass-btn-accent:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0px var(--gold);
+}
+.glass-btn-accent:active {
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0px var(--gold);
+}
 
-/* Subtle top sheen for glass surfaces */
-.glass-sheen { position: relative; overflow: hidden; }
 .glass-sheen::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 45%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), transparent);
-  border-radius: inherit;
-  pointer-events: none;
+  display: none;
 }
 
 @keyframes glass-pop-in {
-  from { opacity: 0; transform: translateY(14px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(14px) scale(0.9) rotate(-3deg); }
+  to { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
 }
 @keyframes glass-fade-in {
   from { opacity: 0; }
@@ -339,21 +347,40 @@
 .glass-anim-in { animation: glass-pop-in 0.32s var(--glass-ease) both; }
 .glass-anim-fade { animation: glass-fade-in 0.25s ease both; }
 
-/* Phone app tiles — hover handled in CSS, no JS */
 .phone-app-tile {
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #141018;
+  border: 2px solid var(--magenta);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(2, 8, 24, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.22);
-  transition: transform 0.14s var(--glass-ease), box-shadow 0.18s var(--glass-ease),
-    filter 0.18s var(--glass-ease);
+  box-shadow: 4px 4px 0px var(--magenta);
+  transition: transform 0.1s var(--glass-ease), box-shadow 0.1s var(--glass-ease);
+  border-radius: 0px;
 }
 .phone-app-tile:hover {
-  transform: translateY(-2px) scale(1.05);
-  filter: brightness(1.08);
-  box-shadow: 0 8px 22px rgba(2, 8, 24, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--gold);
+  border-color: var(--gold);
 }
 .phone-app-tile:active {
-  transform: translateY(0) scale(0.97);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--gold);
+}
+
+.squiggle-underline {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+.squiggle-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: -2px;
+  right: -2px;
+  height: 6px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 6" preserveAspectRatio="none"><path d="M0,3 Q5,0 10,3 T20,3" fill="none" stroke="%23ff007f" stroke-width="2" stroke-linecap="round"/></svg>') repeat-x;
+  background-size: 14px 100%;
+  z-index: 10;
+  pointer-events: none;
 }
 
 @layer utilities {

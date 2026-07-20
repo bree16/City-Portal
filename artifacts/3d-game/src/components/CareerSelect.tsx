@@ -23,7 +23,7 @@ export function CareerSelect() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #0D2B5E 0%, #0A3A30 50%, #0D2B5E 100%)',
+        background: 'linear-gradient(135deg, #09070a 0%, #0A3A30 50%, #09070a 100%)',
         padding: '24px 16px',
         boxSizing: 'border-box',
         fontFamily: 'Inter, sans-serif',
@@ -64,20 +64,20 @@ export function CareerSelect() {
                   alignItems: 'flex-start',
                   textAlign: 'left',
                   padding: '18px 16px',
-                  borderRadius: 16,
-                  border: isSelected ? '2px solid #D4A843' : '2px solid rgba(255,255,255,0.1)',
+                  borderRadius: 0,
+                  border: isSelected ? '2px solid #ffea00' : '2px solid rgba(255,255,255,0.1)',
                   background: isSelected
-                    ? 'rgba(212,168,67,0.12)'
+                    ? 'rgba(255,234,0,0.12)'
                     : 'rgba(255,255,255,0.06)',
                   cursor: 'pointer',
                   fontFamily: 'Inter, sans-serif',
                   backdropFilter: 'blur(8px)',
-                  boxShadow: isSelected ? '0 0 0 3px rgba(212,168,67,0.25)' : 'none',
+                  boxShadow: isSelected ? '0 0 0 3px rgba(255,234,0,0.25)' : 'none',
                   transition: 'border-color 0.15s, background 0.15s, box-shadow 0.15s',
                 }}
               >
                 <div style={{ fontSize: 32, marginBottom: 10 }}>{career.icon}</div>
-                <div style={{ fontSize: 15, fontWeight: 800, color: isSelected ? '#D4A843' : '#fff', marginBottom: 4 }}>
+                <div style={{ fontSize: 15, fontWeight: 800, color: isSelected ? '#ffea00' : '#fff', marginBottom: 4 }}>
                   {career.name}
                 </div>
                 <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', lineHeight: 1.45, marginBottom: 12, minHeight: 40 }}>
@@ -92,7 +92,7 @@ export function CareerSelect() {
                       ${career.monthlyIncome.toLocaleString()}
                     </span>
                   </div>
-                  <div style={{ fontSize: 10, color: '#D4A843', fontWeight: 600 }}>
+                  <div style={{ fontSize: 10, color: '#ffea00', fontWeight: 600 }}>
                     🎁 {career.startingBonus.label}
                   </div>
                 </div>
@@ -105,8 +105,8 @@ export function CareerSelect() {
                 {isSelected && (
                   <div style={{
                     marginTop: 10, width: '100%', textAlign: 'center',
-                    fontSize: 11, fontWeight: 800, color: '#D4A843',
-                    background: 'rgba(212,168,67,0.15)', borderRadius: 8, padding: '4px 0',
+                    fontSize: 11, fontWeight: 800, color: '#ffea00',
+                    background: 'rgba(255,234,0,0.15)', borderRadius: 0, padding: '4px 0',
                   }}>
                     ✓ Selected
                   </div>
@@ -125,15 +125,15 @@ export function CareerSelect() {
             disabled={!selected}
             style={{
               padding: '15px 48px',
-              borderRadius: 14,
-              background: selected ? '#D4A843' : 'rgba(255,255,255,0.1)',
-              color: selected ? '#0D2B5E' : 'rgba(255,255,255,0.3)',
+              borderRadius: 0,
+              background: selected ? '#ffea00' : 'rgba(255,255,255,0.1)',
+              color: selected ? '#09070a' : 'rgba(255,255,255,0.3)',
               border: 'none',
               cursor: selected ? 'pointer' : 'default',
               fontWeight: 800,
               fontSize: 16,
               fontFamily: 'Inter, sans-serif',
-              boxShadow: selected ? '0 4px 24px rgba(212,168,67,0.4)' : 'none',
+              boxShadow: selected ? '0 4px 24px rgba(255,234,0,0.4)' : 'none',
               transition: 'all 0.2s',
               minWidth: 260,
             }}

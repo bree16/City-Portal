@@ -14,7 +14,7 @@ const IMPROVEMENTS = [
     cost: 8000, valuePct: 0.05,
     desc: 'Modern counters, appliances, and updated cabinets.',
     pos: [-5, 0.1, -1] as [number, number, number],
-    color: '#D4A843',
+    color: '#ffea00',
   },
   {
     id: 'new_flooring', label: 'New Flooring', icon: '🪵',
@@ -290,11 +290,11 @@ export default function HomeLifeScene() {
       <Html position={[0, 2.8, -7.6]} center distanceFactor={14}>
         <div style={{
           width: 320, padding: '14px 18px',
-          background: 'rgba(10,18,40,0.98)', border: '1px solid rgba(212,168,67,0.25)',
-          borderRadius: 10, fontFamily: 'Inter, sans-serif', color: '#fff',
+          background: 'rgba(10,18,40,0.98)', border: '1px solid rgba(255,234,0,0.25)',
+          borderRadius: 0, fontFamily: 'var(--display-font)', color: '#fff',
           boxShadow: '0 0 30px rgba(10,18,40,0.8)',
         }}>
-          <div style={{ fontSize: 9, fontWeight: 700, color: '#D4A843', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 10, textAlign: 'center' }}>
+          <div style={{ fontSize: 9, fontWeight: 700, color: '#ffea00', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 10, textAlign: 'center' }}>
             🏠 Home Dashboard — {home.name}
           </div>
 
@@ -303,9 +303,9 @@ export default function HomeLifeScene() {
             {[
               { label: 'Home Value', value: `$${homeValue.toLocaleString()}`, color: '#4ade80' },
               { label: 'Mortgage Left', value: `$${mortgageBalance.toLocaleString()}`, color: '#f87171' },
-              { label: 'Equity', value: `${equityPct.toFixed(1)}%`, color: '#D4A843' },
+              { label: 'Equity', value: `${equityPct.toFixed(1)}%`, color: '#ffea00' },
             ].map((m) => (
-              <div key={m.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 6, padding: '6px 8px', textAlign: 'center' }}>
+              <div key={m.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 0, padding: '6px 8px', textAlign: 'center' }}>
                 <div style={{ fontSize: 14, fontWeight: 800, color: m.color }}>{m.value}</div>
                 <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{m.label}</div>
               </div>
@@ -318,13 +318,13 @@ export default function HomeLifeScene() {
               <span>Equity built: ${equityValue.toLocaleString()}</span>
               <span>{equityPct.toFixed(1)}%</span>
             </div>
-            <div style={{ height: 6, background: 'rgba(255,255,255,0.08)', borderRadius: 3, overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${Math.min(100, equityPct)}%`, background: 'linear-gradient(90deg, #D4A843, #4ade80)', borderRadius: 3, transition: 'width 0.8s ease' }} />
+            <div style={{ height: 6, background: 'rgba(255,255,255,0.08)', borderRadius: 0, overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${Math.min(100, equityPct)}%`, background: 'linear-gradient(90deg, #ffea00, #4ade80)', borderRadius: 0, transition: 'width 0.8s ease' }} />
             </div>
           </div>
 
           {/* Monthly breakdown */}
-          <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 6, padding: '8px 10px', marginBottom: 12 }}>
+          <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 0, padding: '8px 10px', marginBottom: 12 }}>
             <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>Monthly Payment — ${home.monthlyPayment}/mo</div>
             {[
               { label: 'Principal', value: principal, color: '#4ade80' },
@@ -343,8 +343,8 @@ export default function HomeLifeScene() {
             onClick={handlePassMonth}
             disabled={!!pendingMaintenance}
             style={{
-              width: '100%', padding: '9px', borderRadius: 8,
-              background: pendingMaintenance ? 'rgba(255,255,255,0.08)' : '#0A8F7E',
+              width: '100%', padding: '9px', borderRadius: 0,
+              background: pendingMaintenance ? 'rgba(255,255,255,0.08)' : '#00f0ff',
               color: pendingMaintenance ? 'rgba(255,255,255,0.35)' : '#fff',
               border: 'none', cursor: pendingMaintenance ? 'default' : 'pointer',
               fontWeight: 800, fontSize: 12, fontFamily: 'Inter, sans-serif',
@@ -358,11 +358,11 @@ export default function HomeLifeScene() {
             <button
               onClick={() => setListingOpen(true)}
               style={{
-                width: '100%', padding: '8px', borderRadius: 8,
-                background: 'linear-gradient(135deg, #D4A843, #F5C842)',
-                color: '#0D2B5E', border: 'none', cursor: 'pointer',
+                width: '100%', padding: '8px', borderRadius: 0,
+                background: 'linear-gradient(135deg, #ffea00, #F5C842)',
+                color: '#09070a', border: 'none', cursor: 'pointer',
                 fontWeight: 800, fontSize: 11, fontFamily: 'Inter, sans-serif',
-                boxShadow: '0 0 16px rgba(212,168,67,0.5)',
+                boxShadow: '0 0 16px rgba(255,234,0,0.5)',
                 animation: 'pulse 2s infinite',
               }}
             >
@@ -395,7 +395,7 @@ export default function HomeLifeScene() {
             <Html position={[0, 0.7, 0]} center distanceFactor={12}>
               <div onClick={() => { if (!owned) setActiveImp(isActive ? null : imp.id); }} style={{
                 background: owned ? 'rgba(45,122,45,0.9)' : `rgba(${imp.color.startsWith('#D') ? '212,168,67' : imp.color.startsWith('#8') ? '139,105,20' : imp.color.startsWith('#2') ? '39,174,96' : '243,156,18'},0.88)`,
-                color: '#fff', padding: '4px 10px', borderRadius: 6,
+                color: '#fff', padding: '4px 10px', borderRadius: 0,
                 fontSize: 10, fontWeight: 700, fontFamily: 'Inter,sans-serif',
                 whiteSpace: 'nowrap', cursor: owned ? 'default' : 'pointer',
                 border: '1px solid rgba(255,255,255,0.2)',
@@ -406,12 +406,12 @@ export default function HomeLifeScene() {
             {isActive && !owned && (
               <Html position={[0, 2.2, 0]} center distanceFactor={11}>
                 <div style={{
-                  background: 'rgba(13,43,94,0.97)', border: '1px solid rgba(212,168,67,0.4)',
-                  borderRadius: 12, padding: '14px 18px', minWidth: 220,
-                  fontFamily: 'Inter,sans-serif', color: '#fff',
+                  background: 'rgba(9,7,10,0.97)', border: '1px solid rgba(255,234,0,0.4)',
+                  borderRadius: 0, padding: '14px 18px', minWidth: 220,
+                  fontFamily: 'var(--display-font)', color: '#fff',
                   boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
                 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: '#D4A843', marginBottom: 4 }}>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: '#ffea00', marginBottom: 4 }}>
                     {imp.icon} {imp.label}
                   </div>
                   <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginBottom: 8, lineHeight: 1.4 }}>
@@ -429,9 +429,9 @@ export default function HomeLifeScene() {
                     onClick={() => { buyImprovement(imp.id, imp.cost, imp.valuePct); setActiveImp(null); }}
                     disabled={cash < imp.cost}
                     style={{
-                      width: '100%', padding: '9px', borderRadius: 8,
-                      background: cash >= imp.cost ? '#D4A843' : 'rgba(255,255,255,0.08)',
-                      color: cash >= imp.cost ? '#0D2B5E' : 'rgba(255,255,255,0.35)',
+                      width: '100%', padding: '9px', borderRadius: 0,
+                      background: cash >= imp.cost ? '#ffea00' : 'rgba(255,255,255,0.08)',
+                      color: cash >= imp.cost ? '#09070a' : 'rgba(255,255,255,0.35)',
                       border: 'none', cursor: cash >= imp.cost ? 'pointer' : 'default',
                       fontWeight: 800, fontSize: 12, fontFamily: 'Inter,sans-serif',
                     }}
@@ -452,9 +452,9 @@ export default function HomeLifeScene() {
       {pendingMaintenance && (
         <Html position={[0, 3.5, 5.5]} center distanceFactor={14}>
           <div style={{
-            background: 'rgba(13,43,94,0.98)', border: '2px solid rgba(248,113,113,0.5)',
-            borderRadius: 18, padding: '22px 26px', minWidth: 340,
-            fontFamily: 'Inter,sans-serif', color: '#fff',
+            background: 'rgba(9,7,10,0.98)', border: '2px solid rgba(248,113,113,0.5)',
+            borderRadius: 0, padding: '22px 26px', minWidth: 340,
+            fontFamily: 'var(--display-font)', color: '#fff',
             boxShadow: '0 20px 60px rgba(0,0,0,0.7)', textAlign: 'center',
           }}>
             <div style={{ fontSize: 42, marginBottom: 10 }}>{pendingMaintenance.icon}</div>
@@ -464,7 +464,7 @@ export default function HomeLifeScene() {
             <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', marginBottom: 14, lineHeight: 1.5 }}>
               {pendingMaintenance.description}
             </div>
-            <div style={{ background: 'rgba(248,113,113,0.1)', borderRadius: 8, padding: '8px 12px', marginBottom: 16, fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>
+            <div style={{ background: 'rgba(248,113,113,0.1)', borderRadius: 0, padding: '8px 12px', marginBottom: 16, fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>
               💡 {pendingMaintenance.tip}
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
@@ -472,9 +472,9 @@ export default function HomeLifeScene() {
                 onClick={() => applyMaintenance(true)}
                 disabled={cash < pendingMaintenance.cost}
                 style={{
-                  flex: 1, padding: '12px', borderRadius: 10,
+                  flex: 1, padding: '12px', borderRadius: 0,
                   background: cash >= pendingMaintenance.cost ? '#4ade80' : 'rgba(255,255,255,0.08)',
-                  color: cash >= pendingMaintenance.cost ? '#0D2B5E' : 'rgba(255,255,255,0.35)',
+                  color: cash >= pendingMaintenance.cost ? '#09070a' : 'rgba(255,255,255,0.35)',
                   border: 'none', cursor: cash >= pendingMaintenance.cost ? 'pointer' : 'default',
                   fontWeight: 800, fontSize: 12, fontFamily: 'Inter,sans-serif',
                 }}
@@ -485,7 +485,7 @@ export default function HomeLifeScene() {
               <button
                 onClick={() => applyMaintenance(false)}
                 style={{
-                  flex: 1, padding: '12px', borderRadius: 10,
+                  flex: 1, padding: '12px', borderRadius: 0,
                   background: 'rgba(248,113,113,0.15)', color: '#f87171',
                   border: '1px solid rgba(248,113,113,0.35)',
                   cursor: 'pointer', fontWeight: 800, fontSize: 12, fontFamily: 'Inter,sans-serif',
@@ -503,13 +503,13 @@ export default function HomeLifeScene() {
       {listingOpen && (
         <Html position={[0, 3.5, 5.5]} center distanceFactor={14}>
           <div style={{
-            background: 'rgba(13,43,94,0.98)', border: '2px solid rgba(212,168,67,0.5)',
-            borderRadius: 18, padding: '22px 26px', minWidth: 340,
-            fontFamily: 'Inter,sans-serif', color: '#fff',
+            background: 'rgba(9,7,10,0.98)', border: '2px solid rgba(255,234,0,0.5)',
+            borderRadius: 0, padding: '22px 26px', minWidth: 340,
+            fontFamily: 'var(--display-font)', color: '#fff',
             boxShadow: '0 20px 60px rgba(0,0,0,0.7)', textAlign: 'center',
           }}>
             <div style={{ fontSize: 40, marginBottom: 8 }}>🏡</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: '#D4A843', marginBottom: 4 }}>Ready to Sell?</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: '#ffea00', marginBottom: 4 }}>Ready to Sell?</div>
             <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 18 }}>Estimated Sale Breakdown</div>
 
             {[
@@ -526,22 +526,22 @@ export default function HomeLifeScene() {
               </div>
             ))}
 
-            <div style={{ marginTop: 14, padding: '12px', background: estProfit > 0 ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)', borderRadius: 10, marginBottom: 14 }}>
+            <div style={{ marginTop: 14, padding: '12px', background: estProfit > 0 ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)', borderRadius: 0, marginBottom: 14 }}>
               <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>Estimated Profit</div>
               <div style={{ fontSize: 24, fontWeight: 800, color: estProfit > 0 ? '#4ade80' : '#f87171' }}>
                 {estProfit >= 0 ? '+' : ''}${estProfit.toLocaleString()}
               </div>
             </div>
 
-            <div style={{ background: 'rgba(212,168,67,0.1)', borderRadius: 8, padding: '10px 12px', marginBottom: 16, fontSize: 11, color: 'rgba(255,255,255,0.7)', lineHeight: 1.4 }}>
-              🌟 <strong style={{ color: '#D4A843' }}>Dream Home Ahead!</strong><br />
+            <div style={{ background: 'rgba(255,234,0,0.1)', borderRadius: 0, padding: '10px 12px', marginBottom: 16, fontSize: 11, color: 'rgba(255,255,255,0.7)', lineHeight: 1.4 }}>
+              🌟 <strong style={{ color: '#ffea00' }}>Dream Home Ahead!</strong><br />
               Your equity could fund a larger Newport News home — start your journey toward your forever home!
             </div>
 
             <button
               onClick={() => setListingOpen(false)}
               style={{
-                width: '100%', padding: '11px', borderRadius: 10,
+                width: '100%', padding: '11px', borderRadius: 0,
                 background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)',
                 border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 12,
                 fontFamily: 'Inter,sans-serif',
@@ -565,14 +565,14 @@ export default function HomeLifeScene() {
               transition={{ duration: 0.4, type: 'spring', stiffness: 200, damping: 20 }}
               onAnimationComplete={() => setTimeout(() => setMilestoneToast(null), 4500)}
               style={{
-                background: '#0D2B5E', border: '2px solid #D4A843',
-                borderRadius: 14, padding: '14px 18px', minWidth: 260,
+                background: '#09070a', border: '2px solid #ffea00',
+                borderRadius: 0, padding: '14px 18px', minWidth: 260,
                 fontFamily: 'Inter,sans-serif', pointerEvents: 'none',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
               }}
             >
               <div style={{ fontSize: 28, marginBottom: 6, textAlign: 'center' }}>{milestoneToast.icon}</div>
-              <div style={{ fontSize: 13, fontWeight: 800, color: '#D4A843', marginBottom: 4, textAlign: 'center' }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: '#ffea00', marginBottom: 4, textAlign: 'center' }}>
                 {milestoneToast.title}
               </div>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.75)', lineHeight: 1.45, textAlign: 'center' }}>

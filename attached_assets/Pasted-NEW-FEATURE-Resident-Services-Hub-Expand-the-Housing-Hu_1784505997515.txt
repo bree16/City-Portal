@@ -1,0 +1,305 @@
+NEW FEATURE: Resident Services Hub
+
+Expand the Housing Hub beyond homeownership and renting by creating a new Resident Services Hub.
+
+The goal is to make this website the digital front door to Newport News.
+
+Once someone finds a home, they should also be able to access everyday city services without leaving the website.
+
+This should become one of the main sections of the Housing Hub.
+
+Inspiration
+
+Use the attached reference image only as inspiration for the layout and user experience.
+
+I like the clean presentation, large circular icons, spacing, and simple navigation.
+
+Do not copy the design exactly.
+
+Instead, redesign it using the existing Housing Hub branding, color palette, typography, animations, and modern UI.
+
+The new section should feel like it belongs naturally within the website.
+
+Section Title
+
+Create a homepage section called:
+
+Everything You Need After Moving In
+
+Subtitle:
+
+Everything you need to live, work, and thrive in Newport News—all in one place.
+
+Layout
+
+Create a responsive grid of large interactive service cards.
+
+Desktop:
+
+6 cards per row
+
+Tablet:
+
+3 cards per row
+
+Mobile:
+
+2 cards per row
+
+Cards should have:
+
+Large circular icon
+Soft shadows
+Modern gradients
+Rounded edges
+Hover elevation
+Click animation
+Smooth transitions
+
+Each card should feel modern and interactive.
+
+Resident Services
+
+Include cards for:
+
+💧 Water & Utilities
+
+Description:
+
+Start, stop, or manage your utility services.
+
+🗑 Trash & Recycling
+
+Description:
+
+Collection schedules, recycling information, and bulk pickup.
+
+🚌 Public Transportation
+
+Description:
+
+Bus routes, transit schedules, park-and-ride locations, and transportation resources.
+
+🐶 Pet Services
+
+Description:
+
+Pet licensing, dog parks, animal shelter information, and pet adoption resources.
+
+💼 Jobs & Careers
+
+Description:
+
+City jobs, major employers, hiring events, internships, and career opportunities.
+
+👮 Public Safety
+
+Description:
+
+Emergency resources, police services, fire department information, and neighborhood safety.
+
+🚗 Transportation & DMV
+
+Description:
+
+Parking, vehicle services, transportation updates, and driving resources.
+
+🏛 Government Services
+
+Description:
+
+Taxes, permits, voting information, public records, and city departments.
+
+📚 Library & Learning
+
+Description:
+
+Library services, educational resources, community classes, and digital learning.
+
+🏥 Health & Wellness
+
+Description:
+
+Hospitals, urgent care, mental health resources, clinics, and wellness services.
+
+🎓 Schools & Education
+
+Description:
+
+Schools, colleges, childcare resources, and educational opportunities.
+
+🎉 Community Events
+
+Description:
+
+Festivals, volunteer opportunities, farmers markets, concerts, and community activities.
+
+Modern Interactions
+
+Every card should include:
+
+Animated icon
+Hover elevation
+Subtle glow
+Ripple click effect
+Learn More button
+Quick Access button
+
+Cards should feel engaging rather than static.
+
+Service Categories
+
+Allow users to filter services.
+
+Examples:
+
+Utilities
+
+Transportation
+
+Government
+
+Education
+
+Health
+
+Employment
+
+Community
+
+Pets
+
+Safety
+
+Housing
+
+Filtering should animate smoothly.
+
+Quick Actions
+
+Above the service cards, create a row of quick actions.
+
+Examples:
+
+Pay Utility Bill
+
+Report an Issue
+
+Apply for City Jobs
+
+Find My Trash Day
+
+Register a Pet
+
+Find Transit
+
+Upcoming Events
+
+Emergency Contacts
+
+Each quick action should appear as a modern pill-shaped button.
+
+Personalized Dashboard (Prototype)
+
+Create a placeholder "My Newport News" panel.
+
+Allow users to imagine saving their favorite services.
+
+Examples:
+
+⭐ Favorite Services
+
+🕒 Recently Used
+
+📅 Upcoming Events
+
+💧 Utility Status
+
+🗑 Next Trash Pickup
+
+💼 Saved Job Listings
+
+🐶 Pet Reminders
+
+These can be prototype placeholders.
+
+Search
+
+Add a Resident Services search bar.
+
+Placeholder:
+
+"What city service are you looking for?"
+
+Suggested searches:
+
+Water Bill
+
+Trash Schedule
+
+Bus Routes
+
+Jobs
+
+Pet License
+
+Library
+
+Police
+
+Events
+
+Permits
+
+Schools
+
+As the user types, show suggested services.
+
+Visual Design
+
+This section should feel vibrant and welcoming.
+
+Use:
+
+High-quality custom icons
+Beautiful illustrations
+Subtle gradients
+Glassmorphism accents
+Soft shadows
+Rounded cards
+Smooth hover animations
+Consistent spacing
+
+Avoid making the section look like a traditional government directory.
+
+Integration with the Housing Hub
+
+This should not feel like a separate website.
+
+It should naturally continue the user's journey.
+
+The flow should feel like:
+
+🏡 Find a Home
+
+↓
+
+📍 Explore Neighborhoods
+
+↓
+
+🎮 Learn Through the Simulator
+
+↓
+
+🚚 Move Into Your New Home
+
+↓
+
+🏙 Access Resident Services
+
+↓
+
+❤️ Become Part of the Newport News Community
+
+The Resident Services Hub should reinforce that homeownership is only the beginning of living in Newport News.

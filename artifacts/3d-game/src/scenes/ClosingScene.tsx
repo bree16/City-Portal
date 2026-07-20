@@ -79,9 +79,9 @@ export default function ClosingScene() {
       getAudioEngine().play('celebration');
       updateSavings(-12000);
       addAchievement('homeowner');
-      confetti({ particleCount: 130, spread: 80, origin: { y: 0.6 }, colors: ['#D4A843', '#0A8F7E', '#0D2B5E', '#fff', '#FFD700'] });
-      setTimeout(() => confetti({ particleCount: 80, spread: 100, origin: { x: 0.15, y: 0.5 }, colors: ['#D4A843', '#fff'] }), 400);
-      setTimeout(() => confetti({ particleCount: 80, spread: 100, origin: { x: 0.85, y: 0.5 }, colors: ['#0A8F7E', '#fff'] }), 700);
+      confetti({ particleCount: 130, spread: 80, origin: { y: 0.6 }, colors: ['#ffea00', '#00f0ff', '#09070a', '#fff', '#FFD700'] });
+      setTimeout(() => confetti({ particleCount: 80, spread: 100, origin: { x: 0.15, y: 0.5 }, colors: ['#ffea00', '#fff'] }), 400);
+      setTimeout(() => confetti({ particleCount: 80, spread: 100, origin: { x: 0.85, y: 0.5 }, colors: ['#00f0ff', '#fff'] }), 700);
     }
     completeInteraction(SIGNING_STEPS[idx].id);
     setStep((prev) => prev + 1);
@@ -210,7 +210,7 @@ export default function ClosingScene() {
         <meshStandardMaterial color="#8B6914" roughness={0.5} metalness={0.1} wireframe />
       </mesh>
       <Html position={[-3.5, 2.2, -6.7]} center distanceFactor={14}>
-        <div style={{ fontFamily: 'serif', fontSize: 12, fontWeight: 700, color: '#0D2B5E', textAlign: 'center' }}>
+        <div style={{ fontFamily: 'serif', fontSize: 12, fontWeight: 700, color: '#09070a', textAlign: 'center' }}>
           DEED OF TRUST<br /><span style={{ fontSize: 9, fontWeight: 400 }}>Newport News, Virginia</span>
         </div>
       </Html>
@@ -250,21 +250,21 @@ export default function ClosingScene() {
       {/* Signing steps panel */}
       <Html position={[0, 5, 4.5]} center distanceFactor={15}>
         <div style={{
-          background: 'rgba(13,43,94,0.97)', borderRadius: 18, padding: '20px 24px', minWidth: 360,
-          color: '#fff', fontFamily: 'Inter, sans-serif', backdropFilter: 'blur(12px)',
+          background: 'rgba(9,7,10,0.97)', borderRadius: 0, padding: '20px 24px', minWidth: 360,
+          color: '#fff', fontFamily: 'var(--display-font)', backdropFilter: 'blur(12px)',
           border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
           textAlign: 'center',
         }}>
           {!celebrating ? (
             <>
-              <div style={{ fontSize: 15, fontWeight: 800, marginBottom: 4, color: '#D4A843' }}>Closing Day — Final Steps</div>
+              <div style={{ fontSize: 15, fontWeight: 800, marginBottom: 4, color: '#ffea00' }}>Closing Day — Final Steps</div>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 18 }}>Sign each document in order</div>
               {SIGNING_STEPS.map((s, i) => (
                 <button key={s.id} onClick={() => handleStep(i)} disabled={i !== step} style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                  width: '100%', padding: '13px 16px', borderRadius: 12, marginBottom: 10,
-                  background: i < step ? 'rgba(74,222,128,0.18)' : i === step ? '#D4A843' : 'rgba(255,255,255,0.06)',
-                  color: i === step ? '#0D2B5E' : i < step ? '#4ade80' : 'rgba(255,255,255,0.4)',
+                  width: '100%', padding: '13px 16px', borderRadius: 0, marginBottom: 10,
+                  background: i < step ? 'rgba(74,222,128,0.18)' : i === step ? '#ffea00' : 'rgba(255,255,255,0.06)',
+                  color: i === step ? '#09070a' : i < step ? '#4ade80' : 'rgba(255,255,255,0.4)',
                   border: i < step ? '1px solid rgba(74,222,128,0.5)' : 'none',
                   cursor: i === step ? 'pointer' : 'default',
                   fontWeight: 700, fontSize: 13, fontFamily: 'Inter, sans-serif', transition: 'all 0.2s',
@@ -277,7 +277,7 @@ export default function ClosingScene() {
           ) : (
             <>
               <div style={{ fontSize: 52, marginBottom: 12 }}>🏡</div>
-              <div style={{ fontSize: 22, fontWeight: 800, color: '#D4A843', marginBottom: 8 }}>You're a Homeowner!</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: '#ffea00', marginBottom: 8 }}>You're a Homeowner!</div>
               <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)', marginBottom: 6, lineHeight: 1.5 }}>
                 Congratulations! Welcome to Newport News homeownership.
               </div>
@@ -285,9 +285,9 @@ export default function ClosingScene() {
                 Closing costs of $12,000 deducted from savings.
               </div>
               <button onClick={handleAdvance} style={{
-                width: '100%', padding: '15px', borderRadius: 14, background: '#D4A843',
-                color: '#0D2B5E', border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 15,
-                fontFamily: 'Inter, sans-serif', boxShadow: '0 4px 20px rgba(212,168,67,0.5)',
+                width: '100%', padding: '15px', borderRadius: 0, background: '#ffea00',
+                color: '#09070a', border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 15,
+                fontFamily: 'var(--display-font)', boxShadow: '0 4px 20px rgba(255,234,0,0.5)',
               }}>
                 Move Into Your New Home! →
               </button>

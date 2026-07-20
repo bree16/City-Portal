@@ -205,9 +205,9 @@ export default function ApartmentScene() {
         <pointLight position={[5, 0.9, 1.2]} intensity={0.3} color="#1060D0" distance={2} />
         <Html position={[0, 0.95, 0]} center distanceFactor={9}>
           <div onClick={() => openDialogue('laptop')} style={{
-            background: completedInteractions.includes('laptop') ? '#4ade80' : '#0A8F7E',
-            color: completedInteractions.includes('laptop') ? '#0D2B5E' : '#fff',
-            fontSize: 10, padding: '3px 8px', borderRadius: 6,
+            background: completedInteractions.includes('laptop') ? '#4ade80' : '#00f0ff',
+            color: completedInteractions.includes('laptop') ? '#09070a' : '#fff',
+            fontSize: 10, padding: '3px 8px', borderRadius: 0,
             whiteSpace: 'nowrap', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif',
           }}>
             {completedInteractions.includes('laptop') ? '✓ Budget Checked' : '💻 Check Budget'}
@@ -238,9 +238,9 @@ export default function ApartmentScene() {
         </mesh>
         <Html position={[0, 0.75, 0]} center distanceFactor={9}>
           <div onClick={() => openDialogue('piggybank')} style={{
-            background: completedInteractions.includes('piggybank') ? '#4ade80' : '#D4A843',
-            color: completedInteractions.includes('piggybank') ? '#0D2B5E' : '#0D2B5E',
-            fontSize: 10, padding: '3px 8px', borderRadius: 6,
+            background: completedInteractions.includes('piggybank') ? '#4ade80' : '#ffea00',
+            color: completedInteractions.includes('piggybank') ? '#09070a' : '#09070a',
+            fontSize: 10, padding: '3px 8px', borderRadius: 0,
             whiteSpace: 'nowrap', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif',
           }}>
             {completedInteractions.includes('piggybank') ? '✓ Savings Checked' : '🐷 Savings Jar'}
@@ -328,8 +328,8 @@ export default function ApartmentScene() {
       {/* Streamlined action panel */}
       <Html position={[0, 4.0, 4.5]} center distanceFactor={14}>
         <div style={{
-          background: 'rgba(13,43,94,0.96)',
-          borderRadius: 18,
+          background: 'rgba(9,7,10,0.96)',
+          borderRadius: 0,
           padding: '18px 22px',
           minWidth: 320,
           color: '#fff',
@@ -338,7 +338,7 @@ export default function ApartmentScene() {
           border: '1px solid rgba(255,255,255,0.12)',
           boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
         }}>
-          <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 4, color: '#D4A843' }}>
+          <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 4, color: '#ffea00' }}>
             Stage 1 — Getting Ready
           </div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', marginBottom: 16 }}>
@@ -352,7 +352,7 @@ export default function ApartmentScene() {
           ].map((step) => (
             <div key={step.id} style={{
               display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10,
-              padding: '9px 12px', borderRadius: 10,
+              padding: '9px 12px', borderRadius: 0,
               background: step.done ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.05)',
               border: step.done ? '1px solid rgba(74,222,128,0.4)' : '1px solid rgba(255,255,255,0.08)',
               fontSize: 12,
@@ -366,11 +366,11 @@ export default function ApartmentScene() {
 
           {/* Stats mini-display */}
           <div style={{ display: 'flex', gap: 10, margin: '12px 0', fontSize: 11 }}>
-            <div style={{ flex: 1, background: 'rgba(255,255,255,0.06)', borderRadius: 8, padding: '8px 10px' }}>
+            <div style={{ flex: 1, background: 'rgba(255,255,255,0.06)', borderRadius: 0, padding: '8px 10px' }}>
               <div style={{ color: 'rgba(255,255,255,0.5)', marginBottom: 2 }}>Savings</div>
-              <div style={{ color: '#0A8F7E', fontWeight: 800 }}>${savings.toLocaleString()}</div>
+              <div style={{ color: '#00f0ff', fontWeight: 800 }}>${savings.toLocaleString()}</div>
             </div>
-            <div style={{ flex: 1, background: 'rgba(255,255,255,0.06)', borderRadius: 8, padding: '8px 10px' }}>
+            <div style={{ flex: 1, background: 'rgba(255,255,255,0.06)', borderRadius: 0, padding: '8px 10px' }}>
               <div style={{ color: 'rgba(255,255,255,0.5)', marginBottom: 2 }}>Credit Score</div>
               <div style={{ color: creditScore >= 650 ? '#4ade80' : '#fbbf24', fontWeight: 800 }}>{creditScore}</div>
             </div>
@@ -387,10 +387,10 @@ export default function ApartmentScene() {
               }
             }}
             style={{
-              width: '100%', padding: '10px', borderRadius: 10,
-              background: 'rgba(10,143,126,0.18)',
-              border: '1px solid rgba(10,143,126,0.4)',
-              color: '#0A8F7E', cursor: 'pointer', fontWeight: 700, fontSize: 12,
+              width: '100%', padding: '10px', borderRadius: 0,
+              background: 'rgba(0,240,255,0.18)',
+              border: '1px solid rgba(0,240,255,0.4)',
+              color: '#00f0ff', cursor: 'pointer', fontWeight: 700, fontSize: 12,
               fontFamily: 'Inter, sans-serif', marginBottom: 8,
             }}
           >
@@ -399,11 +399,11 @@ export default function ApartmentScene() {
 
           {canAdvance ? (
             <button onClick={handleAdvance} style={{
-              width: '100%', padding: '13px', borderRadius: 12,
-              background: '#D4A843', color: '#0D2B5E', border: 'none',
+              width: '100%', padding: '13px', borderRadius: 0,
+              background: '#ffea00', color: '#09070a', border: 'none',
               cursor: 'pointer', fontWeight: 800, fontSize: 13,
               fontFamily: 'Inter, sans-serif',
-              boxShadow: '0 4px 20px rgba(212,168,67,0.4)',
+              boxShadow: '0 4px 20px rgba(255,234,0,0.4)',
             }}>
               Ready to Buy! Let's Go! →
             </button>

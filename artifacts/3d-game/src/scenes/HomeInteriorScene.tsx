@@ -164,7 +164,7 @@ function ClickableProp({ pos, label, tip }: FeatureProp) {
       </mesh>
       {!open && (
         <Html position={[0, 0.42, 0]} center distanceFactor={10}>
-          <div onClick={() => setOpen(true)} style={{ background: 'rgba(10,143,126,0.85)', color: '#fff', borderRadius: 5, padding: '2px 7px', fontSize: 9, fontWeight: 700, fontFamily: 'Inter,sans-serif', whiteSpace: 'nowrap', cursor: 'pointer' }}>
+          <div onClick={() => setOpen(true)} style={{ background: 'rgba(0,240,255,0.85)', color: '#fff', borderRadius: 0, padding: '2px 7px', fontSize: 9, fontWeight: 700, fontFamily: 'var(--display-font)', whiteSpace: 'nowrap', cursor: 'pointer' }}>
             ● Inspect
           </div>
         </Html>
@@ -172,14 +172,14 @@ function ClickableProp({ pos, label, tip }: FeatureProp) {
       {open && (
         <Html position={[0, 1.4, 0]} center distanceFactor={10}>
           <div style={{
-            background: 'rgba(13,43,94,0.96)', border: '1px solid rgba(212,168,67,0.45)',
-            borderRadius: 10, padding: '10px 14px', maxWidth: 210,
-            boxShadow: '0 6px 24px rgba(0,0,0,0.5)', fontFamily: 'Inter,sans-serif',
+            background: 'rgba(9,7,10,0.96)', border: '1px solid rgba(255,234,0,0.45)',
+            borderRadius: 0, padding: '10px 14px', maxWidth: 210,
+            boxShadow: '0 6px 24px rgba(0,0,0,0.5)', fontFamily: 'var(--display-font)',
           }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#D4A843', marginBottom: 5 }}>{label}</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#ffea00', marginBottom: 5 }}>{label}</div>
             <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.82)', lineHeight: 1.45 }}>{tip}</div>
             <button onClick={(e) => { e.stopPropagation(); setOpen(false); }}
-              style={{ marginTop: 8, fontSize: 10, color: 'rgba(255,255,255,0.4)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>
+              style={{ marginTop: 8, fontSize: 10, color: 'rgba(255,255,255,0.4)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--display-font)' }}>
               ✕ Close
             </button>
           </div>
@@ -227,7 +227,7 @@ function ZoneTracker({ homeId }: { homeId: string }) {
 function RoomLabel({ pos, text }: { pos: [number, number, number]; text: string }) {
   return (
     <Html position={pos} center distanceFactor={16} style={{ pointerEvents: 'none' }}>
-      <div style={{ background: 'rgba(13,43,94,0.65)', borderRadius: 7, padding: '3px 9px', fontSize: 9, color: 'rgba(255,255,255,0.55)', fontFamily: 'Inter,sans-serif', fontWeight: 700, backdropFilter: 'blur(4px)', whiteSpace: 'nowrap' }}>
+      <div style={{ background: 'rgba(9,7,10,0.65)', borderRadius: 0, padding: '3px 9px', fontSize: 9, color: 'rgba(255,255,255,0.55)', fontFamily: 'var(--display-font)', fontWeight: 700, backdropFilter: 'blur(4px)', whiteSpace: 'nowrap' }}>
         {text}
       </div>
     </Html>
@@ -277,8 +277,8 @@ export default function HomeInteriorScene() {
 
       {/* Home name card */}
       <Html position={[0, 3.5, 8.5]} center distanceFactor={18}>
-        <div style={{ background: 'rgba(13,43,94,0.9)', borderRadius: 10, padding: '6px 14px', fontFamily: 'Inter,sans-serif', textAlign: 'center', border: '1px solid rgba(212,168,67,0.35)' }}>
-          <div style={{ fontSize: 12, fontWeight: 800, color: '#D4A843' }}>{home.name}</div>
+        <div style={{ background: 'rgba(9,7,10,0.9)', borderRadius: 0, padding: '6px 14px', fontFamily: 'var(--display-font)', textAlign: 'center', border: '1px solid rgba(255,234,0,0.35)' }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: '#ffea00' }}>{home.name}</div>
           <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)' }}>{home.neighborhood} · ${home.price.toLocaleString()}</div>
         </div>
       </Html>

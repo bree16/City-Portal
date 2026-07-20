@@ -43,7 +43,7 @@ function hashId(id: string): number {
  * single material instance is safe to share. */
 const ringGeo = new THREE.RingGeometry(0.55, 0.7, 48);
 const ringMat = new THREE.MeshBasicMaterial({
-  color: '#D4A843',
+  color: '#ffea00',
   transparent: true,
   opacity: 0.45,
   side: THREE.DoubleSide,
@@ -52,7 +52,7 @@ const ringMat = new THREE.MeshBasicMaterial({
 const markerStemGeo = new THREE.CapsuleGeometry(0.045, 0.16, 4, 10);
 const markerDotGeo = new THREE.SphereGeometry(0.05, 12, 10);
 const markerMat = new THREE.MeshStandardMaterial({
-  color: '#D4A843',
+  color: '#ffea00',
   emissive: '#D4A843',
   emissiveIntensity: 0.6,
   roughness: 0.3,
@@ -226,16 +226,16 @@ export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
                 : 'rgba(13, 18, 30, 0.68)',
               color: isActive ? '#F5D97A' : '#fff',
               padding: '3px 10px',
-              borderRadius: 10,
+              borderRadius: 0,
               fontSize: 11,
               fontWeight: 700,
               whiteSpace: 'nowrap',
               fontFamily: 'Inter, sans-serif',
               boxShadow: isActive
-                ? '0 2px 12px rgba(212,168,67,0.35)'
+                ? '0 2px 12px rgba(255,234,0,0.35)'
                 : '0 2px 8px rgba(0,0,0,0.4)',
               border: isActive
-                ? '1.5px solid #D4A843'
+                ? '1.5px solid #ffea00'
                 : '1px solid rgba(255,255,255,0.18)',
               backdropFilter: 'blur(8px)',
               WebkitBackdropFilter: 'blur(8px)',

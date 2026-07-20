@@ -117,8 +117,8 @@ export function SpeechBubble() {
                   style={{
                     marginTop: 10,
                     padding: '8px 12px',
-                    borderRadius: 10,
-                    background: 'rgba(212,168,67,0.12)',
+                    borderRadius: 0,
+                    background: 'rgba(255,234,0,0.12)',
                     border: 'var(--glass-border-gold)',
                     fontSize: 12,
                     color: 'var(--gold)',
@@ -139,7 +139,7 @@ export function SpeechBubble() {
                   style={{
                     width: i === activeDialogue.lineIndex ? 16 : 6,
                     height: 6,
-                    borderRadius: 3,
+                    borderRadius: 0,
                     background: i <= activeDialogue.lineIndex ? 'var(--gold)' : 'rgba(255,255,255,0.2)',
                     transition: 'all 0.2s',
                   }}

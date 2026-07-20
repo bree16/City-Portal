@@ -158,9 +158,9 @@ export default function CounselorOfficeScene() {
       </mesh>
       <Html position={[-3.5, 2.95, -6.7]} center distanceFactor={10}>
         <div onClick={() => openDialogue('whiteboard')} style={{
-          background: completedInteractions.includes('whiteboard') ? '#4ade80' : '#0D2B5E',
-          color: completedInteractions.includes('whiteboard') ? '#0D2B5E' : '#fff',
-          fontSize: 10, padding: '3px 10px', borderRadius: 6,
+          background: completedInteractions.includes('whiteboard') ? '#4ade80' : '#09070a',
+          color: completedInteractions.includes('whiteboard') ? '#09070a' : '#fff',
+          fontSize: 10, padding: '3px 10px', borderRadius: 0,
           whiteSpace: 'nowrap', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif',
         }}>
           {completedInteractions.includes('whiteboard') ? '✓ ' : ''}Credit Score Guide
@@ -188,9 +188,9 @@ export default function CounselorOfficeScene() {
         ))}
         <Html position={[0, 1.55, 0]} center distanceFactor={10}>
           <div onClick={() => openDialogue('filing')} style={{
-            background: completedInteractions.includes('filing') ? '#4ade80' : '#0A8F7E',
-            color: completedInteractions.includes('filing') ? '#0D2B5E' : '#fff',
-            fontSize: 10, padding: '3px 10px', borderRadius: 6,
+            background: completedInteractions.includes('filing') ? '#4ade80' : '#00f0ff',
+            color: completedInteractions.includes('filing') ? '#09070a' : '#fff',
+            fontSize: 10, padding: '3px 10px', borderRadius: 0,
             whiteSpace: 'nowrap', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif',
           }}>
             {completedInteractions.includes('filing') ? '✓ ' : ''}Document Checklist
@@ -245,14 +245,14 @@ export default function CounselorOfficeScene() {
       {/* Task checklist panel */}
       <Html position={[-4, 4, 4]} center distanceFactor={15}>
         <div style={{
-          background: 'rgba(13,43,94,0.96)',
-          borderRadius: 18, padding: '18px 20px', minWidth: 300,
-          color: '#fff', fontFamily: 'Inter, sans-serif',
+          background: 'rgba(9,7,10,0.96)',
+          borderRadius: 0, padding: '18px 20px', minWidth: 300,
+          color: '#fff', fontFamily: 'var(--display-font)',
           backdropFilter: 'blur(12px)',
           border: '1px solid rgba(255,255,255,0.12)',
           boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
         }}>
-          <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 2, color: '#D4A843' }}>
+          <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 2, color: '#ffea00' }}>
             Getting Ready to Buy
           </div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 14 }}>
@@ -261,7 +261,7 @@ export default function CounselorOfficeScene() {
           {TASKS.map((t) => (
             <div key={t.id} style={{
               display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10,
-              padding: '8px 12px', borderRadius: 10,
+              padding: '8px 12px', borderRadius: 0,
               background: completedInteractions.includes(t.id) ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.05)',
               border: completedInteractions.includes(t.id) ? '1px solid rgba(74,222,128,0.4)' : '1px solid rgba(255,255,255,0.08)',
               fontSize: 12,
@@ -272,16 +272,16 @@ export default function CounselorOfficeScene() {
               </span>
             </div>
           ))}
-          <div style={{ fontSize: 11, color: '#D4A843', textAlign: 'center', margin: '6px 0 10px', fontWeight: 700 }}>
+          <div style={{ fontSize: 11, color: '#ffea00', textAlign: 'center', margin: '6px 0 10px', fontWeight: 700 }}>
             {doneCount}/2 complete
           </div>
           {canAdvance ? (
             <button onClick={handleAdvance} style={{
-              width: '100%', padding: '12px', borderRadius: 12,
-              background: '#D4A843', color: '#0D2B5E', border: 'none',
+              width: '100%', padding: '12px', borderRadius: 0,
+              background: '#ffea00', color: '#09070a', border: 'none',
               cursor: 'pointer', fontWeight: 800, fontSize: 13,
               fontFamily: 'Inter, sans-serif',
-              boxShadow: '0 4px 20px rgba(212,168,67,0.4)',
+              boxShadow: '0 4px 20px rgba(255,234,0,0.4)',
             }}>
               Start House Hunting! →
             </button>

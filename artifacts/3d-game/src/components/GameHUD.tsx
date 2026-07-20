@@ -51,7 +51,7 @@ function MiniMap({ playerPosition }: { playerPosition: [number, number, number] 
         pointerEvents: 'none',
       }}
     >
-      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 5, textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 5, textAlign: 'center', fontFamily: 'var(--display-font)' }}>
         City Map
       </div>
       <svg width={MAP_W} height={MAP_H} style={{ display: 'block', overflow: 'visible' }}>
@@ -89,8 +89,8 @@ function MiniMap({ playerPosition }: { playerPosition: [number, number, number] 
         })}
 
         {/* Player position dot */}
-        <circle cx={px.x} cy={px.y} r={4} fill="#D4A843" opacity={0.95} />
-        <circle cx={px.x} cy={px.y} r={6} fill="none" stroke="#D4A843" strokeWidth={1} opacity={0.5} />
+        <circle cx={px.x} cy={px.y} r={4} fill="#ffea00" opacity={0.95} />
+        <circle cx={px.x} cy={px.y} r={6} fill="none" stroke="#ffea00" strokeWidth={1} opacity={0.5} />
       </svg>
     </div>
   );
@@ -114,7 +114,7 @@ function ObjectiveCard({ stage }: { stage: number }) {
         alignItems: 'center',
         gap: 8,
         padding: '8px 18px',
-        borderColor: 'rgba(212,168,67,0.35)',
+        borderColor: 'rgba(255,234,0,0.35)',
         fontSize: 13,
         fontWeight: 600,
         fontFamily: 'Inter, sans-serif',
@@ -167,7 +167,7 @@ export function GameHUD() {
       >
         {/* Logo + player name */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ background: 'var(--teal-grad)', padding: 6, borderRadius: 10, display: 'flex', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3)' }}>
+          <div style={{ background: 'var(--teal-grad)', padding: 6, borderRadius: 0, display: 'flex', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3)' }}>
             <Home size={16} color="#fff" />
           </div>
           <div style={{ lineHeight: 1.25 }}>
@@ -200,7 +200,7 @@ export function GameHUD() {
           <div
             style={{
               padding: '3px 14px',
-              borderRadius: 999,
+              borderRadius: 0,
               background: isCity ? 'var(--teal-grad)' : 'var(--gold-grad)',
               color: 'var(--ink)',
               fontSize: 11,
@@ -250,10 +250,10 @@ export function GameHUD() {
               className="glass-btn"
               style={{
                 ...(muted
-                  ? { background: 'rgba(212,168,67,0.18)', borderColor: 'rgba(212,168,67,0.5)', color: 'var(--gold)' }
+                  ? { background: 'rgba(255,234,0,0.18)', borderColor: 'rgba(255,234,0,0.5)', color: 'var(--gold)' }
                   : { color: 'var(--glass-text-dim)' }),
                 padding: '4px 7px',
-                borderRadius: 8,
+                borderRadius: 0,
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -276,7 +276,7 @@ export function GameHUD() {
                     width: 64,
                     height: 4,
                     cursor: 'pointer',
-                    accentColor: '#D4A843',
+                    accentColor: '#ffea00',
                     opacity: 0.85,
                   }}
                 />
@@ -296,7 +296,7 @@ export function GameHUD() {
                     width: 64,
                     height: 4,
                     cursor: 'pointer',
-                    accentColor: '#0A8F7E',
+                    accentColor: '#00f0ff',
                     opacity: 0.85,
                   }}
                 />
@@ -346,7 +346,7 @@ export function GameHUD() {
             position: 'fixed',
             inset: 0,
             zIndex: 60,
-            background: 'rgba(2,8,24,0.55)',
+            background: 'rgba(9,7,10,0.55)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -427,7 +427,7 @@ export function GameHUD() {
               style={{
                 height: 6,
                 width: s === stage ? 22 : 8,
-                borderRadius: 3,
+                borderRadius: 0,
                 background:
                   s < stage ? 'var(--teal)' : s === stage ? 'var(--gold)' : 'rgba(255,255,255,0.18)',
                 transition: 'all 0.3s',
@@ -451,7 +451,7 @@ export function GameHUD() {
           height: 52,
           borderRadius: '50%',
           ...(phoneOpen
-            ? { boxShadow: '0 0 0 4px rgba(212,168,67,0.3), 0 8px 24px rgba(2,8,24,0.45), inset 0 1px 0 rgba(255,255,255,0.4)' }
+            ? { boxShadow: '0 0 0 4px rgba(255,234,0,0.3), 0 8px 24px rgba(9,7,10,0.45), inset 0 1px 0 rgba(255,255,255,0.4)' }
             : {}),
           display: 'flex',
           alignItems: 'center',

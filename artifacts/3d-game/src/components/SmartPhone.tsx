@@ -7,8 +7,8 @@ import { getAudioEngine } from '@/hooks/useGameAudio';
 type AppId = 'budget' | 'credit' | 'housing' | 'documents' | 'achievements';
 
 const APPS: { id: AppId; icon: string; label: string; color: string }[] = [
-  { id: 'budget',       icon: '💰', label: 'Budget',   color: '#0A8F7E' },
-  { id: 'credit',       icon: '📊', label: 'Credit',   color: '#0D2B5E' },
+  { id: 'budget',       icon: '💰', label: 'Budget',   color: '#00f0ff' },
+  { id: 'credit',       icon: '📊', label: 'Credit',   color: '#09070a' },
   { id: 'housing',      icon: '🏠', label: 'Homes',    color: '#8B4513' },
   { id: 'documents',    icon: '📄', label: 'Docs',     color: '#6B3FA0' },
   { id: 'achievements', icon: '🏆', label: 'Awards',   color: '#C0392B' },
@@ -94,12 +94,12 @@ function BudgetApp() {
         <span>{label}</span>
         <span style={{ fontWeight: 700, color: '#fff' }}>${value.toLocaleString()}/mo</span>
       </div>
-      <div style={{ height: 8, borderRadius: 4, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+      <div style={{ height: 8, borderRadius: 0, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${(value / maxBar) * 100}%` }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
-          style={{ height: '100%', borderRadius: 4, background: color }}
+          style={{ height: '100%', borderRadius: 0, background: color }}
         />
       </div>
     </div>
@@ -109,22 +109,22 @@ function BudgetApp() {
     <div style={{ padding: '0 4px' }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 16 }}>
         {[
-          { label: '💰 Cash',    value: `$${cash.toLocaleString()}`,    color: '#D4A843' },
-          { label: '🏦 Savings', value: `$${savings.toLocaleString()}`, color: '#0A8F7E' },
+          { label: '💰 Cash',    value: `$${cash.toLocaleString()}`,    color: '#ffea00' },
+          { label: '🏦 Savings', value: `$${savings.toLocaleString()}`, color: '#00f0ff' },
           { label: '💳 Debt',    value: `$${debt.toLocaleString()}`,    color: '#f87171' },
           { label: '📈 Surplus', value: `$${surplus.toLocaleString()}`, color: surplus >= 0 ? '#4ade80' : '#f87171' },
         ].map(({ label, value, color }) => (
-          <div key={label} style={{ background: 'rgba(255,255,255,0.07)', borderRadius: 12, padding: '10px 12px' }}>
+          <div key={label} style={{ background: 'rgba(255,255,255,0.07)', borderRadius: 0, padding: '10px 12px' }}>
             <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>{label}</div>
             <div style={{ fontSize: 15, fontWeight: 800, color }}>{value}</div>
           </div>
         ))}
       </div>
       <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 1 }}>Monthly Budget</div>
-      <Bar value={monthlyIncome}   color="#0A8F7E" label="Income" />
+      <Bar value={monthlyIncome}   color="#00f0ff" label="Income" />
       <Bar value={monthlyExpenses} color="#C0392B" label="Expenses" />
       <div style={{
-        marginTop: 12, padding: '10px 14px', borderRadius: 10,
+        marginTop: 12, padding: '10px 14px', borderRadius: 0,
         background: surplus >= 0 ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)',
         border: `1px solid ${surplus >= 0 ? 'rgba(74,222,128,0.3)' : 'rgba(248,113,113,0.3)'}`,
         fontSize: 12, color: surplus >= 0 ? '#4ade80' : '#f87171', fontWeight: 700,
@@ -160,7 +160,7 @@ function CreditApp() {
         ].map(({ score, label, met }) => (
           <div key={score} style={{
             display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6,
-            padding: '6px 10px', borderRadius: 8,
+            padding: '6px 10px', borderRadius: 0,
             background: met ? 'rgba(74,222,128,0.1)' : 'rgba(255,255,255,0.05)',
           }}>
             <span style={{ fontSize: 14 }}>{met ? '✅' : '⬜'}</span>
@@ -196,20 +196,20 @@ function HousingApp() {
         const selected = selectedHomeId === h.id;
         return (
           <div key={h.id} style={{
-            borderRadius: 12, overflow: 'hidden',
+            borderRadius: 0, overflow: 'hidden',
             border: selected ? '2px solid var(--gold)' : '1px solid rgba(255,255,255,0.1)',
-            background: selected ? 'rgba(212,168,67,0.1)' : 'rgba(255,255,255,0.06)',
+            background: selected ? 'rgba(255,234,0,0.1)' : 'rgba(255,255,255,0.06)',
           }}>
             {/* Color swatch header */}
             <div style={{ height: 48, background: h.color, display: 'flex', alignItems: 'center', padding: '0 12px', gap: 8 }}>
               <span style={{ fontSize: 20 }}>🏠</span>
               <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>{h.name}</div>
-              {selected && <span style={{ marginLeft: 'auto', fontSize: 10, background: '#D4A843', color: '#0D2B5E', padding: '2px 8px', borderRadius: 20, fontWeight: 800 }}>YOUR PICK ✓</span>}
+              {selected && <span style={{ marginLeft: 'auto', fontSize: 10, background: '#ffea00', color: '#09070a', padding: '2px 8px', borderRadius: 0, fontWeight: 800 }}>YOUR PICK ✓</span>}
             </div>
             <div style={{ padding: '10px 12px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
                 <span style={{ fontSize: 16, fontWeight: 800, color: '#fff' }}>${h.price.toLocaleString()}</span>
-                <span style={{ fontSize: 12, color: '#0A8F7E', fontWeight: 700 }}>${h.monthlyPayment}/mo</span>
+                <span style={{ fontSize: 12, color: '#00f0ff', fontWeight: 700 }}>${h.monthlyPayment}/mo</span>
               </div>
               <div style={{ display: 'flex', gap: 12, fontSize: 11, color: 'rgba(255,255,255,0.55)', marginBottom: 8 }}>
                 <span>🛏 {h.beds}bd</span>
@@ -254,7 +254,7 @@ function DocumentsApp() {
         return (
           <div key={id} style={{
             display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px',
-            borderRadius: 10, marginBottom: 8,
+            borderRadius: 0, marginBottom: 8,
             background: done ? 'rgba(74,222,128,0.1)' : 'rgba(255,255,255,0.05)',
             border: `1px solid ${done ? 'rgba(74,222,128,0.3)' : 'rgba(255,255,255,0.08)'}`,
           }}>
@@ -266,7 +266,7 @@ function DocumentsApp() {
           </div>
         );
       })}
-      <div style={{ marginTop: 12, padding: '10px 12px', borderRadius: 10, background: 'rgba(212,168,67,0.08)', border: '1px solid rgba(212,168,67,0.2)', fontSize: 11, color: 'rgba(212,168,67,0.9)', lineHeight: 1.5 }}>
+      <div style={{ marginTop: 12, padding: '10px 12px', borderRadius: 0, background: 'rgba(255,234,0,0.08)', border: '1px solid rgba(255,234,0,0.2)', fontSize: 11, color: 'rgba(255,234,0,0.9)', lineHeight: 1.5 }}>
         💡 Gather these docs early — missing documents are the #1 cause of mortgage delays.
       </div>
     </div>
@@ -286,13 +286,13 @@ function AchievementsApp() {
           const earned = achievements.includes(id);
           return (
             <div key={id} style={{
-              padding: '12px 10px', borderRadius: 12, textAlign: 'center',
-              background: earned ? 'rgba(212,168,67,0.12)' : 'rgba(255,255,255,0.04)',
-              border: `1.5px solid ${earned ? 'rgba(212,168,67,0.5)' : 'rgba(255,255,255,0.08)'}`,
+              padding: '12px 10px', borderRadius: 0, textAlign: 'center',
+              background: earned ? 'rgba(255,234,0,0.12)' : 'rgba(255,255,255,0.04)',
+              border: `1.5px solid ${earned ? 'rgba(255,234,0,0.5)' : 'rgba(255,255,255,0.08)'}`,
               filter: earned ? 'none' : 'grayscale(1) opacity(0.4)',
             }}>
               <div style={{ fontSize: 28, marginBottom: 4 }}>{earned ? icon : '🔒'}</div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: earned ? '#D4A843' : 'rgba(255,255,255,0.5)', marginBottom: 2 }}>{label}</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: earned ? '#ffea00' : 'rgba(255,255,255,0.5)', marginBottom: 2 }}>{label}</div>
               <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', lineHeight: 1.3 }}>{desc}</div>
             </div>
           );
@@ -358,7 +358,7 @@ export function SmartPhone() {
               zIndex: 51,
               width: 360,
               maxHeight: '88dvh',
-              borderRadius: 44,
+              borderRadius: 0,
               background: '#0b0b12',
               boxShadow: '0 0 0 2px rgba(255,255,255,0.08), 0 0 0 4px #1a1a24, 0 32px 80px rgba(0,0,0,0.7)',
               padding: 6,
@@ -374,7 +374,7 @@ export function SmartPhone() {
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden',
-                borderRadius: 38,
+                borderRadius: 0,
                 background: 'var(--glass-bg-strong)',
                 flex: 1,
                 minHeight: 0,
@@ -384,7 +384,7 @@ export function SmartPhone() {
             <div style={{ padding: '14px 20px 0', position: 'relative', flexShrink: 0 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11, color: 'var(--glass-text-dim)', fontWeight: 600 }}>
                 <span>9:41</span>
-                <div style={{ width: 100, height: 22, borderRadius: 11, background: 'rgba(0,0,0,0.5)', position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 10 }} />
+                <div style={{ width: 100, height: 22, borderRadius: 0, background: 'rgba(0,0,0,0.5)', position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 10 }} />
                 <span>●●● 📶 🔋</span>
               </div>
             </div>
@@ -439,17 +439,17 @@ export function SmartPhone() {
                           className="phone-app-tile"
                           style={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                            padding: '14px 8px', borderRadius: 18,
+                            padding: '14px 8px', borderRadius: 0,
                             background: `linear-gradient(150deg, ${color} 0%, ${color}99 100%)`,
                             fontFamily: 'Inter, sans-serif',
                           }}
                         >
                           <span style={{ fontSize: 28 }}>{icon}</span>
-                          <span style={{ fontSize: 10, fontWeight: 700, color: '#fff', fontFamily: 'Inter, sans-serif' }}>{label}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, color: '#fff', fontFamily: 'var(--display-font)' }}>{label}</span>
                         </button>
                       ))}
                     </div>
-                    <div style={{ marginTop: 20, padding: '12px 14px', borderRadius: 14, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, color: 'var(--glass-text-dim)', lineHeight: 1.5 }}>
+                    <div style={{ marginTop: 20, padding: '12px 14px', borderRadius: 0, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, color: 'var(--glass-text-dim)', lineHeight: 1.5 }}>
                       💡 Your phone tracks your entire homebuying journey. Check it anytime for tips and progress.
                     </div>
                   </motion.div>
@@ -459,7 +459,7 @@ export function SmartPhone() {
 
             {/* Home indicator */}
             <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 14px', flexShrink: 0 }}>
-              <div style={{ width: 100, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.25)' }} />
+              <div style={{ width: 100, height: 4, borderRadius: 0, background: 'rgba(255,255,255,0.25)' }} />
             </div>
             </div>
           </motion.div>

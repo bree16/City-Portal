@@ -87,10 +87,10 @@ export function InteractionZone({
           <div
             onClick={onActivate}
             style={{
-              background: 'rgba(13,43,94,0.95)',
+              background: 'rgba(9,7,10,0.95)',
               border: `1px solid ${color}`,
               color: '#fff',
-              borderRadius: 8,
+              borderRadius: 0,
               padding: '4px 10px',
               fontSize: 11,
               fontWeight: 700,
