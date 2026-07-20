@@ -17,7 +17,6 @@ import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from '@/components/ui/badge';
 import { NewsEventsSlideshow } from '@/components/NewsEventsSlideshow';
-import { StreetLifeOverlay } from '@/components/StreetLifeOverlay';
 import heroIllustration from '@assets/generated_images/hero_illustration.png';
 import hiltonImage from '@assets/stock_images/hood_hilton.jpg';
 import denbighImage from '@assets/stock_images/hood_denbigh.jpg';
@@ -88,7 +87,6 @@ export default function HomePage() {
       <ScrollProgress />
       {/* 1. Hero Section */}
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-primary text-white">
-        <StreetLifeOverlay />
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0B2146] to-accent/80 z-0"></div>
         {/* Animated gradient shimmer layer */}
         <div className="absolute inset-0 z-0 opacity-30" style={{

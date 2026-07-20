@@ -32,6 +32,7 @@ import ChecklistPage from '@/pages/ChecklistPage';
 import ShipPage from '@/pages/ShipPage';
 import { HelpLineStrip } from '@/components/HelpLineStrip';
 import { AccessibilityWidget } from '@/components/AccessibilityWidget';
+import { CityLiveFeed } from '@/components/CityLiveFeed';
 
 const queryClient = new QueryClient();
 
@@ -166,6 +167,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       <Footer />
       <ChatWidget />
       <AccessibilityWidget />
+      <CityLiveFeed />
     </div>
   );
 }
