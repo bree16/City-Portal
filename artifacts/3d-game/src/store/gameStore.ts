@@ -26,6 +26,8 @@ export interface GameState {
   gameStarted: boolean;
   transitioning: boolean;
   phoneOpen: boolean;
+  /** How many in-world interactions the player has ever made — used for first-time hints. */
+  interactionCount: number;
 
   cash: number;
   savings: number;
@@ -56,6 +58,8 @@ export interface GameState {
   // Home Life (Stage 8) state
   homeValue: number;
   mortgageBalance: number;
+  /** Fixed monthly mortgage payment set at purchase (30-yr fixed at 6.5%). */
+  mortgagePayment: number;
   improvementsOwned: string[];
   pendingMaintenance: MaintenanceEvent | null; // transient
 
@@ -78,6 +82,7 @@ export interface GameState {
   buyImprovement: (id: string, cost: number, valuePct: number) => void;
   advanceHomeMonth: () => void;
   togglePhone: () => void;
+  noteInteraction: () => void;
   setCareer: (id: string, monthlyIncome: number, monthlyExpenses: number, bonus: { type: 'cash' | 'savings' | 'creditScore'; amount: number }) => void;
   setPendingLifeEvent: (event: LifeEvent | null) => void;
   applyLifeEvent: () => void;
@@ -135,6 +140,7 @@ const INITIAL_STATE = {
   gameStarted: false,
   transitioning: false,
   phoneOpen: false,
+  interactionCount: 0,
   cash: 5800,
   savings: 3500,
   creditScore: 635,
@@ -158,6 +164,7 @@ const INITIAL_STATE = {
   tourProgress: {} as Record<string, string[]>,
   homeValue: 0,
   mortgageBalance: 0,
+  mortgagePayment: 0,
   improvementsOwned: [] as string[],
 };
 
@@ -189,6 +196,7 @@ export const useGameStore = create<GameState>()(
 
       setPhoneOpen: (v) => set({ phoneOpen: v }),
       togglePhone: () => set((s) => ({ phoneOpen: !s.phoneOpen })),
+      noteInteraction: () => set((s) => ({ interactionCount: s.interactionCount + 1 })),
       setCurrentLocation: (id) => set({ currentLocation: id }),
       markRoomVisited: (homeId, room) =>
         set((s) => {
@@ -215,6 +223,7 @@ export const useGameStore = create<GameState>()(
           return {
             homeValue: homePrice,
             mortgageBalance: Math.round(homePrice * 0.90),
+            mortgagePayment: Math.round(homePrice * 0.90 * 0.006321), // fixed 30-yr payment at 6.5%
           };
         }),
       setPendingMaintenance: (event) => set({ pendingMaintenance: event }),
@@ -241,10 +250,12 @@ export const useGameStore = create<GameState>()(
       advanceHomeMonth: () =>
         set((s) => {
           const net = s.monthlyIncome - s.monthlyExpenses;
-          // Real 30-yr amortization: payment from the original loan (90% of home value)
-          // at 6.5% APR; principal = payment minus this month's interest.
+          // Real 30-yr amortization: FIXED payment set at purchase; principal =
+          // payment minus this month's interest on the remaining balance.
           const monthlyRate = 0.065 / 12;
-          const payment = Math.round(s.homeValue * 0.9 * 0.006321); // 30-yr payment factor at 6.5%
+          const payment = s.mortgagePayment > 0
+            ? s.mortgagePayment
+            : Math.round(s.homeValue * 0.9 * 0.006321); // fallback for saves from before this field existed
           const interest = Math.round(s.mortgageBalance * monthlyRate);
           const principalPaid = Math.max(50, payment - interest);
           return {
@@ -381,6 +392,7 @@ export const useGameStore = create<GameState>()(
           // v4 → v5: add Home Life fields.
           if (typeof s.homeValue !== 'number') s.homeValue = 0;
           if (typeof s.mortgageBalance !== 'number') s.mortgageBalance = 0;
+          if (typeof s.mortgagePayment !== 'number') s.mortgagePayment = 0;
           if (!Array.isArray(s.improvementsOwned)) s.improvementsOwned = [];
         }
         if (fromVersion < 6) {

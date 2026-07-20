@@ -52,9 +52,9 @@ type LightCfg = {
 };
 
 const CITY_CFG: LightCfg = {
-  ambient: 0.75, ambientColor: '#E8F4FF',
+  ambient: 0.75, ambientColor: '#FFF0DA',
   keyColor: '#FFFBF0', keyIntensity: 2.0, keyPos: [30, 28, 20],
-  fillColor: '#E0F0FF', fillIntensity: 0.8,
+  fillColor: '#FFE7C2', fillIntensity: 0.8,
   rimColor: '#FFD700', rimIntensity: 0.35,
   fogColor: '#87CEEB', fogNear: 45, fogFar: 100,
   envPreset: 'park',
@@ -72,18 +72,18 @@ const INTERIOR_CFG: Record<string, LightCfg> = {
     accentColor: '#FFB347', accentPos: [-6, 5, -4],
   },
   counselor: {
-    ambient: 0.5, ambientColor: '#F0F4FF',
-    keyColor: '#FFFFFF', keyIntensity: 1.3, keyPos: [10, 16, 8],
-    fillColor: '#D0E8FF', fillIntensity: 0.45,
+    ambient: 0.5, ambientColor: '#FFF2DC',
+    keyColor: '#FFF6E8', keyIntensity: 1.3, keyPos: [10, 16, 8],
+    fillColor: '#FFE4B5', fillIntensity: 0.45,
     rimColor: '#0A8F7E', rimIntensity: 0.25,
     fogColor: '#EEF2F8', fogNear: 24, fogFar: 60,
     envPreset: 'lobby',
-    accentColor: '#B0D0FF', accentPos: [0, 6, -4],
+    accentColor: '#FFD9A0', accentPos: [0, 6, -4],
   },
   realestate: {
-    ambient: 0.7, ambientColor: '#E8F4FF',
+    ambient: 0.7, ambientColor: '#FFF0DA',
     keyColor: '#FFFBF0', keyIntensity: 2.2, keyPos: [20, 22, 15],
-    fillColor: '#E0F0FF', fillIntensity: 0.8,
+    fillColor: '#FFE7C2', fillIntensity: 0.8,
     rimColor: '#FFD700', rimIntensity: 0.4,
     fogColor: '#87CEEB', fogNear: 40, fogFar: 90,
     envPreset: 'park',
@@ -101,7 +101,7 @@ const INTERIOR_CFG: Record<string, LightCfg> = {
   bank: {
     ambient: 0.6, ambientColor: '#EEF4FF',
     keyColor: '#E8F0FF', keyIntensity: 1.8, keyPos: [0, 18, 0],
-    fillColor: '#D0E8FF', fillIntensity: 0.6,
+    fillColor: '#FFE4B5', fillIntensity: 0.6,
     rimColor: '#4080FF', rimIntensity: 0.25,
     fogColor: '#E8EFF8', fogNear: 28, fogFar: 65,
     envPreset: 'city',

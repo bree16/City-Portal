@@ -100,7 +100,7 @@ function ProgressApp() {
         <GameIcon name="calendar" size={28} color="var(--sky-blue)" />
         <div>
           <div style={{ fontSize: 18, fontWeight: 800, color: '#fff' }}>Month {month}</div>
-          <div style={{ fontSize: 17, color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>Of 36 months total</div>
+          <div style={{ fontSize: 17, color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>Months on your journey</div>
         </div>
       </div>
       

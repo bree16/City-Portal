@@ -51,8 +51,13 @@ export function InteractionZone({
   // Guard so onPointerDown + onClick don't double-fire from a single tap.
   const firedThisPress = useRef(false);
 
+  // First-time hint beacon: until the player has made a few interactions ever,
+  // every interaction zone shows a bouncing gold arrow so new players know where to click.
+  const showBeacon = useGameStore((s) => s.interactionCount < 4);
+
   const fire = () => {
     getAudioEngine().play('click');
+    useGameStore.getState().noteInteraction();
     onActivate();
   };
 
@@ -112,6 +117,40 @@ export function InteractionZone({
         <ringGeometry args={[radius * 0.75, radius * 0.9, 32]} />
         <meshBasicMaterial color={color} transparent opacity={0.6} depthWrite={false} />
       </mesh>
+
+      {/* First-time hint: bouncing gold arrow visible even from far away */}
+      {showBeacon && !near && (
+        <Html position={[0, height + 0.4, 0]} center distanceFactor={10} zIndexRange={[15, 0]}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 2,
+              pointerEvents: 'none',
+              animation: 'hint-bounce 1.1s ease-in-out infinite',
+            }}
+          >
+            <div
+              style={{
+                background: 'rgba(9,7,10,0.9)',
+                border: '1.5px solid var(--gold)',
+                color: 'var(--gold)',
+                padding: '3px 10px',
+                fontSize: 15,
+                fontWeight: 800,
+                fontFamily: 'Inter, sans-serif',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 0 16px rgba(212,168,67,0.5)',
+              }}
+            >
+              {prompt ? prompt : 'Click here'}
+            </div>
+            <div style={{ color: 'var(--gold)', fontSize: 22, lineHeight: 1, textShadow: '0 0 8px rgba(212,168,67,0.8)' }}>▼</div>
+            <style>{`@keyframes hint-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }`}</style>
+          </div>
+        </Html>
+      )}
 
       {/* Proximity prompt — slightly enlarged when the player is near */}
       {near && prompt && (

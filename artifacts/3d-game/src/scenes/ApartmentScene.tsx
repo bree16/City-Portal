@@ -107,7 +107,7 @@ export default function ApartmentScene() {
       {/* Ceiling light — emissive glow */}
       <mesh position={[0, 4.85, 0]}>
         <boxGeometry args={[1.2, 0.06, 1.2]} />
-        <meshStandardMaterial color="#ffffff" emissive="#E0F0FF" emissiveIntensity={0.6} roughness={0.5} />
+        <meshStandardMaterial color="#ffffff" emissive="#FFE7C2" emissiveIntensity={0.6} roughness={0.5} />
       </mesh>
       <pointLight position={[0, 4.5, 0]} intensity={0.5} color="#5F9EA0" distance={12} />
 
@@ -166,7 +166,7 @@ export default function ApartmentScene() {
         </mesh>
         <mesh position={[0, 1.0, -0.12]} castShadow>
           <boxGeometry args={[1.6, 0.9, 0.08]} />
-          <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.5} roughness={0.1} metalness={0.3} />
+          <meshStandardMaterial color="#E9E4DA" emissive="#FFE7C2" emissiveIntensity={0.5} roughness={0.1} metalness={0.3} />
         </mesh>
         <pointLight position={[3, 1.2, -5.2]} intensity={0.3} color="#4682B4" distance={3} />
       </group>
@@ -197,12 +197,12 @@ export default function ApartmentScene() {
           onPointerOut={() => { document.body.style.cursor = 'auto'; }}
         >
           <boxGeometry args={[0.65, 0.04, 0.45]} />
-          <meshStandardMaterial color="#DDD8CE" roughness={0.2} metalness={0.6} emissive="#E0F0FF" emissiveIntensity={0.2} />
+          <meshStandardMaterial color="#DDD8CE" roughness={0.2} metalness={0.6} emissive="#FFE7C2" emissiveIntensity={0.2} />
         </mesh>
         {/* Laptop screen */}
         <mesh position={[0, 0.62, -0.28]} castShadow>
           <boxGeometry args={[0.65, 0.42, 0.04]} />
-          <meshStandardMaterial color="#E9E4DA" roughness={0.2} metalness={0.5} emissive="#E0F0FF" emissiveIntensity={0.7} />
+          <meshStandardMaterial color="#E9E4DA" roughness={0.2} metalness={0.5} emissive="#FFE7C2" emissiveIntensity={0.7} />
         </mesh>
         <pointLight position={[5, 0.9, 1.2]} intensity={0.3} color="#5F9EA0" distance={2} />
         <Html position={[0, 0.95, 0]} center distanceFactor={9}>
@@ -396,7 +396,7 @@ export default function ApartmentScene() {
               const fires = shouldEventFire(month);
               advanceMonth();
               if (fires) {
-                setPendingLifeEvent(selectLifeEvent(month));
+                setPendingLifeEvent(selectLifeEvent(month, useGameStore.getState().careerId));
               }
             }}
             style={{

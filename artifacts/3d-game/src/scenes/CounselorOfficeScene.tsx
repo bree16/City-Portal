@@ -95,7 +95,7 @@ export default function CounselorOfficeScene() {
       {/* Desk window — light source */}
       <mesh position={[6, 2.3, -6.88]}>
         <boxGeometry args={[2.5, 1.6, 0.08]} />
-        <meshStandardMaterial color="#4682B4" emissive="#E0F0FF" emissiveIntensity={0.6} roughness={0.1} />
+        <meshStandardMaterial color="#4682B4" emissive="#FFE7C2" emissiveIntensity={0.6} roughness={0.1} />
       </mesh>
       <pointLight position={[6, 2.5, -6]} intensity={0.5} color="#5F9EA0" distance={7} />
 
@@ -116,7 +116,7 @@ export default function CounselorOfficeScene() {
         {/* Monitor */}
         <mesh position={[0.4, 0.55, -0.15]} castShadow>
           <boxGeometry args={[0.55, 0.36, 0.05]} />
-          <meshStandardMaterial color="#DDD8CE" roughness={0.2} metalness={0.4} emissive="#E0F0FF" emissiveIntensity={0.6} />
+          <meshStandardMaterial color="#DDD8CE" roughness={0.2} metalness={0.4} emissive="#FFE7C2" emissiveIntensity={0.6} />
         </mesh>
         <pointLight position={[2.5, 0.8, -2.8]} intensity={0.2} color="#4682B4" distance={2} />
         {/* Papers */}

@@ -104,10 +104,18 @@ function ObjectiveCard({ stage, onClose }: { stage: number; onClose: () => void 
       defaultPosition={{ x: window.innerWidth / 2 - 150, y: window.innerHeight - 80 }}
       onClose={onClose}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap' }}>
-        <GameIcon name={obj.icon} size={20} />
-        <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 16, letterSpacing: 0.6, marginRight: 2 }}>Next</span>
-        <span style={{ color: 'var(--glass-text)' }}>{obj.text}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, whiteSpace: 'nowrap' }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: 36, height: 36, flexShrink: 0,
+          background: 'rgba(212,168,67,0.15)', border: '1px solid rgba(212,168,67,0.45)',
+        }}>
+          <GameIcon name={obj.icon} size={22} color="var(--gold)" />
+        </div>
+        <div style={{ lineHeight: 1.3 }}>
+          <div style={{ color: 'var(--gold)', fontWeight: 800, fontSize: 13, letterSpacing: 1 }}>NEXT STEP</div>
+          <div style={{ color: 'var(--glass-text)', fontSize: 16, fontWeight: 600 }}>{obj.text}</div>
+        </div>
       </div>
     </DraggablePanel>
   );
@@ -128,7 +136,22 @@ function useIsNarrow(breakpoint = 720) {
 export function GameHUD() {
   const { stage, month, cash, savings, creditScore, resetGame, quitToMenu, characterAppearance, togglePhone, phoneOpen, lifeEventLog, currentLocation, playerPosition } = useGameStore();
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
+  const [paused, setPaused] = useState(false);
   const isNarrow = useIsNarrow();
+
+  // Esc toggles the pause menu
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      // Don't hijack Esc while the player is typing in an input field
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      setShowQuitConfirm(false);
+      setPaused((p) => !p);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
   const { muted, toggleMute, musicVolume, setMusicVolume, sfxVolume, setSfxVolume } = useAudioControls();
 
   const playerName = characterAppearance.name?.trim() || 'Player';
@@ -196,7 +219,7 @@ export function GameHUD() {
         {/* Center: location + stage + month */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
           <div style={{ fontSize: 15, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6, display: 'flex', alignItems: 'center', gap: 4 }}>
-            {isCity ? <><GameIcon name="map" size={16} /> Newport News City</> : <><GameIcon name="pin" size={16} /> Month {month} of 36</>}
+            {isCity ? <><GameIcon name="map" size={16} /> Newport News City</> : <><GameIcon name="pin" size={16} /> Month {month}</>}
           </div>
           <div
             style={{
@@ -336,6 +359,95 @@ export function GameHUD() {
           </button>
         </div>
       </div>
+
+      {/* ── Pause menu (Esc) ── */}
+      {paused && (
+        <div
+          className="glass-anim-fade"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 65,
+            background: 'rgba(9,7,10,0.65)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'auto',
+            backdropFilter: 'blur(6px)',
+          }}
+          onClick={() => setPaused(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="glass-panel-strong glass-sheen glass-anim-in"
+            style={{ padding: '26px 30px', maxWidth: 380, width: '92%', fontFamily: 'Inter, sans-serif' }}
+          >
+            <div style={{ textAlign: 'center', marginBottom: 18 }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 6 }}>
+                <GameIcon name="settings" size={34} color="var(--gold)" />
+              </div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: 'var(--glass-text)' }}>Paused</div>
+              <div style={{ fontSize: 15, color: 'var(--glass-text-faint)', marginTop: 2 }}>Press Esc to resume</div>
+            </div>
+
+            {/* Sound settings */}
+            <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '14px 16px', marginBottom: 16 }}>
+              <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--glass-text-faint)', letterSpacing: 1, marginBottom: 10 }}>SOUND</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--glass-text-dim)', width: 60 }}>Music</span>
+                <input
+                  type="range" min={0} max={100}
+                  value={muted ? 0 : Math.round(musicVolume * 100)}
+                  onChange={(e) => setMusicVolume(Number(e.target.value) / 100)}
+                  style={{ flex: 1, height: 5, cursor: 'pointer', accentColor: 'var(--gold)' }}
+                />
+                <span style={{ fontSize: 14, color: 'var(--glass-text-faint)', width: 34, textAlign: 'right' }}>{muted ? 0 : Math.round(musicVolume * 100)}%</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--glass-text-dim)', width: 60 }}>Sounds</span>
+                <input
+                  type="range" min={0} max={100}
+                  value={muted ? 0 : Math.round(sfxVolume * 100)}
+                  onChange={(e) => setSfxVolume(Number(e.target.value) / 100)}
+                  style={{ flex: 1, height: 5, cursor: 'pointer', accentColor: 'var(--teal)' }}
+                />
+                <span style={{ fontSize: 14, color: 'var(--glass-text-faint)', width: 34, textAlign: 'right' }}>{muted ? 0 : Math.round(sfxVolume * 100)}%</span>
+              </div>
+              <button
+                onClick={toggleMute}
+                className="glass-btn"
+                style={{ width: '100%', padding: '8px 0', fontSize: 15, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+              >
+                {muted ? <><VolumeX size={17} /> Unmute All</> : <><Volume2 size={17} /> Mute All</>}
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <button
+                onClick={() => { getAudioEngine().play('click'); setPaused(false); }}
+                className="glass-btn-primary"
+                style={{ padding: '11px 0', fontSize: 17, fontWeight: 800 }}
+              >
+                Resume Game
+              </button>
+              <button
+                onClick={() => { getAudioEngine().play('click'); setPaused(false); resetGame(); }}
+                className="glass-btn"
+                style={{ padding: '10px 0', fontSize: 16, fontWeight: 700 }}
+              >
+                Restart Journey
+              </button>
+              <button
+                onClick={() => { getAudioEngine().play('click'); setPaused(false); quitToMenu(); }}
+                className="glass-btn"
+                style={{ padding: '10px 0', fontSize: 16, fontWeight: 700 }}
+              >
+                Quit to Menu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Quit confirmation dialog ── */}
       {showQuitConfirm && (

@@ -101,7 +101,7 @@ export default function NewHomeScene() {
       {/* Hardwood floor */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[20, 16]} />
-        <meshStandardMaterial color="#64748B" roughness={0.4} metalness={0.06} />
+        <meshStandardMaterial color="#9A7B5C" roughness={0.4} metalness={0.06} />
       </mesh>
       <gridHelper args={[20, 40, '#1E3A8A', '#1E3A8A']} position={[0, 0.005, 0]} />
 
@@ -141,15 +141,15 @@ export default function NewHomeScene() {
       {/* Windows — warm sunlight */}
       <mesh position={[-2, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#E9E4DA" emissive="#FFE7C2" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[3.5, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#E9E4DA" emissive="#FFE7C2" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[-9.85, 1.8, 1]} castShadow>
         <boxGeometry args={[0.12, 1.5, 2.0]} />
-        <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.6} roughness={0.05} />
+        <meshStandardMaterial color="#E9E4DA" emissive="#FFE7C2" emissiveIntensity={0.6} roughness={0.05} />
       </mesh>
       <pointLight position={[0, 3.0, -7]} intensity={0.7} color="#5F9EA0" distance={12} />
 

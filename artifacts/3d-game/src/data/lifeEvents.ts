@@ -12,6 +12,8 @@ export interface LifeEvent {
   description: string;
   effect: LifeEventEffect;
   lesson: string;
+  /** If set, this event only fires for these career ids. Omit = fires for everyone. */
+  careers?: string[];
 }
 
 export const lifeEvents: LifeEvent[] = [
@@ -111,15 +113,129 @@ export const lifeEvents: LifeEvent[] = [
     effect: { type: 'credit', delta: 12 },
     lesson: 'Payment history is 35% of your credit score. Consistency beats any credit hack.',
   },
+  // ── Career-specific events ──────────────────────────────────────
+  {
+    id: 'ship_overtime',
+    icon: 'anchor',
+    title: 'Carrier Deadline Overtime',
+    description: 'The shipyard is pushing to finish a carrier overhaul. Two weeks of mandatory overtime = $520 extra.',
+    effect: { type: 'cash', delta: 520 },
+    lesson: 'Overtime is great for savings — but lenders only count it toward a mortgage if it\'s consistent for 2 years.',
+    careers: ['shipbuilding'],
+  },
+  {
+    id: 'ship_boots',
+    icon: 'wrench',
+    title: 'Safety Gear Replacement',
+    description: 'Your steel-toe boots and welding gloves wore out. The yard covers some, but you\'re out $140.',
+    effect: { type: 'cash', delta: -140 },
+    lesson: 'Work-related costs are part of your real budget. Some union dues and gear may be tax-deductible.',
+    careers: ['shipbuilding'],
+  },
+  {
+    id: 'nurse_shift_diff',
+    icon: 'health',
+    title: 'Night Shift Differential',
+    description: 'You picked up three night shifts this month. Shift differential pay added $380 to your paycheck.',
+    effect: { type: 'cash', delta: 380 },
+    lesson: 'Extra shifts can fast-track a down payment — just protect your sleep and health too.',
+    careers: ['healthcare'],
+  },
+  {
+    id: 'nurse_license',
+    icon: 'documents',
+    title: 'License Renewal Fee',
+    description: 'Your RN license renewal plus a required continuing-education course cost $190 this month.',
+    effect: { type: 'cash', delta: -190 },
+    lesson: 'Professional licenses are recurring costs. Budget for them yearly so they never feel like a surprise.',
+    careers: ['healthcare'],
+  },
+  {
+    id: 'tech_cert',
+    icon: 'laptop',
+    title: 'Certification Bonus',
+    description: 'You passed your Security+ cert. Your employer reimbursed the exam AND gave you a $400 bonus.',
+    effect: { type: 'cash', delta: 400 },
+    lesson: 'Certifications raise income fast in tech — and higher income means more house you can safely afford.',
+    careers: ['technology'],
+  },
+  {
+    id: 'gov_shutdown_scare',
+    icon: 'city-hall',
+    title: 'Budget Freeze Scare',
+    description: 'A city budget freeze delayed your paycheck a week. You covered bills from savings — stressful, but you managed.',
+    effect: { type: 'savings', delta: -150 },
+    lesson: 'Even "stable" jobs have hiccups. An emergency fund keeps a late paycheck from becoming a crisis.',
+    careers: ['government'],
+  },
+  {
+    id: 'teacher_supplies',
+    icon: 'book',
+    title: 'Classroom Supplies',
+    description: 'You bought supplies for your students out of pocket again — $130 this semester.',
+    effect: { type: 'cash', delta: -130 },
+    lesson: 'Educators can deduct some classroom expenses at tax time — keep those receipts.',
+    careers: ['education'],
+  },
+  {
+    id: 'teacher_summer',
+    icon: 'sun',
+    title: 'Summer School Pay',
+    description: 'You taught summer school. The extra weeks added $450 to your savings.',
+    effect: { type: 'savings', delta: 450 },
+    lesson: 'Seasonal income spikes are perfect for a down-payment fund — you never budgeted to spend them.',
+    careers: ['education'],
+  },
+  {
+    id: 'military_reenlist',
+    icon: 'medal',
+    title: 'Re-enlistment Bonus Installment',
+    description: 'An installment of your re-enlistment bonus hit your account: $600.',
+    effect: { type: 'savings', delta: 600 },
+    lesson: 'VA loans let service members buy with $0 down — one of the strongest homebuying benefits anywhere.',
+    careers: ['military'],
+  },
+  {
+    id: 'fastfood_tips',
+    icon: 'dining',
+    title: 'Holiday Rush Tips',
+    description: 'A packed holiday weekend meant great tips — an extra $260 in your pocket.',
+    effect: { type: 'cash', delta: 260 },
+    lesson: 'Tip income counts for a mortgage if you report it and it shows a 2-year history. Report your tips!',
+    careers: ['fastfood'],
+  },
+  {
+    id: 'retail_hours_cut',
+    icon: 'cart',
+    title: 'Hours Cut This Month',
+    description: 'The store cut everyone\'s hours after inventory. Your paycheck came up $200 short.',
+    effect: { type: 'cash', delta: -200 },
+    lesson: 'Variable hours make budgeting harder. Base your budget on your LOWEST typical month, not your best.',
+    careers: ['retail'],
+  },
+  {
+    id: 'student_scholarship',
+    icon: 'school',
+    title: 'Scholarship Refund',
+    description: 'Your scholarship covered more than tuition this term. The school refunded you $500.',
+    effect: { type: 'savings', delta: 500 },
+    lesson: 'Graduating with less debt is a head start on homeownership — student loans count in your DTI ratio.',
+    careers: ['student'],
+  },
 ];
 
 /**
  * Deterministically pick a life event for a given month counter.
  * Uses a simple hash so the same month always picks the same event — no Math.random() in render.
+ * Pool = generic events + events matching the player's career.
  */
-export function selectLifeEvent(month: number): LifeEvent {
-  const index = (month * 7 + 3) % lifeEvents.length;
-  return lifeEvents[index];
+export function selectLifeEvent(month: number, careerId?: string | null): LifeEvent {
+  const pool = lifeEvents.filter((e) => !e.careers || (careerId && e.careers.includes(careerId)));
+  if (pool.length === 0) return lifeEvents[0];
+  // Knuth multiplicative hash: distributes indices evenly regardless of pool size,
+  // so career-specific events are actually reachable for every career.
+  const hash = ((month + 1) * 2654435761) >>> 0;
+  return pool[hash % pool.length];
 }
 
 /**

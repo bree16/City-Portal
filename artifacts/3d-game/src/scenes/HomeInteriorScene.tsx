@@ -32,7 +32,7 @@ interface HomeTheme {
 
 const HOME_THEMES: Record<number, HomeTheme> = {
   1: {
-    wallColor: '#E9E4DA', floorColor: '#64748B', bedroomFloorColor: '#A0522D',
+    wallColor: '#E9E4DA', floorColor: '#9A7B5C', bedroomFloorColor: '#A0522D',
     accentColor: '#1E3A8A', ceilingColor: '#E9E4DA',
     hasFireplace: true, hasKitchenIsland: false,
     features: {
@@ -56,7 +56,7 @@ const HOME_THEMES: Record<number, HomeTheme> = {
     },
   },
   2: {
-    wallColor: '#DDD8CE', floorColor: '#8B5A2B', bedroomFloorColor: '#64748B',
+    wallColor: '#DDD8CE', floorColor: '#8B5A2B', bedroomFloorColor: '#9A7B5C',
     accentColor: '#0F766E', ceilingColor: '#DDD8CE',
     hasFireplace: false, hasKitchenIsland: false,
     features: {
@@ -104,7 +104,7 @@ const HOME_THEMES: Record<number, HomeTheme> = {
     },
   },
   4: {
-    wallColor: '#DDD8CE', floorColor: '#64748B', bedroomFloorColor: '#8B5A2B',
+    wallColor: '#DDD8CE', floorColor: '#9A7B5C', bedroomFloorColor: '#8B5A2B',
     accentColor: '#0F766E', ceilingColor: '#DDD8CE',
     hasFireplace: false, hasKitchenIsland: false,
     features: {
@@ -403,7 +403,7 @@ export default function HomeInteriorScene() {
       </mesh>
       <mesh position={[-1.5, 0.88, -0.1]} castShadow>
         <boxGeometry args={[3.5, 0.44, 0.16]} />
-        <meshStandardMaterial color="#64748B" roughness={0.8} />
+        <meshStandardMaterial color="#9A7B5C" roughness={0.8} />
       </mesh>
       {/* Cushions */}
       {([-2, -0.5, 1] as number[]).map((cx) => (
@@ -428,7 +428,7 @@ export default function HomeInteriorScene() {
       {/* TV + stand */}
       <mesh position={[2.5, 0.35, 2]} castShadow>
         <boxGeometry args={[2.4, 0.7, 0.5]} />
-        <meshStandardMaterial color="#64748B" roughness={0.5} metalness={0.1} />
+        <meshStandardMaterial color="#9A7B5C" roughness={0.5} metalness={0.1} />
       </mesh>
       <mesh position={[2.5, 1.3, 2.1]} castShadow>
         <boxGeometry args={[2.0, 1.3, 0.09]} />
@@ -472,7 +472,7 @@ export default function HomeInteriorScene() {
       {theme.hasKitchenIsland && (
         <mesh position={[4.5, 0.52, 0]} castShadow>
           <boxGeometry args={[1.6, 1.04, 3.0]} />
-          <meshStandardMaterial color="#64748B" roughness={0.4} metalness={0.05} />
+          <meshStandardMaterial color="#9A7B5C" roughness={0.4} metalness={0.05} />
         </mesh>
       )}
 
@@ -496,12 +496,12 @@ export default function HomeInteriorScene() {
       {/* Nightstand */}
       <mesh position={[-4.0, 0.38, -2.1]} castShadow>
         <boxGeometry args={[0.7, 0.76, 0.6]} />
-        <meshStandardMaterial color="#64748B" roughness={0.6} />
+        <meshStandardMaterial color="#9A7B5C" roughness={0.6} />
       </mesh>
       {/* Dresser */}
       <mesh position={[-7.2, 0.6, 0.5]} castShadow>
         <boxGeometry args={[0.55, 1.2, 2.0]} />
-        <meshStandardMaterial color="#64748B" roughness={0.6} metalness={0.04} />
+        <meshStandardMaterial color="#9A7B5C" roughness={0.6} metalness={0.04} />
       </mesh>
 
       {/* ── BACKYARD / PATIO ── */}
@@ -556,7 +556,7 @@ export default function HomeInteriorScene() {
           </mesh>
           <mesh position={[lx, 2.78, lz]}>
             <cylinderGeometry args={[0.15, 0.15, 0.04, 10]} />
-            <meshStandardMaterial color="#5F9EA0" emissive="#E0F0FF" emissiveIntensity={0.6} />
+            <meshStandardMaterial color="#5F9EA0" emissive="#FFE7C2" emissiveIntensity={0.6} />
           </mesh>
           <pointLight position={[lx, 2.5, lz]} intensity={0.7} color="#5F9EA0" distance={8} decay={2} />
         </group>

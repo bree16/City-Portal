@@ -130,7 +130,7 @@ export default function HomeLifeScene() {
       {/* ── FLOOR ── */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[20, 16]} />
-        <meshStandardMaterial color="#64748B" roughness={0.42} metalness={0.05} />
+        <meshStandardMaterial color="#9A7B5C" roughness={0.42} metalness={0.05} />
       </mesh>
       <gridHelper args={[20, 40, '#1E3A8A', '#1E3A8A']} position={[0, 0.005, 0]} />
       {/* Rug */}
@@ -168,11 +168,11 @@ export default function HomeLifeScene() {
       {/* ── WINDOWS ── */}
       <mesh position={[-2, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#E9E4DA" emissive="#FFE7C2" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[3.5, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#E9E4DA" emissive="#FFE7C2" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <pointLight position={[0, 3.0, -7]} intensity={1.4} color="#5F9EA0" distance={14} decay={2} />
 
@@ -190,7 +190,7 @@ export default function HomeLifeScene() {
       {/* TV stand + TV */}
       <mesh position={[2.5, 0.3, -2.5]} castShadow>
         <boxGeometry args={[2.5, 0.6, 0.5]} />
-        <meshStandardMaterial color="#64748B" roughness={0.5} />
+        <meshStandardMaterial color="#9A7B5C" roughness={0.5} />
       </mesh>
       <mesh position={[2.5, 1.2, -2.6]} castShadow>
         <boxGeometry args={[2.0, 1.2, 0.09]} />
@@ -226,7 +226,7 @@ export default function HomeLifeScene() {
       {/* Floor lamp beside the sofa */}
       <FloorLamp position={[-4.2, 0, -3.2]} shadeColor="#F5F5DC" lightColor="#FFF0D4" />
       {/* Side table with mug near sofa */}
-      <SideTable position={[-4.2, 0, -1.6]} color="#64748B" />
+      <SideTable position={[-4.2, 0, -1.6]} color="#9A7B5C" />
       {/* Tall plant by the dining area corner */}
       <TallPlant position={[8.5, 0, 5]} scale={1.05} />
       {/* Potted plant near the desk */}
@@ -249,7 +249,7 @@ export default function HomeLifeScene() {
         {/* Countertop */}
         <mesh position={[0.6, 0.92, 0]} castShadow>
           <boxGeometry args={[1.1, 0.06, 4.3]} />
-          <meshStandardMaterial color="#64748B" roughness={0.3} metalness={0.15} />
+          <meshStandardMaterial color="#9A7B5C" roughness={0.3} metalness={0.15} />
         </mesh>
         {/* Upper cabinets */}
         <mesh position={[0.75, 2.1, 0]} castShadow>
@@ -270,7 +270,7 @@ export default function HomeLifeScene() {
         {/* Fridge at end of counter */}
         <mesh position={[0.55, 1.05, -2.4]} castShadow>
           <boxGeometry args={[0.9, 2.1, 0.9]} />
-          <meshStandardMaterial color="#64748B" roughness={0.35} metalness={0.5} />
+          <meshStandardMaterial color="#9A7B5C" roughness={0.35} metalness={0.5} />
         </mesh>
         <mesh position={[0.1, 1.55, -2.4]}>
           <boxGeometry args={[0.03, 0.5, 0.05]} />

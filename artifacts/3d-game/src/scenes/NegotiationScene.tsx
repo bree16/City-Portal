@@ -87,7 +87,7 @@ export default function NegotiationScene() {
           </mesh>
           <mesh position={[x, 3.58, 0]}>
             <cylinderGeometry args={[0.16, 0.16, 0.05, 12]} />
-            <meshStandardMaterial color="#5F9EA0" emissive="#E0F0FF" emissiveIntensity={0.6} />
+            <meshStandardMaterial color="#5F9EA0" emissive="#FFE7C2" emissiveIntensity={0.6} />
           </mesh>
           <pointLight position={[x, 3.2, 0]} intensity={0.9} color="#5F9EA0" distance={6} />
         </group>
