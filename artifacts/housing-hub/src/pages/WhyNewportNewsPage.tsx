@@ -8,18 +8,18 @@ import {
 import { Button } from '@/components/ui/button';
 
 import heroImage from '@assets/generated_images/why_hero.jpg';
-import parksImage from '@assets/generated_images/why_parks.jpg';
-import restaurantsImage from '@assets/generated_images/why_restaurants.jpg';
-import coffeeImage from '@assets/generated_images/why_coffee.jpg';
-import artsImage from '@assets/generated_images/why_arts.jpg';
-import entertainmentImage from '@assets/generated_images/why_entertainment.jpg';
-import eventsImage from '@assets/generated_images/why_events.jpg';
-import shoppingImage from '@assets/generated_images/why_shopping.jpg';
-import neighborhoodsImage from '@assets/generated_images/why_neighborhoods.jpg';
-import petsImage from '@assets/generated_images/why_pets.jpg';
-import waterfrontImage from '@assets/generated_images/why_waterfront.jpg';
-import employersImage from '@assets/generated_images/why_employers.jpg';
-import schoolsImage from '@assets/generated_images/why_schools.jpg';
+import parksImage from '@assets/stock_images/why_parks.jpg';
+import restaurantsImage from '@assets/stock_images/why_restaurants.jpg';
+import coffeeImage from '@assets/stock_images/why_coffee.jpg';
+import artsImage from '@assets/stock_images/why_arts.jpg';
+import entertainmentImage from '@assets/stock_images/why_entertainment.jpg';
+import eventsImage from '@assets/stock_images/why_events.jpg';
+import shoppingImage from '@assets/stock_images/why_shopping.jpg';
+import neighborhoodsImage from '@assets/stock_images/why_neighborhoods.jpg';
+import petsImage from '@assets/stock_images/why_pets.jpg';
+import waterfrontImage from '@assets/stock_images/why_waterfront.jpg';
+import employersImage from '@assets/stock_images/why_employers.jpg';
+import schoolsImage from '@assets/stock_images/why_schools.jpg';
 
 const commuteData = {
   'Hilton Village': [{dest:'Newport News Shipbuilding',mins:12},{dest:'Jefferson Lab',mins:18},{dest:'Riverside Hospital',mins:22},{dest:'Fort Eustis',mins:35}],
