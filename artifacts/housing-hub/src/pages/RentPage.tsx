@@ -10,12 +10,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 import rentHero from '@assets/generated_images/rent_hero.jpg';
-import rent1 from '@assets/generated_images/rent_1.jpg';
-import rent2 from '@assets/generated_images/rent_2.jpg';
-import rent3 from '@assets/generated_images/rent_3.jpg';
-import rent4 from '@assets/generated_images/rent_4.jpg';
-import rent5 from '@assets/generated_images/rent_5.jpg';
-import rent6 from '@assets/generated_images/rent_6.jpg';
+import rent1 from '@assets/stock_images/rental_1.jpg';
+import rent2 from '@assets/stock_images/rental_2.jpg';
+import rent3 from '@assets/stock_images/rental_3_ext.jpg';
+import rent4 from '@assets/stock_images/rental_4.jpg';
+import rent5 from '@assets/stock_images/rental_5.webp';
+import rent6 from '@assets/stock_images/rental_6.jpg';
 
 export default function RentPage() {
   const [searchTerm, setSearchTerm] = useState('All');
