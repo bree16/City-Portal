@@ -332,9 +332,6 @@ export default function ServicesPage() {
           </div>
 
           <div className="relative">
-            {/* Connecting Line (Desktop) */}
-            <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-primary/10 via-accent/30 to-primary/10 -translate-y-1/2"></div>
-            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
               {/* Step 1 */}
               <div className="flex flex-col items-center text-center group">
