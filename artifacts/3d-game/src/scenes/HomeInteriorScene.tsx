@@ -30,8 +30,8 @@ interface HomeTheme {
 
 const HOME_THEMES: Record<number, HomeTheme> = {
   1: {
-    wallColor: '#F0E6D3', floorColor: '#8B6914', bedroomFloorColor: '#8B6914',
-    accentColor: '#8B4513', ceilingColor: '#FAF5EE',
+    wallColor: '#09070a', floorColor: '#2b0a3d', bedroomFloorColor: '#1a0521',
+    accentColor: '#ff007f', ceilingColor: '#09070a',
     hasFireplace: true, hasKitchenIsland: false,
     features: {
       entry: [{ pos: [-4, 0.6, 7], label: '🪟 Crown Molding', tip: 'Original 1940s crown molding — a sign of quality craftsmanship that adds character and value.' }],
@@ -54,8 +54,8 @@ const HOME_THEMES: Record<number, HomeTheme> = {
     },
   },
   2: {
-    wallColor: '#E8E0D0', floorColor: '#B0A080', bedroomFloorColor: '#C0B090',
-    accentColor: '#6B8E8B', ceilingColor: '#F5F0EA',
+    wallColor: '#110e15', floorColor: '#1a0a2a', bedroomFloorColor: '#2b0a3d',
+    accentColor: '#00f0ff', ceilingColor: '#110e15',
     hasFireplace: false, hasKitchenIsland: false,
     features: {
       entry: [{ pos: [-4, 0.6, 7], label: '🏡 Ranch Layout', tip: 'Single-level ranch homes are fully accessible — perfect for long-term aging in place.' }],
@@ -78,8 +78,8 @@ const HOME_THEMES: Record<number, HomeTheme> = {
     },
   },
   3: {
-    wallColor: '#EBEBEB', floorColor: '#C4B89A', bedroomFloorColor: '#C4B89A',
-    accentColor: '#4A90C4', ceilingColor: '#FFFFFF',
+    wallColor: '#09070a', floorColor: '#1a0521', bedroomFloorColor: '#110e15',
+    accentColor: '#ffea00', ceilingColor: '#09070a',
     hasFireplace: false, hasKitchenIsland: true,
     features: {
       entry: [{ pos: [-4, 0.6, 7], label: '🏙️ Modern Finishes', tip: 'Contemporary design with clean lines throughout — highly attractive to modern buyers.' }],
@@ -102,8 +102,8 @@ const HOME_THEMES: Record<number, HomeTheme> = {
     },
   },
   4: {
-    wallColor: '#F5F5F0', floorColor: '#A89880', bedroomFloorColor: '#C0B090',
-    accentColor: '#7B8B6B', ceilingColor: '#FFFFFF',
+    wallColor: '#110e15', floorColor: '#2b0a3d', bedroomFloorColor: '#1a0a2a',
+    accentColor: '#00f0ff', ceilingColor: '#110e15',
     hasFireplace: false, hasKitchenIsland: false,
     features: {
       entry: [{ pos: [-4, 0.6, 7], label: '💰 Equity Opportunity', tip: 'At $168k — 30% below neighborhood median — strong appreciation potential as the area develops.' }],
@@ -152,19 +152,21 @@ function ClickableProp({ pos, label, tip }: FeatureProp) {
         onActivate={() => setOpen((v) => !v)}
       />
       <mesh
-        onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
+        onPointerDown={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
+        onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
+        onPointerOut={() => { document.body.style.cursor = 'auto'; }}
         castShadow
       >
         <sphereGeometry args={[0.16, 8, 8]} />
         <meshStandardMaterial
-          color={open ? '#D4A843' : '#0A8F7E'}
-          emissive={open ? '#D4A843' : '#0A8F7E'}
+          color={open ? '#ffea00' : '#00f0ff'}
+          emissive={open ? '#ffea00' : '#00f0ff'}
           emissiveIntensity={open ? 1.0 : 0.5}
         />
       </mesh>
       {!open && (
         <Html position={[0, 0.42, 0]} center distanceFactor={10}>
-          <div onClick={() => setOpen(true)} style={{ background: 'rgba(0,240,255,0.85)', color: '#fff', borderRadius: 0, padding: '2px 7px', fontSize: 9, fontWeight: 700, fontFamily: 'var(--display-font)', whiteSpace: 'nowrap', cursor: 'pointer' }}>
+          <div onPointerDown={(e) => { e.stopPropagation(); setOpen(true); }} style={{ background: 'rgba(0,240,255,0.85)', color: '#fff', borderRadius: 0, padding: '2px 7px', fontSize: 9, fontWeight: 700, fontFamily: 'var(--display-font)', whiteSpace: 'nowrap', cursor: 'pointer' }}>
             ● Inspect
           </div>
         </Html>
@@ -395,40 +397,40 @@ export default function HomeInteriorScene() {
       {/* Sofa */}
       <mesh position={[-1.5, 0.45, 0.5]} castShadow>
         <boxGeometry args={[3.5, 0.9, 1.2]} />
-        <meshStandardMaterial color="#6B5A4A" roughness={0.8} />
+        <meshStandardMaterial color="#1a0521" roughness={0.8} />
       </mesh>
       <mesh position={[-1.5, 0.88, -0.1]} castShadow>
         <boxGeometry args={[3.5, 0.44, 0.16]} />
-        <meshStandardMaterial color="#5A4A3A" roughness={0.8} />
+        <meshStandardMaterial color="#2b0a3d" roughness={0.8} />
       </mesh>
       {/* Cushions */}
       {([-2, -0.5, 1] as number[]).map((cx) => (
         <mesh key={cx} position={[cx, 0.95, 0.38]} castShadow>
           <boxGeometry args={[0.88, 0.16, 0.86]} />
-          <meshStandardMaterial color="#7A6A5A" roughness={0.9} />
+          <meshStandardMaterial color="#00f0ff" roughness={0.9} />
         </mesh>
       ))}
       {/* Coffee table */}
       <mesh position={[-1.5, 0.28, 2.2]} castShadow>
         <boxGeometry args={[2.2, 0.08, 1.0]} />
-        <meshStandardMaterial color="#5A3A1A" roughness={0.4} metalness={0.05} />
+        <meshStandardMaterial color="#110e15" roughness={0.4} metalness={0.05} />
       </mesh>
       {([-0.9, 0.9] as number[]).map((lx) =>
         ([-0.35, 0.35] as number[]).map((lz) => (
           <mesh key={`${lx}${lz}`} position={[lx - 1.5, 0.14, lz + 2.2]} castShadow>
             <cylinderGeometry args={[0.05, 0.05, 0.28, 6]} />
-            <meshStandardMaterial color="#3A2A0A" roughness={0.6} />
+            <meshStandardMaterial color="#ffea00" roughness={0.6} />
           </mesh>
         ))
       )}
       {/* TV + stand */}
       <mesh position={[2.5, 0.35, 2]} castShadow>
         <boxGeometry args={[2.4, 0.7, 0.5]} />
-        <meshStandardMaterial color="#2A1A0A" roughness={0.5} metalness={0.1} />
+        <meshStandardMaterial color="#2b0a3d" roughness={0.5} metalness={0.1} />
       </mesh>
       <mesh position={[2.5, 1.3, 2.1]} castShadow>
         <boxGeometry args={[2.0, 1.3, 0.09]} />
-        <meshStandardMaterial color="#111111" roughness={0.2} metalness={0.6} />
+        <meshStandardMaterial color="#09070a" roughness={0.2} metalness={0.6} />
       </mesh>
 
       {/* Fireplace (home 1 only) */}
@@ -436,111 +438,111 @@ export default function HomeInteriorScene() {
         <group position={[-4.7, 0, 3]}>
           <mesh position={[0, 1.0, 0.09]} castShadow>
             <boxGeometry args={[2.2, 2.0, 0.2]} />
-            <meshStandardMaterial color="#8B4513" roughness={0.8} />
+            <meshStandardMaterial color="#1a0a2a" roughness={0.8} />
           </mesh>
           <mesh position={[0, 0.6, 0.2]} castShadow>
             <boxGeometry args={[1.4, 1.2, 0.2]} />
-            <meshStandardMaterial color="#2C1A0A" roughness={0.9} />
+            <meshStandardMaterial color="#09070a" roughness={0.9} />
           </mesh>
-          <pointLight position={[0, 0.8, 0.5]} intensity={1.2} color="#FF6B35" distance={5} decay={2} />
+          <pointLight position={[0, 0.8, 0.5]} intensity={1.2} color="#ff007f" distance={5} decay={2} />
         </group>
       )}
 
       {/* ── KITCHEN FURNITURE ── */}
       <mesh position={[6.5, 0.45, 0]} castShadow>
         <boxGeometry args={[1.2, 0.9, 5]} />
-        <meshStandardMaterial color="#E8E0D0" roughness={0.7} />
+        <meshStandardMaterial color="#110e15" roughness={0.7} />
       </mesh>
       <mesh position={[6.5, 0.95, 0]} castShadow>
         <boxGeometry args={[1.3, 0.08, 5.2]} />
-        <meshStandardMaterial color={homeId === 1 ? '#7A5C2E' : homeId === 3 ? '#DDDDD0' : '#909090'} roughness={0.3} metalness={0.1} />
+        <meshStandardMaterial color={homeId === 1 ? '#00f0ff' : homeId === 3 ? '#ffea00' : '#ff007f'} roughness={0.3} metalness={0.1} />
       </mesh>
       <mesh position={[6.5, 2.1, 0]} castShadow>
         <boxGeometry args={[1.0, 0.9, 4.8]} />
-        <meshStandardMaterial color="#E8E0D0" roughness={0.7} />
+        <meshStandardMaterial color="#1a0521" roughness={0.7} />
       </mesh>
       {/* Stove */}
       <mesh position={[6.5, 0.95, 1.2]} castShadow>
         <boxGeometry args={[0.7, 0.08, 0.65]} />
-        <meshStandardMaterial color="#333333" roughness={0.3} metalness={0.5} />
+        <meshStandardMaterial color="#09070a" roughness={0.3} metalness={0.5} />
       </mesh>
       {/* Kitchen island (home 3) */}
       {theme.hasKitchenIsland && (
         <mesh position={[4.5, 0.52, 0]} castShadow>
           <boxGeometry args={[1.6, 1.04, 3.0]} />
-          <meshStandardMaterial color="#E2E2E2" roughness={0.4} metalness={0.05} />
+          <meshStandardMaterial color="#2b0a3d" roughness={0.4} metalness={0.05} />
         </mesh>
       )}
 
       {/* ── BEDROOM FURNITURE ── */}
       <mesh position={[-5.5, 0.25, -1.5]} castShadow>
         <boxGeometry args={[3.2, 0.5, 2.5]} />
-        <meshStandardMaterial color="#4A3020" roughness={0.7} />
+        <meshStandardMaterial color="#1a0a2a" roughness={0.7} />
       </mesh>
       <mesh position={[-5.5, 0.6, -1.5]} castShadow>
         <boxGeometry args={[3.0, 0.4, 2.3]} />
-        <meshStandardMaterial color="#EEE8E0" roughness={0.95} />
+        <meshStandardMaterial color="#110e15" roughness={0.95} />
       </mesh>
       <mesh position={[-5.5, 0.85, -2.3]} castShadow>
         <boxGeometry args={[1.8, 0.2, 0.5]} />
-        <meshStandardMaterial color="#FFF5EE" roughness={0.95} />
+        <meshStandardMaterial color="#ff007f" roughness={0.95} />
       </mesh>
       <mesh position={[-5.5, 1.0, -2.85]} castShadow>
         <boxGeometry args={[3.2, 1.4, 0.16]} />
-        <meshStandardMaterial color="#4A3020" roughness={0.7} />
+        <meshStandardMaterial color="#1a0a2a" roughness={0.7} />
       </mesh>
       {/* Nightstand */}
       <mesh position={[-4.0, 0.38, -2.1]} castShadow>
         <boxGeometry args={[0.7, 0.76, 0.6]} />
-        <meshStandardMaterial color="#5A3A1A" roughness={0.6} />
+        <meshStandardMaterial color="#2b0a3d" roughness={0.6} />
       </mesh>
       {/* Dresser */}
       <mesh position={[-7.2, 0.6, 0.5]} castShadow>
         <boxGeometry args={[0.55, 1.2, 2.0]} />
-        <meshStandardMaterial color="#5A3A1A" roughness={0.6} metalness={0.04} />
+        <meshStandardMaterial color="#2b0a3d" roughness={0.6} metalness={0.04} />
       </mesh>
 
       {/* ── BACKYARD / PATIO ── */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.04, -4.5]} receiveShadow>
         <planeGeometry args={[6, 2]} />
-        <meshStandardMaterial color="#A07840" roughness={0.9} />
+        <meshStandardMaterial color="#110e15" roughness={0.9} />
       </mesh>
       {/* Patio chairs */}
       {([-1.5, 1.5] as number[]).map((px) => (
         <group key={px} position={[px, 0, -5.5]}>
           <mesh position={[0, 0.3, 0]} castShadow>
             <boxGeometry args={[0.6, 0.1, 0.6]} />
-            <meshStandardMaterial color="#8B6914" roughness={0.7} />
+            <meshStandardMaterial color="#1a0521" roughness={0.7} />
           </mesh>
           <mesh position={[0, 0.65, -0.24]} castShadow>
             <boxGeometry args={[0.6, 0.65, 0.08]} />
-            <meshStandardMaterial color="#8B6914" roughness={0.7} />
+            <meshStandardMaterial color="#00f0ff" roughness={0.7} />
           </mesh>
         </group>
       ))}
       {/* Patio table */}
       <mesh position={[0, 0.36, -5.5]} castShadow>
         <cylinderGeometry args={[0.04, 0.04, 0.72, 6]} />
-        <meshStandardMaterial color="#888888" roughness={0.5} metalness={0.3} />
+        <meshStandardMaterial color="#110e15" roughness={0.5} metalness={0.3} />
       </mesh>
       <mesh position={[0, 0.4, -5.5]} castShadow>
         <cylinderGeometry args={[0.5, 0.5, 0.08, 12]} />
-        <meshStandardMaterial color="#6B4C14" roughness={0.6} metalness={0.1} />
+        <meshStandardMaterial color="#ffea00" roughness={0.6} metalness={0.1} />
       </mesh>
       {/* Fence posts */}
       {([-4, -2, 0, 2, 4] as number[]).map((fx) => (
         <mesh key={fx} position={[fx, 0.75, -8]} castShadow>
           <boxGeometry args={[0.08, 1.5, 0.08]} />
-          <meshStandardMaterial color="#8B7355" roughness={0.8} />
+          <meshStandardMaterial color="#110e15" roughness={0.8} />
         </mesh>
       ))}
       <mesh position={[0, 1.2, -8]} castShadow>
         <boxGeometry args={[8, 0.08, 0.08]} />
-        <meshStandardMaterial color="#8B7355" roughness={0.8} />
+        <meshStandardMaterial color="#1a0521" roughness={0.8} />
       </mesh>
       <mesh position={[0, 0.5, -8]} castShadow>
         <boxGeometry args={[8, 0.08, 0.08]} />
-        <meshStandardMaterial color="#8B7355" roughness={0.8} />
+        <meshStandardMaterial color="#1a0521" roughness={0.8} />
       </mesh>
 
       {/* ── CEILING LIGHTS ── */}
@@ -548,13 +550,13 @@ export default function HomeInteriorScene() {
         <group key={`l${lx}`}>
           <mesh position={[lx, 2.85, lz]}>
             <cylinderGeometry args={[0.18, 0.22, 0.16, 10]} />
-            <meshStandardMaterial color="#333" roughness={0.3} metalness={0.6} />
+            <meshStandardMaterial color="#09070a" roughness={0.3} metalness={0.6} />
           </mesh>
           <mesh position={[lx, 2.78, lz]}>
             <cylinderGeometry args={[0.15, 0.15, 0.04, 10]} />
-            <meshStandardMaterial color="#FFF8D0" emissive="#FFF8D0" emissiveIntensity={1.5} />
+            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={1.5} />
           </mesh>
-          <pointLight position={[lx, 2.5, lz]} intensity={0.7} color="#FFE87A" distance={8} decay={2} />
+          <pointLight position={[lx, 2.5, lz]} intensity={0.7} color="#00f0ff" distance={8} decay={2} />
         </group>
       ))}
 
@@ -578,16 +580,16 @@ export default function HomeInteriorScene() {
       {theme.hasFireplace ? (
         <Bookshelf position={[-4.7, 0, 5]} rotation={[0, 0, 0]} color={theme.accentColor} />
       ) : (
-        <PottedPlant position={[-4.5, 0, 5.4]} scale={1.15} leafColor="#2D7A2D" />
+        <PottedPlant position={[-4.5, 0, 5.4]} scale={1.15} leafColor="#00f0ff" />
       )}
       {/* Home 3 (modern): sleek accent plant on the kitchen island end */}
       {theme.hasKitchenIsland && (
-        <PottedPlant position={[4.5, 1.04, 1.2]} scale={0.7} potColor="#DADADA" leafColor="#3A8A3A" />
+        <PottedPlant position={[4.5, 1.04, 1.2]} scale={0.7} potColor="#ffea00" leafColor="#ff007f" />
       )}
       {/* Backyard greenery — flowers + bushes vary by theme */}
       <FlowerBed position={[3.5, 0.04, -5]} w={1.6} d={0.6} />
-      <Bush position={[-3.5, 0, -6.5]} scale={1.1} color="#3A7A3A" />
-      <Bush position={[-2.2, 0, -6.6]} scale={0.85} color="#4A8A4A" />
+      <Bush position={[-3.5, 0, -6.5]} scale={1.1} color="#ff007f" />
+      <Bush position={[-2.2, 0, -6.6]} scale={0.85} color="#00f0ff" />
 
       {/* ── CLICKABLE FEATURE PROPS ── */}
       {Object.entries(theme.features).flatMap(([, props]) =>

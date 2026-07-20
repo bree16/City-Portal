@@ -41,13 +41,17 @@ function ClickFeedback() {
 
     if (markerRef.current) {
       const p = s.playerPosition;
-      const moving = Math.hypot(t[0] - p[0], t[2] - p[2]) > 0.15;
-      markerRef.current.visible = moving;
-      if (moving) {
+      const dist = Math.hypot(t[0] - p[0], t[2] - p[2]);
+      // Fade the marker out smoothly as the player arrives (0.15..0.9m).
+      const fade = Math.min(1, Math.max(0, (dist - 0.15) / 0.75));
+      const mat = markerRef.current.material as THREE.MeshBasicMaterial;
+      markerRef.current.visible = fade > 0.01;
+      if (markerRef.current.visible) {
         markerRef.current.position.set(t[0], 0.035, t[2]);
         markerRef.current.rotation.z += dt * 2;
         const pulse = 0.9 + Math.sin(rippleT.current * 10 + markerRef.current.rotation.z * 3) * 0.08;
         markerRef.current.scale.setScalar(pulse);
+        mat.opacity = 0.85 * fade;
       }
     }
   });
@@ -56,11 +60,11 @@ function ClickFeedback() {
     <>
       <mesh ref={rippleRef} rotation={[-Math.PI / 2, 0, 0]} visible={false}>
         <ringGeometry args={[0.28, 0.38, 32]} />
-        <meshBasicMaterial color="#D4A843" transparent opacity={0} depthWrite={false} />
+        <meshBasicMaterial color="#ffea00" transparent opacity={0} depthWrite={false} />
       </mesh>
       <mesh ref={markerRef} rotation={[-Math.PI / 2, 0, 0]} visible={false}>
         <ringGeometry args={[0.3, 0.42, 32]} />
-        <meshBasicMaterial color="#0A8F7E" transparent opacity={0.85} depthWrite={false} />
+        <meshBasicMaterial color="#00f0ff" transparent opacity={0.85} depthWrite={false} />
       </mesh>
     </>
   );

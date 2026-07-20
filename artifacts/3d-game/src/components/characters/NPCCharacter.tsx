@@ -58,7 +58,7 @@ const markerMat = new THREE.MeshStandardMaterial({
   roughness: 0.3,
   metalness: 0.4,
 });
-const hitboxGeo = new THREE.BoxGeometry(0.6, 1.8, 0.5);
+const hitboxGeo = new THREE.CylinderGeometry(1.1, 1.1, 2.6, 16);
 const hitboxMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
 
 /** Animate the shared ring material's opacity once per frame (not per NPC). */
@@ -163,7 +163,16 @@ export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
 
   return (
     <group ref={rootRef} position={npc.position} rotation={npc.rotation ?? [0, 0, 0]}>
-      <group ref={rigGroupRef}>
+      <group
+        ref={rigGroupRef}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+          getAudioEngine().play('click');
+          onClick?.();
+        }}
+        onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
+        onPointerOut={() => { document.body.style.cursor = 'auto'; }}
+      >
         <CharacterRig
           skinTone={npc.skinTone}
           hairColor={npc.hairColor}
@@ -197,16 +206,18 @@ export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
         </group>
       )}
 
-      {/* Invisible click hitbox (shared geo/mat) */}
+      {/* Invisible click hitbox (shared geo/mat) — generous cylinder */}
       <mesh
-        position={[0, 0.9, 0]}
+        position={[0, 1.1, 0]}
         geometry={hitboxGeo}
         material={hitboxMat}
-        onClick={(e) => {
+        onPointerDown={(e) => {
           e.stopPropagation();
           getAudioEngine().play('click');
           onClick?.();
         }}
+        onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
+        onPointerOut={() => { document.body.style.cursor = 'auto'; }}
       />
 
       {/* Name label above head — glass look. Hidden beyond ~18m so distant
@@ -242,7 +253,8 @@ export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
               cursor: 'pointer',
               pointerEvents: 'auto',
             }}
-            onClick={() => {
+            onPointerDown={(e) => {
+              e.stopPropagation();
               getAudioEngine().play('click');
               onClick?.();
             }}

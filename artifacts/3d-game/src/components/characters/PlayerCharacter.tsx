@@ -3,15 +3,16 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useGameStore } from '@/store/gameStore';
 import { CharacterRig } from './CharacterRig';
-import { resolveCollisions } from '@/lib/obstacles';
+import { resolveCollisions, steerAround } from '@/lib/obstacles';
 import { getAudioEngine } from '@/hooks/useGameAudio';
 
 const FOOTSTEP_INTERVAL = 0.32; // seconds of movement between footstep sounds
 
 const MAX_SPEED = 3.4; // units/sec
 const ACCEL_DAMP = 9; // higher = snappier acceleration
-const ARRIVE_RADIUS = 1.1; // start decelerating within this distance
-const STOP_EPSILON = 0.03; // arrival tolerance
+const ARRIVE_RADIUS = 1.3; // start decelerating within this distance
+const STOP_EPSILON = 0.04; // arrival tolerance
+const MIN_ARRIVE_SPEED = 0.35; // floor so ease-out never crawls forever
 
 export function PlayerCharacter() {
   const { characterAppearance, setPlayerPosition } = useGameStore();
@@ -32,13 +33,29 @@ export function PlayerCharacter() {
     const dist = Math.hypot(dx, dz);
 
     if (dist > STOP_EPSILON) {
-      // Arrival steering: full speed far away, ease out near the target.
-      const desired = dist < ARRIVE_RADIUS ? MAX_SPEED * (dist / ARRIVE_RADIUS) : MAX_SPEED;
+      // Arrival steering: full speed far away, smooth ease-out near the target.
+      // Quadratic falloff feels more natural than linear and prevents a hard stop.
+      let desired = MAX_SPEED;
+      if (dist < ARRIVE_RADIUS) {
+        const k = dist / ARRIVE_RADIUS; // 0..1
+        desired = Math.max(MIN_ARRIVE_SPEED, MAX_SPEED * k * (2 - k)); // ease-out curve
+      }
       speedRef.current = THREE.MathUtils.damp(speedRef.current, desired, ACCEL_DAMP, dt);
 
+      // Never step past the target (prevents overshoot / sliding).
       const step = Math.min(speedRef.current * dt, dist);
-      const nx = posRef.current.x + (dx / dist) * step;
-      const nz = posRef.current.z + (dz / dist) * step;
+      const dirX = dx / dist;
+      const dirZ = dz / dist;
+      let nx = posRef.current.x + dirX * step;
+      let nz = posRef.current.z + dirZ * step;
+      // Lightweight steering: nudge sideways around obstacles we're heading into
+      // so the player flows around furniture instead of grinding along it.
+      // Skip near the target so we always arrive exactly on the clicked point.
+      if (dist > ARRIVE_RADIUS) {
+        const avoid = steerAround(posRef.current.x, posRef.current.z, dirX, dirZ, step);
+        nx += avoid[0];
+        nz += avoid[1];
+      }
       // Slide around obstacles: push-out produces tangential movement.
       const [rx, rz] = resolveCollisions(nx, nz);
 

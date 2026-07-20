@@ -8,8 +8,8 @@ import { useGameStore } from '@/store/gameStore';
 import { homes } from '@/data/homes';
 import { Bush, FlowerBed, TallPlant } from '@/components/decor/DecorKit';
 
-const HOUSE_COLORS = ['#D4B896', '#7BA7BC', '#BC9B7A', '#96BC7B'];
-const ROOF_COLORS = ['#8B4513', '#2C3E50', '#6B3A2A', '#2D4A1E'];
+const HOUSE_COLORS = ['#110e15', '#2b0a3d', '#1a0521', '#1a0a2a'];
+const ROOF_COLORS = ['#ff007f', '#00f0ff', '#ffea00', '#ff007f'];
 
 const AGENTS: Array<Omit<NPCDef, 'position' | 'rotation'>> = [
   { id: 'agent_h', name: 'Agent Maya', role: 'Realtor', skinTone: '#FDBCB4', hairColor: '#1a0a00', shirtColor: '#D4A843', pantsColor: '#2C2C2C' },
@@ -48,23 +48,23 @@ export default function NeighborhoodScene() {
       {/* Grass — PBR */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[60, 22]} />
-        <meshStandardMaterial color="#5A9050" roughness={0.95} metalness={0} />
+        <meshStandardMaterial color="#09070a" roughness={0.95} metalness={0} />
       </mesh>
       {/* Sidewalk */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 3.5]} receiveShadow>
         <planeGeometry args={[60, 3]} />
-        <meshStandardMaterial color="#C8C0B0" roughness={0.85} />
+        <meshStandardMaterial color="#110e15" roughness={0.85} />
       </mesh>
       {/* Road */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.008, 7]} receiveShadow>
         <planeGeometry args={[60, 5]} />
-        <meshStandardMaterial color="#3A3A3A" roughness={0.9} />
+        <meshStandardMaterial color="#1a0a2a" roughness={0.9} />
       </mesh>
       {/* Road lines */}
       {[-15, -5, 5, 15].map((x) => (
         <mesh key={x} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.015, 7]} receiveShadow>
           <planeGeometry args={[2.5, 0.18]} />
-          <meshStandardMaterial color="#FFD700" roughness={0.6} />
+          <meshStandardMaterial color="#00f0ff" roughness={0.6} emissive="#00f0ff" emissiveIntensity={0.5} />
         </mesh>
       ))}
 
@@ -72,34 +72,34 @@ export default function NeighborhoodScene() {
       {([[-20, -4], [-10, -5], [0, -4.5], [10, -5], [20, -4], [-5, 1], [15, 1]] as [number, number][]).map(([x, z], i) => (
         <mesh key={`gp-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.006, z]} receiveShadow>
           <circleGeometry args={[1.2 + (i % 3) * 0.4, 14]} />
-          <meshStandardMaterial color={i % 2 ? '#4C7E42' : '#548648'} roughness={1} />
+          <meshStandardMaterial color={i % 2 ? '#1a0521' : '#2b0a3d'} roughness={1} />
         </mesh>
       ))}
 
       {/* Corner bushes between the lots along the sidewalk verge */}
       {([-20, -10, 0, 10, 20] as number[]).map((x, i) => (
-        <Bush key={`vb-${x}`} position={[x, 0, 1.6]} scale={0.7 + (i % 3) * 0.15} color={i % 2 ? '#3A7A3A' : '#4A8C4A'} />
+        <Bush key={`vb-${x}`} position={[x, 0, 1.6]} scale={0.7 + (i % 3) * 0.15} color={i % 2 ? '#ff007f' : '#00f0ff'} />
       ))}
 
       {/* Sky backdrop */}
       <mesh position={[0, 8, -25]}>
         <planeGeometry args={[80, 24]} />
-        <meshStandardMaterial color="#87CEEB" roughness={1} side={2} />
+        <meshStandardMaterial color="#09070a" roughness={1} side={2} />
       </mesh>
       {/* Clouds */}
       {[[-12, 10, -20], [8, 12, -22], [20, 9, -18]].map(([x, y, z], i) => (
         <group key={i} position={[x, y, z]}>
           <mesh>
             <sphereGeometry args={[1.5, 10, 10]} />
-            <meshStandardMaterial color="#fff" roughness={1} />
+            <meshStandardMaterial color="#1a0a2a" roughness={1} />
           </mesh>
           <mesh position={[1.2, 0.3, 0]}>
             <sphereGeometry args={[1.1, 10, 10]} />
-            <meshStandardMaterial color="#fff" roughness={1} />
+            <meshStandardMaterial color="#1a0a2a" roughness={1} />
           </mesh>
           <mesh position={[-1.0, 0.2, 0]}>
             <sphereGeometry args={[1.0, 10, 10]} />
-            <meshStandardMaterial color="#fff" roughness={1} />
+            <meshStandardMaterial color="#1a0a2a" roughness={1} />
           </mesh>
         </group>
       ))}
@@ -123,62 +123,62 @@ export default function NeighborhoodScene() {
             {/* Front door */}
             <mesh position={[0, 0.7, 2.26]} castShadow>
               <boxGeometry args={[1.0, 1.4, 0.1]} />
-              <meshStandardMaterial color="#8B6914" roughness={0.6} />
+              <meshStandardMaterial color="#2b0a3d" roughness={0.6} />
             </mesh>
             <mesh position={[0.38, 0.7, 2.32]}>
               <sphereGeometry args={[0.06, 8, 8]} />
-              <meshStandardMaterial color="#D4A843" metalness={0.85} roughness={0.1} />
+              <meshStandardMaterial color="#00f0ff" metalness={0.85} roughness={0.1} />
             </mesh>
             {/* Front windows — glowing warm */}
             {[-1.8, 1.8].map((wx) => (
               <mesh key={wx} position={[wx, 1.5, 2.28]} castShadow>
                 <boxGeometry args={[1.0, 0.85, 0.1]} />
-                <meshStandardMaterial color="#87CEEB" emissive="#FFE87A" emissiveIntensity={0.5} roughness={0.1} />
+                <meshStandardMaterial color="#09070a" emissive="#ffea00" emissiveIntensity={0.5} roughness={0.1} />
               </mesh>
             ))}
             {/* Side window */}
             <mesh position={[2.76, 1.5, 0]} castShadow>
               <boxGeometry args={[0.1, 0.8, 0.9]} />
-              <meshStandardMaterial color="#87CEEB" emissive="#FFE87A" emissiveIntensity={0.3} roughness={0.1} />
+              <meshStandardMaterial color="#09070a" emissive="#00f0ff" emissiveIntensity={0.3} roughness={0.1} />
             </mesh>
             {/* Window glow */}
-            <pointLight position={[0, 1.8, 2.5]} intensity={0.4} color="#FFD96A" distance={3} />
+            <pointLight position={[0, 1.8, 2.5]} intensity={0.4} color="#ffea00" distance={3} />
             {/* Chimney */}
             <mesh position={[1.8, 3.0, -0.5]} castShadow>
               <boxGeometry args={[0.45, 1.2, 0.45]} />
-              <meshStandardMaterial color="#A0522D" roughness={0.8} />
+              <meshStandardMaterial color="#1a0a2a" roughness={0.8} />
             </mesh>
             {/* Tree */}
             <group position={[-3.2, 0, 0.5]}>
               <mesh position={[0, 0.7, 0]} castShadow>
                 <cylinderGeometry args={[0.14, 0.2, 1.4, 6]} />
-                <meshStandardMaterial color="#8B4513" roughness={0.8} />
+                <meshStandardMaterial color="#1a0521" roughness={0.8} />
               </mesh>
               <mesh position={[0, 1.8, 0]} castShadow>
                 <sphereGeometry args={[0.9, 10, 10]} />
-                <meshStandardMaterial color="#2D7A2D" roughness={0.9} />
+                <meshStandardMaterial color="#00f0ff" roughness={0.9} />
               </mesh>
             </group>
             {/* Mailbox */}
             <group position={[3.5, 0, 2.5]}>
               <mesh position={[0, 0.5, 0]} castShadow>
                 <cylinderGeometry args={[0.04, 0.04, 1.0, 6]} />
-                <meshStandardMaterial color="#888" metalness={0.6} roughness={0.3} />
+                <meshStandardMaterial color="#ff007f" metalness={0.6} roughness={0.3} />
               </mesh>
               <mesh position={[0, 0.9, 0]} castShadow>
                 <boxGeometry args={[0.28, 0.18, 0.18]} />
-                <meshStandardMaterial color="#0D2B5E" roughness={0.5} metalness={0.2} />
+                <meshStandardMaterial color="#2b0a3d" roughness={0.5} metalness={0.2} />
               </mesh>
               {/* Red flag */}
               <mesh position={[0.16, 0.95, 0]} castShadow>
                 <boxGeometry args={[0.04, 0.14, 0.02]} />
-                <meshStandardMaterial color="#C0392B" roughness={0.6} />
+                <meshStandardMaterial color="#00f0ff" roughness={0.6} />
               </mesh>
             </group>
 
             {/* Foundation shrubs flanking the front door (small, off walkway) */}
-            <Bush position={[-1.5, 0, 2.5]} scale={0.75} color={idx % 2 ? '#3A7A3A' : '#4A8C4A'} />
-            <Bush position={[1.5, 0, 2.5]} scale={0.75} color={idx % 2 ? '#4A8C4A' : '#3A7A3A'} />
+            <Bush position={[-1.5, 0, 2.5]} scale={0.75} color={idx % 2 ? '#ff007f' : '#ffea00'} />
+            <Bush position={[1.5, 0, 2.5]} scale={0.75} color={idx % 2 ? '#ffea00' : '#ff007f'} />
 
             {/* Flower beds under the front windows */}
             <FlowerBed position={[-1.8, 0, 2.55]} w={1.3} d={0.5} />
@@ -191,7 +191,7 @@ export default function NeighborhoodScene() {
             {[3.2, 4.0, 4.8, 5.6].map((z, i) => (
               <mesh key={`path-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.012, z]} receiveShadow>
                 <circleGeometry args={[0.45, 12]} />
-                <meshStandardMaterial color="#B0A890" roughness={0.9} />
+                <meshStandardMaterial color="#ffea00" roughness={0.9} />
               </mesh>
             ))}
 

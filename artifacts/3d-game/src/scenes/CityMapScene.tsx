@@ -13,15 +13,15 @@ function Tree({ position }: { position: [number, number, number] }) {
     <group position={position}>
       <mesh position={[0, 0.6, 0]} castShadow>
         <cylinderGeometry args={[0.14, 0.18, 1.2, 6]} />
-        <meshStandardMaterial color="#6B4C2A" roughness={0.9} />
+        <meshStandardMaterial color="#1a0a2a" roughness={0.9} />
       </mesh>
       <mesh position={[0, 1.9, 0]} castShadow>
         <sphereGeometry args={[0.7, 8, 7]} />
-        <meshStandardMaterial color="#2D6A2D" roughness={0.8} />
+        <meshStandardMaterial color="#00a8b5" roughness={0.8} />
       </mesh>
       <mesh position={[0, 2.5, 0]} castShadow>
         <sphereGeometry args={[0.45, 8, 7]} />
-        <meshStandardMaterial color="#3A7A3A" roughness={0.8} />
+        <meshStandardMaterial color="#00f0ff" roughness={0.8} />
       </mesh>
     </group>
   );
@@ -32,17 +32,17 @@ function StreetLight({ position }: { position: [number, number, number] }) {
     <group position={position}>
       <mesh castShadow>
         <cylinderGeometry args={[0.06, 0.08, 4.5, 6]} />
-        <meshStandardMaterial color="#555566" roughness={0.5} metalness={0.4} />
+        <meshStandardMaterial color="#110e15" roughness={0.5} metalness={0.4} />
       </mesh>
       <mesh position={[0.5, 2.0, 0]} rotation={[0, 0, Math.PI / 2]}>
         <cylinderGeometry args={[0.04, 0.04, 1.0, 5]} />
-        <meshStandardMaterial color="#555566" metalness={0.5} />
+        <meshStandardMaterial color="#110e15" metalness={0.5} />
       </mesh>
       <mesh position={[1.0, 2.0, 0]} castShadow>
         <sphereGeometry args={[0.14, 8, 8]} />
-        <meshStandardMaterial color="#FFF8D0" emissive="#FFF5A0" emissiveIntensity={1.5} />
+        <meshStandardMaterial color="#ffffff" emissive="#ffea00" emissiveIntensity={1.5} />
       </mesh>
-      <pointLight position={[1.0, 2.0, 0]} intensity={0.5} color="#FFF5A0" distance={8} decay={2} />
+      <pointLight position={[1.0, 2.0, 0]} intensity={0.5} color="#ffea00" distance={8} decay={2} />
     </group>
   );
 }
@@ -63,7 +63,7 @@ function ParkedCar({ position, color, rotation = 0 }: { position: [number, numbe
         ([-0.42, 0.42] as number[]).map((z) => (
           <mesh key={`${x}${z}`} position={[x, 0.12, z]} rotation={[Math.PI / 2, 0, 0]}>
             <cylinderGeometry args={[0.14, 0.14, 0.1, 8]} />
-            <meshStandardMaterial color="#1a1a1a" roughness={0.9} />
+            <meshStandardMaterial color="#09070a" roughness={0.9} />
           </mesh>
         ))
       )}
@@ -76,16 +76,16 @@ function Bench({ position }: { position: [number, number, number] }) {
     <group position={position}>
       <mesh position={[0, 0.35, 0]} castShadow>
         <boxGeometry args={[1.2, 0.1, 0.35]} />
-        <meshStandardMaterial color="#8B6914" roughness={0.7} />
+        <meshStandardMaterial color="#2b0a3d" roughness={0.7} />
       </mesh>
       <mesh position={[0, 0.55, -0.14]} castShadow>
         <boxGeometry args={[1.2, 0.35, 0.08]} />
-        <meshStandardMaterial color="#8B6914" roughness={0.7} />
+        <meshStandardMaterial color="#ff007f" roughness={0.7} />
       </mesh>
       {[-0.5, 0.5].map((x) => (
         <mesh key={x} position={[x, 0.18, 0]} castShadow>
           <boxGeometry args={[0.07, 0.36, 0.32]} />
-          <meshStandardMaterial color="#6B4C2A" roughness={0.8} />
+          <meshStandardMaterial color="#1a0a2a" roughness={0.8} />
         </mesh>
       ))}
     </group>
@@ -212,7 +212,7 @@ function BuildingExterior({ b, status, onEnter }: {
       {/* Sign / label */}
       <Html position={[0, h + 1.2, 0]} center distanceFactor={16}>
         <div
-          onClick={() => { if (!isLocked && b.hasInterior) onEnter(b.id); }}
+          onPointerDown={(e) => { e.stopPropagation(); if (!isLocked && b.hasInterior) onEnter(b.id); }}
           style={{
             background: isLocked ? 'rgba(40,40,40,0.9)' : isCurrent ? 'rgba(255,234,0,0.95)' : 'rgba(9,7,10,0.9)',
             padding: '5px 12px',
@@ -237,10 +237,12 @@ function BuildingExterior({ b, status, onEnter }: {
       {b.hasInterior && (
         <mesh
           position={[0, 1.5, d / 2 + 0.6]}
-          onClick={(e) => {
+          onPointerDown={(e) => {
             e.stopPropagation();
             if (!isLocked) onEnter(b.id);
           }}
+          onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
+          onPointerOut={() => { document.body.style.cursor = 'auto'; }}
         >
           <boxGeometry args={[w, 3, 1.2]} />
           <meshStandardMaterial transparent opacity={0} />
@@ -295,26 +297,26 @@ export default function CityMapScene() {
       {/* Main grass base */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[70, 70]} />
-        <meshStandardMaterial color="#5A8C4A" roughness={0.95} />
+        <meshStandardMaterial color="#0f2420" roughness={0.95} />
       </mesh>
 
       {/* Main E-W road (z = -1 to 1, i.e. 5 units wide) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, -0.5]} receiveShadow>
         <planeGeometry args={[66, 5]} />
-        <meshStandardMaterial color="#555560" roughness={0.8} />
+        <meshStandardMaterial color="#09070a" roughness={0.8} />
       </mesh>
 
       {/* N-S road (x = -0.5, 4 wide) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, 0.01, 0]} receiveShadow>
         <planeGeometry args={[4, 66]} />
-        <meshStandardMaterial color="#555560" roughness={0.8} />
+        <meshStandardMaterial color="#09070a" roughness={0.8} />
       </mesh>
 
       {/* Center line markings — E-W road */}
       {([-24, -16, -8, 0, 8, 16, 24] as number[]).map((x) => (
         <mesh key={`ew-${x}`} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.02, -0.5]}>
           <planeGeometry args={[3.5, 0.2]} />
-          <meshStandardMaterial color="#F5F5A0" roughness={0.9} />
+          <meshStandardMaterial color="#ffea00" roughness={0.9} />
         </mesh>
       ))}
 
@@ -322,19 +324,19 @@ export default function CityMapScene() {
       {/* North sidewalk */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, -4]} receiveShadow>
         <planeGeometry args={[66, 2]} />
-        <meshStandardMaterial color="#8C8C96" roughness={0.85} />
+        <meshStandardMaterial color="#1a0521" roughness={0.85} />
       </mesh>
       {/* South sidewalk */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 3]} receiveShadow>
         <planeGeometry args={[66, 2]} />
-        <meshStandardMaterial color="#8C8C96" roughness={0.85} />
+        <meshStandardMaterial color="#1a0521" roughness={0.85} />
       </mesh>
 
       {/* Crosswalk stripes at center */}
       {([-2, -1, 0, 1, 2] as number[]).map((i) => (
         <mesh key={`cw-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, 0.025, i * 0.8 - 0.5]}>
           <planeGeometry args={[0.6, 0.55]} />
-          <meshStandardMaterial color="#FFFFFF" roughness={0.9} transparent opacity={0.7} />
+          <meshStandardMaterial color="#ff007f" roughness={0.9} transparent opacity={0.7} />
         </mesh>
       ))}
 
@@ -344,10 +346,10 @@ export default function CityMapScene() {
       ))}
 
       {/* ─── Parked cars ─── */}
-      <ParkedCar position={[-22, 0, -3.2]} color="#C0392B" />
-      <ParkedCar position={[-14, 0, -3.2]} color="#2C7BB6" />
-      <ParkedCar position={[10, 0, 2.2]} color="#8B6914" rotation={Math.PI} />
-      <ParkedCar position={[20, 0, 2.2]} color="#3A3A3A" rotation={Math.PI} />
+      <ParkedCar position={[-22, 0, -3.2]} color="#ff007f" />
+      <ParkedCar position={[-14, 0, -3.2]} color="#00f0ff" />
+      <ParkedCar position={[10, 0, 2.2]} color="#ffea00" rotation={Math.PI} />
+      <ParkedCar position={[20, 0, 2.2]} color="#110e15" rotation={Math.PI} />
 
       {/* ─── Trees alongside sidewalks and grass areas ─── */}
       {([-26, -20, -12, 2, 14, 22, 28] as number[]).map((x) => (
@@ -379,7 +381,7 @@ export default function CityMapScene() {
       {([[-28, -11], [-19, 10], [24, -12], [15, 11], [-6, -12], [29, 9]] as [number, number][]).map(([x, z], i) => (
         <mesh key={`gp-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.008, z]} receiveShadow>
           <circleGeometry args={[1.4 + (i % 3) * 0.5, 14]} />
-          <meshStandardMaterial color={i % 2 ? '#4A7C3E' : '#527F44'} roughness={1} />
+          <meshStandardMaterial color={i % 2 ? '#162e29' : '#0c1a17'} roughness={1} />
         </mesh>
       ))}
 

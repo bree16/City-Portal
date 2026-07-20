@@ -15,27 +15,31 @@ const IMPROVEMENTS = [
     desc: 'Modern counters, appliances, and updated cabinets.',
     pos: [-5, 0.1, -1] as [number, number, number],
     color: '#ffea00',
+    rgba: '255,234,0',
   },
   {
     id: 'new_flooring', label: 'New Flooring', icon: '🪵',
     cost: 3500, valuePct: 0.02,
     desc: 'Hardwood throughout the main living area.',
     pos: [0, 0.1, -1] as [number, number, number],
-    color: '#8B6914',
+    color: '#ff007f',
+    rgba: '255,0,127',
   },
   {
     id: 'landscaping', label: 'Landscaping', icon: '🌿',
     cost: 2200, valuePct: 0.03,
     desc: 'Professional landscaping with new plants and mulch.',
     pos: [5.5, 0.1, 2] as [number, number, number],
-    color: '#27AE60',
+    color: '#00f0ff',
+    rgba: '0,240,255',
   },
   {
     id: 'solar_panels', label: 'Solar Panels', icon: '☀️',
     cost: 12000, valuePct: 0.04,
     desc: 'Cuts energy bills and boosts eco-friendly home value.',
     pos: [-5, 0.1, 2] as [number, number, number],
-    color: '#F39C12',
+    color: '#7b00ff',
+    rgba: '123,0,255',
   },
 ] as const;
 
@@ -123,32 +127,32 @@ export default function HomeLifeScene() {
       {/* ── FLOOR ── */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[20, 16]} />
-        <meshStandardMaterial color="#B8905A" roughness={0.42} metalness={0.05} />
+        <meshStandardMaterial color="#2b0a3d" roughness={0.42} metalness={0.05} />
       </mesh>
-      <gridHelper args={[20, 40, '#A07840', '#A07840']} position={[0, 0.005, 0]} />
+      <gridHelper args={[20, 40, '#ff007f', '#ff007f']} position={[0, 0.005, 0]} />
       {/* Rug */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-1, 0.01, 0]} receiveShadow>
         <planeGeometry args={[6, 5]} />
-        <meshStandardMaterial color="#4B3A6E" roughness={0.95} />
+        <meshStandardMaterial color="#00f0ff" roughness={0.95} />
       </mesh>
 
       {/* ── WALLS ── */}
       <mesh position={[0, 2.5, -8]} receiveShadow>
         <boxGeometry args={[20, 5, 0.2]} />
-        <meshStandardMaterial color="#F0EAE0" roughness={0.9} />
+        <meshStandardMaterial color="#09070a" roughness={0.9} />
       </mesh>
       <mesh position={[-10, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#EAE4D8" roughness={0.9} />
+        <meshStandardMaterial color="#110e15" roughness={0.9} />
       </mesh>
       <mesh position={[10, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#EAE4D8" roughness={0.9} />
+        <meshStandardMaterial color="#110e15" roughness={0.9} />
       </mesh>
       {/* Ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[20, 16]} />
-        <meshStandardMaterial color="#F8F4EE" roughness={1} />
+        <meshStandardMaterial color="#09070a" roughness={1} />
       </mesh>
 
       {/* ── LIGHTS ── */}
@@ -156,85 +160,85 @@ export default function HomeLifeScene() {
         <group key={x}>
           <mesh position={[x, 4.88, 0]}>
             <boxGeometry args={[1.4, 0.05, 0.5]} />
-            <meshStandardMaterial color="#FFFFF0" emissive="#FFF8D0" emissiveIntensity={1.4} />
+            <meshStandardMaterial color="#ffffff" emissive="#ffea00" emissiveIntensity={1.4} />
           </mesh>
-          <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#FFF8D0" distance={10} decay={2} />
+          <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#ffea00" distance={10} decay={2} />
         </group>
       ))}
 
       {/* ── WINDOWS ── */}
       <mesh position={[-2, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#87CEEB" emissive="#FFE87A" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#09070a" emissive="#00f0ff" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[3.5, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#87CEEB" emissive="#FFE87A" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#09070a" emissive="#00f0ff" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
-      <pointLight position={[0, 3.0, -7]} intensity={1.4} color="#FFD96A" distance={14} decay={2} />
+      <pointLight position={[0, 3.0, -7]} intensity={1.4} color="#00f0ff" distance={14} decay={2} />
 
       {/* ── FURNITURE (static — already furnished) ── */}
       {/* Sofa */}
       <mesh position={[-2.5, 0.45, -2.5]} castShadow>
         <boxGeometry args={[2.2, 0.9, 1.0]} />
-        <meshStandardMaterial color="#6B5B95" roughness={0.8} />
+        <meshStandardMaterial color="#ff007f" roughness={0.8} />
       </mesh>
       {/* Coffee table */}
       <mesh position={[-1.5, 0.3, -0.8]} castShadow>
         <boxGeometry args={[1.6, 0.08, 0.9]} />
-        <meshStandardMaterial color="#5A3A1A" roughness={0.4} metalness={0.05} />
+        <meshStandardMaterial color="#1a0521" roughness={0.4} metalness={0.05} />
       </mesh>
       {/* TV stand + TV */}
       <mesh position={[2.5, 0.3, -2.5]} castShadow>
         <boxGeometry args={[2.5, 0.6, 0.5]} />
-        <meshStandardMaterial color="#2A1A0A" roughness={0.5} />
+        <meshStandardMaterial color="#2b0a3d" roughness={0.5} />
       </mesh>
       <mesh position={[2.5, 1.2, -2.6]} castShadow>
         <boxGeometry args={[2.0, 1.2, 0.09]} />
-        <meshStandardMaterial color="#111" roughness={0.2} metalness={0.6} />
+        <meshStandardMaterial color="#09070a" roughness={0.2} metalness={0.6} />
       </mesh>
       {/* Dining table */}
       <mesh position={[0, 0.5, 2.5]} castShadow>
         <boxGeometry args={[1.8, 0.1, 1.0]} />
-        <meshStandardMaterial color="#8B7355" roughness={0.5} />
+        <meshStandardMaterial color="#110e15" roughness={0.5} />
       </mesh>
       {/* Desk area */}
       <mesh position={[-5.5, 0.5, 2.5]} castShadow>
         <boxGeometry args={[1.5, 0.1, 0.75]} />
-        <meshStandardMaterial color="#7A5C44" roughness={0.6} />
+        <meshStandardMaterial color="#1a0a2a" roughness={0.6} />
       </mesh>
       {/* Plant */}
       <group position={[7.5, 0, -5]}>
         <mesh position={[0, 0.4, 0]} castShadow>
           <cylinderGeometry args={[0.28, 0.22, 0.8, 8]} />
-          <meshStandardMaterial color="#C47A3A" roughness={0.7} />
+          <meshStandardMaterial color="#ffea00" roughness={0.7} />
         </mesh>
         <mesh position={[0, 1.0, 0]} castShadow>
           <sphereGeometry args={[0.55, 10, 10]} />
-          <meshStandardMaterial color="#2D7A2D" roughness={0.9} />
+          <meshStandardMaterial color="#00f0ff" roughness={0.9} />
         </mesh>
       </group>
 
       {/* ── DECOR: fully lived-in home ── */}
       {/* Living-room rug under sofa/coffee table */}
-      <Rug position={[-2, 0.008, -1.6]} w={4.2} d={3.2} color="#7B5B7B" border="#5B3B5B" />
+      <Rug position={[-2, 0.008, -1.6]} w={4.2} d={3.2} color="#00f0ff" border="#ff007f" />
       {/* Bookshelf in far corner (behind sofa area, against left wall) */}
-      <Bookshelf position={[-8.6, 0, -4]} rotation={[0, Math.PI / 2, 0]} />
+      <Bookshelf position={[-8.6, 0, -4]} rotation={[0, Math.PI / 2, 0]} color="#1a0521" />
       {/* Floor lamp beside the sofa */}
-      <FloorLamp position={[-4.2, 0, -3.2]} />
+      <FloorLamp position={[-4.2, 0, -3.2]} shadeColor="#ffea00" lightColor="#ffea00" />
       {/* Side table with mug near sofa */}
-      <SideTable position={[-4.2, 0, -1.6]} />
+      <SideTable position={[-4.2, 0, -1.6]} color="#2b0a3d" />
       {/* Tall plant by the dining area corner */}
       <TallPlant position={[8.5, 0, 5]} scale={1.05} />
       {/* Potted plant near the desk */}
       <PottedPlant position={[-8.5, 0, 4] } scale={1.05} />
       {/* Curtains framing the back windows (windows at z=-7.85) */}
-      <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#9B7B6B" />
-      <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#9B7B6B" />
+      <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#ffea00" />
+      <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#ffea00" />
       {/* Wall art on right wall (faces -x) */}
-      <WallArt position={[9.85, 2.9, 4]} rotation={[0, -Math.PI / 2, 0]} color="#4A90C4" w={1.3} h={0.95} />
+      <WallArt position={[9.85, 2.9, 4]} rotation={[0, -Math.PI / 2, 0]} color="#ff007f" w={1.3} h={0.95} />
       {/* Wall art on left wall (faces +x), above bookshelf area */}
-      <WallArt position={[-9.85, 3.0, 1.5]} rotation={[0, Math.PI / 2, 0]} color="#0A8F7E" w={1.2} h={0.9} />
+      <WallArt position={[-9.85, 3.0, 1.5]} rotation={[0, Math.PI / 2, 0]} color="#00f0ff" w={1.2} h={0.9} />
       {/* Books + clutter on coffee table */}
       <BookRow position={[-1.9, 0.34, -0.8]} count={4} rotation={[0, 0.3, 0]} />
 
@@ -243,37 +247,37 @@ export default function HomeLifeScene() {
         {/* Counter run along right wall */}
         <mesh position={[0.6, 0.45, 0]} castShadow>
           <boxGeometry args={[1.0, 0.9, 4.2]} />
-          <meshStandardMaterial color="#E4DCCC" roughness={0.7} />
+          <meshStandardMaterial color="#1a0a2a" roughness={0.7} />
         </mesh>
         {/* Countertop */}
         <mesh position={[0.6, 0.92, 0]} castShadow>
           <boxGeometry args={[1.1, 0.06, 4.3]} />
-          <meshStandardMaterial color="#5A5A5A" roughness={0.3} metalness={0.15} />
+          <meshStandardMaterial color="#2b0a3d" roughness={0.3} metalness={0.15} />
         </mesh>
         {/* Upper cabinets */}
         <mesh position={[0.75, 2.1, 0]} castShadow>
           <boxGeometry args={[0.7, 0.85, 4.0]} />
-          <meshStandardMaterial color="#E4DCCC" roughness={0.7} />
+          <meshStandardMaterial color="#1a0521" roughness={0.7} />
         </mesh>
         {/* Stove top with burners */}
         <mesh position={[0.55, 0.96, 1.4]} castShadow>
           <boxGeometry args={[0.8, 0.05, 0.8]} />
-          <meshStandardMaterial color="#2C2C2C" roughness={0.35} metalness={0.4} />
+          <meshStandardMaterial color="#111" roughness={0.35} metalness={0.4} />
         </mesh>
         {([[-0.18, 1.22], [0.18, 1.22], [-0.18, 1.58], [0.18, 1.58]] as [number, number][]).map(([bx, bz], i) => (
           <mesh key={i} position={[0.55 + bx, 0.99, bz]}>
             <cylinderGeometry args={[0.11, 0.11, 0.015, 12]} />
-            <meshStandardMaterial color="#1a1a1a" roughness={0.5} />
+            <meshStandardMaterial color="#09070a" roughness={0.5} />
           </mesh>
         ))}
         {/* Fridge at end of counter */}
         <mesh position={[0.55, 1.05, -2.4]} castShadow>
           <boxGeometry args={[0.9, 2.1, 0.9]} />
-          <meshStandardMaterial color="#C0C4C8" roughness={0.35} metalness={0.5} />
+          <meshStandardMaterial color="#2b0a3d" roughness={0.35} metalness={0.5} />
         </mesh>
         <mesh position={[0.1, 1.55, -2.4]}>
           <boxGeometry args={[0.03, 0.5, 0.05]} />
-          <meshStandardMaterial color="#8A8E92" metalness={0.6} roughness={0.3} />
+          <meshStandardMaterial color="#09070a" metalness={0.6} roughness={0.3} />
         </mesh>
       </group>
 
@@ -382,7 +386,8 @@ export default function HomeLifeScene() {
             <mesh
               position={[0, 0.06, 0]}
               rotation={[-Math.PI / 2, 0, 0]}
-              onClick={(e) => { e.stopPropagation(); if (!owned) setActiveImp(isActive ? null : imp.id); }}
+              onPointerDown={(e) => { e.stopPropagation(); if (!owned) setActiveImp(isActive ? null : imp.id); }}
+              onClick={(e) => e.stopPropagation()}
             >
               <planeGeometry args={[2.2, 1.6]} />
               <meshStandardMaterial
@@ -394,7 +399,7 @@ export default function HomeLifeScene() {
             </mesh>
             <Html position={[0, 0.7, 0]} center distanceFactor={12}>
               <div onClick={() => { if (!owned) setActiveImp(isActive ? null : imp.id); }} style={{
-                background: owned ? 'rgba(45,122,45,0.9)' : `rgba(${imp.color.startsWith('#D') ? '212,168,67' : imp.color.startsWith('#8') ? '139,105,20' : imp.color.startsWith('#2') ? '39,174,96' : '243,156,18'},0.88)`,
+                background: owned ? 'rgba(0,240,255,0.9)' : `rgba(${imp.rgba},0.88)`,
                 color: '#fff', padding: '4px 10px', borderRadius: 0,
                 fontSize: 10, fontWeight: 700, fontFamily: 'Inter,sans-serif',
                 whiteSpace: 'nowrap', cursor: owned ? 'default' : 'pointer',

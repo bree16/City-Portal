@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
+import type { ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { useGameStore } from '@/store/gameStore';
+import { getAudioEngine } from '@/hooks/useGameAudio';
 
 interface InteractionZoneProps {
   /** Local position within the parent group (world position is computed automatically). */
@@ -22,6 +24,14 @@ interface InteractionZoneProps {
  * Large invisible hit zone around an interactive object. Clicking anywhere in
  * the zone fires the same handler as clicking the object itself. When the
  * player walks near, a glowing ring + prompt appear.
+ *
+ * Robustness notes:
+ *  - We handle BOTH onPointerDown and onClick and stop propagation on each so
+ *    the GroundPlane's onPointerDown (which would otherwise move the player)
+ *    never steals the interaction. onPointerDown is the primary trigger so a
+ *    single tap reliably fires even if the pointer nudges before release.
+ *  - The invisible cylinder is intentionally tall + wide so the target is easy
+ *    to hit from any camera angle.
  */
 export function InteractionZone({
   position,
@@ -37,6 +47,29 @@ export function InteractionZone({
   const worldPos = useRef(new THREE.Vector3());
   const [near, setNear] = useState(false);
   const nearRef = useRef(false);
+  // Guard so onPointerDown + onClick don't double-fire from a single tap.
+  const firedThisPress = useRef(false);
+
+  const fire = () => {
+    getAudioEngine().play('click');
+    onActivate();
+  };
+
+  const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
+    e.stopPropagation();
+    firedThisPress.current = true;
+    fire();
+  };
+
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    // If pointerDown already fired for this press, skip (avoids double activation).
+    if (firedThisPress.current) {
+      firedThisPress.current = false;
+      return;
+    }
+    fire();
+  };
 
   useFrame(({ clock }) => {
     if (!groupRef.current) return;
@@ -61,17 +94,15 @@ export function InteractionZone({
 
   return (
     <group ref={groupRef} position={position}>
-      {/* Big invisible clickable cylinder */}
+      {/* Big invisible clickable cylinder — primary fat target */}
       <mesh
         position={[0, height / 2, 0]}
-        onClick={(e) => {
-          e.stopPropagation();
-          onActivate();
-        }}
+        onPointerDown={handlePointerDown}
+        onClick={handleClick}
         onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
         onPointerOut={() => { document.body.style.cursor = 'auto'; }}
       >
-        <cylinderGeometry args={[radius, radius, height, 12]} />
+        <cylinderGeometry args={[radius, radius, height, 16]} />
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
 
@@ -81,23 +112,25 @@ export function InteractionZone({
         <meshBasicMaterial color={color} transparent opacity={0.6} depthWrite={false} />
       </mesh>
 
-      {/* Proximity prompt */}
+      {/* Proximity prompt — slightly enlarged when the player is near */}
       {near && prompt && (
         <Html position={[0, height + 0.15, 0]} center distanceFactor={9} zIndexRange={[20, 0]}>
           <div
-            onClick={onActivate}
+            onPointerDown={(e) => { e.stopPropagation(); fire(); }}
             style={{
               background: 'rgba(9,7,10,0.95)',
-              border: `1px solid ${color}`,
+              border: `1.5px solid ${color}`,
               color: '#fff',
               borderRadius: 0,
-              padding: '4px 10px',
-              fontSize: 11,
-              fontWeight: 700,
+              padding: '5px 12px',
+              fontSize: 12,
+              fontWeight: 800,
               fontFamily: 'Inter, sans-serif',
               whiteSpace: 'nowrap',
               cursor: 'pointer',
-              boxShadow: `0 0 14px ${color}55`,
+              boxShadow: `0 0 20px ${color}77`,
+              transform: 'scale(1.08)',
+              transition: 'transform 0.15s ease-out',
             }}
           >
             👆 {prompt}

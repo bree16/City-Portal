@@ -52,27 +52,27 @@ export default function NegotiationScene() {
       {/* Floor */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[18, 14]} />
-        <meshStandardMaterial color="#B8A88A" roughness={0.6} metalness={0.03} />
+        <meshStandardMaterial color="#1a0a2a" roughness={0.6} metalness={0.03} />
       </mesh>
 
       {/* Walls */}
       <mesh position={[0, 2.5, -7]} receiveShadow>
         <boxGeometry args={[18, 5, 0.2]} />
-        <meshStandardMaterial color="#E8DDD0" roughness={0.9} />
+        <meshStandardMaterial color="#09070a" roughness={0.9} />
       </mesh>
       <mesh position={[-9, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 14]} />
-        <meshStandardMaterial color="#DDD0C0" roughness={0.9} />
+        <meshStandardMaterial color="#110e15" roughness={0.9} />
       </mesh>
       <mesh position={[9, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 14]} />
-        <meshStandardMaterial color="#DDD0C0" roughness={0.9} />
+        <meshStandardMaterial color="#110e15" roughness={0.9} />
       </mesh>
 
       {/* Ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[18, 14]} />
-        <meshStandardMaterial color="#F5F0E8" roughness={1} />
+        <meshStandardMaterial color="#09070a" roughness={1} />
       </mesh>
 
       {/* Pendant lights over table */}
@@ -80,30 +80,30 @@ export default function NegotiationScene() {
         <group key={x}>
           <mesh position={[x, 3.5, 0]}>
             <cylinderGeometry args={[0.18, 0.22, 0.18, 12]} />
-            <meshStandardMaterial color="#2C2C2C" roughness={0.3} metalness={0.6} />
+            <meshStandardMaterial color="#2b0a3d" roughness={0.3} metalness={0.6} />
           </mesh>
           <mesh position={[x, 3.44, 0]}>
             <boxGeometry args={[0.02, 0.8, 0.02]} />
-            <meshStandardMaterial color="#555" metalness={0.7} roughness={0.2} />
+            <meshStandardMaterial color="#1a0521" metalness={0.7} roughness={0.2} />
           </mesh>
           <mesh position={[x, 3.58, 0]}>
             <cylinderGeometry args={[0.16, 0.16, 0.05, 12]} />
-            <meshStandardMaterial color="#FFF8D0" emissive="#FFF8D0" emissiveIntensity={1.5} />
+            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={1.5} />
           </mesh>
-          <pointLight position={[x, 3.2, 0]} intensity={0.9} color="#FFE87A" distance={6} />
+          <pointLight position={[x, 3.2, 0]} intensity={0.9} color="#00f0ff" distance={6} />
         </group>
       ))}
 
       {/* Negotiation table */}
       <mesh position={[0, 0.48, 0]} castShadow>
         <boxGeometry args={[4.5, 0.1, 2.2]} />
-        <meshStandardMaterial color="#6B4226" roughness={0.4} metalness={0.05} />
+        <meshStandardMaterial color="#1a0521" roughness={0.4} metalness={0.05} />
       </mesh>
       {([-1.9, 1.9] as number[]).map((x) =>
         ([-0.9, 0.9] as number[]).map((z) => (
           <mesh key={`${x}-${z}`} position={[x, 0.24, z]} castShadow>
             <cylinderGeometry args={[0.07, 0.07, 0.97, 8]} />
-            <meshStandardMaterial color="#5A3A1A" roughness={0.5} metalness={0.08} />
+            <meshStandardMaterial color="#00f0ff" roughness={0.5} metalness={0.08} />
           </mesh>
         ))
       )}
@@ -112,7 +112,7 @@ export default function NegotiationScene() {
       {[-1.2, 0, 1.2].map((x) => (
         <mesh key={x} position={[x, 0.55, 0]} castShadow>
           <boxGeometry args={[0.5, 0.012, 0.38]} />
-          <meshStandardMaterial color="#fff" roughness={0.9} />
+          <meshStandardMaterial color="#ffffff" roughness={0.9} />
         </mesh>
       ))}
 
@@ -121,11 +121,11 @@ export default function NegotiationScene() {
         <group key={`p-${x}`} position={[x, 0, 1.8]}>
           <mesh position={[0, 0.3, 0]} castShadow>
             <boxGeometry args={[0.65, 0.1, 0.65]} />
-            <meshStandardMaterial color="#4A3020" roughness={0.85} />
+            <meshStandardMaterial color="#2b0a3d" roughness={0.85} />
           </mesh>
           <mesh position={[0, 0.68, -0.28]} castShadow>
             <boxGeometry args={[0.65, 0.75, 0.09]} />
-            <meshStandardMaterial color="#4A3020" roughness={0.85} />
+            <meshStandardMaterial color="#ff007f" roughness={0.85} />
           </mesh>
         </group>
       ))}
@@ -133,11 +133,11 @@ export default function NegotiationScene() {
         <group key={`s-${x}`} position={[x, 0, -1.8]}>
           <mesh position={[0, 0.3, 0]} castShadow>
             <boxGeometry args={[0.65, 0.1, 0.65]} />
-            <meshStandardMaterial color="#4A3020" roughness={0.85} />
+            <meshStandardMaterial color="#2b0a3d" roughness={0.85} />
           </mesh>
           <mesh position={[0, 0.68, 0.28]} castShadow>
             <boxGeometry args={[0.65, 0.75, 0.09]} />
-            <meshStandardMaterial color="#4A3020" roughness={0.85} />
+            <meshStandardMaterial color="#ff007f" roughness={0.85} />
           </mesh>
         </group>
       ))}
@@ -157,11 +157,11 @@ export default function NegotiationScene() {
       <group position={[-7, 0, -5]}>
         <mesh position={[0, 0.35, 0]} castShadow>
           <cylinderGeometry args={[0.25, 0.2, 0.7, 8]} />
-          <meshStandardMaterial color="#C47A3A" roughness={0.7} />
+          <meshStandardMaterial color="#ffea00" roughness={0.7} />
         </mesh>
         <mesh position={[0, 0.85, 0]} castShadow>
           <sphereGeometry args={[0.45, 10, 10]} />
-          <meshStandardMaterial color="#2D7A2D" roughness={0.9} />
+          <meshStandardMaterial color="#00f0ff" roughness={0.9} />
         </mesh>
       </group>
 
@@ -169,8 +169,8 @@ export default function NegotiationScene() {
       {/* Tall plant in the opposite corner to balance the existing one */}
       <TallPlant position={[7, 0, -5]} scale={1.1} />
       {/* Framed art on side walls, facing inward */}
-      <WallArt position={[-8.85, 3.0, -2]} rotation={[0, Math.PI / 2, 0]} color="#3A5F7A" w={1.3} h={0.9} />
-      <WallArt position={[8.85, 3.0, -2]} rotation={[0, -Math.PI / 2, 0]} color="#5A7A5A" w={1.3} h={0.9} />
+      <WallArt position={[-8.85, 3.0, -2]} rotation={[0, Math.PI / 2, 0]} color="#ff007f" w={1.3} h={0.9} />
+      <WallArt position={[8.85, 3.0, -2]} rotation={[0, -Math.PI / 2, 0]} color="#00f0ff" w={1.3} h={0.9} />
       {/* Subtle wall clock on back wall, beside the house photo */}
       <WallClock position={[4, 3.0, -6.88]} rotation={[0, 0, 0]} />
 

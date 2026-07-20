@@ -1,0 +1,95 @@
+Character Anatomy & Model Construction (Very High Priority)
+
+The current character appears to be assembled from simple geometric primitives (spheres, cylinders, cubes, capsules, and other basic shapes).
+
+This creates a disconnected, robotic appearance where each body part looks like a separate object rather than a complete human body.
+
+Avoid constructing the character from obvious geometric shapes.
+
+Instead, build a proper stylized humanoid character with a continuous mesh and smooth transitions between body parts.
+
+Connected Anatomy
+
+The character should feel like one complete person—not a collection of separate pieces.
+
+Body parts should connect naturally.
+
+Examples:
+
+The neck should blend smoothly into the shoulders.
+The shoulders should connect naturally to the torso.
+Arms should attach anatomically to the shoulders.
+Elbows should bend correctly.
+Wrists should transition naturally into the hands.
+The torso should connect smoothly to the hips.
+Legs should emerge naturally from the pelvis.
+Knees should bend correctly.
+Ankles should connect properly to the feet.
+
+There should never be obvious gaps or harsh transitions between body parts.
+
+Smooth Character Mesh
+
+Rather than using visible cylinders and spheres, create a unified stylized character mesh.
+
+The silhouette should flow naturally from head to toe.
+
+Use smooth curves instead of hard geometric edges.
+
+Avoid the appearance that limbs were simply attached to a central body.
+
+Human Proportions
+
+Maintain believable anatomy while keeping the character stylized.
+
+The character should have:
+
+Natural head size
+Defined neck
+Proper shoulder width
+Realistic torso length
+Defined waist and hips
+Correct arm proportions
+Hands that reach approximately mid-thigh when standing naturally
+Proper leg proportions
+Correct foot size for balance
+
+Characters should immediately read as human.
+
+Natural Joint Deformation
+
+Ensure joints animate correctly.
+
+When moving:
+
+Shoulders rotate naturally.
+Elbows bend correctly.
+Knees flex realistically.
+Hips rotate smoothly.
+Neck turns naturally.
+
+Avoid limbs clipping into the torso or bending in impossible directions.
+
+Clothing
+
+Clothing should wrap around the body naturally.
+
+Avoid shirts, pants, and sleeves that appear to be simple colored cylinders.
+
+Instead, create clothing that follows the body's shape with subtle folds, seams, and layered details while remaining optimized for browser performance.
+
+Hair
+
+Hair should sit naturally on the head.
+
+Avoid helmet-like shapes.
+
+Create hairstyles with volume, shape, and smooth silhouettes that frame the face without covering the eyes.
+
+Overall Art Style
+
+Aim for a polished, stylized human character—not a hyper-realistic scan and not a block-based avatar.
+
+The visual quality should feel similar to modern stylized simulation and adventure games.
+
+The character should look professionally designed, expressive, and approachable while remaining lightweight enough for a browser-based educational simulator.
