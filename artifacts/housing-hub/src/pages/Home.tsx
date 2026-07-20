@@ -12,11 +12,12 @@ import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from '@/components/ui/badge';
+import { NewsEventsSlideshow } from '@/components/NewsEventsSlideshow';
 import heroIllustration from '@assets/generated_images/hero_illustration.png';
-import hiltonImage from '@assets/generated_images/hilton_village.jpg';
-import denbighImage from '@assets/generated_images/denbigh.jpg';
-import oysterImage from '@assets/generated_images/oyster_point.jpg';
-import southeastImage from '@assets/generated_images/southeast.jpg';
+import hiltonImage from '@assets/stock_images/hood_hilton.jpg';
+import denbighImage from '@assets/stock_images/hood_denbigh.jpg';
+import oysterImage from '@assets/stock_images/hood_oyster_point.jpg';
+import southeastImage from '@assets/stock_images/hood_southeast.jpg';
 import lifestyleNewHomeowners from '@assets/generated_images/lifestyle_new_homeowners.jpg';
 import lifestyleMilitaryFamily from '@assets/generated_images/lifestyle_military_family.jpg';
 import lifestyleCommunityFestival from '@assets/generated_images/lifestyle_community_festival.jpg';
@@ -659,6 +660,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* News & Events slideshow */}
+      <NewsEventsSlideshow />
 
       {/* 5. Resident Services Teaser */}
       <section className="py-24 bg-muted/30 border-t border-border/50">
