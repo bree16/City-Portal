@@ -31,41 +31,45 @@ function shade(hex: string, mult: number): string {
 }
 
 /* ── Shared Geometries ────────────────────────────────────────── */
-/* Instantiated once globally to keep memory and draw calls cheap. */
+/* 
+  Instantiated once globally to keep memory and draw calls cheap. 
+  Lathe geometries MUST be defined top-to-bottom (decreasing Y) to ensure outward-facing normals.
+*/
 
 const SHARED = {
   // --- Upper Body (Skin) ---
   torso: new THREE.LatheGeometry([
-    new THREE.Vector2(0.001, 0.28),
-    new THREE.Vector2(0.035, 0.28),  // neck top
-    new THREE.Vector2(0.045, 0.22),  // neck base
-    new THREE.Vector2(0.110, 0.18),  // shoulder base (flat shoulders)
-    new THREE.Vector2(0.125, 0.08),  // chest
-    new THREE.Vector2(0.105, -0.02), // waist
-    new THREE.Vector2(0.115, -0.08), // tuck
-    new THREE.Vector2(0.001, -0.08)
+    new THREE.Vector2(0.001, 0.28),   // close top
+    new THREE.Vector2(0.035, 0.28),   // neck top
+    new THREE.Vector2(0.045, 0.22),   // neck base
+    new THREE.Vector2(0.100, 0.18),   // shoulder base
+    new THREE.Vector2(0.115, 0.08),   // chest
+    new THREE.Vector2(0.105, 0.01),   // waist
+    new THREE.Vector2(0.110, -0.05),  // tuck
+    new THREE.Vector2(0.001, -0.05)   // close bottom
   ], 24),
 
-  // --- Upper Body (Shirt) ---
+  // --- Upper Body (Shirt) - Perfectly offsets torso radially, stops at waist ---
   shirt: new THREE.LatheGeometry([
-    new THREE.Vector2(0.040, 0.23),
-    new THREE.Vector2(0.115, 0.19),  // shoulder cap base
-    new THREE.Vector2(0.135, 0.08),  // chest
-    new THREE.Vector2(0.115, -0.02), // waist
-    new THREE.Vector2(0.125, -0.12), // hem
-    new THREE.Vector2(0.001, -0.12)
+    new THREE.Vector2(0.001, 0.22),   // close top
+    new THREE.Vector2(0.052, 0.22),   // collar (+0.007)
+    new THREE.Vector2(0.110, 0.18),   // shoulder cap (+0.010)
+    new THREE.Vector2(0.130, 0.08),   // chest (+0.015)
+    new THREE.Vector2(0.120, 0.01),   // tucked waist (+0.015)
+    new THREE.Vector2(0.001, 0.01)    // close bottom
   ], 24),
-  shirtHem: new THREE.TorusGeometry(0.125, 0.012, 8, 24),
 
   // --- Lower Body (Pants & Pelvis) ---
   pants: new THREE.LatheGeometry([
-    new THREE.Vector2(0.001, 0.02),
-    new THREE.Vector2(0.115, 0.02),  // waist top
-    new THREE.Vector2(0.135, -0.12), // hips
-    new THREE.Vector2(0.110, -0.22), // crotch
-    new THREE.Vector2(0.001, -0.24)
+    new THREE.Vector2(0.001, 0.01),   // close top
+    new THREE.Vector2(0.120, 0.01),   // waist top
+    new THREE.Vector2(0.135, -0.12),  // hips
+    new THREE.Vector2(0.110, -0.22),  // crotch
+    new THREE.Vector2(0.001, -0.24)   // close bottom
   ], 24),
-  belt: new THREE.TorusGeometry(0.120, 0.016, 8, 24),
+  
+  // Belt perfectly covers the Y seam between shirt (0.01) and pants (0.01)
+  belt: new THREE.TorusGeometry(0.123, 0.014, 8, 24),
 
   // --- Head & Face (Scaled to ~1/5.5 body height) ---
   head: new THREE.SphereGeometry(0.13, 24, 20),
@@ -151,7 +155,6 @@ function HairMesh({ hairstyle, hairMat, skinMat, fadeMat }: { hairstyle: Hairsty
         </group>
       );
     case 'locs': {
-      // Procedurally place hanging locs organically around the head
       const locs: { x: number; y: number; z: number; rotX: number; rotZ: number; len: number }[] = [];
       const rings = [
         { y: 0.09, r: 0.08, count: 6, len: 0.12, angleOffset: 0 },
@@ -163,7 +166,6 @@ function HairMesh({ hairstyle, hairMat, skinMat, fadeMat }: { hairstyle: Hairsty
           const a = (i / ring.count) * Math.PI * 2 + ring.angleOffset;
           const x = Math.cos(a) * ring.r;
           const z = Math.sin(a) * ring.r;
-          // strictly leave the face clear
           if (z < 0.02 || Math.abs(x) > 0.08 || rIdx === 0) {
             locs.push({
               x, y: ring.y, z,
@@ -306,10 +308,10 @@ export function CharacterRig({
   // Dynamically generated materials
   const mats = useMemo(() => ({
     skin: new THREE.MeshStandardMaterial({ color: skinTone, roughness: 0.45, metalness: 0.1 }),
-    shirt: new THREE.MeshStandardMaterial({ color: shirtColor, roughness: 0.85 }),
-    pants: new THREE.MeshStandardMaterial({ color: pantsColor, roughness: 0.9 }),
-    shirtDark: new THREE.MeshStandardMaterial({ color: shade(shirtColor, 0.72), roughness: 0.85 }),
-    pantsDark: new THREE.MeshStandardMaterial({ color: shade(pantsColor, 0.7), roughness: 0.9 }),
+    shirt: new THREE.MeshStandardMaterial({ color: shirtColor, roughness: 0.85, side: THREE.DoubleSide }),
+    pants: new THREE.MeshStandardMaterial({ color: pantsColor, roughness: 0.9, side: THREE.DoubleSide }),
+    shirtDark: new THREE.MeshStandardMaterial({ color: shade(shirtColor, 0.72), roughness: 0.85, side: THREE.DoubleSide }),
+    pantsDark: new THREE.MeshStandardMaterial({ color: shade(pantsColor, 0.7), roughness: 0.9, side: THREE.DoubleSide }),
     hair: new THREE.MeshStandardMaterial({ color: hairColor, roughness: 0.7, metalness: 0 }),
     fade: new THREE.MeshStandardMaterial({ color: shade(hairColor, 0.5), roughness: 0.8, transparent: true, opacity: 0.6 }),
     eye: new THREE.MeshStandardMaterial({ color: eyeColor, roughness: 0.2 }),
@@ -322,14 +324,11 @@ export function CharacterRig({
     return () => { Object.values(mats).forEach(m => m.dispose()); };
   }, [mats]);
 
-  // Meaningful silhouette changes based on bodyScale (0 = Slim, 1 = Broad)
-  // Ensure chest expands horizontally much more than depth to create human torso shape
-  const chestW = 0.90 + bodyScale * 0.40;
-  const chestD = 0.60 + bodyScale * 0.20; // Flattened chest depth
-  const hipW = 0.85 + bodyScale * 0.30;
-  const hipD = 0.65 + bodyScale * 0.20;
+  // Unified scalers for cohesive silhouette
+  const bodyW = 0.90 + bodyScale * 0.35;
+  const bodyD = 0.70 + bodyScale * 0.25;
   const limbThick = 1.0 + bodyScale * 0.4;
-  const handScale = 1.0 + bodyScale * 0.3; // Uniform hand scale
+  const handScale = 1.0 + bodyScale * 0.3;
 
   useFrame(({ clock }) => {
     const t = clock.elapsedTime + idlePhase;
@@ -364,12 +363,14 @@ export function CharacterRig({
       if (leftShinRef.current) leftShinRef.current.rotation.set(Math.max(0, swing + cosSwing) * 0.8, 0, 0);
       if (rightShinRef.current) rightShinRef.current.rotation.set(Math.max(0, -swing + cosSwing) * 0.8, 0, 0);
       
-      // Torso dynamics (Vertical posture maintained)
+      // Torso dynamics
       if (rootRef.current) {
-        rootRef.current.position.y = 0.85 + Math.abs(cosSwing) * 0.035;
+        // Allows bouncing during movement, sinking root firmly into floor to prevent shadow hover
+        rootRef.current.position.y = 0.84 + Math.abs(cosSwing) * 0.035;
         rootRef.current.rotation.set(0, swing * 0.1, Math.sin(w * 0.5) * 0.02);
       }
       if (chestParentRef.current) {
+        chestParentRef.current.position.y = 0; // reset idle bob
         chestParentRef.current.rotation.set(0, -swing * 0.15, 0);
       }
       if (pelvisParentRef.current) {
@@ -381,30 +382,31 @@ export function CharacterRig({
     } else if (isIdle) {
       const b = Math.sin(t * 1.5);
       
-      // Breathing & Weight shift (STRICT UPRIGHT POSTURE)
+      // Strictly maintain root Y=0.84 so feet stay perfectly grounded deep into the contact shadow.
       if (rootRef.current) {
-        rootRef.current.position.y = 0.85 + (b + 1) * 0.003;
+        rootRef.current.position.y = 0.84;
         rootRef.current.rotation.set(0, Math.sin(t * 0.5) * 0.03, Math.sin(t * 0.5) * 0.01);
       }
+      // Chest handles the breathing volume and vertical sway.
       if (chestParentRef.current) {
-        chestParentRef.current.scale.set(1 + b * 0.012, 1, 1 + b * 0.012);
-        chestParentRef.current.rotation.set(0, 0, 0); // NO pitch forward
+        chestParentRef.current.position.y = (b + 1) * 0.003; 
+        chestParentRef.current.scale.set(1 + b * 0.012, 1 + b * 0.005, 1 + b * 0.012);
+        chestParentRef.current.rotation.set(0, 0, 0); 
       }
       if (pelvisParentRef.current) {
         pelvisParentRef.current.rotation.set(0, 0, 0);
       }
 
-      // Emotes / Idle Arms (Relaxed strictly at sides)
+      // Emotes / Idle Arms
       if (emote === 'wave' && rightArmRef.current && rightForearmRef.current) {
         rightArmRef.current.rotation.set(0, 0, 2.2);
         rightForearmRef.current.rotation.set(0, 0, -0.5 + Math.sin(t * 8) * 0.5);
       } else {
         if (rightArmRef.current) {
-          // Hang straight down (0), angled outward naturally to clear hips
           rightArmRef.current.rotation.set(0, 0, 0.12 + Math.sin(t * 1.5) * 0.015);
         }
         if (rightForearmRef.current) {
-          rightForearmRef.current.rotation.set(-0.05, 0, 0); // imperceptible natural bend
+          rightForearmRef.current.rotation.set(-0.05, 0, 0);
         }
       }
       
@@ -415,7 +417,7 @@ export function CharacterRig({
         leftForearmRef.current.rotation.set(-0.05, 0, 0);
       }
 
-      // Look around (Level head)
+      // Look around
       if (headRef.current) {
         if (lookAround || emote === 'look') {
           headRef.current.rotation.set(0, Math.sin(t * 2) * 0.45, 0);
@@ -434,22 +436,18 @@ export function CharacterRig({
 
   return (
     <group scale={scale}>
-      {/* 
-        Root at waist Y=0.85
-        Leg total length is ~0.85, so shoes rest exactly at Global Y=0
-      */}
-      <group ref={rootRef} position={[0, 0.85, 0]}>
+      <group ref={rootRef} position={[0, 0.84, 0]}>
         
         {/* LOWER BODY (Pants & Pelvis) */}
         <group ref={pelvisParentRef}>
-          <group scale={[hipW, 1, hipD]} position={[0, 0, 0]}>
+          <group scale={[bodyW, 1, bodyD]} position={[0, 0, 0]}>
             <mesh geometry={SHARED.pants} material={mats.pants} castShadow />
-            <mesh geometry={SHARED.belt} material={mats.pantsDark} position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]} />
+            <mesh geometry={SHARED.belt} material={mats.pantsDark} position={[0, 0.01, 0]} rotation={[Math.PI / 2, 0, 0]} />
           </group>
 
           {/* LEGS (Pivot from Hips at Y=-0.12) */}
           {([-1, 1] as const).map((s) => (
-            <group key={`leg${s}`} ref={s === -1 ? leftLegRef : rightLegRef} position={[s * (0.06 * hipW), -0.12, 0]}>
+            <group key={`leg${s}`} ref={s === -1 ? leftLegRef : rightLegRef} position={[s * (0.06 * bodyW), -0.12, 0]}>
               <group scale={[limbThick, 1, limbThick]}>
                 <mesh geometry={SHARED.hip} material={mats.pants} castShadow />
                 <mesh geometry={SHARED.thighPant} material={mats.pants} position={[0, -0.16, 0]} castShadow />
@@ -463,12 +461,13 @@ export function CharacterRig({
                   <mesh geometry={SHARED.pantHem} material={mats.pantsDark} position={[0, -0.32, 0]} rotation={[Math.PI / 2, 0, 0]} />
                 </group>
 
-                {/* FOOT (Ankle at Y=-0.32 relative to knee. Global Y = 0.85 - 0.12 - 0.32 - 0.32 = 0.09) */}
+                {/* FOOT (Ankle at Y=-0.32 relative to knee. Global Y = 0.84 - 0.12 - 0.32 - 0.32 = 0.08) */}
                 <group position={[0, -0.32, 0]}>
                   <mesh geometry={SHARED.ankle} material={mats.skin} scale={[limbThick, 1, limbThick]} castShadow />
-                  {/* Shoe lies flat. Center at Y=-0.06 relative to ankle. Global Y=0.03. Radius=0.03. Bottom=0.0 */}
-                  <mesh geometry={SHARED.shoe} material={CONST_MATS.shoe} position={[0, -0.06, 0.04]} rotation={[Math.PI / 2, 0, 0]} scale={[1 + bodyScale * 0.1, 1, 1 + bodyScale * 0.1]} castShadow />
-                  <mesh geometry={SHARED.shoeSole} material={CONST_MATS.shoeSole} position={[0, -0.07, 0.04]} rotation={[Math.PI / 2, 0, 0]} scale={[1 + bodyScale * 0.1, 1, 1 + bodyScale * 0.1]} castShadow />
+                  {/* Local Z handles height because of Math.PI/2 rotation. Scale Z stays 1 to keep exactly ground-level. */}
+                  {/* Center Y is -0.05. Radius is 0.03. So sole bottom is at Y=-0.08 relative to ankle, making Global Y=0.00 exactly. */}
+                  <mesh geometry={SHARED.shoe} material={CONST_MATS.shoe} position={[0, -0.05, 0.04]} rotation={[Math.PI / 2, 0, 0]} scale={[1 + bodyScale * 0.1, 1 + bodyScale * 0.1, 1]} castShadow />
+                  <mesh geometry={SHARED.shoeSole} material={CONST_MATS.shoeSole} position={[0, -0.052, 0.04]} rotation={[Math.PI / 2, 0, 0]} scale={[1 + bodyScale * 0.1, 1 + bodyScale * 0.1, 1]} castShadow />
                 </group>
               </group>
             </group>
@@ -477,13 +476,12 @@ export function CharacterRig({
 
         {/* UPPER BODY (Torso, Shirt, Head, Arms) */}
         <group ref={chestParentRef}>
-          <group scale={[chestW, 1, chestD]} position={[0, 0, 0]}>
+          <group scale={[bodyW, 1, bodyD]} position={[0, 0, 0]}>
             <mesh geometry={SHARED.torso} material={mats.skin} castShadow />
             <mesh geometry={SHARED.shirt} material={mats.shirt} castShadow />
-            <mesh geometry={SHARED.shirtHem} material={mats.shirtDark} position={[0, -0.12, 0]} rotation={[Math.PI / 2, 0, 0]} />
           </group>
 
-          {/* HEAD (Pivots at neck base Y=0.22, raising head to reveal neck) */}
+          {/* HEAD (Pivots at neck base Y=0.22) */}
           <group position={[0, 0.22, 0]}>
             <group ref={headRef} position={[0, 0.08, 0]}>
               <group scale={[1 + bodyScale * 0.05, 1 + bodyScale * 0.05, 1 + bodyScale * 0.05]}>
@@ -529,10 +527,9 @@ export function CharacterRig({
             </group>
           </group>
 
-          {/* ARMS (Pivot from perfectly flat shoulders at Y=0.18) */}
+          {/* ARMS (Pivot from flat shoulders at Y=0.18) */}
           {([-1, 1] as const).map((s) => (
-            // Arm position exactly aligns with the scaled chest width, keeping it flush with torso
-            <group key={`arm${s}`} ref={s === -1 ? leftArmRef : rightArmRef} position={[s * (0.11 * chestW + 0.01 * limbThick), 0.18, 0]}>
+            <group key={`arm${s}`} ref={s === -1 ? leftArmRef : rightArmRef} position={[s * (0.11 * bodyW + 0.01 * limbThick), 0.18, 0]}>
               <group scale={[limbThick, 1, limbThick]}>
                 <mesh geometry={SHARED.shoulder} material={mats.shirt} castShadow />
                 <mesh geometry={SHARED.upperArm} material={mats.skin} position={[0, -0.12, 0]} castShadow />
@@ -547,9 +544,8 @@ export function CharacterRig({
                   <mesh geometry={SHARED.forearm} material={mats.skin} position={[0, -0.12, 0]} castShadow />
                 </group>
 
-                {/* HAND (Wrist at Y=-0.24 relative to elbow. Hand rests neatly beside hip) */}
+                {/* HAND */}
                 <group position={[0, -0.24, 0]}>
-                  {/* Uniform scale for perfect spherical mitt hands, no flattening */}
                   <group scale={[handScale, handScale, handScale]}>
                     <mesh geometry={SHARED.wrist} material={mats.skin} castShadow />
                     <mesh geometry={SHARED.hand} material={mats.skin} position={[0, -0.02, 0]} castShadow />
