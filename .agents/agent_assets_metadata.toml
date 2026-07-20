@@ -12,3 +12,15 @@ id = "dLE4hUtybI-H2-J456vvk"
 uri = "file://attached_assets/image_search/own_home_option_2.jpg"
 type = "image"
 title = "Option B — Man & woman in front of house (Unsplash)"
+
+[[outputs]]
+id = "VAzl_KV6qxIk-8zx-DvpE"
+uri = "file://artifacts/3d-game/public/audio/music-main.mp3"
+type = "audio"
+title = "game main theme"
+
+[[outputs]]
+id = "oeGL3iDvfn7fYd4XkHGfX"
+uri = "file://artifacts/3d-game/public/audio/music-chill.mp3"
+type = "audio"
+title = "game chill theme"

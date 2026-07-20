@@ -36,6 +36,7 @@ export function ChatWidget() {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const sendingRef = useRef(false);
 
   // Auto-scroll to the bottom whenever messages change or typing state toggles.
   useEffect(() => {
@@ -43,7 +44,11 @@ export function ChatWidget() {
   }, [messages, isTyping]);
 
   const handleSend = async (text: string) => {
-    if (!text.trim() || isTyping) return;
+    // sendingRef is a synchronous lock: isTyping alone can't prevent
+    // same-tick double submits (rapid Enter + click) because state
+    // updates are async.
+    if (!text.trim() || isTyping || sendingRef.current) return;
+    sendingRef.current = true;
 
     const userMsg: Message = { id: Date.now(), text, sender: 'user' };
     const nextMessages: Message[] = [...messages, userMsg];
@@ -76,6 +81,7 @@ export function ChatWidget() {
     } catch {
       setMessages(prev => [...prev, { id: Date.now() + 1, text: FALLBACK_RESPONSE, sender: 'bot' }]);
     } finally {
+      sendingRef.current = false;
       setIsTyping(false);
     }
   };

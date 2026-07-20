@@ -17,6 +17,20 @@ export type SoundEffect =
   | 'notification'
   | 'celebration';
 
+// ─── Music tracks ───────────────────────────────────────────────────────────
+
+type TrackName = 'main' | 'chill';
+
+const TRACK_URLS: Record<TrackName, string> = {
+  main: `${import.meta.env.BASE_URL}audio/music-main.mp3`,
+  chill: `${import.meta.env.BASE_URL}audio/music-chill.mp3`,
+};
+
+/** Outdoor / celebratory stages get the upbeat theme; interiors get the chill one. */
+function trackForStage(stage: number): TrackName {
+  return stage === 0 || stage === 3 || stage === 7 ? 'main' : 'chill';
+}
+
 // ─── Singleton audio engine ────────────────────────────────────────────────
 
 class GameAudioEngine {
@@ -25,6 +39,12 @@ class GameAudioEngine {
   private sfxGain: GainNode | null = null;
   private ambientOscillators: OscillatorNode[] = [];
   private ambientGains: GainNode[] = [];
+  // Real music track playback (MP3s in public/audio), routed through musicGain
+  private trackEl: HTMLAudioElement | null = null;
+  private trackSrc: MediaElementAudioSourceNode | null = null;
+  private currentTrack: TrackName | null = null;
+  private lastStage = 0;
+  private trackFailed = false;
   private _muted = false;
   private _musicVolume: number;
   private _sfxVolume: number;
@@ -88,6 +108,8 @@ class GameAudioEngine {
     this._rampGain(this.sfxGain, val ? 0 : this._sfxVolume);
     if (val) {
       this.stopAmbient();
+    } else {
+      this.startAmbient(this.lastStage);
     }
   }
 
@@ -97,6 +119,7 @@ class GameAudioEngine {
       useGameStore.getState().setAudioMuted(false);
       this._rampGain(this.musicGain, this._musicVolume);
       this._rampGain(this.sfxGain, this._sfxVolume);
+      this.startAmbient(this.lastStage);
     }
   }
 
@@ -310,8 +333,53 @@ class GameAudioEngine {
   };
 
   startAmbient(stage: number) {
-    this.stopAmbient();
-    if (this._muted) return;
+    this.lastStage = stage;
+    if (this._muted) {
+      this.stopAmbient();
+      return;
+    }
+    // Prefer real music tracks; fall back to synth pads if a track fails.
+    if (!this.trackFailed) {
+      this._startTrack(trackForStage(stage));
+      return;
+    }
+    this._startSynthAmbient(stage);
+  }
+
+  private _startTrack(name: TrackName) {
+    const ctx = this.boot();
+    // Already playing the right track? Leave it alone (no restart on scene change).
+    if (this.currentTrack === name && this.trackEl && !this.trackEl.paused) return;
+
+    if (!this.trackEl) {
+      this.trackEl = new Audio();
+      this.trackEl.loop = true;
+      this.trackEl.crossOrigin = 'anonymous';
+      // Route through musicGain so volume/mute ramps apply.
+      this.trackSrc = ctx.createMediaElementSource(this.trackEl);
+      this.trackSrc.connect(this.musicGain!);
+      this.trackEl.addEventListener('error', () => {
+        // Track missing/unloadable — fall back to synth pads permanently.
+        this.trackFailed = true;
+        this.currentTrack = null;
+        if (!this._muted) this._startSynthAmbient(this.lastStage);
+      });
+    }
+
+    // Tear down any synth pads from a previous fallback state.
+    this._stopSynthAmbient();
+
+    if (this.currentTrack !== name) {
+      this.currentTrack = name;
+      this.trackEl.src = TRACK_URLS[name];
+    }
+    void this.trackEl.play().catch(() => {
+      /* Autoplay blocked — a later user gesture will retry via startAmbient. */
+    });
+  }
+
+  private _startSynthAmbient(stage: number) {
+    this._stopSynthAmbient();
     const ctx = this.boot();
     const cfg = this.AMBIENT[stage] ?? this.AMBIENT[1];
     const perVoice = cfg.gain / cfg.freqs.length;
@@ -353,6 +421,11 @@ class GameAudioEngine {
    * (e.g. when returning to the character screen).
    */
   stopAmbient() {
+    if (this.trackEl && !this.trackEl.paused) this.trackEl.pause();
+    this._stopSynthAmbient();
+  }
+
+  private _stopSynthAmbient() {
     const oscillators = this.ambientOscillators;
     const gains = this.ambientGains;
     this.ambientOscillators = [];
