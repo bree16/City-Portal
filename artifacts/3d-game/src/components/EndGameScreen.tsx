@@ -49,7 +49,7 @@ const INITIAL_CREDIT = 635;
 
 export function EndGameScreen() {
   const {
-    showEndGame, homeSold, saleProceeds, homeValue, mortgageBalance,
+    showEndGame, homeSold, finalSaleProceeds, homeValue, mortgageBalance,
     totalInterestPaid, creditScore, homeLifeMonths, careerId,
     devMode, resetGame, setDevCash, setDevMode,
   } = useGameStore();
@@ -66,7 +66,7 @@ export function EndGameScreen() {
   }, [showEndGame]);
 
   const equityBuilt = Math.max(0, homeValue - mortgageBalance);
-  const netWorth    = homeSold ? Math.max(saleProceeds, 0) : equityBuilt;
+  const netWorth    = homeSold ? Math.max(finalSaleProceeds, 0) : equityBuilt;
   const creditDelta = creditScore - INITIAL_CREDIT;
   const lesson      = CAREER_LESSONS[careerId ?? ''] ?? "You navigated one of life's biggest financial decisions and came out stronger for it.";
 
@@ -74,7 +74,7 @@ export function EndGameScreen() {
     const text =
       `🏡 I just finished Path to Your First Home!\n` +
       `${homeSold
-        ? `💰 Sold for ${saleProceeds >= 0 ? '+' : ''}$${saleProceeds.toLocaleString()}`
+        ? `💰 Sold for ${finalSaleProceeds >= 0 ? '+' : ''}${finalSaleProceeds.toLocaleString()}`
         : `🏠 Equity built: $${equityBuilt.toLocaleString()}`}\n` +
       `📈 Credit: ${INITIAL_CREDIT} → ${creditScore} (${creditDelta >= 0 ? '+' : ''}${creditDelta} pts)\n` +
       `📅 ${homeLifeMonths} months as a homeowner\n` +
