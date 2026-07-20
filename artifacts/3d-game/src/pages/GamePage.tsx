@@ -2,13 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useGameStore } from '@/store/gameStore';
+import type { SellNegotiationState } from '@/store/gameStore';
 import { GameIcon, GameIconName } from '@/components/ui/GameIcon';
 import { GameHUD } from '@/components/GameHUD';
 import { SpeechBubble } from '@/components/SpeechBubble';
 import { SceneTransition } from '@/components/SceneTransition';
 import { AchievementToast } from '@/components/AchievementToast';
 import { ResultsCard } from '@/components/ResultsCard';
+import { EndGameScreen } from '@/components/EndGameScreen';
 import { SmartPhone } from '@/components/SmartPhone';
 import { LifeEventModal } from '@/components/LifeEventModal';
 import { CityExitButton } from '@/components/CityExitButton';
@@ -304,6 +307,168 @@ function formatTitle(id: string): string {
     .join(' ');
 }
 
+// ── Year Summary Modal ────────────────────────────────────────────
+function YearSummaryModal() {
+  const { yearSummary, clearYearSummary } = useGameStore();
+  if (!yearSummary) return null;
+  const totalCash = yearSummary.reduce((a, e) => a + e.cashDelta, 0);
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 900,
+      background: 'rgba(9,7,10,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      backdropFilter: 'blur(4px)', fontFamily: 'Inter, sans-serif',
+    }}>
+      <div className="glass-panel-strong glass-sheen" style={{ maxWidth: 380, width: '94%', padding: '22px 24px' }}>
+        <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--gold)', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <GameIcon name="fast-forward" size={18} /> Year in Review
+        </div>
+        {yearSummary.map((e, i) => (
+          <div key={i} style={{
+            display: 'flex', justifyContent: 'space-between', padding: '5px 0',
+            borderBottom: '1px solid rgba(255,255,255,0.07)', fontSize: 13,
+          }}>
+            <span style={{ color: 'rgba(255,255,255,0.65)' }}>{e.label}</span>
+            {e.cashDelta !== 0 && (
+              <span style={{ fontWeight: 700, color: e.cashDelta > 0 ? '#4ade80' : '#f87171' }}>
+                {e.cashDelta > 0 ? '+' : ''}${Math.abs(e.cashDelta).toLocaleString()}
+              </span>
+            )}
+          </div>
+        ))}
+        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: 14, fontWeight: 800, color: totalCash >= 0 ? '#4ade80' : '#f87171', marginTop: 4 }}>
+          <span>Net Cash Change</span>
+          <span>{totalCash >= 0 ? '+' : ''}${totalCash.toLocaleString()}</span>
+        </div>
+        <button
+          onClick={clearYearSummary}
+          className="glass-btn-primary"
+          style={{ width: '100%', marginTop: 14, padding: '10px 0', fontSize: 15, fontWeight: 800 }}
+        >
+          Continue →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── In-Game Dev Panel (floating ⚙️, only visible when devMode = true) ───
+function InGameDevPanel() {
+  const { devMode, cash, savings, stage, homeValue, mortgageBalance, homeLifeMonths } = useGameStore();
+  const { setDevCash, setStage, wrapUpJourney } = useGameStore();
+  const [open, setOpen] = useState(false);
+  const [devCashInput, setDevCashInput] = useState('');
+
+  if (!devMode) return null;
+
+  const equity = Math.max(0, homeValue - mortgageBalance);
+
+  return (
+    <div style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 500, fontFamily: 'Inter, sans-serif' }}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        style={{
+          background: 'rgba(255,100,0,0.85)', border: '1px solid rgba(255,100,0,0.5)',
+          color: '#fff', borderRadius: 'var(--glass-radius)', width: 38, height: 38,
+          cursor: 'pointer', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.4)',
+        }}
+        title="Dev Tools"
+      >⚙️</button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.15 }}
+            style={{
+              position: 'absolute', bottom: 44, left: 0,
+              background: 'rgba(9,7,10,0.97)', border: '1px solid rgba(255,100,0,0.4)',
+              borderRadius: 'var(--glass-radius)', padding: '14px 16px', minWidth: 230,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+            }}
+          >
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'rgba(255,100,0,0.9)', letterSpacing: 1, marginBottom: 10 }}>🛠 DEV TOOLS</div>
+            {/* Stats readout */}
+            {[
+              { label: 'Stage', value: String(stage) },
+              { label: 'Cash', value: `${cash.toLocaleString()}` },
+              { label: 'Savings', value: `${savings.toLocaleString()}` },
+              { label: 'Equity', value: `${equity.toLocaleString()}` },
+              { label: 'Home Life Months', value: String(homeLifeMonths) },
+            ].map((r) => (
+              <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, padding: '2px 0', borderBottom: '1px solid rgba(255,255,255,0.06)', color: '#fff' }}>
+                <span style={{ color: 'rgba(255,255,255,0.45)' }}>{r.label}</span>
+                <span style={{ fontWeight: 700, color: '#D4AF37' }}>{r.value}</span>
+              </div>
+            ))}
+            {/* Set cash */}
+            <div style={{ marginTop: 10, marginBottom: 8 }}>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 4 }}>SET CASH $</div>
+              <div style={{ display: 'flex', gap: 5 }}>
+                <input
+                  type="number"
+                  value={devCashInput}
+                  onChange={(e) => setDevCashInput(e.target.value)}
+                  placeholder="Amount"
+                  style={{
+                    flex: 1, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)',
+                    color: '#fff', borderRadius: 4, padding: '4px 8px', fontSize: 12,
+                    fontFamily: 'Inter, sans-serif',
+                  }}
+                />
+                <button
+                  onClick={() => { const v = parseInt(devCashInput, 10); if (!isNaN(v)) { setDevCash(v); setDevCashInput(''); } }}
+                  style={{
+                    background: 'rgba(255,100,0,0.6)', border: 'none', color: '#fff',
+                    borderRadius: 4, padding: '4px 8px', cursor: 'pointer', fontSize: 12, fontWeight: 700,
+                  }}
+                >Set</button>
+              </div>
+            </div>
+            {/* Stage jump buttons */}
+            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>JUMP TO STAGE</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, marginBottom: 8 }}>
+              {([1,2,3,4,5,6,7,8] as const).map((n) => (
+                <button
+                  key={n}
+                  onClick={() => {
+                    const map: Record<number, Partial<Parameters<typeof useGameStore.setState>[0]>> = {
+                      1: { stage: 1, currentLocation: 'city', gameStarted: true },
+                      2: { stage: 2, currentLocation: 'city', gameStarted: true, careerId: 'teacher', cash: 800, savings: 1200, monthlyIncome: 4200, monthlyExpenses: 2730 },
+                      3: { stage: 3, currentLocation: 'city', gameStarted: true, careerId: 'teacher', cash: 5000, savings: 9500, monthlyIncome: 4200, monthlyExpenses: 2730 },
+                      4: { stage: 4, currentLocation: 'negotiation', gameStarted: true, careerId: 'teacher', cash: 3000, savings: 24500, selectedHomeId: 1 },
+                      5: { stage: 5, currentLocation: 'bank', gameStarted: true, careerId: 'teacher', cash: 3000, savings: 24500, selectedHomeId: 1 },
+                      6: { stage: 6, currentLocation: 'closing', gameStarted: true, careerId: 'teacher', cash: 2500, savings: 24500, selectedHomeId: 1 },
+                      7: { stage: 7, currentLocation: 'newhome', gameStarted: true, careerId: 'teacher', cash: 2000, savings: 500, selectedHomeId: 1 },
+                      8: { stage: 8, currentLocation: 'homelife', gameStarted: true, careerId: 'teacher', cash: 2000, savings: 500, selectedHomeId: 1 },
+                    };
+                    useGameStore.setState(map[n] as Parameters<typeof useGameStore.setState>[0]);
+                    setOpen(false);
+                  }}
+                  style={{
+                    background: n === stage ? 'rgba(10,143,126,0.4)' : 'rgba(255,255,255,0.06)',
+                    border: `1px solid ${n === stage ? 'rgba(10,143,126,0.6)' : 'rgba(255,255,255,0.1)'}`,
+                    color: '#fff', borderRadius: 4, padding: '4px', cursor: 'pointer',
+                    fontSize: 11, fontWeight: n === stage ? 800 : 400,
+                  }}
+                >S{n}</button>
+              ))}
+            </div>
+            {/* Force end game */}
+            <button
+              onClick={() => { wrapUpJourney(); setOpen(false); }}
+              style={{ width: '100%', padding: '7px', borderRadius: 4, background: 'rgba(212,175,55,0.35)', border: '1px solid rgba(212,175,55,0.5)', color: '#fff', cursor: 'pointer', fontSize: 11, fontWeight: 700, fontFamily: 'Inter, sans-serif' }}
+            >
+              🏁 Force End Game
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // ── Home-Life Draggable Overlays ──────────────────────────────────
 function HomeLifeOverlays() {
   const {
@@ -311,19 +476,35 @@ function HomeLifeOverlays() {
     homeValue, mortgageBalance, mortgagePayment, mortgageRate, cash,
     selectedHomeId, pendingMaintenance, homeLifeMonths,
     advanceHomeLifeMonth, payDownMortgage, refinanceMortgage,
+    passYear, wrapUpJourney, completeSale, sellNegotiation, setSellNegotiation,
   } = useGameStore();
 
   // Sub-panel view within the listing modal
-  const [activeAction, setActiveAction] = useState<'none' | 'paydown' | 'refinance'>('none');
+  const [activeAction, setActiveAction] = useState<'none' | 'paydown' | 'refinance' | 'sell' | 'negotiating'>('none');
   // Selected paydown amount
   const [paydownAmt, setPaydownAmt]     = useState(0);
   // Selected refinance tier index
   const [refiIdx, setRefiIdx]           = useState(0);
+  // Sell flow: listing price slider
+  const [listingPrice, setListingPrice] = useState(0);
 
   // Reset sub-view when modal opens/closes
   useEffect(() => {
-    if (!listingOpen) { setActiveAction('none'); setPaydownAmt(0); setRefiIdx(0); }
+    if (!listingOpen) {
+      setActiveAction('none');
+      setPaydownAmt(0);
+      setRefiIdx(0);
+      setSellNegotiation(null);
+    }
   }, [listingOpen]);
+
+  // Initialise listing price when entering sell view
+  useEffect(() => {
+    if (activeAction === 'sell' && listingPrice === 0 && homeValue > 0) {
+      // Suggest a 5% appreciation over current value as default listing price
+      setListingPrice(Math.round(homeValue * 1.05 / 1000) * 1000);
+    }
+  }, [activeAction, homeValue]);
 
   if (stage !== 8) return null;
 
@@ -436,6 +617,7 @@ function HomeLifeOverlays() {
                 ...btnFull('#fff', pendingMaintenance ? 'rgba(255,255,255,0.08)' : '#0F766E'),
                 color: pendingMaintenance ? 'rgba(255,255,255,0.35)' : '#fff',
                 cursor: pendingMaintenance ? 'default' : 'pointer',
+                marginBottom: 4,
               }}
             >
               {pendingMaintenance
@@ -443,17 +625,45 @@ function HomeLifeOverlays() {
                 : <>Pass a Month →</>}
             </button>
 
-            {/* List Home */}
-            {equityPct >= 15 && (
+            {/* Pass a Year */}
+            <button
+              onClick={passYear}
+              disabled={!!pendingMaintenance}
+              style={{
+                ...btnFull('#fff', pendingMaintenance ? 'rgba(255,255,255,0.04)' : 'rgba(10,143,126,0.35)', pendingMaintenance ? 'transparent' : 'rgba(10,143,126,0.4)'),
+                color: pendingMaintenance ? 'rgba(255,255,255,0.2)' : '#fff',
+                cursor: pendingMaintenance ? 'default' : 'pointer',
+                marginBottom: 10,
+              }}
+            >
+              <GameIcon name="fast-forward" size={12} /> Pass a Year (12 months)
+            </button>
+
+            {/* Manage Home (Home Options) */}
+            {equityPct >= 10 && (
               <button
                 onClick={() => setListingOpen(true)}
                 style={{
                   ...btnFull('#0F172A', 'linear-gradient(135deg,#D4AF37,#F5C842)'),
                   boxShadow: '0 0 16px rgba(212,175,55,0.5)',
                   animation: 'pulse 2s infinite',
+                  marginBottom: 4,
                 }}
               >
                 <GameIcon name="home" size={14} /> Manage Home →
+              </button>
+            )}
+
+            {/* Wrap Up Journey (36+ months) */}
+            {homeLifeMonths >= 36 && (
+              <button
+                onClick={wrapUpJourney}
+                style={{
+                  ...btnFull('rgba(255,255,255,0.7)', 'rgba(255,255,255,0.07)', 'rgba(255,255,255,0.15)'),
+                  marginBottom: 0,
+                }}
+              >
+                <GameIcon name="celebration" size={12} /> Wrap Up Journey
               </button>
             )}
           </div>
@@ -463,7 +673,13 @@ function HomeLifeOverlays() {
       {listingOpen && (
         <DraggablePanel
           id="listing-modal"
-          title={activeAction === 'paydown' ? 'Extra Mortgage Payment' : activeAction === 'refinance' ? 'Refinance Your Mortgage' : 'Home Options'}
+          title={
+            activeAction === 'paydown' ? 'Extra Mortgage Payment'
+            : activeAction === 'refinance' ? 'Refinance Your Mortgage'
+            : activeAction === 'sell' ? 'List Your Home for Sale'
+            : activeAction === 'negotiating' ? 'Buyer Negotiation'
+            : 'Home Options'
+          }
           icon="home"
           defaultPosition={{ x: Math.max(16, Math.round(window.innerWidth / 2) - 185), y: 80 }}
           onClose={() => setListingOpen(false)}
@@ -473,71 +689,251 @@ function HomeLifeOverlays() {
             {/* ── MAIN VIEW ─────────────────────────────────────────── */}
             {activeAction === 'none' && (
               <>
-                {/* Sale breakdown */}
-                <div style={{ textAlign: 'center', marginBottom: 14 }}>
-                  <div style={{ color: '#4ade80', marginBottom: 6 }}><GameIcon name="home" size={36} /></div>
-                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', marginBottom: 12 }}>Estimated Sale Breakdown</div>
-                  {[
-                    { label: 'Current Market Value',  value:  homeValue,       color: '#4ade80' },
-                    { label: 'Agent Commission (5%)', value: -agentFee,        color: '#f87171' },
-                    { label: 'Closing Costs (2%)',    value: -closingCosts,    color: '#f87171' },
-                    { label: 'Mortgage Payoff',       value: -mortgageBalance, color: '#f87171' },
-                  ].map((r) => (
-                    <div key={r.label} style={row}>
-                      <span style={dimTxt}>{r.label}</span>
-                      <span style={{ color: r.color, fontWeight: 700 }}>
-                        {r.value < 0 ? '−' : ''}${Math.abs(r.value).toLocaleString()}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                <div style={{ ...panel(estProfit > 0 ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)'), textAlign: 'center', marginBottom: 12 }}>
-                  <div style={{ fontSize: 10, ...dimTxt }}>Estimated Sale Profit</div>
-                  <div style={{ fontSize: 26, fontWeight: 800, color: estProfit > 0 ? '#4ade80' : '#f87171' }}>
-                    {estProfit >= 0 ? '+' : ''}${estProfit.toLocaleString()}
-                  </div>
+                {/* Summary */}
+                <div style={{ ...panel('rgba(74,222,128,0.08)'), textAlign: 'center', marginBottom: 12 }}>
+                  <div style={{ fontSize: 10, ...dimTxt, marginBottom: 2 }}>Current Home Equity</div>
+                  <div style={{ fontSize: 26, fontWeight: 800, color: '#4ade80' }}>${equityValue.toLocaleString()}</div>
+                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>{equityPct.toFixed(1)}% of ${homeValue.toLocaleString()}</div>
                 </div>
 
                 <div style={{ ...panel('rgba(212,175,55,0.1)'), fontSize: 10, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5, textAlign: 'center', marginBottom: 12 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 5, justifyContent: 'center', marginBottom: 4 }}>
                     <GameIcon name="sparkles" size={13} color="#D4AF37" />
-                    <strong style={{ color: '#D4AF37' }}>Grow Your Investment</strong>
+                    <strong style={{ color: '#D4AF37' }}>What would you like to do?</strong>
                   </div>
-                  Use extra cash to pay down your mortgage or refinance for a lower rate.
+                  Manage your mortgage, sell your home, or keep building equity.
                 </div>
 
-                {/* Action buttons */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 6 }}>
-                  <button
-                    onClick={() => { setPaydownAmt(Math.min(5000, Math.floor((cash || 0) * 0.1))); setActiveAction('paydown'); }}
-                    disabled={!cash || cash < 500}
-                    style={btn(
-                      cash >= 500 ? '#4ade80' : 'rgba(255,255,255,0.25)',
-                      cash >= 500 ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)',
-                      cash >= 500 ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.08)',
-                    )}
-                  >
-                    <GameIcon name="bank" size={12} /> Pay Down Mortgage
-                  </button>
-                  <button
-                    onClick={() => { setRefiIdx(0); setActiveAction('refinance'); }}
-                    disabled={refiTiers.length === 0}
-                    style={btn(
-                      refiTiers.length > 0 ? '#D4AF37' : 'rgba(255,255,255,0.25)',
-                      refiTiers.length > 0 ? 'rgba(212,175,55,0.12)' : 'rgba(255,255,255,0.04)',
-                      refiTiers.length > 0 ? 'rgba(212,175,55,0.35)' : 'rgba(255,255,255,0.08)',
-                    )}
-                  >
-                    <GameIcon name="chart" size={12} /> {refiTiers.length > 0 ? 'Refinance' : 'Refinance (Need 6mo)'}
-                  </button>
-                </div>
+                {/* Action buttons — 3 options */}
+                <button
+                  onClick={() => { setPaydownAmt(Math.min(5000, Math.floor((cash || 0) * 0.1))); setActiveAction('paydown'); }}
+                  disabled={!cash || cash < 500}
+                  style={btnFull(
+                    cash >= 500 ? '#4ade80' : 'rgba(255,255,255,0.25)',
+                    cash >= 500 ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)',
+                    cash >= 500 ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.08)',
+                  )}
+                >
+                  <GameIcon name="bank" size={12} /> Pay Down Mortgage
+                </button>
+                <button
+                  onClick={() => { setRefiIdx(0); setActiveAction('refinance'); }}
+                  disabled={refiTiers.length === 0}
+                  style={btnFull(
+                    refiTiers.length > 0 ? '#D4AF37' : 'rgba(255,255,255,0.25)',
+                    refiTiers.length > 0 ? 'rgba(212,175,55,0.12)' : 'rgba(255,255,255,0.04)',
+                    refiTiers.length > 0 ? 'rgba(212,175,55,0.35)' : 'rgba(255,255,255,0.08)',
+                  )}
+                >
+                  <GameIcon name="chart" size={12} /> {refiTiers.length > 0 ? 'Refinance Mortgage' : 'Refinance (Need 6mo)'}
+                </button>
+                <button
+                  onClick={() => { setActiveAction('sell'); setListingPrice(Math.round(homeValue * 1.05 / 1000) * 1000); }}
+                  style={btnFull('#0F172A', 'linear-gradient(135deg,#D4AF37,#F5C842)', 'transparent')}
+                >
+                  <GameIcon name="keys" size={12} /> List Your Home for Sale →
+                </button>
 
                 <button onClick={() => setListingOpen(false)} style={btnFull('rgba(255,255,255,0.45)', 'rgba(255,255,255,0.05)', 'rgba(255,255,255,0.1)')}>
                   <GameIcon name="close" size={10} /> Keep Building Equity
                 </button>
               </>
             )}
+
+            {/* ── SELL FLOW VIEW ────────────────────────────────────── */}
+            {activeAction === 'sell' && (() => {
+              const suggestedPrice = Math.round(homeValue * 1.05 / 1000) * 1000;
+              const minPrice = Math.round(homeValue * 0.85);
+              const maxPrice = Math.round(homeValue * 1.20);
+              const agentFeeS = Math.round(listingPrice * 0.05);
+              const closingS  = Math.round(listingPrice * 0.02);
+              const netProceeds = listingPrice - agentFeeS - closingS - mortgageBalance;
+              return (
+                <>
+                  {/* Market value context */}
+                  <div style={{ ...panel('rgba(74,222,128,0.08)'), marginBottom: 14 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                      <span style={{ fontSize: 10, ...dimTxt }}>Current Market Value</span>
+                      <span style={{ fontSize: 12, fontWeight: 800, color: '#4ade80' }}>${homeValue.toLocaleString()}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: 10, ...dimTxt }}>AI-Suggested List Price (+5%)</span>
+                      <span style={{ fontSize: 12, fontWeight: 800, color: '#D4AF37' }}>${suggestedPrice.toLocaleString()}</span>
+                    </div>
+                  </div>
+
+                  {/* Listing price slider */}
+                  <div style={{ marginBottom: 14 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>
+                      <span>Listing Price</span>
+                      <span style={{ color: '#D4AF37', fontWeight: 800, fontSize: 13 }}>${listingPrice.toLocaleString()}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={minPrice}
+                      max={maxPrice}
+                      step={1000}
+                      value={listingPrice}
+                      onChange={(e) => setListingPrice(Number(e.target.value))}
+                      style={{ width: '100%', accentColor: '#D4AF37', cursor: 'pointer' }}
+                    />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'rgba(255,255,255,0.3)', marginTop: 2 }}>
+                      <span>${minPrice.toLocaleString()}</span>
+                      <span>${maxPrice.toLocaleString()}</span>
+                    </div>
+                  </div>
+
+                  {/* Net proceeds preview */}
+                  <div style={{ ...panel(netProceeds > 0 ? 'rgba(74,222,128,0.08)' : 'rgba(248,113,113,0.08)'), marginBottom: 14 }}>
+                    {[
+                      { label: 'List Price', value: listingPrice, color: '#D4AF37' },
+                      { label: 'Agent (5%)', value: -agentFeeS, color: '#f87171' },
+                      { label: 'Closing (2%)', value: -closingS, color: '#f87171' },
+                      { label: 'Mortgage Payoff', value: -mortgageBalance, color: '#f87171' },
+                    ].map((r) => (
+                      <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, padding: '2px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                        <span style={dimTxt}>{r.label}</span>
+                        <span style={{ fontWeight: 700, color: r.color }}>{r.value < 0 ? '−' : ''}${Math.abs(r.value).toLocaleString()}</span>
+                      </div>
+                    ))}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, fontWeight: 800, paddingTop: 6, color: netProceeds >= 0 ? '#4ade80' : '#f87171' }}>
+                      <span>Net Proceeds</span>
+                      <span>{netProceeds >= 0 ? '+' : '−'}${Math.abs(netProceeds).toLocaleString()}</span>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 6 }}>
+                    {/* Accept market offer immediately */}
+                    <button
+                      onClick={() => {
+                        const marketOffer = Math.round(homeValue * 0.98);
+                        completeSale(marketOffer);
+                        setListingOpen(false);
+                      }}
+                      style={btn('#fff', 'rgba(10,143,126,0.4)', 'rgba(10,143,126,0.5)')}
+                    >
+                      <GameIcon name="handshake" size={12} /> Accept Market Offer<br/>
+                      <span style={{ fontSize: 9, opacity: 0.7 }}>${Math.round(homeValue * 0.98).toLocaleString()}</span>
+                    </button>
+                    {/* Start negotiation */}
+                    <button
+                      onClick={() => {
+                        const buyerOffer = Math.round(listingPrice * 0.93);
+                        setSellNegotiation({
+                          listingPrice,
+                          round: 1,
+                          buyerOffer,
+                          status: 'pending',
+                          salePrice: null,
+                          eventLog: [`You list at ${listingPrice.toLocaleString()}.`, `Buyer offers ${buyerOffer.toLocaleString()} (7% below ask).`],
+                        });
+                        setActiveAction('negotiating');
+                      }}
+                      style={btn('#0F172A', 'linear-gradient(135deg,#D4AF37,#F5C842)')}
+                    >
+                      <GameIcon name="sparkles" size={12} /> Negotiate →
+                    </button>
+                  </div>
+
+                  <button onClick={() => setActiveAction('none')} style={btnFull('rgba(255,255,255,0.45)', 'rgba(255,255,255,0.05)', 'rgba(255,255,255,0.1)')}>
+                    ← Back
+                  </button>
+                </>
+              );
+            })()}
+
+            {/* ── NEGOTIATION VIEW ─────────────────────────────────── */}
+            {activeAction === 'negotiating' && sellNegotiation && (() => {
+              const neg = sellNegotiation;
+              const canAccept = neg.status === 'pending';
+              return (
+                <>
+                  {/* Negotiation log */}
+                  <div style={{ ...panel('rgba(255,255,255,0.04)'), maxHeight: 140, overflowY: 'auto', marginBottom: 10 }}>
+                    {neg.eventLog.map((line, i) => (
+                      <div key={i} style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', padding: '3px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                        {line}
+                      </div>
+                    ))}
+                  </div>
+
+                  {canAccept && (
+                    <>
+                      <div style={{ ...panel(neg.buyerOffer >= neg.listingPrice * 0.95 ? 'rgba(74,222,128,0.1)' : 'rgba(212,175,55,0.1)'), textAlign: 'center', marginBottom: 10 }}>
+                        <div style={{ fontSize: 10, ...dimTxt, marginBottom: 2 }}>Buyer's Current Offer</div>
+                        <div style={{ fontSize: 24, fontWeight: 900, color: neg.buyerOffer >= neg.listingPrice * 0.95 ? '#4ade80' : '#D4AF37' }}>
+                          ${neg.buyerOffer.toLocaleString()}
+                        </div>
+                        <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>
+                          Round {neg.round} of 3
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 6 }}>
+                        {/* Accept current offer */}
+                        <button
+                          onClick={() => {
+                            completeSale(neg.buyerOffer);
+                            setListingOpen(false);
+                          }}
+                          style={btn('#fff', 'rgba(74,222,128,0.25)', 'rgba(74,222,128,0.4)')}
+                        >
+                          <GameIcon name="check" size={12} /> Accept ${neg.buyerOffer.toLocaleString()}
+                        </button>
+                        {/* Counter or final round */}
+                        {neg.round < 3 ? (
+                          <button
+                            onClick={() => {
+                              const nextBuyerOffer = neg.round === 1
+                                ? Math.round(neg.listingPrice * 0.97)
+                                : Math.round(neg.listingPrice * 0.99);
+                              const nextRound = neg.round + 1;
+                              setSellNegotiation({
+                                ...neg,
+                                round: nextRound,
+                                buyerOffer: nextBuyerOffer,
+                                eventLog: [
+                                  ...neg.eventLog,
+                                  `You counter at ${neg.listingPrice.toLocaleString()}.`,
+                                  `Buyer comes back at ${nextBuyerOffer.toLocaleString()}${nextRound === 3 ? ' — final offer.' : '.'}`,
+                                ],
+                              });
+                            }}
+                            style={btn('#0F172A', 'linear-gradient(135deg,#D4AF37,#F5C842)')}
+                          >
+                            <GameIcon name="sparkles" size={12} /> Counter at ${neg.listingPrice.toLocaleString()}
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setSellNegotiation({ ...neg, status: 'failed', eventLog: [...neg.eventLog, 'Buyer walked away. You can relist.'] });
+                            }}
+                            style={btn('#f87171', 'rgba(248,113,113,0.12)', 'rgba(248,113,113,0.3)')}
+                          >
+                            <GameIcon name="close" size={12} /> Reject &amp; Relist
+                          </button>
+                        )}
+                      </div>
+                    </>
+                  )}
+
+                  {neg.status === 'failed' && (
+                    <>
+                      <div style={{ ...panel('rgba(248,113,113,0.1)'), textAlign: 'center', marginBottom: 12 }}>
+                        <div style={{ fontSize: 12, color: '#f87171', fontWeight: 700 }}>Deal fell through. You can relist anytime.</div>
+                      </div>
+                      <button onClick={() => { setActiveAction('sell'); setSellNegotiation(null); }} style={btnFull('#fff', 'rgba(212,175,55,0.25)', 'rgba(212,175,55,0.4)')}>
+                        ← Relist Home
+                      </button>
+                    </>
+                  )}
+
+                  <button onClick={() => { setActiveAction('none'); setSellNegotiation(null); }} style={btnFull('rgba(255,255,255,0.35)', 'rgba(255,255,255,0.04)', 'rgba(255,255,255,0.1)')}>
+                    ← Back to Options
+                  </button>
+                </>
+              );
+            })()}
 
             {/* ── PAY DOWN VIEW ─────────────────────────────────────── */}
             {activeAction === 'paydown' && (
@@ -734,7 +1130,7 @@ function HomeLifeOverlays() {
 }
 
 export default function GamePage() {
-  const { achievements, showResultsCard, setShowResultsCard } = useGameStore();
+  const { achievements, showResultsCard, setShowResultsCard, showEndGame } = useGameStore();
   const prevAchievements = useRef<string[]>([]);
   const [toastQueue, setToastQueue] = useState<string[]>([]);
   const [activeToast, setActiveToast] = useState<string | null>(null);
@@ -754,6 +1150,9 @@ export default function GamePage() {
     }
   }, [activeToast, toastQueue]);
 
+  // When end game is showing, hide normal game UI
+  const hideNormal = showResultsCard || showEndGame;
+
   return (
     <div
       style={{
@@ -764,8 +1163,8 @@ export default function GamePage() {
         position: 'relative',
       }}
     >
-      {!showResultsCard && <GameHUD />}
-      <div style={{ position: 'absolute', top: 72, left: 0, right: 0, bottom: 0 }}>
+      {!hideNormal && <GameHUD />}
+      <div style={{ position: 'absolute', top: hideNormal ? 0 : 72, left: 0, right: 0, bottom: 0 }}>
         <Canvas
           shadows
           camera={{ position: [13, 11, 13], fov: 44 }}
@@ -775,12 +1174,14 @@ export default function GamePage() {
           <SceneContents />
         </Canvas>
       </div>
-      {!showResultsCard && <SpeechBubble />}
-      {!showResultsCard && <SmartPhone />}
-      {!showResultsCard && <LifeEventModal />}
-      {!showResultsCard && <CityExitButton />}
-      {!showResultsCard && <TourChecklist />}
-      {!showResultsCard && <HomeLifeOverlays />}
+      {!hideNormal && <SpeechBubble />}
+      {!hideNormal && <SmartPhone />}
+      {!hideNormal && <LifeEventModal />}
+      {!hideNormal && <CityExitButton />}
+      {!hideNormal && <TourChecklist />}
+      {!hideNormal && <HomeLifeOverlays />}
+      {!hideNormal && <YearSummaryModal />}
+      {!hideNormal && <InGameDevPanel />}
       <SceneTransition />
       <AchievementToast
         isVisible={!!activeToast}
@@ -792,6 +1193,8 @@ export default function GamePage() {
         onPlayAgain={() => setShowResultsCard(false)}
         onClose={() => setShowResultsCard(false)}
       />
+      {/* End Game Screen — renders above everything when showEndGame is true */}
+      <EndGameScreen />
     </div>
   );
 }

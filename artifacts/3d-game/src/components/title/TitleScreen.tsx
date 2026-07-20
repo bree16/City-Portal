@@ -32,6 +32,8 @@ export function TitleScreen({ onPlay, onContinue }: { onPlay: () => void, onCont
         if (buf.join('') === '2005') {
           engine.play('click');
           setShowDevMode(true);
+          // Persist devMode so the in-game dev panel is visible
+          useGameStore.setState({ devMode: true });
           buf.length = 0;
         }
       }

@@ -4,6 +4,20 @@ import type { LifeEvent } from '@/data/lifeEvents';
 import type { MaintenanceEvent } from '@/data/maintenanceEvents';
 import { shouldMaintenanceFire, selectMaintenanceEvent } from '@/data/maintenanceEvents';
 
+export interface YearSummaryEvent {
+  label: string;
+  cashDelta: number;
+}
+
+export interface SellNegotiationState {
+  listingPrice: number;
+  round: number; // 0 = not started, 1-3 = rounds
+  buyerOffer: number;
+  status: 'pending' | 'accepted' | 'failed';
+  salePrice: number | null;
+  eventLog: string[];
+}
+
 export type HairstyleId = 'short' | 'medium' | 'locs' | 'curly' | 'ponytail' | 'fade';
 export type AccessoryId = 'glasses' | 'earrings' | 'hat';
 
@@ -33,6 +47,8 @@ export interface GameState {
   cash: number;
   savings: number;
   creditScore: number;
+  /** Credit score when the game was first started — used for end-game delta. */
+  startCreditScore: number;
   debt: number;
   monthlyIncome: number;
   monthlyExpenses: number;
@@ -71,6 +87,24 @@ export interface GameState {
   listingOpen: boolean;
   /** Current annual mortgage interest rate as a percent (default 6.5). */
   mortgageRate: number;
+  /** Whether the home has been sold (end-game trigger). */
+  homeSold: boolean;
+  /** Whether to show the full end-game screen. */
+  showEndGame: boolean;
+  /** Total interest paid over the home life period (accumulated). */
+  totalInterestPaid: number;
+  /** Actual sale price accepted by player (set once in completeSale, never recomputed). */
+  finalSalePrice: number;
+  /** Net proceeds after agent fee, closing costs, and mortgage payoff at sale time. */
+  finalSaleProceeds: number;
+  /** Mortgage balance at the moment of sale (for audit display). */
+  mortgagePayoffAtSale: number;
+  /** Summary of events that fired during a "Pass a Year". Cleared after display. */
+  yearSummary: YearSummaryEvent[] | null;
+  /** Active sell negotiation state (transient). */
+  sellNegotiation: SellNegotiationState | null;
+  /** Whether dev mode has been unlocked (persisted so it survives quit-to-menu). */
+  devMode: boolean;
 
   // Audio preferences — persisted with the save so they survive clearing localStorage-only keys
   musicVolume: number; // 0–1
@@ -118,10 +152,26 @@ export interface GameState {
   setListingOpen: (v: boolean) => void;
   /** Advance one month in homelife: pays mortgage, accrues income, checks maintenance. */
   advanceHomeLifeMonth: () => void;
+  /** Advance a full year (12 months) in homelife, auto-resolving maintenance events. */
+  passYear: () => void;
   /** Apply a lump-sum extra principal payment toward the mortgage. */
   payDownMortgage: (amount: number) => void;
   /** Refinance the mortgage: reduce rate, recalculate payment, deduct closing fee. */
   refinanceMortgage: (newRate: number, fee: number) => void;
+  /** Complete a home sale: pay off mortgage, add equity to savings, trigger end game. */
+  completeSale: (salePrice: number) => void;
+  /** Skip the sell flow and go straight to end game (home still owned). */
+  wrapUpJourney: () => void;
+  /** Show or hide the end-game screen. */
+  setShowEndGame: (v: boolean) => void;
+  /** Set player cash directly (dev tool). */
+  setDevCash: (amount: number) => void;
+  /** Unlock or lock dev mode. */
+  setDevMode: (v: boolean) => void;
+  /** Clear the year summary after it has been displayed. */
+  clearYearSummary: () => void;
+  /** Update sell negotiation state. */
+  setSellNegotiation: (state: SellNegotiationState | null) => void;
   quitToMenu: () => void;
   resetGame: () => void;
 }
@@ -161,6 +211,7 @@ const INITIAL_STATE = {
   cash: 5800,
   savings: 3500,
   creditScore: 635,
+  startCreditScore: 635,
   debt: 4000,
   monthlyIncome: 3800,
   monthlyExpenses: 2100,
@@ -187,6 +238,15 @@ const INITIAL_STATE = {
   homeLifeMonths: 0,
   dashboardOpen: true,
   listingOpen: false,
+  homeSold: false,
+  showEndGame: false,
+  totalInterestPaid: 0,
+  finalSalePrice: 0,
+  finalSaleProceeds: 0,
+  mortgagePayoffAtSale: 0,
+  yearSummary: null as YearSummaryEvent[] | null,
+  sellNegotiation: null as SellNegotiationState | null,
+  devMode: false,
 };
 
 export const DEFAULT_VOLUME = 0.6;
@@ -202,6 +262,8 @@ const TRANSIENT_FIELDS: (keyof GameState)[] = [
   'pendingMaintenance',
   'listingOpen',
   'dashboardOpen',
+  'yearSummary',
+  'sellNegotiation',
 ];
 
 export const useGameStore = create<GameState>()(
@@ -284,6 +346,7 @@ export const useGameStore = create<GameState>()(
             month: s.month + 1,
             cash: Math.max(0, s.cash + net),
             mortgageBalance: Math.max(0, s.mortgageBalance - principalPaid),
+            totalInterestPaid: (s.totalInterestPaid ?? 0) + interest,
           };
         }),
       payDownMortgage: (amount) =>
@@ -395,6 +458,91 @@ export const useGameStore = create<GameState>()(
           };
         });
       },
+      // Advance a full year (12 months), auto-resolving maintenance events
+      passYear: () => {
+        const events: YearSummaryEvent[] = [];
+        useGameStore.setState((s) => {
+          let cash = s.cash;
+          let mortgageBalance = s.mortgageBalance;
+          let homeValue = s.homeValue;
+          let totalInterestPaid = s.totalInterestPaid ?? 0;
+          let homeLifeMonths = s.homeLifeMonths;
+          let month = s.month;
+          const annualRate = (s.mortgageRate ?? 6.5) / 100;
+          const monthlyRate = annualRate / 12;
+          const payment = s.mortgagePayment > 0
+            ? s.mortgagePayment
+            : Math.round(s.homeValue * 0.9 * 0.006321);
+          const net = s.monthlyIncome - s.monthlyExpenses;
+
+          for (let i = 0; i < 12; i++) {
+            // Income & mortgage
+            const interest = Math.round(mortgageBalance * monthlyRate);
+            const principalPaid = Math.max(50, payment - interest);
+            cash = Math.max(0, cash + net);
+            mortgageBalance = Math.max(0, mortgageBalance - principalPaid);
+            totalInterestPaid += interest;
+            month += 1;
+            homeLifeMonths += 1;
+
+            // Maintenance check
+            if (shouldMaintenanceFire(homeLifeMonths)) {
+              const evt = selectMaintenanceEvent(homeLifeMonths);
+              if (evt) {
+                if (cash >= evt.cost) {
+                  // Auto-fix
+                  cash -= evt.cost;
+                  events.push({ label: `${evt.title} (fixed)`, cashDelta: -evt.cost });
+                } else {
+                  // Auto-defer: reduce home value
+                  homeValue = Math.round(homeValue * (1 - evt.valueImpact));
+                  events.push({ label: `${evt.title} (deferred — home value ↓)`, cashDelta: 0 });
+                }
+              }
+            }
+          }
+
+          // Small annual appreciation (~3%)
+          const appreciation = Math.round(homeValue * 0.03);
+          homeValue += appreciation;
+          events.push({ label: 'Annual market appreciation +3%', cashDelta: appreciation });
+
+          return {
+            cash,
+            mortgageBalance,
+            homeValue,
+            totalInterestPaid,
+            homeLifeMonths,
+            month,
+            yearSummary: events,
+          };
+        });
+      },
+      completeSale: (salePrice: number) =>
+        set((s) => {
+          // Compute proceeds from the PRE-SALE mortgage balance (captured before zeroing it)
+          const agentFee = Math.round(salePrice * 0.05);
+          const closingCosts = Math.round(salePrice * 0.02);
+          const mortgagePayoffAtSale = s.mortgageBalance;
+          const netProceeds = Math.max(0, salePrice - agentFee - closingCosts - mortgagePayoffAtSale);
+          // Credit proceeds to cash ONLY — do not double-count into savings
+          return {
+            homeSold: true,
+            showEndGame: true,
+            finalSalePrice: salePrice,
+            finalSaleProceeds: netProceeds,
+            mortgagePayoffAtSale,
+            cash: s.cash + netProceeds,
+            // Zero out the mortgage — home is sold
+            mortgageBalance: 0,
+          };
+        }),
+      wrapUpJourney: () => set({ showEndGame: true }),
+      setShowEndGame: (v: boolean) => set({ showEndGame: v }),
+      setDevCash: (amount: number) => set({ cash: Math.max(0, amount) }),
+      setDevMode: (v: boolean) => set({ devMode: v }),
+      clearYearSummary: () => set({ yearSummary: null }),
+      setSellNegotiation: (state: SellNegotiationState | null) => set({ sellNegotiation: state }),
       // Return to the character screen mid-game. Progress (stage, cash, etc.)
       // stays in the persisted save; only transient/session flags are cleared.
       quitToMenu: () =>
@@ -411,7 +559,7 @@ export const useGameStore = create<GameState>()(
     }),
     {
       name: 'path-to-home-game-state',
-      version: 7,
+      version: 8,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => {
         const persisted = { ...state } as Record<string, unknown>;
@@ -476,6 +624,17 @@ export const useGameStore = create<GameState>()(
           if (typeof s.musicVolume !== 'number') s.musicVolume = legacy;
           if (typeof s.sfxVolume !== 'number') s.sfxVolume = legacy;
           delete s.audioVolume;
+        }
+        if (fromVersion < 8) {
+          // v7 → v8: add end-game / sell-home fields.
+          if (typeof s.homeSold !== 'boolean') s.homeSold = false;
+          if (typeof s.showEndGame !== 'boolean') s.showEndGame = false;
+          if (typeof s.totalInterestPaid !== 'number') s.totalInterestPaid = 0;
+          if (typeof s.devMode !== 'boolean') s.devMode = false;
+          if (typeof s.startCreditScore !== 'number') s.startCreditScore = 635;
+          if (typeof s.finalSalePrice !== 'number') s.finalSalePrice = 0;
+          if (typeof s.finalSaleProceeds !== 'number') s.finalSaleProceeds = 0;
+          if (typeof s.mortgagePayoffAtSale !== 'number') s.mortgagePayoffAtSale = 0;
         }
         return s;
       },
