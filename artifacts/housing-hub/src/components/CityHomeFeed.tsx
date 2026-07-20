@@ -64,7 +64,7 @@ function useFlash(ms = 220) {
 
 function GetawayCar() {
   return (
-    <svg width="196" height="74" viewBox="0 0 196 74" style={{ overflow: 'visible' }}>
+    <svg width="118" height="44" viewBox="0 0 196 74" style={{ overflow: 'visible' }}>
       <rect x="8" y="27" width="180" height="33" rx="9" fill="#B91C1C" />
       <rect x="28" y="10" width="122" height="29" rx="8" fill="#DC2626" />
       <rect x="36" y="13" width="46" height="22" rx="5" fill="#FCA5A5" opacity="0.5" />
@@ -89,7 +89,7 @@ function GetawayCar() {
 function PoliceCar() {
   const fl = useFlash(200);
   return (
-    <svg width="228" height="84" viewBox="0 0 228 84" style={{ overflow: 'visible' }}>
+    <svg width="137" height="50" viewBox="0 0 228 84" style={{ overflow: 'visible' }}>
       {/* Body */}
       <rect x="12" y="28" width="200" height="38" rx="10" fill="#1E3A8A" />
       {/* Cabin */}
@@ -125,7 +125,7 @@ function PoliceCar() {
 function AmbulanceSVG() {
   const fl = useFlash(270);
   return (
-    <svg width="268" height="96" viewBox="0 0 268 96" style={{ overflow: 'visible' }}>
+    <svg width="161" height="57" viewBox="0 0 268 96" style={{ overflow: 'visible' }}>
       {/* Box body */}
       <rect x="8" y="20" width="252" height="58" rx="7" fill="white" stroke="#CBD5E1" strokeWidth="2" />
       {/* Cab */}
@@ -160,7 +160,7 @@ function AmbulanceSVG() {
 
 function MickeyMouse() {
   return (
-    <svg width="56" height="72" viewBox="0 0 56 72" style={{ overflow: 'visible' }}>
+    <svg width="40" height="52" viewBox="0 0 56 72" style={{ overflow: 'visible' }}>
       {/* Ears */}
       <circle cx="11" cy="13" r="12" fill="#111" />
       <circle cx="45" cy="13" r="12" fill="#111" />
@@ -198,7 +198,7 @@ function MickeyMouse() {
 
 function MinnieMouse() {
   return (
-    <svg width="56" height="80" viewBox="0 0 56 80" style={{ overflow: 'visible' }}>
+    <svg width="40" height="57" viewBox="0 0 56 80" style={{ overflow: 'visible' }}>
       {/* Ears */}
       <circle cx="11" cy="13" r="12" fill="#111" />
       <circle cx="45" cy="13" r="12" fill="#111" />
@@ -248,7 +248,7 @@ function MinnieMouse() {
 
 function Elsa() {
   return (
-    <svg width="44" height="76" viewBox="0 0 44 76" style={{ overflow: 'visible' }}>
+    <svg width="31" height="54" viewBox="0 0 44 76" style={{ overflow: 'visible' }}>
       {/* Ice crown */}
       <polygon points="8,10 12,2 16,8 20,0 24,8 28,2 32,10" fill="#BAE6FD" opacity="0.9" />
       {/* Braid */}
@@ -285,7 +285,7 @@ function Elsa() {
 
 function SpiderMan() {
   return (
-    <svg width="48" height="72" viewBox="0 0 48 72" style={{ overflow: 'visible' }}>
+    <svg width="34" height="51" viewBox="0 0 48 72" style={{ overflow: 'visible' }}>
       {/* Head */}
       <circle cx="24" cy="11" r="11" fill="#CC0000" />
       {/* Web eyes */}
@@ -328,7 +328,7 @@ function SpiderMan() {
 
 function IronMan() {
   return (
-    <svg width="52" height="76" viewBox="0 0 52 76" style={{ overflow: 'visible' }}>
+    <svg width="37" height="54" viewBox="0 0 52 76" style={{ overflow: 'visible' }}>
       {/* Helmet */}
       <rect x="10" y="2" width="32" height="24" rx="8" fill="#CC0000" />
       {/* Face plate */}
@@ -371,7 +371,7 @@ function IronMan() {
 
 function Hulk() {
   return (
-    <svg width="68" height="80" viewBox="0 0 68 80" style={{ overflow: 'visible' }}>
+    <svg width="49" height="57" viewBox="0 0 68 80" style={{ overflow: 'visible' }}>
       {/* Big green body */}
       {/* Head */}
       <circle cx="34" cy="14" r="16" fill="#22C55E" />
@@ -415,7 +415,7 @@ function Hulk() {
 
 function GrinchChar() {
   return (
-    <svg width="62" height="84" viewBox="0 0 62 84" style={{ overflow: 'visible' }}>
+    <svg width="44" height="60" viewBox="0 0 62 84" style={{ overflow: 'visible' }}>
       {/* Santa hat */}
       <polygon points="12,20 31,0 50,16" fill="#CC0000" />
       <rect x="8" y="20" width="46" height="8" rx="4" fill="white" />
