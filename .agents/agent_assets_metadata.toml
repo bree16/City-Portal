@@ -24,3 +24,9 @@ id = "oeGL3iDvfn7fYd4XkHGfX"
 uri = "file://artifacts/3d-game/public/audio/music-chill.mp3"
 type = "audio"
 title = "game chill theme"
+
+[[outputs]]
+id = "m1LtkluJti-Mx_VdNRlB6"
+uri = "file://artifacts/3d-game/public/audio/music-chill_2.mp3"
+type = "audio"
+title = "Lofi chill theme"

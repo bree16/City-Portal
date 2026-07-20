@@ -31,6 +31,19 @@ function trackForStage(stage: number): TrackName {
   return stage === 0 || stage === 3 || stage === 7 ? 'main' : 'chill';
 }
 
+/**
+ * True when the game runs inside an iframe (e.g. embedded on the Housing Hub
+ * website's Simulator page). Music only plays in the standalone game — the
+ * website embed stays silent so browsing the site isn't accompanied by music.
+ */
+const IS_EMBEDDED = (() => {
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true; // cross-origin parent → definitely embedded
+  }
+})();
+
 // ─── Singleton audio engine ────────────────────────────────────────────────
 
 class GameAudioEngine {
@@ -334,6 +347,8 @@ class GameAudioEngine {
 
   startAmbient(stage: number) {
     this.lastStage = stage;
+    // No background music when embedded on the website — game-only feature.
+    if (IS_EMBEDDED) return;
     if (this._muted) {
       this.stopAmbient();
       return;
