@@ -103,7 +103,7 @@ function CrossingGuardScene() {
     <AnimatePresence>
       {active && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          style={{ position: 'fixed', bottom: 38, left: '30%', zIndex: 9970, pointerEvents: 'none' }}>
+          style={{ position: 'fixed', bottom: 38, left: '18%', zIndex: 9970, pointerEvents: 'none' }}>
           <svg width="320" height="80" viewBox="0 0 320 80">
             {/* Guard — orange vest, stop sign */}
             <Head x={30} y={20} fill="#C68642" />
@@ -151,7 +151,7 @@ function BusStopScene() {
   }, []);
 
   return (
-    <div style={{ position: 'fixed', bottom: 38, left: '55%', zIndex: 9968, pointerEvents: 'none' }}>
+    <div style={{ position: 'fixed', top: '42%', right: '4%', zIndex: 9968, pointerEvents: 'none' }}>
       <svg width="350" height="90" viewBox="0 0 350 90">
         {/* Bus stop sign pole */}
         <rect x={10} y={10} width={3} height={68} fill="#666" />
@@ -300,9 +300,9 @@ function BlockPartyScene() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }}
+        <motion.div initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }}
           transition={{ duration: 0.8 }}
-          style={{ position: 'fixed', bottom: 38, left: '5%', zIndex: 9965, pointerEvents: 'none' }}>
+          style={{ position: 'fixed', top: '38%', left: '4%', zIndex: 9965, pointerEvents: 'none' }}>
           <svg width="280" height="110" viewBox="0 0 280 110">
             {/* BBQ grill */}
             <ellipse cx={40} cy={60} rx={22} ry={10} fill="#333" />
@@ -412,7 +412,7 @@ function HomebuyerScene() {
       {visible && (
         <motion.div initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6 }}
           transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-          style={{ position: 'fixed', bottom: 38, right: '8%', zIndex: 9975, pointerEvents: 'none' }}>
+          style={{ position: 'fixed', top: '16%', right: '6%', zIndex: 9975, pointerEvents: 'none' }}>
           <svg width="180" height="130" viewBox="0 0 180 130">
             {/* Little house */}
             <polygon points="90,10 140,40 140,110 40,110 40,40" fill="#D4AF37" />
@@ -565,7 +565,7 @@ function ZillowBrowserScene() {
       {visible && (
         <motion.div initial={{ opacity: 0, x: 80 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 80 }}
           transition={{ type: 'spring', stiffness: 180, damping: 22 }}
-          style={{ position: 'fixed', bottom: 38, right: '22%', zIndex: 9974, pointerEvents: 'none' }}>
+          style={{ position: 'fixed', top: '26%', right: '20%', zIndex: 9974, pointerEvents: 'none' }}>
           <svg width="200" height="130" viewBox="0 0 200 130">
             {/* Desk */}
             <rect x={0} y={110} width={200} height={8} rx={3} fill="#8B6914" />
@@ -636,7 +636,7 @@ function StreetMusicianScene() {
     <AnimatePresence>
       {visible && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          style={{ position: 'fixed', bottom: 38, left: '20%', zIndex: 9964, pointerEvents: 'none' }}>
+          style={{ position: 'fixed', top: '52%', left: '12%', zIndex: 9964, pointerEvents: 'none' }}>
           <svg width="120" height="120" viewBox="0 0 120 120">
             {/* Ground */}
             <rect x={0} y={108} width={120} height={4} rx={2} fill="rgba(255,255,255,0.15)" />
@@ -862,7 +862,7 @@ function SittingCrowdScene() {
     <AnimatePresence>
       {visible && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          style={{ position: 'fixed', bottom: 38, left: '42%', zIndex: 9962, pointerEvents: 'none' }}>
+          style={{ position: 'fixed', top: '60%', left: '32%', zIndex: 9962, pointerEvents: 'none' }}>
           <svg width="240" height="90" viewBox="0 0 240 90">
             {/* Park bench */}
             <rect x={10} y={65} width={220} height={6} rx={2} fill="#8B6914" />
@@ -937,7 +937,7 @@ function ShipbuilderWorkScene() {
     <AnimatePresence>
       {visible && (
         <motion.div initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -60 }}
-          style={{ position: 'fixed', bottom: 38, left: '65%', zIndex: 9960, pointerEvents: 'none' }}>
+          style={{ position: 'fixed', top: '30%', left: '55%', zIndex: 9960, pointerEvents: 'none' }}>
           <svg width="200" height="120" viewBox="0 0 200 120">
             {/* Ship hull being built */}
             <rect x={20} y={60} width={160} height={50} rx={4} fill="#1E3A5F" opacity={0.8} />
@@ -1015,7 +1015,7 @@ function NurseWorkScene() {
     <AnimatePresence>
       {visible && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          style={{ position: 'fixed', bottom: 38, right: '30%', zIndex: 9959, pointerEvents: 'none' }}>
+          style={{ position: 'fixed', top: '14%', right: '28%', zIndex: 9959, pointerEvents: 'none' }}>
           <svg width="160" height="110" viewBox="0 0 160 110">
             {/* Medical cart */}
             <rect x={90} y={50} width={60} height={50} rx={4} fill="#fff" stroke="#14B8A6" strokeWidth={2} />

@@ -9,168 +9,168 @@ import { useLocation } from 'wouter';
 
 // ─── Page-specific content ────────────────────────────────────────────────────
 
-interface InfoCard { headline: string; sub: string; badge?: string }
+interface InfoCard { headline: string; sub: string; badge?: string; link?: string }
 
 const PAGE_DATA: Record<string, { color: string; accent: string; emoji: string; cards: InfoCard[]; ticker: string[] }> = {
   '/': {
     color: '#14B8A6', accent: '#D4AF37', emoji: '🏡',
     cards: [
-      { headline: '2,400+ Families Assisted', sub: 'City housing programs & counseling services', badge: 'Community Impact' },
-      { headline: '$18M Aid Distributed', sub: 'Grants, vouchers & emergency help since 2020', badge: 'City Investment' },
-      { headline: '340 Affordable Units', sub: 'Available right now in Newport News', badge: 'Housing Stock' },
-      { headline: '92% Satisfaction', sub: 'Families served rate our programs excellent', badge: 'Our Record' },
+      { headline: 'Buy Your First Home', sub: 'Programs, grants & step-by-step guidance for buyers', link: '/buy', badge: 'Get Started →' },
+      { headline: 'Explore Neighborhoods', sub: 'Hilton Village · Denbigh · Oyster Point · Southeast', link: '/neighborhoods', badge: 'Browse →' },
+      { headline: 'Play the Simulator', sub: 'Walk through what homeownership really costs', link: '/simulator', badge: 'Try It →' },
+      { headline: 'Free Workshop — Aug 8', sub: 'Beyond the Keys homebuyer education, 9:30 AM', link: '/events', badge: 'Register Free →' },
     ],
-    ticker: ['2,400+ families helped by Newport News housing programs', '$18M in housing aid distributed citywide', '340 affordable units available now', 'Free HUD-approved housing counseling — call (757) 933-2311', '92% satisfaction rate from residents we\'ve served'],
+    ticker: ['Buy a home in Newport News → visit the Buy page', 'Explore neighborhoods: Hilton Village · Denbigh · Oyster Point', 'Play the Simulator — learn homeownership step by step', 'Free homebuyer workshop: Beyond the Keys — Aug 8, 2026', 'Need guidance? Free HUD-certified housing counseling available'],
   },
   '/buy': {
     color: '#D4AF37', accent: '#14B8A6', emoji: '🔑',
     cards: [
-      { headline: 'Up to $25K Down Payment', sub: 'City-backed first-time buyer assistance programs', badge: 'Grant Available' },
-      { headline: 'Credit Score 580+', sub: 'You may still qualify — counselors can help', badge: 'Low Barrier' },
-      { headline: 'Free HUD Counseling', sub: 'No-cost guidance from certified housing advisors', badge: 'No Cost' },
-      { headline: '30+ Programs Available', sub: 'Federal, state and city assistance combined', badge: 'Many Options' },
+      { headline: 'Buying Power Calculator', sub: 'See your estimated monthly payment right now ↑', link: '/buy', badge: 'Use Tool →' },
+      { headline: 'Down Payment Programs', sub: 'City & state assistance for first-time buyers', link: '/assistance', badge: 'See Programs →' },
+      { headline: 'Talk to a Counselor', sub: 'Free HUD-certified housing guidance, no appointment needed', link: '/contact', badge: 'Contact →' },
+      { headline: 'Check Your Eligibility', sub: 'Take the 7-question quiz to find your best programs', link: '/quiz', badge: 'Take Quiz →' },
     ],
-    ticker: ['First-time buyers: up to $25K down payment assistance available', 'Credit score as low as 580 may qualify for programs', 'Free HUD-certified housing counseling — no appointment needed', 'Newport News median home price: ~$280K', '30+ homebuyer programs between federal, state and city'],
+    ticker: ['Use the Buying Power Calculator above ↑', 'Compare rent vs. buy on this page', 'Find down payment assistance → visit Assistance page', 'Free HUD counseling — no appointment needed', 'Take the eligibility quiz to find your programs'],
   },
   '/rent': {
     color: '#60A5FA', accent: '#14B8A6', emoji: '🏢',
     cards: [
-      { headline: 'Section 8 Vouchers', sub: 'Subsidy program for income-qualifying residents', badge: 'HUD Program' },
-      { headline: 'FMR ~$1,500/2BR', sub: 'Fair Market Rent benchmark for Newport News 2026', badge: 'Market Rate' },
-      { headline: 'VA Rent Relief', sub: 'Emergency rental assistance for hardship cases', badge: 'Emergency Aid' },
-      { headline: 'Income < 50% AMI', sub: 'Section 8 eligibility threshold for the area', badge: 'Eligibility' },
+      { headline: 'Find Affordable Rentals', sub: 'Browse listings across Newport News neighborhoods', link: '/rent', badge: 'Browse →' },
+      { headline: 'Rental Assistance', sub: 'Section 8, VA Rent Relief & emergency programs', link: '/assistance', badge: 'Get Help →' },
+      { headline: 'Rent vs. Buy', sub: 'See if buying might be cheaper than renting for you', link: '/buy', badge: 'Compare →' },
+      { headline: 'Talk to Someone', sub: 'Free housing counseling — renting, buying or emergency', link: '/contact', badge: 'Contact →' },
     ],
-    ticker: ['Section 8 vouchers — income qualifying residents may apply', 'Newport News Fair Market Rent: ~$1,500 for a 2-bedroom', 'Virginia Rent Relief Program available for hardship cases', 'Emergency rental assistance: call (757) 933-2311', '50% AMI income limit for Section 8 voucher eligibility'],
+    ticker: ['Browse affordable rentals in Newport News', 'Section 8 vouchers — learn more on the Assistance page', 'Already renting? See if buying could cost less', 'Emergency rental assistance — call (757) 933-2311', 'Free counseling covers renting, buying, and emergency help'],
   },
   '/neighborhoods': {
     color: '#34D399', accent: '#D4AF37', emoji: '📍',
     cards: [
-      { headline: 'Hilton Village ~$320K', sub: 'Historic charm, walkable streets, artisan shops', badge: 'Most Historic' },
-      { headline: 'Denbigh ~$285K', sub: 'Spacious lots, great parks, suburban feel', badge: 'Family Friendly' },
-      { headline: 'Oyster Point ~$350K', sub: 'Modern condos, bustling commerce, dining', badge: 'Most Modern' },
-      { headline: 'Southeast ~$210K', sub: 'Rich heritage, waterfront views, community focus', badge: 'Best Value' },
+      { headline: 'Hilton Village  avg ~$320K', sub: 'Historic charm, walkable streets, artisan shops', link: '/neighborhoods', badge: 'Explore →' },
+      { headline: 'Denbigh  avg ~$285K', sub: 'Spacious lots, great parks, suburban community', link: '/neighborhoods', badge: 'Explore →' },
+      { headline: 'Oyster Point  avg ~$350K', sub: 'Modern condos, bustling commerce & dining', link: '/neighborhoods', badge: 'Explore →' },
+      { headline: 'Southeast  avg ~$210K', sub: 'Rich heritage, waterfront views, community focus', link: '/neighborhoods', badge: 'Explore →' },
     ],
-    ticker: ['Hilton Village: avg ~$320K — historic charm and walkability', 'Denbigh: avg ~$285K — spacious suburban neighborhood', 'Oyster Point: avg ~$350K — modern living and dining', 'Southeast Newport News: avg ~$210K — waterfront heritage', '50+ parks and 14 miles of trails across Newport News'],
+    ticker: ['Hilton Village: avg ~$320K — historic & walkable', 'Denbigh: avg ~$285K — spacious suburban living', 'Oyster Point: avg ~$350K — modern condos & dining', 'Southeast Newport News: avg ~$210K — waterfront views', 'Scroll down to explore all Newport News neighborhoods ↓'],
   },
   '/assistance': {
     color: '#F87171', accent: '#D4AF37', emoji: '🤝',
     cards: [
-      { headline: 'Emergency: (757) 587-4202', sub: 'Virginia Peninsula Housing Crisis Hotline', badge: 'Call Now' },
-      { headline: 'Up to $25K Help', sub: 'First-time buyer and emergency assistance grants', badge: 'Grant' },
-      { headline: 'Eviction Prevention', sub: 'Legal aid and rent assistance to keep you housed', badge: 'Protection' },
-      { headline: '2-1-1 United Way', sub: 'Free social services referral line, 24/7', badge: '24/7 Help' },
+      { headline: 'Housing Crisis Hotline', sub: '(757) 587-4202 — Virginia Peninsula, free & confidential', badge: 'Call Now' },
+      { headline: 'Down Payment Grants', sub: 'City & state programs for first-time buyers', link: '/buy', badge: 'Learn More →' },
+      { headline: 'Eviction Prevention', sub: 'Legal aid and rental assistance — call (757) 933-2311', badge: 'Get Help' },
+      { headline: '2-1-1 United Way', sub: 'Free 24/7 social service referral line', badge: '24/7 →' },
     ],
-    ticker: ['Housing Crisis Hotline: (757) 587-4202 — free & confidential', 'Up to $25K emergency housing assistance available', 'Eviction prevention: call (757) 933-2311 immediately', '2-1-1 United Way Virginia: 24/7 referral service', 'NNRHA: (757) 928-2620 — housing authority resources'],
+    ticker: ['Housing Crisis Hotline: (757) 587-4202 — free & confidential', 'Eviction prevention: call (757) 933-2311 immediately', 'United Way 2-1-1: 24/7 referral — dial 211 from any phone', 'NNRHA: (757) 928-2620 — Newport News Housing Authority', 'Down payment grants available — see Buy page for details'],
   },
   '/resources': {
     color: '#A78BFA', accent: '#14B8A6', emoji: '📚',
     cards: [
-      { headline: 'SHIP Plan: Feb 2026', sub: 'Strategic Housing Initiatives Plan adopted', badge: 'New Policy' },
-      { headline: '4 Pillars of SHIP', sub: 'Reform · Production · Affordability · Preservation', badge: 'Framework' },
-      { headline: 'Virginia Housing', sub: 'State mortgages with below-market interest rates', badge: 'State Program' },
-      { headline: 'Missing Middle Focus', sub: 'Townhomes & duplexes to expand housing supply', badge: 'SHIP Goal' },
+      { headline: 'SHIP Plan — Active 2026', sub: 'Newport News Strategic Housing Initiatives Plan', link: '/ship', badge: 'Read Plan →' },
+      { headline: 'Virginia Housing', sub: 'Below-market mortgage rates for VA residents', badge: 'virginiahousing.com →' },
+      { headline: 'HUD Counseling', sub: 'Free certified housing counseling for all residents', link: '/contact', badge: 'Find Counselor →' },
+      { headline: 'Homebuyer Checklist', sub: 'Download the Newport News step-by-step guide', link: '/checklist', badge: 'Download →' },
     ],
-    ticker: ['SHIP Plan adopted February 2026 — expanding affordable housing', 'Virginia Housing: below-market mortgage rates available', 'HUD-approved housing counseling — free to all residents', 'Missing Middle housing: townhomes & duplexes being prioritized', 'NNRHA manages 1,500+ public housing units in the city'],
+    ticker: ['Newport News SHIP Plan — adopted Feb 2026 · read on SHIP page', 'Virginia Housing: below-market mortgage rates available', 'HUD-approved housing counseling — free to all residents', 'Download the free homebuyer checklist → Checklist page', 'NNRHA manages 1,500+ public housing units across the city'],
   },
   '/events': {
     color: '#FB923C', accent: '#D4AF37', emoji: '📅',
     cards: [
-      { headline: 'Beyond the Keys', sub: 'Homebuyer workshop — Aug 8, 2026 · 9:30–11 AM', badge: 'Upcoming' },
-      { headline: 'Home & Health Expo', sub: 'Community expo — Sep 24, 2026 · 10 AM–2 PM', badge: 'Upcoming' },
-      { headline: 'Bank On Hampton Roads', sub: 'Free 5-month financial literacy program', badge: 'Ongoing' },
-      { headline: 'Free Workshops', sub: 'Homebuying education every month — register free', badge: 'Free' },
+      { headline: 'Beyond the Keys', sub: 'Homebuyer workshop — Aug 8, 2026 · 9:30–11 AM', link: '/events', badge: 'Register Free →' },
+      { headline: 'Home & Health Expo', sub: 'Community expo — Sep 24, 2026 · 10 AM–2 PM', link: '/events', badge: 'Learn More →' },
+      { headline: 'Bank On Hampton Roads', sub: 'Free 5-month financial literacy program', link: '/events', badge: 'Enroll →' },
+      { headline: 'All Events Free', sub: 'Open to all Newport News residents — no cost', link: '/events', badge: 'See Calendar →' },
     ],
-    ticker: ['Beyond the Keys workshop: Aug 8, 2026 — register today', 'Home & Healthy Living Expo: Sep 24, 2026 at Newport News', 'Bank On Hampton Roads: free 5-month financial literacy program', 'Monthly homebuyer education workshops — no cost to attend', 'All events free & open to Newport News residents'],
+    ticker: ['Beyond the Keys: Aug 8, 2026 · 9:30 AM — homebuyer workshop', 'Home & Healthy Living Expo: Sep 24, 2026', 'Bank On Hampton Roads: free 5-month financial literacy program', 'All workshops free and open to Newport News residents', 'Register for upcoming events — see the Events page'],
   },
   '/contact': {
     color: '#14B8A6', accent: '#D4AF37', emoji: '📞',
     cards: [
-      { headline: '(757) 933-2311', sub: 'City Housing Line — Mon–Fri 8am–5pm', badge: 'Call Us' },
-      { headline: '2400 Washington Ave', sub: 'Newport News, VA 23607 — walk-ins welcome', badge: 'Visit Us' },
-      { headline: '2 Business Days', sub: 'Counselor response time goal', badge: 'Fast Response' },
-      { headline: 'housing@nnva.gov', sub: 'Email our team for non-urgent questions', badge: 'Email' },
+      { headline: '(757) 933-2311', sub: 'City Housing Line — Mon–Fri 8am–5pm', badge: 'Call Now' },
+      { headline: '2400 Washington Ave', sub: 'Newport News, VA 23607 — walk-ins welcome', badge: 'Get Directions' },
+      { headline: 'Housing@nnva.gov', sub: 'Email the team for non-urgent questions', badge: 'Send Email' },
+      { headline: 'Free HUD Counseling', sub: 'Certified advisors — all incomes welcome', link: '/journey', badge: 'Learn More →' },
     ],
-    ticker: ['City Housing Line: (757) 933-2311 — Mon–Fri 8am–5pm', '2400 Washington Avenue, Newport News VA 23607', 'Counselor response goal: 2 business days', 'Email: housing@newportnewsva.gov', 'Walk-in hours: Monday–Friday 8:00 AM to 5:00 PM'],
+    ticker: ['City Housing Line: (757) 933-2311 — Mon–Fri 8am–5pm', '2400 Washington Avenue, Newport News VA 23607', 'Email: housing@nnva.gov — non-urgent inquiries', 'Walk-in hours: Monday–Friday 8:00 AM to 5:00 PM', 'Free HUD-certified counseling — all income levels welcome'],
   },
   '/journey': {
     color: '#34D399', accent: '#D4AF37', emoji: '🗺️',
     cards: [
-      { headline: 'Start 6–12 Months Early', sub: 'Financial prep timeline before buying', badge: 'Timeline' },
-      { headline: 'Credit Score 620+', sub: 'Target score for most homebuyer programs', badge: 'Credit Goal' },
-      { headline: 'Free HUD Counseling', sub: 'All pathways — renting, buying, repairs', badge: 'Free Guidance' },
-      { headline: '5 Pathways Available', sub: 'Rent · Buy · Own · Repair · Emergency', badge: 'Your Options' },
+      { headline: 'Rent Path', sub: 'Find safe, affordable housing right now', link: '/rent', badge: 'Explore Rentals →' },
+      { headline: 'Buy Path', sub: 'First-time buyer programs, grants & the calculator', link: '/buy', badge: 'Start Buying →' },
+      { headline: 'Repair Path', sub: 'Home repair assistance for existing homeowners', link: '/assistance', badge: 'Get Help →' },
+      { headline: 'Free HUD Counseling', sub: 'All 5 pathways — a counselor will guide you', link: '/contact', badge: 'Contact →' },
     ],
-    ticker: ['Start your homebuying journey 6–12 months before purchasing', 'Target credit score: 620+ for most city programs', 'Free HUD-approved counseling — all income levels welcome', '5 housing pathways: Rent, Buy, Own, Repair, Emergency', 'Newport News connects you to the right program for your stage'],
+    ticker: ['Choose your housing path: Rent · Buy · Own · Repair · Emergency', 'Free HUD-approved counseling for all pathways', 'Use the Buying Power Calculator on the Buy page', 'Explore neighborhoods before you decide where to buy', 'Start with the eligibility quiz to find your best programs'],
   },
   '/services': {
     color: '#60A5FA', accent: '#14B8A6', emoji: '🏙️',
     cards: [
-      { headline: 'Pay Utility Bill Online', sub: 'Water, gas & electric — quick online payments', badge: 'City Service' },
-      { headline: 'NN-ALERT System', sub: 'Sign up for emergency city alerts', badge: 'Safety' },
-      { headline: 'City Jobs Available', sub: 'Employment with the City of Newport News', badge: 'Work Here' },
-      { headline: 'Report an Issue', sub: 'Keep Newport News clean — report problems online', badge: 'Civic' },
+      { headline: 'Pay Utility Bill Online', sub: 'Water, gas & electric at newportnewsva.gov', badge: 'Pay Now →' },
+      { headline: 'NN-ALERT System', sub: 'Sign up for emergency city notifications', badge: 'Sign Up →' },
+      { headline: 'City Jobs', sub: 'Employment opportunities with Newport News', badge: 'Apply →' },
+      { headline: 'Report an Issue', sub: 'Keep the city clean — report problems online', badge: 'Report →' },
     ],
-    ticker: ['Pay utility bills online at newportnewsva.gov', 'NN-ALERT: sign up for emergency notifications', 'City of Newport News is hiring — apply at city HR portal', 'Report neighborhood issues via the city\'s online portal', 'Trash & recycling schedules at newportnewsva.gov/solidwaste'],
+    ticker: ['Pay utility bills online at newportnewsva.gov', 'NN-ALERT: sign up for emergency city notifications', 'Newport News is hiring — see city employment portal', 'Report neighborhood issues via the online portal', 'Trash & recycling schedule at newportnewsva.gov/solidwaste'],
   },
   '/success-stories': {
     color: '#D4AF37', accent: '#14B8A6', emoji: '⭐',
     cards: [
-      { headline: 'Marcus T., Age 26', sub: 'Bought first home in Denbigh using city grants', badge: 'Success Story' },
-      { headline: 'Alicia M., Hilton', sub: '+120 credit score points through counseling', badge: 'Credit Journey' },
-      { headline: '$18M in Aid', sub: 'Distributed to Newport News residents since 2020', badge: 'City Impact' },
-      { headline: '2,400+ Families', sub: 'Helped find their path to stable housing', badge: 'Community' },
+      { headline: 'Share Your Story', sub: 'Bought a home in Newport News? We want to feature you', link: '/contact', badge: 'Contact Us →' },
+      { headline: 'Start Your Journey', sub: 'Find your housing pathway today', link: '/journey', badge: 'Get Started →' },
+      { headline: 'Browse Programs', sub: 'Grants, vouchers & counseling for every situation', link: '/assistance', badge: 'See Programs →' },
+      { headline: 'Play the Simulator', sub: 'See what your own homebuying story could look like', link: '/simulator', badge: 'Try It →' },
     ],
-    ticker: ['Marcus T. bought his first home at 26 using city grant programs', 'Alicia M. improved her credit score by 120 points in one year', '$18M in housing aid distributed to Newport News residents', '2,400+ families assisted through city housing programs', 'Your success story could be next — start your journey today'],
+    ticker: ['Ready to write your own story? Start on the Buy page', 'Free HUD-certified counseling — all income levels welcome', 'Find down payment grants and programs on the Assistance page', 'Play the Simulator to see what homeownership looks like for you', 'Browse neighborhoods to find your ideal Newport News community'],
   },
   '/why-newport-news': {
     color: '#34D399', accent: '#D4AF37', emoji: '⚓',
     cards: [
-      { headline: 'Newport News Shipbuilding', sub: 'Largest industrial employer in all of Virginia', badge: 'Top Employer' },
-      { headline: '50+ Parks & Trails', sub: '14 miles of trails including the Noland Trail', badge: 'Outdoors' },
-      { headline: '~10 Min to Work', sub: 'Southeast to Shipbuilding commute time', badge: 'Short Commute' },
-      { headline: 'James River Waterfront', sub: 'Walk the boardwalk any morning of the week', badge: 'Waterfront' },
+      { headline: 'Explore Neighborhoods', sub: 'Hilton Village · Denbigh · Oyster Point · Southeast', link: '/neighborhoods', badge: 'Browse →' },
+      { headline: 'Newport News Shipbuilding', sub: 'HII — largest industrial employer in Virginia', link: '/why-newport-news', badge: 'Learn More →' },
+      { headline: '50+ Parks & 14mi Trails', sub: 'Including the award-winning Noland Trail', link: '/why-newport-news', badge: 'Explore →' },
+      { headline: 'James River Waterfront', sub: 'Walk the boardwalk any morning of the week', link: '/why-newport-news', badge: 'See More →' },
     ],
-    ticker: ['Newport News Shipbuilding (HII) — largest industrial employer in Virginia', '50+ parks and 14 miles of trails including Noland Trail', 'Southeast to Shipbuilding: ~10-minute commute', 'Walk the James River boardwalk any morning', 'Newport News: military families, professionals, lifelong residents all call home'],
+    ticker: ['Explore Newport News neighborhoods: Hilton Village · Denbigh · Southeast', 'HII Newport News Shipbuilding — largest industrial VA employer', '50+ parks including the 5-mile Noland Trail', 'James River waterfront boardwalk — open daily', 'Military families, professionals & lifelong residents all call it home'],
   },
   '/checklist': {
     color: '#14B8A6', accent: '#D4AF37', emoji: '✅',
     cards: [
-      { headline: 'Step 1: Check Credit', sub: 'Aim for 620+ before applying for programs', badge: 'First Step' },
-      { headline: 'Save 1–3% Down', sub: 'Virginia programs need as little as 1% down', badge: 'Savings Goal' },
-      { headline: '6–12 Month Prep', sub: 'Start preparing well before you want to buy', badge: 'Timeline' },
-      { headline: 'Free Checklist', sub: 'Download the Newport News homebuyer guide', badge: 'Free Tool' },
+      { headline: 'Step 1: Check Your Credit', sub: 'Aim for 620+ — use the checklist to track progress', link: '/checklist', badge: 'Start Here →' },
+      { headline: 'Step 2: Calculate Budget', sub: 'Use the Buying Power calculator on the Buy page', link: '/buy', badge: 'Try Calculator →' },
+      { headline: 'Step 3: Find Programs', sub: 'Take the 7-question eligibility quiz', link: '/quiz', badge: 'Take Quiz →' },
+      { headline: 'Step 4: Talk to a Counselor', sub: 'Free HUD-certified guidance — no appointment needed', link: '/contact', badge: 'Contact →' },
     ],
-    ticker: ['Homebuyer checklist: start with a credit check — aim for 620+', 'Virginia programs accept down payments as low as 1%', 'Begin financial prep 6–12 months before your target purchase date', 'Download the free Newport News homebuyer checklist today', 'A housing counselor will walk through every step with you — free'],
+    ticker: ['Step 1: Check your credit — aim for 620+ before applying', 'Step 2: Use the Buying Power Calculator → Buy page', 'Step 3: Take the eligibility quiz to find your programs', 'Step 4: Talk to a free HUD-certified counselor', 'Virginia programs accept down payments as low as 1%'],
   },
   '/ship': {
     color: '#A78BFA', accent: '#D4AF37', emoji: '📋',
     cards: [
-      { headline: 'SHIP Adopted Feb 2026', sub: 'Strategic Housing Initiatives Plan is active', badge: 'Live Policy' },
-      { headline: '4 SHIP Pillars', sub: 'Reform · Production · Affordability · Preservation', badge: 'Framework' },
-      { headline: 'Missing Middle Push', sub: 'Duplexes & townhomes to expand housing stock', badge: 'New Supply' },
-      { headline: 'Regulatory Reform', sub: 'Zoning changes to allow more housing types', badge: 'Policy Change' },
+      { headline: 'SHIP Plan — Feb 2026', sub: 'Newport News Strategic Housing Initiatives Plan', link: '/ship', badge: 'Read Plan →' },
+      { headline: '4 Pillars of SHIP', sub: 'Reform · Production · Affordability · Preservation', link: '/ship', badge: 'Learn More →' },
+      { headline: 'Missing Middle Housing', sub: 'Duplexes & townhomes to expand housing stock', link: '/ship', badge: 'Details →' },
+      { headline: 'Your Input Matters', sub: 'Public comment shapes Newport News housing policy', link: '/contact', badge: 'Contact →' },
     ],
-    ticker: ['SHIP Plan: Newport News Strategic Housing Initiatives Plan — adopted Feb 2026', '4 pillars: Regulatory Reform, Production, Affordability, Preservation', '"Missing Middle" housing: townhomes & duplexes being prioritized', 'Zoning reform underway to allow more housing types citywide', 'SHIP goal: create more pathways to stable, affordable housing'],
+    ticker: ['SHIP Plan adopted February 2026 — shaping Newport News housing', '4 pillars: Regulatory Reform, Production, Affordability, Preservation', '"Missing Middle" housing: duplexes & townhomes being prioritized', 'Zoning reform underway to allow more housing types', 'Your voice matters — contact the housing office to weigh in'],
   },
   '/partners': {
     color: '#FB923C', accent: '#14B8A6', emoji: '🤝',
     cards: [
-      { headline: 'Virginia Housing', sub: 'State mortgages at below-market interest rates', badge: 'State Partner' },
-      { headline: 'NNRHA', sub: 'Newport News Redevelopment & Housing Authority', badge: 'Local Partner' },
-      { headline: 'United Way 2-1-1', sub: 'Social service referrals available 24/7', badge: '24/7' },
-      { headline: 'HUD Approved', sub: 'Federal housing standards and program oversight', badge: 'Federal' },
+      { headline: 'Virginia Housing', sub: 'State mortgages at below-market interest rates', badge: 'virginiahousing.com →' },
+      { headline: 'NNRHA', sub: '(757) 928-2620 — Newport News Housing Authority', badge: 'Call →' },
+      { headline: 'United Way 2-1-1', sub: 'Free 24/7 social service referral — dial 2-1-1', badge: 'Dial 211 →' },
+      { headline: 'HUD Approved Programs', sub: 'Federal housing quality standards & oversight', link: '/resources', badge: 'See Resources →' },
     ],
-    ticker: ['Virginia Housing: state-backed mortgages at below-market rates', 'NNRHA: (757) 928-2620 — Newport News Housing Authority', 'United Way 2-1-1: free social service referrals around the clock', 'HUD-approved programs meet federal housing quality standards', 'HOME of Virginia and Fair Housing partners active in the city'],
+    ticker: ['Virginia Housing: state-backed mortgages at below-market rates', 'NNRHA: (757) 928-2620 — Newport News Housing Authority', 'United Way 2-1-1: free social service referrals 24/7', 'HUD-approved programs — federal housing quality standards', 'See all partner resources on the Resources page'],
   },
   '/quiz': {
     color: '#D4AF37', accent: '#14B8A6', emoji: '🎯',
     cards: [
-      { headline: '7-Question Quiz', sub: 'Find your matched housing programs in 2 minutes', badge: 'Quick & Easy' },
-      { headline: 'VA Home Loans', sub: 'Veterans may qualify for zero down payment', badge: 'Veterans' },
-      { headline: 'Section 8 Matching', sub: 'Check eligibility for housing choice vouchers', badge: 'Rental Help' },
-      { headline: 'DPA Grants', sub: 'Down Payment Assistance matched to your situation', badge: 'Free Money' },
+      { headline: 'Take the Quiz ↑', sub: '7 questions · 2 minutes · personalized program matches', link: '/quiz', badge: 'Start Now →' },
+      { headline: 'After Your Quiz', sub: 'Book a free counseling session with your results', link: '/contact', badge: 'Contact →' },
+      { headline: 'Try the Calculator', sub: 'See your estimated monthly payment on the Buy page', link: '/buy', badge: 'Calculate →' },
+      { headline: 'Explore Neighborhoods', sub: 'Know where you want to live before you buy', link: '/neighborhoods', badge: 'Browse →' },
     ],
-    ticker: ['Take the housing quiz — 7 questions, 2 minutes, personalized results', 'Veterans: VA Home Loans offer zero down payment options', 'Section 8 housing choice vouchers — check your eligibility now', 'Down Payment Assistance grants matched to your income and goals', 'Quiz matches you to 30+ federal, state and city programs'],
+    ticker: ['Take the quiz above ↑ — 7 questions, 2 minutes', 'After your quiz, book a free counseling session', 'Try the Buying Power calculator on the Buy page', 'Browse neighborhoods before committing to a location', 'Veterans: ask your counselor about VA Home Loan options'],
   },
 };
 
@@ -216,7 +216,7 @@ function MegaDrone({ color }: { color: string }) {
 }
 
 function BigInfoCard({ card, color, accent }: { card: InfoCard; color: string; accent: string }) {
-  return (
+  const inner = (
     <div style={{
       width: 240,
       background: 'linear-gradient(145deg, #06122a 0%, #0f2347 60%, #162e55 100%)',
@@ -225,10 +225,11 @@ function BigInfoCard({ card, color, accent }: { card: InfoCard; color: string; a
       padding: '16px 20px 18px',
       boxShadow: `0 16px 50px rgba(0,0,0,0.65), 0 0 0 1px ${color}30, inset 0 1px 0 rgba(255,255,255,0.06)`,
       fontFamily: 'Inter, sans-serif',
+      cursor: card.link ? 'pointer' : 'default',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
         <div style={{ fontSize: 8, fontWeight: 900, color: accent, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
-          🏛 City of Newport News
+          🏛 Newport News Housing Hub
         </div>
         {card.badge && (
           <span style={{
@@ -245,6 +246,14 @@ function BigInfoCard({ card, color, accent }: { card: InfoCard; color: string; a
       <div style={{ marginTop: 12, height: 2, background: `linear-gradient(90deg, ${color}, transparent)`, borderRadius: 1 }} />
     </div>
   );
+  if (card.link) {
+    return (
+      <a href={card.link} style={{ textDecoration: 'none', display: 'block', pointerEvents: 'auto' }}>
+        {inner}
+      </a>
+    );
+  }
+  return inner;
 }
 
 function CityBus({ marquee }: { marquee: string }) {
@@ -340,7 +349,7 @@ function HotAirBalloon({ color, accent }: { color: string; accent: string }) {
 }
 
 function BalloonSign({ card, color, accent }: { card: InfoCard; color: string; accent: string }) {
-  return (
+  const inner = (
     <div style={{
       background: `linear-gradient(135deg, ${color}18, ${color}08)`,
       border: `2px solid ${color}`,
@@ -350,6 +359,7 @@ function BalloonSign({ card, color, accent }: { card: InfoCard; color: string; a
       backdropFilter: 'blur(10px)',
       boxShadow: `0 8px 30px rgba(0,0,0,0.4), 0 0 0 1px ${color}20`,
       fontFamily: 'Inter, sans-serif',
+      cursor: card.link ? 'pointer' : 'default',
     }}>
       <div style={{ fontSize: 8, fontWeight: 800, color: accent, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>
         🏛 Newport News Housing
@@ -358,6 +368,14 @@ function BalloonSign({ card, color, accent }: { card: InfoCard; color: string; a
       <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.65)', lineHeight: 1.5 }}>{card.sub}</div>
     </div>
   );
+  if (card.link) {
+    return (
+      <a href={card.link} style={{ textDecoration: 'none', display: 'block', pointerEvents: 'auto' }}>
+        {inner}
+      </a>
+    );
+  }
+  return inner;
 }
 
 // ─── Flash helper ─────────────────────────────────────────────────────────────
@@ -370,13 +388,18 @@ function useFlash(interval = 220) {
   return on;
 }
 
+// Drone hovers at different viewport heights each cycle to appear throughout the page
+const DRONE_TOPS = [80, 200, 320, 140, 260];
+
 // ─── Drone Scene ──────────────────────────────────────────────────────────────
 function DroneScene({ color, accent, card }: { color: string; accent: string; card: InfoCard }) {
   const [cardVisible, setCardVisible] = useState(false);
   const [phase, setPhase] = useState<'idle'|'entering'|'hovering'|'exiting'>('idle');
+  const [cycleCount, setCycleCount] = useState(0);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const runCycle = useCallback(() => {
+    setCycleCount(c => c + 1);
     setPhase('entering');
     timerRef.current = setTimeout(() => {
       setCardVisible(true);
@@ -409,9 +432,11 @@ function DroneScene({ color, accent, card }: { color: string; accent: string; ca
                  phase === 'entering' ? '62vw' :
                  phase === 'hovering' ? '62vw' : '-20vw';
 
+  const droneTop = DRONE_TOPS[cycleCount % DRONE_TOPS.length];
+
   return (
     <motion.div
-      style={{ position: 'fixed', top: 80, right: 0, left: 0, pointerEvents: 'none', zIndex: 9990 }}
+      style={{ position: 'fixed', top: droneTop, right: 0, left: 0, pointerEvents: 'none', zIndex: 9990 }}
     >
       <motion.div
         animate={{ x: droneX, y: phase === 'hovering' ? [0, -6, 0] : 0 }}
