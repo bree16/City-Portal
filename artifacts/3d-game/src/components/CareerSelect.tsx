@@ -83,48 +83,48 @@ export function CareerSelect() {
                 <div style={{ fontSize: 18, fontWeight: 800, color: isSelected ? 'var(--gold)' : '#fff', marginBottom: 4 }}>
                   {career.name}
                 </div>
-                <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.45, marginBottom: 12, minHeight: 40 }}>
+                <div style={{ fontSize: 16, color: 'rgba(255,255,255,0.55)', lineHeight: 1.45, marginBottom: 12, minHeight: 40 }}>
                   {career.description}
                 </div>
 
                 {/* Income + bonus */}
                 <div style={{ width: '100%', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', letterSpacing: 0.8 }}>Monthly Income</span>
+                    <span style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', letterSpacing: 0.8 }}>Monthly Income</span>
                     <span style={{ fontSize: 17, fontWeight: 800, color: '#4ade80' }}>
                       ${career.monthlyIncome.toLocaleString()}
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', letterSpacing: 0.8 }}>Monthly Costs</span>
-                    <span style={{ fontSize: 15, fontWeight: 700, color: '#f87171' }}>
+                    <span style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', letterSpacing: 0.8 }}>Monthly Costs</span>
+                    <span style={{ fontSize: 17, fontWeight: 700, color: '#f87171' }}>
                       −${career.monthlyExpenses.toLocaleString()}
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', letterSpacing: 0.8 }}>Left to Save</span>
-                    <span style={{ fontSize: 15, fontWeight: 800, color: 'var(--gold)' }}>
+                    <span style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', letterSpacing: 0.8 }}>Left to Save</span>
+                    <span style={{ fontSize: 17, fontWeight: 800, color: 'var(--gold)' }}>
                       ${(career.monthlyIncome - career.monthlyExpenses).toLocaleString()}/mo
                     </span>
                   </div>
-                  <div style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <GameIcon name="gift" size={12} /> {career.startingBonus.label}
+                  <div style={{ fontSize: 15, color: 'var(--gold)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <GameIcon name="gift" size={16} /> {career.startingBonus.label}
                   </div>
                 </div>
 
                 {/* Flavor quote */}
-                <div style={{ marginTop: 10, fontSize: 13, color: 'rgba(255,255,255,0.35)', fontStyle: 'italic', lineHeight: 1.4 }}>
+                <div style={{ marginTop: 10, fontSize: 15, color: 'rgba(255,255,255,0.35)', fontStyle: 'italic', lineHeight: 1.4 }}>
                   {career.flavorQuote}
                 </div>
 
                 {isSelected && (
                   <div style={{
                     marginTop: 10, width: '100%', textAlign: 'center',
-                    fontSize: 14, fontWeight: 800, color: 'var(--gold)',
+                    fontSize: 16, fontWeight: 800, color: 'var(--gold)',
                     background: 'rgba(212,168,67,0.15)', borderRadius: 'var(--glass-radius-btn)', padding: '4px 0',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4
                   }}>
-                    <GameIcon name="check" size={12} /> Selected
+                    <GameIcon name="check" size={16} /> Selected
                   </div>
                 )}
               </motion.button>
@@ -164,7 +164,7 @@ export function CareerSelect() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            style={{ textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: 14, marginTop: 12 }}
+            style={{ textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: 16, marginTop: 12 }}
           >
             Starting income: ${selected.monthlyIncome.toLocaleString()}/month · {selected.startingBonus.label}
           </motion.p>

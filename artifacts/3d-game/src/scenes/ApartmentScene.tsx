@@ -107,14 +107,14 @@ export default function ApartmentScene() {
       {/* Ceiling light — emissive glow */}
       <mesh position={[0, 4.85, 0]}>
         <boxGeometry args={[1.2, 0.06, 1.2]} />
-        <meshStandardMaterial color="#ffffff" emissive="#E0F0FF" emissiveIntensity={1.5} roughness={0.5} />
+        <meshStandardMaterial color="#ffffff" emissive="#E0F0FF" emissiveIntensity={0.6} roughness={0.5} />
       </mesh>
-      <pointLight position={[0, 4.5, 0]} intensity={0.8} color="#5F9EA0" distance={12} />
+      <pointLight position={[0, 4.5, 0]} intensity={0.5} color="#5F9EA0" distance={12} />
 
       {/* Window on back wall — glowing sunlight */}
       <mesh position={[-2, 2.2, -5.85]}>
         <boxGeometry args={[2.2, 1.6, 0.08]} />
-        <meshStandardMaterial color="#4682B4" emissive="#FFF0D4" emissiveIntensity={0.8} roughness={0.1} />
+        <meshStandardMaterial color="#4682B4" emissive="#FFF0D4" emissiveIntensity={0.4} roughness={0.1} />
       </mesh>
       {/* Window frame */}
       <mesh position={[-2, 2.2, -5.78]}>
@@ -122,7 +122,7 @@ export default function ApartmentScene() {
         <meshStandardMaterial color="#D2B48C" roughness={0.6} metalness={0.05} wireframe />
       </mesh>
       {/* Window glow light */}
-      <pointLight position={[-2, 2.5, -5]} intensity={1.2} color="#D2B48C" distance={8} />
+      <pointLight position={[-2, 2.5, -5]} intensity={0.7} color="#D2B48C" distance={8} />
 
       {/* Sofa */}
       <group position={[-2, 0, -3.5]}>

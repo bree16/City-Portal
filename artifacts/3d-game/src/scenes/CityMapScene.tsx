@@ -41,7 +41,7 @@ function StreetLight({ position }: { position: [number, number, number] }) {
       </mesh>
       <mesh position={[1.0, 2.0, 0]} castShadow>
         <sphereGeometry args={[0.14, 8, 8]} />
-        <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={1.5} />
+        <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={0.6} />
       </mesh>
       <pointLight position={[1.0, 2.0, 0]} intensity={0.5} color="#D2B48C" distance={8} decay={2} />
     </group>

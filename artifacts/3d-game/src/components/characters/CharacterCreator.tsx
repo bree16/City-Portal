@@ -203,19 +203,19 @@ export function CharacterCreator() {
                 onClick={playWave} 
                 className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${emote === 'wave' ? 'bg-teal-500 text-teal-950 shadow-[0_0_20px_rgba(20,184,166,0.4)]' : 'bg-white/5 border border-white/10 hover:bg-white/10 text-white/80'}`}
               >
-                <GameIcon name="handshake" size={16} /> Wave
+                <GameIcon name="handshake" size={20} /> Wave
               </button>
               <button 
                 onClick={playSmile} 
                 className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${forceSmile ? 'bg-teal-500 text-teal-950 shadow-[0_0_20px_rgba(20,184,166,0.4)]' : 'bg-white/5 border border-white/10 hover:bg-white/10 text-white/80'}`}
               >
-                <GameIcon name="heart" size={16} /> Smile
+                <GameIcon name="heart" size={20} /> Smile
               </button>
               <button 
                 onClick={playLook} 
                 className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${lookAround ? 'bg-teal-500 text-teal-950 shadow-[0_0_20px_rgba(20,184,166,0.4)]' : 'bg-white/5 border border-white/10 hover:bg-white/10 text-white/80'}`}
               >
-                <GameIcon name="search" size={16} /> Look
+                <GameIcon name="search" size={20} /> Look
               </button>
             </div>
           </div>
@@ -334,7 +334,7 @@ export function CharacterCreator() {
                         : 'bg-white/5 text-white/70 border border-white/5 hover:bg-white/10'
                     }`}
                   >
-                    <GameIcon name={icon} size={16} />
+                    <GameIcon name={icon} size={20} />
                     {label}
                   </button>
                 ))}

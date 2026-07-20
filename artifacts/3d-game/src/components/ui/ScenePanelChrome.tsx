@@ -14,11 +14,11 @@ export function ScenePanelClose({ onClose, title = 'Close' }: { onClose: () => v
       aria-label={title}
       style={{
         position: 'absolute',
-        top: -10,
-        right: -10,
+        top: -16,
+        right: -16,
         zIndex: 5,
-        width: 24,
-        height: 24,
+        width: 32,
+        height: 32,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -39,7 +39,7 @@ export function ScenePanelClose({ onClose, title = 'Close' }: { onClose: () => v
         e.currentTarget.style.background = 'var(--navy)';
       }}
     >
-      <GameIcon name="close" size={14} />
+      <GameIcon name="close" size={18} />
     </button>
   );
 }
@@ -67,7 +67,7 @@ export function ScenePanelReopen({ onOpen, label, icon }: { onOpen: () => void; 
         cursor: 'pointer',
         fontFamily: 'var(--display-font)',
         fontWeight: 600,
-        fontSize: 12,
+        fontSize: 14,
         transition: 'all 0.2s var(--glass-ease)',
       }}
       onMouseEnter={(e) => {
@@ -79,7 +79,7 @@ export function ScenePanelReopen({ onOpen, label, icon }: { onOpen: () => void; 
         e.currentTarget.style.transform = 'translateY(0)';
       }}
     >
-      {icon && <GameIcon name={icon} size={14} color="var(--gold)" />}
+      {icon && <GameIcon name={icon} size={18} color="var(--gold)" />}
       {label}
     </div>
   );

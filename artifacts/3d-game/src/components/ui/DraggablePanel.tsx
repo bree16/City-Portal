@@ -125,8 +125,8 @@ export function DraggablePanel({
           gap: 16,
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 600, color: 'var(--gold)', pointerEvents: 'none' }}>
-          {icon && <GameIcon name={icon} size={14} />}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 15, fontWeight: 600, color: 'var(--gold)', pointerEvents: 'none' }}>
+          {icon && <GameIcon name={icon} size={18} />}
           {title}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -139,7 +139,7 @@ export function DraggablePanel({
             style={{ color: 'var(--glass-text-dim)', cursor: 'pointer', display: 'flex' }}
             title="Minimize"
           >
-            <GameIcon name="chevron-down" size={14} />
+            <GameIcon name="chevron-down" size={18} />
           </button>
           {onClose && (
             <button
@@ -151,7 +151,7 @@ export function DraggablePanel({
               style={{ color: 'var(--glass-text-dim)', cursor: 'pointer', display: 'flex' }}
               title="Close"
             >
-              <GameIcon name="close" size={14} />
+              <GameIcon name="close" size={18} />
             </button>
           )}
         </div>

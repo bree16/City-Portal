@@ -238,7 +238,7 @@ export function NPCCharacter({ npc, onClick }: NPCCharacterProps) {
               color: isActive ? '#F5D97A' : '#fff',
               padding: '3px 10px',
               borderRadius: 0,
-              fontSize: 11,
+              fontSize: 13,
               fontWeight: 700,
               whiteSpace: 'nowrap',
               fontFamily: 'Inter, sans-serif',

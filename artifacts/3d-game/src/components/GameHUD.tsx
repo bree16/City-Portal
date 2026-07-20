@@ -105,8 +105,8 @@ function ObjectiveCard({ stage, onClose }: { stage: number; onClose: () => void 
       onClose={onClose}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap' }}>
-        <GameIcon name={obj.icon} size={16} />
-        <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 14, letterSpacing: 0.6, marginRight: 2 }}>Next</span>
+        <GameIcon name={obj.icon} size={20} />
+        <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 16, letterSpacing: 0.6, marginRight: 2 }}>Next</span>
         <span style={{ color: 'var(--glass-text)' }}>{obj.text}</span>
       </div>
     </DraggablePanel>
@@ -166,18 +166,18 @@ export function GameHUD() {
         {/* Logo + player name */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ background: 'var(--teal-grad)', padding: 6, borderRadius: 0, display: 'flex', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3)' }}>
-            <Home size={16} color="#fff" />
+            <Home size={20} color="#fff" />
           </div>
           {!isNarrow && <div style={{ lineHeight: 1.25 }}>
             <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--glass-text)' }}>Newport News</div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--gold)', letterSpacing: 0.8 }}>Housing Hub</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--gold)', letterSpacing: 0.8 }}>Housing Hub</div>
           </div>}
           <div
             className="glass-chip"
             style={{
               marginLeft: 6,
               padding: '4px 12px',
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: 700,
               color: 'var(--glass-text-dim)',
               maxWidth: 130,
@@ -189,14 +189,14 @@ export function GameHUD() {
               gap: '6px'
             }}
           >
-            <GameIcon name="player" size={14} /> {playerName}
+            <GameIcon name="player" size={18} /> {playerName}
           </div>
         </div>
 
         {/* Center: location + stage + month */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-          <div style={{ fontSize: 13, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6, display: 'flex', alignItems: 'center', gap: 4 }}>
-            {isCity ? <><GameIcon name="map" size={12} /> Newport News City</> : <><GameIcon name="pin" size={12} /> Month {month} of 36</>}
+          <div style={{ fontSize: 15, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6, display: 'flex', alignItems: 'center', gap: 4 }}>
+            {isCity ? <><GameIcon name="map" size={16} /> Newport News City</> : <><GameIcon name="pin" size={16} /> Month {month} of 36</>}
           </div>
           <div
             style={{
@@ -204,7 +204,7 @@ export function GameHUD() {
               borderRadius: 0,
               background: isCity ? 'var(--teal-grad)' : 'var(--gold-grad)',
               color: 'var(--ink)',
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: 800,
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.35)',
             }}
@@ -227,17 +227,17 @@ export function GameHUD() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <GameIcon name="budget" size={14} color="var(--gold)" />
+            <GameIcon name="budget" size={18} color="var(--gold)" />
             <span>${cash.toLocaleString()}</span>
           </div>
           <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.16)' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <GameIcon name="bank" size={14} color="var(--teal)" />
+            <GameIcon name="bank" size={18} color="var(--teal)" />
             <span style={{ color: 'var(--teal)' }}>${savings.toLocaleString()}</span>
           </div>
           <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.16)' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <GameIcon name="chart" size={14} color={creditScore >= 650 ? '#4ade80' : '#fbbf24'} />
+            <GameIcon name="chart" size={18} color={creditScore >= 650 ? '#4ade80' : '#fbbf24'} />
             <span style={{ color: creditScore >= 650 ? '#4ade80' : '#fbbf24' }}>
               {creditScore}
             </span>
@@ -259,11 +259,11 @@ export function GameHUD() {
                 alignItems: 'center',
               }}
             >
-              {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+              {muted ? <VolumeX size={17} /> : <Volume2 size={17} />}
             </button>
             {!isNarrow && <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', letterSpacing: 0.5 }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', letterSpacing: 0.5 }}>
                   Music
                 </span>
                 <input
@@ -283,7 +283,7 @@ export function GameHUD() {
                 />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', letterSpacing: 0.5 }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', letterSpacing: 0.5 }}>
                   SFX
                 </span>
                 <input
@@ -309,7 +309,7 @@ export function GameHUD() {
             onClick={() => { getAudioEngine().play('click'); resetGame(); }}
             className="glass-btn"
             style={{
-              fontSize: 13,
+              fontSize: 15,
               fontWeight: 700,
               letterSpacing: 0.5,
               padding: '4px 10px',
@@ -322,7 +322,7 @@ export function GameHUD() {
             title="Quit to Menu"
             className="glass-btn"
             style={{
-              fontSize: 13,
+              fontSize: 15,
               fontWeight: 700,
               letterSpacing: 0.5,
               padding: '4px 10px',
@@ -331,7 +331,7 @@ export function GameHUD() {
               gap: 4,
             }}
           >
-            <LogOut size={11} />
+            <LogOut size={15} />
             {isNarrow ? 'Quit' : 'Quit to Menu'}
           </button>
         </div>
@@ -483,15 +483,15 @@ export function GameHUD() {
               gap: 6,
               padding: '7px 14px',
               color: 'var(--glass-text-dim)',
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: 700,
               letterSpacing: 0.5,
               cursor: 'pointer',
               fontFamily: 'Inter, sans-serif',
             }}
           >
-            <GameIcon name="documents" size={14} /> Life Events
-            {logExpanded ? <ChevronDown size={12} /> : <ChevronUp size={12} />}
+            <GameIcon name="documents" size={18} /> Life Events
+            {logExpanded ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
           </button>
           {logExpanded && (
             <div
@@ -505,14 +505,14 @@ export function GameHUD() {
                 padding: '12px 14px',
               }}
             >
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: 1, marginBottom: 8 }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: 1, marginBottom: 8 }}>
                 Recent Events
               </div>
               {lifeEventLog.map((title, i) => (
                 <div
                   key={i}
                   style={{
-                    fontSize: 15,
+                    fontSize: 17,
                     color: i === 0 ? 'var(--gold)' : 'var(--glass-text-dim)',
                     padding: '4px 0',
                     borderBottom: i < lifeEventLog.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
@@ -557,14 +557,14 @@ export function GameHUD() {
                 alignItems: 'center',
                 gap: 6,
                 padding: '6px 12px',
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: 800,
                 color: 'var(--glass-text)',
                 cursor: 'pointer',
                 pointerEvents: 'auto',
               }}
             >
-              <GameIcon name="target" size={14} /> Objective
+              <GameIcon name="target" size={18} /> Objective
             </button>
           )}
           {!showMiniMap && (
@@ -577,14 +577,14 @@ export function GameHUD() {
                 alignItems: 'center',
                 gap: 6,
                 padding: '6px 12px',
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: 800,
                 color: 'var(--glass-text)',
                 cursor: 'pointer',
                 pointerEvents: 'auto',
               }}
             >
-              <GameIcon name="map" size={14} /> Map
+              <GameIcon name="map" size={18} /> Map
             </button>
           )}
         </div>

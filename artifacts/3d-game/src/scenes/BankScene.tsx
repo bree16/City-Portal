@@ -94,7 +94,7 @@ export default function BankScene() {
         <group key={x}>
           <mesh position={[x, 4.88, 0]}>
             <boxGeometry args={[1.5, 0.05, 0.4]} />
-            <meshStandardMaterial color="#ffffff" emissive="#E0F0FF" emissiveIntensity={1.8} />
+            <meshStandardMaterial color="#ffffff" emissive="#E0F0FF" emissiveIntensity={0.7} />
           </mesh>
           <pointLight position={[x, 4.4, 0]} intensity={0.7} color="#5F9EA0" distance={10} />
         </group>
@@ -158,7 +158,7 @@ export default function BankScene() {
         </mesh>
         <mesh position={[0, 1.2, 0.26]} castShadow>
           <boxGeometry args={[0.5, 0.35, 0.05]} />
-          <meshStandardMaterial color="#111" emissive="#E0F0FF" emissiveIntensity={0.8} roughness={0.1} metalness={0.3} />
+          <meshStandardMaterial color="#111" emissive="#E0F0FF" emissiveIntensity={0.4} roughness={0.1} metalness={0.3} />
         </mesh>
         <pointLight position={[-8, 1.4, -4.5]} intensity={0.4} color="#5F9EA0" distance={2} />
       </group>

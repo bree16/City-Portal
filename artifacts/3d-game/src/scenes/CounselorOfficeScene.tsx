@@ -86,7 +86,7 @@ export default function CounselorOfficeScene() {
         <group key={x}>
           <mesh position={[x, 4.88, 0]}>
             <boxGeometry args={[1.0, 0.05, 0.5]} />
-            <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={1.2} />
+            <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={0.55} />
           </mesh>
           <pointLight position={[x, 4.5, 0]} intensity={0.5} color="#D2B48C" distance={10} />
         </group>
@@ -97,7 +97,7 @@ export default function CounselorOfficeScene() {
         <boxGeometry args={[2.5, 1.6, 0.08]} />
         <meshStandardMaterial color="#4682B4" emissive="#E0F0FF" emissiveIntensity={0.6} roughness={0.1} />
       </mesh>
-      <pointLight position={[6, 2.5, -6]} intensity={0.8} color="#5F9EA0" distance={7} />
+      <pointLight position={[6, 2.5, -6]} intensity={0.5} color="#5F9EA0" distance={7} />
 
       {/* Counselor desk */}
       <group position={[2, 0, -3]}>

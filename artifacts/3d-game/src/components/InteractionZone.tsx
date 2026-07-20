@@ -124,7 +124,7 @@ export function InteractionZone({
               color: '#fff',
               borderRadius: 0,
               padding: '5px 12px',
-              fontSize: 15,
+              fontSize: 17,
               fontWeight: 800,
               fontFamily: 'Inter, sans-serif',
               whiteSpace: 'nowrap',
@@ -137,7 +137,7 @@ export function InteractionZone({
               gap: 6
             }}
           >
-            <GameIcon name="search" size={14} /> {prompt}
+            <GameIcon name="search" size={18} /> {prompt}
           </div>
         </Html>
       )}

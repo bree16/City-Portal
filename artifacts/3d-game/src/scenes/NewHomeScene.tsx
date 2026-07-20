@@ -132,7 +132,7 @@ export default function NewHomeScene() {
         <group key={x}>
           <mesh position={[x, 4.88, 0]}>
             <boxGeometry args={[1.4, 0.05, 0.5]} />
-            <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={1.4} />
+            <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={0.6} />
           </mesh>
           <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#D2B48C" distance={10} />
         </group>
@@ -151,7 +151,7 @@ export default function NewHomeScene() {
         <boxGeometry args={[0.12, 1.5, 2.0]} />
         <meshStandardMaterial color="#E9E4DA" emissive="#E0F0FF" emissiveIntensity={0.6} roughness={0.05} />
       </mesh>
-      <pointLight position={[0, 3.0, -7]} intensity={1.2} color="#5F9EA0" distance={12} />
+      <pointLight position={[0, 3.0, -7]} intensity={0.7} color="#5F9EA0" distance={12} />
 
       {/* Door */}
       <group position={[8.5, 0, 2.5]}>
@@ -220,7 +220,7 @@ export default function NewHomeScene() {
             ) : (
               <mesh position={[0, 0.06, 0]} onPointerDown={(e) => { e.stopPropagation(); if (activeSlot !== slot.id) getAudioEngine().play('click'); setActiveSlot(activeSlot === slot.id ? null : slot.id); }} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = 'auto'; }}>
                 <boxGeometry args={[slot.size[0] + 0.2, 0.12, slot.size[2] + 0.2]} />
-                <meshStandardMaterial color="#D2B48C" transparent opacity={0.45} emissive="#FFF0D4" emissiveIntensity={0.8} roughness={0.5} />
+                <meshStandardMaterial color="#D2B48C" transparent opacity={0.45} emissive="#FFF0D4" emissiveIntensity={0.4} roughness={0.5} />
               </mesh>
             )}
             <Html position={[0, placed ? slot.size[1] + 0.55 : 0.55, 0]} center distanceFactor={10}>

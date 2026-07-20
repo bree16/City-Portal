@@ -107,7 +107,7 @@ export function SpeechBubble() {
             </div>
 
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: line.speaker === 'You' ? 'var(--gold)' : 'var(--teal)', marginBottom: 4, letterSpacing: 0.6 }}>
+              <div style={{ fontSize: 16, fontWeight: 700, color: line.speaker === 'You' ? 'var(--gold)' : 'var(--teal)', marginBottom: 4, letterSpacing: 0.6 }}>
                 {line.speaker === 'You' ? playerName : line.speaker}
               </div>
               <p style={{ fontSize: 17, color: 'var(--glass-text)', lineHeight: 1.55, margin: 0 }}>
@@ -121,7 +121,7 @@ export function SpeechBubble() {
                     borderRadius: 0,
                     background: 'rgba(212,168,67,0.12)',
                     border: 'var(--glass-border-gold)',
-                    fontSize: 15,
+                    fontSize: 17,
                     color: 'var(--gold)',
                     lineHeight: 1.4,
                     display: 'flex',
@@ -129,7 +129,7 @@ export function SpeechBubble() {
                     gap: 6
                   }}
                 >
-                  <GameIcon name="lightbulb" size={14} /> {displayTip}
+                  <GameIcon name="lightbulb" size={18} /> {displayTip}
                 </div>
               )}
             </div>

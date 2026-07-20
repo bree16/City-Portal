@@ -43,7 +43,7 @@ function FloatingKey() {
         <boxGeometry args={[0.07, 0.11, 0.06]} />
         <meshStandardMaterial color="#F5C842" metalness={0.9} roughness={0.15} emissive="#D4A843" emissiveIntensity={0.4} />
       </mesh>
-      <pointLight position={[0, 0, 0.3]} intensity={0.8} color="#FFD96A" distance={3} />
+      <pointLight position={[0, 0, 0.3]} intensity={0.5} color="#FFD96A" distance={3} />
     </group>
   );
 }
@@ -129,7 +129,7 @@ export default function ClosingScene() {
           <meshStandardMaterial color="#D2B48C" emissive="#FFF0D4" emissiveIntensity={2.0} />
         </mesh>
       ))}
-      <pointLight position={[0, 4.2, 0]} intensity={1.2} color="#D2B48C" distance={12} />
+      <pointLight position={[0, 4.2, 0]} intensity={0.7} color="#D2B48C" distance={12} />
 
       {/* Carpet */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>

@@ -446,7 +446,7 @@ export default function HomeInteriorScene() {
             <boxGeometry args={[1.4, 1.2, 0.2]} />
             <meshStandardMaterial color="#E9E4DA" roughness={0.9} />
           </mesh>
-          <pointLight position={[0, 0.8, 0.5]} intensity={1.2} color="#4682B4" distance={5} decay={2} />
+          <pointLight position={[0, 0.8, 0.5]} intensity={0.7} color="#4682B4" distance={5} decay={2} />
         </group>
       )}
 
@@ -556,7 +556,7 @@ export default function HomeInteriorScene() {
           </mesh>
           <mesh position={[lx, 2.78, lz]}>
             <cylinderGeometry args={[0.15, 0.15, 0.04, 10]} />
-            <meshStandardMaterial color="#5F9EA0" emissive="#E0F0FF" emissiveIntensity={1.5} />
+            <meshStandardMaterial color="#5F9EA0" emissive="#E0F0FF" emissiveIntensity={0.6} />
           </mesh>
           <pointLight position={[lx, 2.5, lz]} intensity={0.7} color="#5F9EA0" distance={8} decay={2} />
         </group>

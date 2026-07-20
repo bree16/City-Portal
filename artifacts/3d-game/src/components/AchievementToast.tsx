@@ -32,7 +32,7 @@ export function AchievementToast({ isVisible, title, onClose }: AchievementToast
             <Trophy className="w-5 h-5" />
           </div>
           <div>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--gold)', letterSpacing: 1 }}>Achievement Unlocked</p>
+            <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--gold)', letterSpacing: 1 }}>Achievement Unlocked</p>
             <p style={{ fontSize: 17, fontWeight: 700, color: 'var(--glass-text)' }}>{title}</p>
           </div>
         </motion.div>

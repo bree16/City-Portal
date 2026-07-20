@@ -159,7 +159,7 @@ export default function HomeLifeScene() {
         <group key={x}>
           <mesh position={[x, 4.88, 0]}>
             <boxGeometry args={[1.4, 0.05, 0.5]} />
-            <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={1.4} />
+            <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={0.6} />
           </mesh>
           <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#D2B48C" distance={10} decay={2} />
         </group>

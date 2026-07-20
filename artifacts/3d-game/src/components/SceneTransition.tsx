@@ -60,7 +60,7 @@ export function SceneTransition() {
             <div style={{ fontSize: 56, marginBottom: 16, display: 'flex', justifyContent: 'center' }}><GameIcon name={STAGE_ICONS[stage] || 'warning'} size={64} color="#fff" /></div>
             <div
               style={{
-                fontSize: 15,
+                fontSize: 17,
                 fontWeight: 700,
                 color: 'var(--gold)',
                 
