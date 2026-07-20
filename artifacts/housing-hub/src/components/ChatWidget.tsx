@@ -46,11 +46,8 @@ export function ChatWidget() {
     if (!text.trim() || isTyping) return;
 
     const userMsg: Message = { id: Date.now(), text, sender: 'user' };
-    let nextMessages: Message[] = [];
-    setMessages(prev => {
-      nextMessages = [...prev, userMsg];
-      return nextMessages;
-    });
+    const nextMessages: Message[] = [...messages, userMsg];
+    setMessages(nextMessages);
     setInputValue('');
     setIsTyping(true);
 
