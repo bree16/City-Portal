@@ -553,12 +553,52 @@ export default function HomeLifeScene() {
               Your equity could fund a larger Newport News home — start your journey toward your forever home!
             </div>
 
+            {/* Action options */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 4 }}>
+              {/* Pay Down Mortgage */}
+              <button
+                onClick={() => {
+                  const extra = Math.min(5000, Math.floor((cash || 0) * 0.1));
+                  if (extra > 0) {
+                    useGameStore.getState().updateCash(-extra);
+                    useGameStore.setState((s) => ({
+                      mortgageBalance: Math.max(0, s.mortgageBalance - extra),
+                    }));
+                  }
+                  setListingOpen(false);
+                }}
+                disabled={!cash || cash < 500}
+                style={{
+                  padding: '10px 8px', borderRadius: 'var(--glass-radius)',
+                  background: cash >= 500 ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.04)',
+                  color: cash >= 500 ? '#4ade80' : 'rgba(255,255,255,0.3)',
+                  border: `1px solid ${cash >= 500 ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.1)'}`,
+                  cursor: cash >= 500 ? 'pointer' : 'default', fontWeight: 700, fontSize: 10,
+                  fontFamily: 'Inter,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5
+                }}
+              >
+                <GameIcon name="bank" size={12} /> Pay Down Mortgage
+              </button>
+              {/* Refinance */}
+              <button
+                onClick={() => setListingOpen(false)}
+                style={{
+                  padding: '10px 8px', borderRadius: 'var(--glass-radius)',
+                  background: 'rgba(212,175,55,0.1)', color: '#D4AF37',
+                  border: '1px solid rgba(212,175,55,0.3)',
+                  cursor: 'pointer', fontWeight: 700, fontSize: 10,
+                  fontFamily: 'Inter,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5
+                }}
+              >
+                <GameIcon name="chart" size={12} /> Refinance (Coming Soon)
+              </button>
+            </div>
             <button
               onClick={() => setListingOpen(false)}
               style={{
                 width: '100%', padding: '11px', borderRadius: 'var(--glass-radius)',
-                background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)',
-                border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 12,
+                background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)',
+                border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', fontWeight: 700, fontSize: 11,
                 fontFamily: 'Inter,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
               }}
             >

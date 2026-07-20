@@ -68,13 +68,13 @@ export function SceneTransition() {
                 marginBottom: 12,
               }}
             >
-              {stage === 8 ? 'Stage 8 — Post-Purchase' : `Stage ${stage} of 7`}
+              {stage === 8 ? 'Home Life — Building Equity' : stage >= 1 && stage <= 7 ? `Stage ${stage} of 7` : 'Completing Your Journey'}
             </div>
             <div style={{ fontSize: 36, fontWeight: 800, color: '#fff', marginBottom: 12 }}>
-              {STAGE_NAMES[stage]}
+              {STAGE_NAMES[stage] ?? 'Your Journey'}
             </div>
             <div style={{ fontSize: 18, color: 'rgba(255,255,255,0.55)' }}>
-              {STAGE_SUBTITLES[stage]}
+              {STAGE_SUBTITLES[stage] ?? 'Keep going — you\'re almost there!'}
             </div>
 
             {/* Loading dots */}

@@ -1,0 +1,292 @@
+Final Website Polish & Feature Completion
+
+The website is nearly complete and presentation-ready, but there are still several areas that need to be completed and polished. Please implement the following improvements.
+
+1. Complete Missing Resource Links
+
+Several sections currently contain "Learn More" buttons that either don't work or don't lead to useful resources.
+
+Every button should lead to a legitimate, relevant webpage from a trusted source.
+
+Know Your Rights as a Neighbor
+
+Add working links to appropriate housing and tenant information, such as:
+
+Fair Housing rights
+Virginia Fair Housing resources
+Neighbor dispute information
+Housing discrimination information
+Landlord/tenant rights
+
+Use official government or nonprofit resources whenever possible.
+
+Emergency Rental Assistance
+
+Provide links to actual rental assistance resources.
+
+Include resources such as:
+
+Virginia housing assistance
+Local emergency assistance
+Rental relief information
+Eviction prevention resources
+
+These should be official organizations whenever possible.
+
+2. Why Newport News Page
+
+Every "Learn More" button should connect to an appropriate real-world resource.
+
+Please research and use high-quality links.
+
+Entertainment
+
+Link to local attractions and entertainment.
+
+Community Events
+
+Link to Newport News event calendars and city events.
+
+Shopping
+
+Link to major shopping destinations.
+
+Walkable Neighborhoods
+
+Provide information about neighborhoods and walkability.
+
+Pet-Friendly Spaces
+
+Link to dog parks, pet-friendly parks, trails, and recreation.
+
+Waterfront Activities
+
+Link to parks, marinas, beaches, waterfront recreation, fishing, boating, and trails.
+
+Major Employers
+
+Provide information about major employers in Newport News.
+
+Examples include:
+
+Newport News Shipbuilding
+Riverside Health
+Sentara
+Jefferson Lab
+City employment
+Schools & Education
+
+Link to:
+
+Newport News Public Schools
+Local colleges
+Workforce development
+Adult education
+Coffee Shops
+
+Provide a page highlighting popular local coffee shops.
+
+Arts & Culture
+
+Link to museums, performing arts, galleries, cultural events, and local attractions.
+
+3. Military-Friendly Resources
+
+The Military Friendly section should have fully functional links.
+
+Active Duty Relocation
+
+Connect to official military relocation resources.
+
+Military Spouse Resources
+
+Link to Military OneSource and other spouse support organizations.
+
+VA Home Loans
+
+Connect directly to official VA Home Loan information.
+
+Veteran Housing Assistance
+
+Provide links to veteran housing assistance programs and resources.
+
+4. Verify Entire Website
+
+Audit the entire website.
+
+Every button should:
+
+Open correctly
+Lead somewhere useful
+Never result in a dead end
+Never be a placeholder
+
+If a page exists, connect to it.
+
+If an external resource is more appropriate, use that instead.
+
+There should be no broken navigation anywhere on the website.
+
+Game Improvements
+5. Draggable Windows
+
+Many popup windows block gameplay.
+
+All popup panels should become draggable.
+
+The player should be able to:
+
+Click the title bar
+Drag anywhere on the screen
+Reposition windows
+Continue interacting with the game underneath
+
+This includes:
+
+Reports
+Dialog windows
+Information panels
+Tutorials
+Statistics
+Results
+Any future popup
+
+Dragging should feel smooth.
+
+Remember each window's position while it's open.
+
+6. Fix Undefined Stage Bug
+
+At the end of the game the interface still displays:
+
+Undefined Stage
+
+This should never appear.
+
+Replace it with the proper completion screen and ensure every stage has a valid identifier.
+
+7. End-of-Game Menu
+
+After completing the simulator, present a polished completion menu.
+
+Players should see options such as:
+
+🏡 Continue Your Homeownership Journey
+
+📊 View Final Report
+
+🔄 Start a New Journey
+
+🏠 Return to Housing Hub
+
+🚪 Exit Simulator
+
+The interface should feel complete.
+
+8. Report Window
+
+Currently the Final Report window cannot be closed.
+
+Please fix this.
+
+Requirements:
+
+Functional X button
+ESC key closes it
+Clicking outside (if appropriate) closes it
+Window remains draggable
+9. Prevent Interface Overlap
+
+Currently multiple menus remain visible simultaneously.
+
+This blocks information.
+
+Only one primary modal should be active at a time.
+
+Opening a new window should either:
+
+Hide the previous one
+Minimize it
+Layer it correctly
+
+The interface should never obscure critical information.
+
+10. Continue Building Equity
+
+Currently the only option is:
+
+Keep Building Equity
+
+Expand this system.
+
+Players should also have options such as:
+
+Sell Home
+
+Upgrade Home
+
+Renovate
+
+Pay Down Mortgage
+
+Purchase Investment Property (future-ready placeholder if not implemented)
+
+Refinance Mortgage (optional)
+
+Downsize
+
+Retire
+
+Move to a Different Neighborhood
+
+After selecting Sell Home, continue the simulation naturally instead of ending progression.
+
+Website Visual Enhancements
+11. Elevate the Entire Website Experience
+
+The website already functions well.
+
+Now transform it into something visually unforgettable.
+
+Research modern award-winning web experiences for inspiration and implement tasteful techniques that are compatible with the Housing Hub.
+
+Focus on smooth, high-quality interactions that enhance usability rather than distract from it.
+
+Possible improvements include:
+
+Elegant page transitions
+Scroll-triggered animations
+Smooth section reveals
+Animated cards
+Interactive hover effects
+Dynamic hero transitions
+Animated backgrounds where appropriate
+Glassmorphism accents
+Parallax effects used sparingly
+Micro-interactions for buttons, forms, and navigation
+Smooth loading states
+Rich icon animations
+Responsive visual feedback
+Subtle lighting and depth effects
+
+Every animation should feel intentional, performant, and accessible.
+
+12. Make the Website Feel Premium
+
+The overall experience should feel comparable to a modern technology company's website rather than a traditional government portal.
+
+The site should communicate:
+
+Professionalism
+Trust
+Innovation
+Accessibility
+Community
+
+without sacrificing clarity or ease of use.
+
+The goal is for visitors to think:
+
+"I can't believe this is a government housing website."
+
+Every interaction should reinforce that impression.

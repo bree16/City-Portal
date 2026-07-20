@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Switch, Route, Router as WouterRouter, useLocation } from 'wouter';
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
 import { ClerkProvider, SignIn, SignUp, useClerk } from '@clerk/react';
@@ -141,6 +142,21 @@ function ClerkQueryClientCacheInvalidator() {
   return null;
 }
 
+/** Wraps each page in a smooth fade+slide entrance. */
+function PageTransition({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      key={window.location.pathname}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+      style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-foreground">
@@ -155,31 +171,36 @@ function Layout({ children }: { children: React.ReactNode }) {
 }
 
 function Router() {
+  const [location] = useLocation();
   return (
     <Layout>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/buy" component={BuyPage} />
-        <Route path="/rent" component={RentPage} />
-        <Route path="/neighborhoods" component={NeighborhoodsPage} />
-        <Route path="/assistance" component={AssistancePage} />
-        <Route path="/journey" component={JourneyPage} />
-        <Route path="/simulator" component={SimulatorPage} />
-        <Route path="/why-newport-news" component={WhyNewportNewsPage} />
-        <Route path="/partners" component={PartnersPage} />
-        <Route path="/quiz" component={QuizPage} />
-        <Route path="/resources" component={ResourcesPage} />
-        <Route path="/events" component={EventsPage} />
-        <Route path="/services" component={ServicesPage} />
-        <Route path="/success-stories" component={SuccessStoriesPage} />
-        <Route path="/checklist" component={ChecklistPage} />
-        <Route path="/ship" component={ShipPage} />
-        <Route path="/contact" component={ContactPage} />
-        {/* REQUIRED — "/sign-in/*?" and "/sign-up/*?" verbatim for Clerk OAuth sub-paths */}
-        <Route path="/sign-in/*?" component={SignInPage} />
-        <Route path="/sign-up/*?" component={SignUpPage} />
-        <Route component={NotFound} />
-      </Switch>
+      <AnimatePresence mode="wait" initial={false}>
+        <PageTransition key={location}>
+          <Switch location={location}>
+            <Route path="/" component={Home} />
+            <Route path="/buy" component={BuyPage} />
+            <Route path="/rent" component={RentPage} />
+            <Route path="/neighborhoods" component={NeighborhoodsPage} />
+            <Route path="/assistance" component={AssistancePage} />
+            <Route path="/journey" component={JourneyPage} />
+            <Route path="/simulator" component={SimulatorPage} />
+            <Route path="/why-newport-news" component={WhyNewportNewsPage} />
+            <Route path="/partners" component={PartnersPage} />
+            <Route path="/quiz" component={QuizPage} />
+            <Route path="/resources" component={ResourcesPage} />
+            <Route path="/events" component={EventsPage} />
+            <Route path="/services" component={ServicesPage} />
+            <Route path="/success-stories" component={SuccessStoriesPage} />
+            <Route path="/checklist" component={ChecklistPage} />
+            <Route path="/ship" component={ShipPage} />
+            <Route path="/contact" component={ContactPage} />
+            {/* REQUIRED — "/sign-in/*?" and "/sign-up/*?" verbatim for Clerk OAuth sub-paths */}
+            <Route path="/sign-in/*?" component={SignInPage} />
+            <Route path="/sign-up/*?" component={SignUpPage} />
+            <Route component={NotFound} />
+          </Switch>
+        </PageTransition>
+      </AnimatePresence>
     </Layout>
   );
 }

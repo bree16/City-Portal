@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { toPng } from 'html-to-image';
 import { useGameStore } from '@/store/gameStore';
 import { homes } from '@/data/homes';
@@ -20,6 +20,7 @@ const INITIAL_CREDIT = 635;
 interface ResultsCardProps {
   visible: boolean;
   onPlayAgain: () => void;
+  onClose?: () => void;
 }
 
 function MiniCharacter({ skinTone, hairColor, shirtColor, pantsColor }: {
@@ -61,7 +62,7 @@ function MiniCharacter({ skinTone, hairColor, shirtColor, pantsColor }: {
   );
 }
 
-export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
+export function ResultsCard({ visible, onPlayAgain, onClose }: ResultsCardProps) {
   const { month, creditScore, savings, selectedHomeId, achievements, furnitureOwned, characterAppearance, resetGame } = useGameStore();
   const home = homes.find((h) => h.id === selectedHomeId) ?? homes[0];
   const creditGain = creditScore - INITIAL_CREDIT;
@@ -69,6 +70,20 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [downloading, setDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState(false);
+
+  // ESC closes the card (without resetting game) if onClose is provided
+  useEffect(() => {
+    if (!visible) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        const t = e.target as HTMLElement | null;
+        if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+        onClose?.();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [visible, onClose]);
 
   const handleDownload = async () => {
     if (!cardRef.current || downloading) return;
@@ -110,6 +125,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
+          onClick={(e) => { if (e.target === e.currentTarget) onClose?.(); }}
           style={{
             position: 'fixed', inset: 0, zIndex: 1000,
             background: 'rgba(17, 14, 21, 0.92)',
@@ -138,12 +154,24 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
               padding: '10px 24px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
-              <span style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)', letterSpacing: '0.12em',  }}>
+              <span style={{ fontSize: 17, fontWeight: 800, color: 'var(--ink)', letterSpacing: '0.12em' }}>
                 Newport News Housing Hub
               </span>
-              <span style={{ fontSize: 16, color: 'var(--ink)', fontWeight: 700 }}>
-                Path to Your First Home
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontSize: 16, color: 'var(--ink)', fontWeight: 700 }}>Path to Your First Home</span>
+                {onClose && (
+                  <button
+                    data-no-export
+                    onClick={onClose}
+                    title="Close"
+                    style={{
+                      background: 'rgba(0,0,0,0.15)', border: 'none', borderRadius: '50%',
+                      width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: 'var(--ink)', fontWeight: 800, fontSize: 16, lineHeight: 1,
+                    }}
+                  >✕</button>
+                )}
+              </div>
             </div>
 
             {/* Body */}
@@ -222,52 +250,67 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
               )}
 
               {/* Share */}
-              <button
-                data-no-export
-                onClick={handleDownload}
-                disabled={downloading}
-                className="glass-btn-primary"
-                style={{
-                  width: '100%', padding: '12px 16px', fontWeight: 700, fontSize: 16,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                  marginBottom: 10, cursor: downloading ? 'wait' : 'pointer',
-                }}
-                data-testid="button-download-card"
-              >
-                <GameIcon name="camera" size={20} />
-                {downloading ? 'Creating your image…' : 'Download My Results Card'}
-              </button>
               {downloadError && (
-                <div data-no-export style={{ fontSize: 16, color: '#f87171', marginBottom: 10, textAlign: 'center' }}>
-                  Something went wrong creating the image — try a regular screenshot instead.
+                <div data-no-export style={{ fontSize: 14, color: '#f87171', marginBottom: 8, textAlign: 'center' }}>
+                  Couldn't create image — try a screenshot instead.
                 </div>
               )}
 
               {/* CTAs */}
-              <div data-no-export style={{ display: 'flex', gap: 10 }}>
-                <button
-                  onClick={handlePlayAgain}
-                  className="glass-btn"
-                  style={{
-                    flex: 1, padding: '12px 16px', fontWeight: 700, fontSize: 16,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
-                  }}
-                >
-                  <GameIcon name="replay" size={18} /> Play Again
-                </button>
-                <a
-                  href="/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="glass-btn-primary"
-                  style={{
-                    flex: 1.4, padding: '12px 16px', fontSize: 16,
-                    textDecoration: 'none', textAlign: 'center',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
-                  }}
-                >
-                  <GameIcon name="home" size={18} /> Visit Newport News Housing Hub
-                </a>
+              <div data-no-export style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {/* Primary row */}
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button
+                    onClick={handleDownload}
+                    disabled={downloading}
+                    className="glass-btn"
+                    style={{
+                      flex: 1, padding: '11px 14px', fontWeight: 700, fontSize: 14,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                      cursor: downloading ? 'wait' : 'pointer',
+                    }}
+                  >
+                    <GameIcon name="camera" size={16} /> {downloading ? 'Creating…' : 'Download Card'}
+                  </button>
+                  <button
+                    onClick={handlePlayAgain}
+                    className="glass-btn"
+                    style={{
+                      flex: 1, padding: '11px 14px', fontWeight: 700, fontSize: 14,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
+                    }}
+                  >
+                    <GameIcon name="replay" size={16} /> New Journey
+                  </button>
+                </div>
+                {/* Secondary row */}
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {onClose && (
+                    <button
+                      onClick={onClose}
+                      className="glass-btn"
+                      style={{
+                        flex: 1, padding: '11px 14px', fontWeight: 700, fontSize: 14,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
+                      }}
+                    >
+                      <GameIcon name="home" size={16} /> Continue Journey
+                    </button>
+                  )}
+                  <a
+                    href="/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="glass-btn-primary"
+                    style={{
+                      flex: onClose ? 1 : 2, padding: '11px 14px', fontSize: 14,
+                      textDecoration: 'none', textAlign: 'center',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
+                    }}
+                  >
+                    <GameIcon name="neighborhood" size={16} /> Return to Housing Hub
+                  </a>
+                </div>
               </div>
             </div>
           </motion.div>

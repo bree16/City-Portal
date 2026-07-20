@@ -358,6 +358,7 @@ export default function GamePage() {
       <ResultsCard
         visible={showResultsCard}
         onPlayAgain={() => setShowResultsCard(false)}
+        onClose={() => setShowResultsCard(false)}
       />
     </div>
   );

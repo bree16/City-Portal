@@ -32,18 +32,18 @@ export default function WhyNewportNewsPage() {
   const [selectedNeighborhood, setSelectedNeighborhood] = useState<keyof typeof commuteData>('Hilton Village');
 
   const lifestyleCards = [
-    { title: "Parks & Recreation", icon: Home, image: parksImage, desc: "Over 50 parks, athletic fields, and green spaces across the city." }, // Trees -> Home (Trees not in lucide-react default sometimes, let's use MapPin instead for Trees, actually lets use Home for now)
-    { title: "Local Restaurants", icon: UtensilsCrossed, image: restaurantsImage, desc: "Diverse dining from waterfront seafood to international cuisine." },
-    { title: "Coffee Shops", icon: Coffee, image: coffeeImage, desc: "Independent cafes and local spots perfect for remote work and meetups." },
-    { title: "Arts & Culture", icon: Palette, image: artsImage, desc: "A growing arts scene with murals, galleries, and cultural events." },
-    { title: "Entertainment", icon: Music, image: entertainmentImage, desc: "Live music, venues, and year-round entertainment for every taste." },
-    { title: "Community Events", icon: Calendar, image: eventsImage, desc: "Festivals, neighborhood gatherings, and holiday celebrations throughout the year." },
-    { title: "Shopping", icon: ShoppingBag, image: shoppingImage, desc: "From major malls to local boutiques, shopping for every need and budget." },
-    { title: "Walkable Neighborhoods", icon: MapPin, image: neighborhoodsImage, desc: "Tree-lined streets and pedestrian-friendly communities to explore." },
-    { title: "Pet-Friendly Spaces", icon: Heart, image: petsImage, desc: "Dog parks, walking trails, and pet-welcoming neighborhoods throughout the city." },
-    { title: "Waterfront Activities", icon: Anchor, image: waterfrontImage, desc: "Kayaking, fishing, trails, and stunning views along the James River." },
-    { title: "Major Employers", icon: Building2, image: employersImage, desc: "World-class employers across shipbuilding, healthcare, government, and tech." },
-    { title: "Schools & Education", icon: GraduationCap, image: schoolsImage, desc: "Strong public schools and proximity to several colleges and universities." },
+    { title: "Parks & Recreation", icon: Home, image: parksImage, desc: "Over 50 parks, athletic fields, and green spaces across the city.", url: "https://www.nnva.gov/1450/Parks-Recreation-Tourism" },
+    { title: "Local Restaurants", icon: UtensilsCrossed, image: restaurantsImage, desc: "Diverse dining from waterfront seafood to international cuisine.", url: "https://www.yelp.com/search?find_desc=restaurants&find_loc=Newport+News%2C+VA" },
+    { title: "Coffee Shops", icon: Coffee, image: coffeeImage, desc: "Independent cafes and local spots perfect for remote work and meetups.", url: "https://www.google.com/maps/search/coffee+shops+Newport+News+VA" },
+    { title: "Arts & Culture", icon: Palette, image: artsImage, desc: "A growing arts scene with murals, galleries, and cultural events.", url: "https://www.nmas.org/" },
+    { title: "Entertainment", icon: Music, image: entertainmentImage, desc: "Live music, venues, and year-round entertainment for every taste.", url: "https://www.visitnewportnews.com/things-to-do/entertainment/" },
+    { title: "Community Events", icon: Calendar, image: eventsImage, desc: "Festivals, neighborhood gatherings, and holiday celebrations throughout the year.", url: "https://www.visitnewportnews.com/events/" },
+    { title: "Shopping", icon: ShoppingBag, image: shoppingImage, desc: "From major malls to local boutiques, shopping for every need and budget.", url: "https://www.patrickhemall.com/" },
+    { title: "Walkable Neighborhoods", icon: MapPin, image: neighborhoodsImage, desc: "Tree-lined streets and pedestrian-friendly communities to explore.", url: "/neighborhoods" },
+    { title: "Pet-Friendly Spaces", icon: Heart, image: petsImage, desc: "Dog parks, walking trails, and pet-welcoming neighborhoods throughout the city.", url: "https://www.nnva.gov/1454/Dog-Parks" },
+    { title: "Waterfront Activities", icon: Anchor, image: waterfrontImage, desc: "Kayaking, fishing, trails, and stunning views along the James River.", url: "https://www.nolandtrail.com/" },
+    { title: "Major Employers", icon: Building2, image: employersImage, desc: "World-class employers across shipbuilding, healthcare, government, and tech.", url: "#employers" },
+    { title: "Schools & Education", icon: GraduationCap, image: schoolsImage, desc: "Strong public schools and proximity to several colleges and universities.", url: "https://www.nnschools.org/" },
   ];
 
   return (
@@ -89,9 +89,11 @@ export default function WhyNewportNewsPage() {
                 <div className="p-6">
                   <h3 className="font-bold text-lg text-primary mb-2">{card.title}</h3>
                   <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-2">{card.desc}</p>
-                  <button className="text-accent font-medium text-sm flex items-center gap-1 group-hover:underline">
-                    Learn More <Anchor className="w-3 h-3 hidden" />
-                  </button>
+                  {card.url.startsWith('/') ? (
+                    <a href={card.url} className="text-accent font-medium text-sm flex items-center gap-1 group-hover:underline">Learn More →</a>
+                  ) : (
+                    <a href={card.url} target="_blank" rel="noopener noreferrer" className="text-accent font-medium text-sm flex items-center gap-1 group-hover:underline">Learn More →</a>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -111,19 +113,19 @@ export default function WhyNewportNewsPage() {
             <p className="text-lg text-white/80 max-w-3xl mx-auto">Newport News is home to thousands of active duty service members, veterans, and their families. We're here to support your housing journey.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="military">
             {[
-              { title: "Active Duty Relocation", desc: "PCS move to the area? We can help you find housing near Fort Eustis and NWS Yorktown." },
-              { title: "VA Home Loans", desc: "Zero down payment options for eligible veterans and active duty. Talk to a VA-approved lender." },
-              { title: "Military Spouse Resources", desc: "Housing, employment, and community resources for military spouses navigating relocation." },
-              { title: "Veteran Housing Assistance", desc: "From transitional housing to homeownership programs specifically designed for veterans." }
+              { title: "Active Duty Relocation", desc: "PCS move to the area? We can help you find housing near Fort Eustis and NWS Yorktown.", url: "https://installations.militaryonesource.mil/fort-eustis" },
+              { title: "VA Home Loans", desc: "Zero down payment options for eligible veterans and active duty. Talk to a VA-approved lender.", url: "https://www.va.gov/housing-assistance/home-loans/" },
+              { title: "Military Spouse Resources", desc: "Housing, employment, and community resources for military spouses navigating relocation.", url: "https://www.militaryonesource.mil/" },
+              { title: "Veteran Housing Assistance", desc: "From transitional housing to homeownership programs specifically designed for veterans.", url: "https://www.va.gov/housing-assistance/" }
             ].map((card, i) => (
               <motion.div key={card.title} initial={{opacity:0,y:20}} whileInView={{opacity:1,y:0}} transition={{delay: i*0.1}} viewport={{once:true}}
                 className="bg-white rounded-2xl p-6 text-foreground shadow-lg flex flex-col">
                 <h3 className="font-bold text-xl text-primary mb-3">{card.title}</h3>
                 <p className="text-muted-foreground text-sm flex-1 mb-6 leading-relaxed">{card.desc}</p>
-                <Button variant="outline" className="w-full border-secondary text-primary hover:bg-secondary hover:text-primary transition-colors font-semibold">
-                  Learn More
+                <Button asChild variant="outline" className="w-full border-secondary text-primary hover:bg-secondary hover:text-primary transition-colors font-semibold">
+                  <a href={card.url} target="_blank" rel="noopener noreferrer">Learn More</a>
                 </Button>
               </motion.div>
             ))}

@@ -208,17 +208,17 @@ export default function RentPage() {
               </p>
               <div className="space-y-4">
                 {[
-                  { name: "COVID-19 Relief Funds", note: "For pandemic-related income loss" },
-                  { name: "CARES Act Programs", note: "Federal emergency support" },
-                  { name: "Local Emergency Funds", note: "City-funded eviction prevention" }
+                  { name: "Virginia Rent Relief Program", note: "State-funded emergency rental assistance", url: "https://www.dhcd.virginia.gov/rrp" },
+                  { name: "HUD Emergency Rental Assistance", note: "Federal housing support programs", url: "https://www.hud.gov/topics/rental_assistance" },
+                  { name: "Newport News Human Services", note: "City-funded eviction prevention", url: "https://www.nnva.gov/339/Human-Services" }
                 ].map((fund, i) => (
                   <div key={i} className="bg-white p-4 rounded-xl flex items-center justify-between shadow-lg">
                     <div>
                       <h4 className="font-bold text-primary">{fund.name}</h4>
                       <p className="text-sm text-muted-foreground">{fund.note}</p>
                     </div>
-                    <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-white shrink-0">
-                      Apply Now
+                    <Button asChild variant="outline" className="border-accent text-accent hover:bg-accent hover:text-white shrink-0">
+                      <a href={fund.url} target="_blank" rel="noopener noreferrer">Apply Now</a>
                     </Button>
                   </div>
                 ))}
@@ -243,9 +243,9 @@ export default function RentPage() {
               <h2 className="text-3xl font-bold text-primary mb-8">Know Your Rights as a Neighbor</h2>
               <div className="space-y-4">
                 {[
-                  { title: "Know Your Rights", desc: "Understanding the Virginia Residential Landlord and Tenant Act.", icon: ShieldCheck },
-                  { title: "How to Handle Disputes", desc: "Mediation services and legal aid contacts for landlord issues.", icon: Info },
-                  { title: "Eviction Prevention", desc: "Steps to take if you receive a pay-or-quit notice.", icon: AlertCircle }
+                  { title: "Know Your Rights", desc: "Understanding the Virginia Residential Landlord and Tenant Act.", icon: ShieldCheck, url: "https://www.dhcd.virginia.gov/content/fair-housing" },
+                  { title: "How to Handle Disputes", desc: "Free mediation and legal aid for landlord-tenant issues.", icon: Info, url: "https://www.virginialegalaid.org/" },
+                  { title: "Eviction Prevention", desc: "Steps to take if you receive a pay-or-quit notice.", icon: AlertCircle, url: "https://www.evictionfreeva.com/" }
                 ].map((card, i) => (
                   <Card key={i} className="bg-white border-border/50 shadow-sm hover:shadow-md transition-shadow">
                     <CardContent className="p-5 flex items-start gap-4">
@@ -255,7 +255,7 @@ export default function RentPage() {
                       <div>
                         <h4 className="font-bold text-foreground mb-1">{card.title}</h4>
                         <p className="text-sm text-muted-foreground mb-2">{card.desc}</p>
-                        <a href="#" className="text-sm font-semibold text-accent hover:underline">Learn More →</a>
+                        <a href={card.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-accent hover:underline">Learn More →</a>
                       </div>
                     </CardContent>
                   </Card>
