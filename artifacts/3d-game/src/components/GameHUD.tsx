@@ -4,19 +4,21 @@ import { useGameStore } from '@/store/gameStore';
 import { useAudioControls } from '@/components/AudioManager';
 import { getAudioEngine } from '@/hooks/useGameAudio';
 import { buildings } from '@/data/buildings';
+import { GameIcon, GameIconName } from '@/components/ui/GameIcon';
+import { DraggablePanel } from '@/components/ui/DraggablePanel';
 
 // ── Constants ────────────────────────────────────────────────────
 
 const STAGE_NAMES = ['', 'Renting', 'Preparing', 'Hunting', 'Offer', 'Mortgage', 'Closing', 'Move In'];
 
-const OBJECTIVES = [
-  { stage: 1, text: 'Talk to your landlord & save for a down payment', building: 'apartment', icon: '🏠' },
-  { stage: 2, text: 'Visit the Housing Counselor to get pre-qualified', building: 'counselor', icon: '📋' },
-  { stage: 3, text: 'Browse homes at the Real Estate Office', building: 'realestate', icon: '🔑' },
-  { stage: 4, text: "Make your offer at the Buyer's Agent office", building: 'negotiation', icon: '🤝' },
-  { stage: 5, text: 'Get mortgage approval at the Community Bank', building: 'bank', icon: '🏦' },
-  { stage: 6, text: 'Sign your closing papers at City Hall', building: 'closing', icon: '🏛️' },
-  { stage: 7, text: 'Enjoy your new home! You did it!', building: null, icon: '🎉' },
+const OBJECTIVES: Array<{ stage: number; text: string; building: string | null; icon: GameIconName }> = [
+  { stage: 1, text: 'Talk to your landlord & save for a down payment', building: 'apartment', icon: 'home' },
+  { stage: 2, text: 'Visit the Housing Counselor to get pre-qualified', building: 'counselor', icon: 'documents' },
+  { stage: 3, text: 'Browse homes at the Real Estate Office', building: 'realestate', icon: 'keys' },
+  { stage: 4, text: "Make your offer at the Buyer's Agent office", building: 'negotiation', icon: 'handshake' },
+  { stage: 5, text: 'Get mortgage approval at the Community Bank', building: 'bank', icon: 'bank' },
+  { stage: 6, text: 'Sign your closing papers at City Hall', building: 'closing', icon: 'city-hall' },
+  { stage: 7, text: 'Enjoy your new home! You did it!', building: null, icon: 'celebration' },
 ];
 
 // Mini-map world bounds
@@ -34,63 +36,19 @@ function worldToMap(wx: number, wz: number): { x: number; y: number } {
   };
 }
 
-// ── Reusable corner close button (comic UI theme) ────────────────
-
-function PanelCloseButton({ onClose, title = 'Close' }: { onClose: () => void; title?: string }) {
-  return (
-    <button
-      onClick={(e) => { e.stopPropagation(); getAudioEngine().play('click'); onClose(); }}
-      title={title}
-      aria-label={title}
-      style={{
-        position: 'absolute',
-        top: -10,
-        right: -10,
-        zIndex: 5,
-        width: 22,
-        height: 22,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'var(--magenta)',
-        color: '#fff',
-        border: '2px solid var(--ink)',
-        borderRadius: 0,
-        boxShadow: '2px 2px 0px var(--gold)',
-        cursor: 'pointer',
-        fontFamily: 'var(--display-font)',
-        fontWeight: 800,
-        fontSize: 12,
-        lineHeight: 1,
-        pointerEvents: 'auto',
-      }}
-    >
-      ✕
-    </button>
-  );
-}
-
 // ── Mini-map ─────────────────────────────────────────────────────
 
 function MiniMap({ playerPosition, onClose }: { playerPosition: [number, number, number]; onClose: () => void }) {
   const px = worldToMap(playerPosition[0], playerPosition[2]);
 
   return (
-    <div
-      className="glass-panel glass-anim-in"
-      style={{
-        position: 'fixed',
-        top: 76,
-        right: 12,
-        zIndex: 32,
-        padding: 8,
-        pointerEvents: 'none',
-      }}
+    <DraggablePanel
+      id="minimap"
+      title="City Map"
+      icon="map"
+      defaultPosition={{ x: window.innerWidth - MAP_W - 40, y: 80 }}
+      onClose={onClose}
     >
-      <PanelCloseButton onClose={onClose} title="Hide City Map" />
-      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 5, textAlign: 'center', fontFamily: 'var(--display-font)' }}>
-        City Map
-      </div>
       <svg width={MAP_W} height={MAP_H} style={{ display: 'block', overflow: 'visible' }}>
         {/* Road grid */}
         {/* Main E-W road */}
@@ -126,10 +84,10 @@ function MiniMap({ playerPosition, onClose }: { playerPosition: [number, number,
         })}
 
         {/* Player position dot */}
-        <circle cx={px.x} cy={px.y} r={4} fill="#ffea00" opacity={0.95} />
-        <circle cx={px.x} cy={px.y} r={6} fill="none" stroke="#ffea00" strokeWidth={1} opacity={0.5} />
+        <circle cx={px.x} cy={px.y} r={4} fill="var(--gold)" opacity={0.95} />
+        <circle cx={px.x} cy={px.y} r={6} fill="none" stroke="var(--gold)" strokeWidth={1} opacity={0.5} />
       </svg>
-    </div>
+    </DraggablePanel>
   );
 }
 
@@ -139,32 +97,19 @@ function ObjectiveCard({ stage, onClose }: { stage: number; onClose: () => void 
   const obj = OBJECTIVES.find((o) => o.stage === stage) ?? OBJECTIVES[0];
 
   return (
-    <div
-      className="glass-chip glass-anim-in"
-      style={{
-        position: 'fixed',
-        bottom: 28,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 32,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-        padding: '8px 18px',
-        borderColor: 'rgba(255,234,0,0.35)',
-        fontSize: 13,
-        fontWeight: 600,
-        fontFamily: 'Inter, sans-serif',
-        pointerEvents: 'none',
-        whiteSpace: 'nowrap',
-        maxWidth: '90vw',
-      }}
+    <DraggablePanel
+      id="objective"
+      title="Objective"
+      icon="target"
+      defaultPosition={{ x: window.innerWidth / 2 - 150, y: window.innerHeight - 80 }}
+      onClose={onClose}
     >
-      <PanelCloseButton onClose={onClose} title="Hide Objective" />
-      <span>{obj.icon}</span>
-      <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: 0.6, marginRight: 2 }}>Next</span>
-      <span style={{ color: 'var(--glass-text)' }}>{obj.text}</span>
-    </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap' }}>
+        <GameIcon name={obj.icon} size={16} />
+        <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 11, letterSpacing: 0.6, marginRight: 2 }}>Next</span>
+        <span style={{ color: 'var(--glass-text)' }}>{obj.text}</span>
+      </div>
+    </DraggablePanel>
   );
 }
 
@@ -212,7 +157,7 @@ export function GameHUD() {
           </div>
           <div style={{ lineHeight: 1.25 }}>
             <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--glass-text)' }}>Newport News</div>
-            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: 0.8 }}>Housing Hub</div>
+            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', letterSpacing: 0.8 }}>Housing Hub</div>
           </div>
           <div
             className="glass-chip"
@@ -226,16 +171,19 @@ export function GameHUD() {
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}
           >
-            👤 {playerName}
+            <GameIcon name="player" size={14} /> {playerName}
           </div>
         </div>
 
         {/* Center: location + stage + month */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-          <div style={{ fontSize: 10, color: 'var(--glass-text-dim)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.6 }}>
-            {isCity ? '🗺️ Newport News City' : `📍 Month ${month} of 36`}
+          <div style={{ fontSize: 10, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6, display: 'flex', alignItems: 'center', gap: 4 }}>
+            {isCity ? <><GameIcon name="map" size={12} /> Newport News City</> : <><GameIcon name="pin" size={12} /> Month {month} of 36</>}
           </div>
           <div
             style={{
@@ -266,17 +214,17 @@ export function GameHUD() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <span>💰</span>
+            <GameIcon name="budget" size={14} color="var(--gold)" />
             <span>${cash.toLocaleString()}</span>
           </div>
           <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.16)' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <span>🏦</span>
+            <GameIcon name="bank" size={14} color="var(--teal)" />
             <span style={{ color: 'var(--teal)' }}>${savings.toLocaleString()}</span>
           </div>
           <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.16)' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <span>📊</span>
+            <GameIcon name="chart" size={14} color={creditScore >= 650 ? '#4ade80' : '#fbbf24'} />
             <span style={{ color: creditScore >= 650 ? '#4ade80' : '#fbbf24' }}>
               {creditScore}
             </span>
@@ -290,7 +238,7 @@ export function GameHUD() {
               className="glass-btn"
               style={{
                 ...(muted
-                  ? { background: 'rgba(255,234,0,0.18)', borderColor: 'rgba(255,234,0,0.5)', color: 'var(--gold)' }
+                  ? { background: 'rgba(212,168,67,0.18)', borderColor: 'rgba(212,168,67,0.5)', color: 'var(--gold)' }
                   : { color: 'var(--glass-text-dim)' }),
                 padding: '4px 7px',
                 borderRadius: 0,
@@ -302,7 +250,7 @@ export function GameHUD() {
             </button>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', letterSpacing: 0.5 }}>
                   Music
                 </span>
                 <input
@@ -316,13 +264,13 @@ export function GameHUD() {
                     width: 64,
                     height: 4,
                     cursor: 'pointer',
-                    accentColor: '#ffea00',
+                    accentColor: 'var(--gold)',
                     opacity: 0.85,
                   }}
                 />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--glass-text-faint)', width: 28, textAlign: 'right', letterSpacing: 0.5 }}>
                   SFX
                 </span>
                 <input
@@ -336,7 +284,7 @@ export function GameHUD() {
                     width: 64,
                     height: 4,
                     cursor: 'pointer',
-                    accentColor: '#00f0ff',
+                    accentColor: 'var(--teal)',
                     opacity: 0.85,
                   }}
                 />
@@ -350,7 +298,6 @@ export function GameHUD() {
             style={{
               fontSize: 10,
               fontWeight: 700,
-              textTransform: 'uppercase',
               letterSpacing: 0.5,
               padding: '4px 10px',
             }}
@@ -364,7 +311,6 @@ export function GameHUD() {
             style={{
               fontSize: 10,
               fontWeight: 700,
-              textTransform: 'uppercase',
               letterSpacing: 0.5,
               padding: '4px 10px',
               display: 'flex',
@@ -406,7 +352,7 @@ export function GameHUD() {
               textAlign: 'center',
             }}
           >
-            <div style={{ fontSize: 28, marginBottom: 8 }}>🚪</div>
+            <div style={{ fontSize: 28, marginBottom: 8, display: 'flex', justifyContent: 'center' }}><GameIcon name="exit" size={32} color="rgba(255,255,255,0.2)" /></div>
             <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--glass-text)', marginBottom: 8 }}>
               Quit to Menu?
             </div>
@@ -491,7 +437,7 @@ export function GameHUD() {
           height: 52,
           borderRadius: '50%',
           ...(phoneOpen
-            ? { boxShadow: '0 0 0 4px rgba(255,234,0,0.3), 0 8px 24px rgba(9,7,10,0.45), inset 0 1px 0 rgba(255,255,255,0.4)' }
+            ? { boxShadow: '0 0 0 4px rgba(212,168,67,0.3), 0 8px 24px rgba(9,7,10,0.45), inset 0 1px 0 rgba(255,255,255,0.4)' }
             : {}),
           display: 'flex',
           alignItems: 'center',
@@ -526,13 +472,12 @@ export function GameHUD() {
               color: 'var(--glass-text-dim)',
               fontSize: 11,
               fontWeight: 700,
-              textTransform: 'uppercase',
               letterSpacing: 0.5,
               cursor: 'pointer',
               fontFamily: 'Inter, sans-serif',
             }}
           >
-            📋 Life Events
+            <GameIcon name="documents" size={14} /> Life Events
             {logExpanded ? <ChevronDown size={12} /> : <ChevronUp size={12} />}
           </button>
           {logExpanded && (
@@ -547,7 +492,7 @@ export function GameHUD() {
                 padding: '12px 14px',
               }}
             >
-              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: 1, marginBottom: 8 }}>
                 Recent Events
               </div>
               {lifeEventLog.map((title, i) => (
@@ -606,7 +551,7 @@ export function GameHUD() {
                 pointerEvents: 'auto',
               }}
             >
-              🎯 Objective
+              <GameIcon name="target" size={14} /> Objective
             </button>
           )}
           {!showMiniMap && (
@@ -626,7 +571,7 @@ export function GameHUD() {
                 pointerEvents: 'auto',
               }}
             >
-              🗺️ Map
+              <GameIcon name="map" size={14} /> Map
             </button>
           )}
         </div>

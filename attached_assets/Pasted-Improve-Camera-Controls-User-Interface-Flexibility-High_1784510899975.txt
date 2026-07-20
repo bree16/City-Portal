@@ -1,0 +1,105 @@
+Improve Camera Controls & User Interface Flexibility (High Priority)
+
+The simulator should give players more control over both the camera and the interface.
+
+Currently, the objective panels and dialogue windows remain fixed on the screen and often block important parts of the environment.
+
+The camera also feels too restrictive.
+
+The experience should feel much more interactive and player-controlled.
+
+Draggable User Interface
+
+All major UI windows should be draggable.
+
+Examples:
+
+Objectives
+Budget panel
+Dialogue windows
+Tutorial panels
+Inventory
+Character information
+Achievement notifications (where appropriate)
+
+Players should be able to:
+
+Click and drag any window.
+Reposition it anywhere on the screen.
+Move it out of the way while exploring.
+Have it remember its last position during the current session.
+Minimize & Expand
+
+Large panels should include controls to:
+
+Minimize
+Collapse
+Expand
+Pin
+Close (when appropriate)
+
+For example, the Objectives panel could collapse into a small icon that expands again with one click.
+
+This prevents the UI from covering the game world.
+
+Camera Controls
+
+Expand the camera controls to make exploration feel more natural.
+
+Allow players to:
+
+Rotate left and right (Y-axis)
+Tilt the camera up and down (X-axis)
+Zoom in
+Zoom out
+Pan slightly around the player
+
+The camera should always remain centered on the player while giving enough freedom to comfortably inspect buildings, rooms, furniture, and NPCs.
+
+Mouse Controls
+
+Support intuitive controls such as:
+
+Left-click to move and interact.
+Click and drag to rotate the camera.
+Mouse wheel to zoom.
+Hold the right mouse button and drag to orbit the camera around the player.
+Double-click to move quickly to a destination (optional).
+
+Movement and camera controls should feel smooth and responsive.
+
+Camera Limits
+
+Prevent the camera from:
+
+Clipping through walls.
+Going below the ground.
+Rotating into awkward angles.
+Losing sight of the player.
+
+Maintain sensible limits while still allowing players to look around comfortably.
+
+Better Object Viewing
+
+Allow players to inspect important objects more easily.
+
+Examples:
+
+Houses
+Furniture
+Neighborhoods
+Parks
+Documents
+NPCs
+
+The improved camera should make exploring these areas enjoyable instead of frustrating.
+
+Automatic UI Behavior
+
+When entering a conversation or interacting with an object:
+
+Move pop-up panels to a location that does not block the interaction.
+Reposition tooltips automatically if they overlap with another panel.
+Avoid covering important NPCs or interactive objects.
+
+The interface should intelligently adapt to what the player is doing.

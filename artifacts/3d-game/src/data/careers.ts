@@ -1,7 +1,9 @@
+import { GameIconName } from '@/components/ui/GameIcon';
+
 export interface Career {
   id: string;
   name: string;
-  icon: string;
+  icon: GameIconName;
   description: string;
   flavorQuote: string;
   monthlyIncome: number;
@@ -16,7 +18,7 @@ export const careers: Career[] = [
   {
     id: 'shipbuilding',
     name: 'Shipbuilding',
-    icon: '⚓',
+    icon: 'anchor',
     description: 'Work at Newport News Shipbuilding, one of the largest shipyards in the US.',
     flavorQuote: '"Built with pride, ship by ship."',
     monthlyIncome: 4800,
@@ -25,7 +27,7 @@ export const careers: Career[] = [
   {
     id: 'healthcare',
     name: 'Healthcare',
-    icon: '🏥',
+    icon: 'health',
     description: 'Serve the community as a nurse, technician, or healthcare administrator.',
     flavorQuote: '"Caring for others starts with caring for yourself."',
     monthlyIncome: 4200,
@@ -34,7 +36,7 @@ export const careers: Career[] = [
   {
     id: 'technology',
     name: 'Technology',
-    icon: '💻',
+    icon: 'laptop',
     description: 'Work in cybersecurity, software, or defense tech at a local contractor.',
     flavorQuote: '"The future is built in code."',
     monthlyIncome: 5200,
@@ -43,7 +45,7 @@ export const careers: Career[] = [
   {
     id: 'government',
     name: 'Government',
-    icon: '🏛️',
+    icon: 'city-hall',
     description: 'Serve the City of Newport News or a federal agency in the region.',
     flavorQuote: '"Public service is its own reward."',
     monthlyIncome: 3800,
@@ -52,7 +54,7 @@ export const careers: Career[] = [
   {
     id: 'education',
     name: 'Education',
-    icon: '📚',
+    icon: 'book',
     description: 'Teach at Newport News Public Schools or Christopher Newport University.',
     flavorQuote: '"Every student is a future homeowner."',
     monthlyIncome: 3400,
@@ -61,7 +63,7 @@ export const careers: Career[] = [
   {
     id: 'military',
     name: 'Military',
-    icon: '🎖️',
+    icon: 'medal',
     description: 'Serve at Joint Base Langley–Eustis with housing and benefit support.',
     flavorQuote: '"Discipline builds wealth, one month at a time."',
     monthlyIncome: 3200,

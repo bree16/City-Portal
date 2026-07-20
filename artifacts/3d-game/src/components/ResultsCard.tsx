@@ -1,15 +1,16 @@
 import { useGameStore } from '@/store/gameStore';
 import { homes } from '@/data/homes';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GameIcon, GameIconName } from '@/components/ui/GameIcon';
 
-const ACHIEVEMENT_META: Record<string, { label: string; icon: string }> = {
-  budget_master:   { label: 'Budget Master',     icon: '💰' },
-  first_mortgage:  { label: 'Mortgage Ready',    icon: '📋' },
-  house_hunter:    { label: 'House Hunter',       icon: '🔍' },
-  credit_champion: { label: 'Credit Champion',   icon: '⭐' },
-  deal_maker:      { label: 'Deal Maker',        icon: '🤝' },
-  homeowner:       { label: 'New Homeowner',     icon: '🔑' },
-  dream_home:      { label: 'Dream Home Builder', icon: '🏡' },
+const ACHIEVEMENT_META: Record<string, { label: string; icon: GameIconName }> = {
+  budget_master:   { label: 'Budget Master',     icon: 'budget' },
+  first_mortgage:  { label: 'Mortgage Ready',    icon: 'documents' },
+  house_hunter:    { label: 'House Hunter',       icon: 'search' },
+  credit_champion: { label: 'Credit Champion',   icon: 'star' },
+  deal_maker:      { label: 'Deal Maker',        icon: 'handshake' },
+  homeowner:       { label: 'New Homeowner',     icon: 'keys' },
+  dream_home:      { label: 'Dream Home Builder', icon: 'sparkles' },
 };
 
 const INITIAL_CREDIT = 635;
@@ -104,7 +105,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
               padding: '10px 24px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
-              <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--ink)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--ink)', letterSpacing: '0.12em',  }}>
                 Newport News Housing Hub
               </span>
               <span style={{ fontSize: 11, color: 'var(--ink)', fontWeight: 700 }}>
@@ -119,20 +120,20 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                 {/* Character */}
                 <div style={{
                   flexShrink: 0,
-                  background: 'rgba(255,234,0,0.1)',
+                  background: 'rgba(212,168,67,0.1)',
                   borderRadius: 0,
                   padding: '12px 10px 6px',
                   border: 'var(--glass-border-gold)',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
                 }}>
                   <MiniCharacter {...characterAppearance} />
-                  <span style={{ fontSize: 10, color: 'var(--glass-text-dim)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.6 }}>Your Player</span>
+                  <span style={{ fontSize: 10, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6 }}>Your Player</span>
                 </div>
 
                 {/* Title block */}
                 <div style={{ flex: 1, paddingTop: 8 }}>
-                  <div style={{ fontSize: 11, color: 'var(--teal)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>
-                    🎉 Journey Complete!
+                  <div style={{ fontSize: 11, color: 'var(--teal)', fontWeight: 700, letterSpacing: '0.1em', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <GameIcon name="celebration" size={14} /> Journey Complete!
                   </div>
                   <div style={{ fontSize: 22, fontWeight: 900, color: 'var(--glass-text)', lineHeight: 1.2, marginBottom: 8 }}>
                     You're a Newport News Homeowner!
@@ -151,22 +152,22 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
 
               {/* Stats grid */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
-                <StatBox icon="🗓️" label="Months to Close" value={`${month} months`} />
+                <StatBox icon="calendar" label="Months to Close" value={`${month} months`} />
                 <StatBox
-                  icon="📈"
+                  icon="chart"
                   label="Credit Score Journey"
                   value={`${INITIAL_CREDIT} → ${creditScore}`}
                   subValue={creditGain >= 0 ? `+${creditGain} pts` : `${creditGain} pts`}
                   valueColor={creditGain >= 0 ? '#4ade80' : '#f87171'}
                 />
-                <StatBox icon="🏦" label="Total Savings Built" value={`$${savings.toLocaleString()}`} />
-                <StatBox icon="🛋️" label="Furniture Purchased" value={`${furnitureOwned.length} items`} />
+                <StatBox icon="bank" label="Total Savings Built" value={`${savings.toLocaleString()}`} />
+                <StatBox icon="furniture" label="Furniture Purchased" value={`${furnitureOwned.length} items`} />
               </div>
 
               {/* Achievements */}
               {earnedAchievements.length > 0 && (
                 <div style={{ marginBottom: 22 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: '0.1em', marginBottom: 10 }}>
                     Achievements Earned
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -178,7 +179,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                           padding: '5px 12px',
                           display: 'flex', alignItems: 'center', gap: 6,
                         }}>
-                          <span style={{ fontSize: 14 }}>{meta.icon}</span>
+                          <GameIcon name={meta.icon} size={14} />
                           <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--gold)' }}>{meta.label}</span>
                         </div>
                       );
@@ -193,7 +194,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                 border: '1px solid rgba(20,184,161,0.25)', marginBottom: 18,
                 display: 'flex', alignItems: 'center', gap: 8,
               }}>
-                <span style={{ fontSize: 16 }}>📸</span>
+                <GameIcon name="camera" size={16} />
                 <span style={{ fontSize: 11, color: 'var(--glass-text-dim)', lineHeight: 1.4 }}>
                   Take a screenshot to share your homebuying journey!
                 </span>
@@ -206,9 +207,10 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                   className="glass-btn"
                   style={{
                     flex: 1, padding: '12px 16px', fontWeight: 700, fontSize: 13,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
                   }}
                 >
-                  🔄 Play Again
+                  <GameIcon name="replay" size={14} /> Play Again
                 </button>
                 <a
                   href="/"
@@ -218,10 +220,10 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
                   style={{
                     flex: 1.4, padding: '12px 16px', fontSize: 13,
                     textDecoration: 'none', textAlign: 'center',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
                   }}
                 >
-                  🏠 Visit Newport News Housing Hub
+                  <GameIcon name="home" size={14} /> Visit Newport News Housing Hub
                 </a>
               </div>
             </div>
@@ -233,7 +235,7 @@ export function ResultsCard({ visible, onPlayAgain }: ResultsCardProps) {
 }
 
 function StatBox({ icon, label, value, subValue, valueColor }: {
-  icon: string; label: string; value: string; subValue?: string; valueColor?: string;
+  icon: GameIconName; label: string; value: string; subValue?: string; valueColor?: string;
 }) {
   return (
     <div style={{
@@ -242,8 +244,8 @@ function StatBox({ icon, label, value, subValue, valueColor }: {
       border: '1px solid rgba(255,255,255,0.1)',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-        <span style={{ fontSize: 14 }}>{icon}</span>
-        <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</span>
+        <GameIcon name={icon} size={14} />
+        <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--glass-text-faint)', letterSpacing: '0.08em' }}>{label}</span>
       </div>
       <div style={{ fontSize: 16, fontWeight: 800, color: valueColor ?? 'var(--glass-text)' }}>{value}</div>
       {subValue && <div style={{ fontSize: 11, color: valueColor ?? 'var(--glass-text-dim)', fontWeight: 600, marginTop: 2 }}>{subValue}</div>}

@@ -6,6 +6,8 @@ import { PottedPlant, TallPlant, WallArt, Curtains } from '@/components/decor/De
 import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChrome';
 import { motion } from 'framer-motion';
 
+import { GameIcon } from '@/components/ui/GameIcon';
+
 const FURNITURE_SLOTS = [
   {
     id: 'sofa_slot', label: 'Sofa',
@@ -99,34 +101,34 @@ export default function NewHomeScene() {
       {/* Hardwood floor */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[20, 16]} />
-        <meshStandardMaterial color="#2b0a3d" roughness={0.4} metalness={0.06} />
+        <meshStandardMaterial color="#64748B" roughness={0.4} metalness={0.06} />
       </mesh>
-      <gridHelper args={[20, 40, '#ff007f', '#ff007f']} position={[0, 0.005, 0]} />
+      <gridHelper args={[20, 40, '#1E3A8A', '#1E3A8A']} position={[0, 0.005, 0]} />
 
       {/* Rug */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-1, 0.01, -1.5]} receiveShadow>
         <planeGeometry args={[5.5, 4.5]} />
-        <meshStandardMaterial color="#00f0ff" roughness={0.95} />
+        <meshStandardMaterial color="#0F766E" roughness={0.95} />
       </mesh>
 
       {/* Walls */}
       <mesh position={[0, 2.5, -8]} receiveShadow>
         <boxGeometry args={[20, 5, 0.2]} />
-        <meshStandardMaterial color="#09070a" roughness={0.9} />
+        <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
       </mesh>
       <mesh position={[-10, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#110e15" roughness={0.9} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
       </mesh>
       <mesh position={[10, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#110e15" roughness={0.9} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
       </mesh>
 
       {/* Ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[20, 16]} />
-        <meshStandardMaterial color="#09070a" roughness={1} />
+        <meshStandardMaterial color="#F8FAFC" roughness={1} />
       </mesh>
 
       {/* Ceiling lights */}
@@ -134,36 +136,36 @@ export default function NewHomeScene() {
         <group key={x}>
           <mesh position={[x, 4.88, 0]}>
             <boxGeometry args={[1.4, 0.05, 0.5]} />
-            <meshStandardMaterial color="#ffffff" emissive="#ffea00" emissiveIntensity={1.4} />
+            <meshStandardMaterial color="#ffffff" emissive="#D4AF37" emissiveIntensity={1.4} />
           </mesh>
-          <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#ffea00" distance={10} />
+          <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#D4AF37" distance={10} />
         </group>
       ))}
 
       {/* Windows — warm sunlight */}
       <mesh position={[-2, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#09070a" emissive="#00f0ff" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[3.5, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#09070a" emissive="#00f0ff" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[-9.85, 1.8, 1]} castShadow>
         <boxGeometry args={[0.12, 1.5, 2.0]} />
-        <meshStandardMaterial color="#09070a" emissive="#00f0ff" emissiveIntensity={0.6} roughness={0.05} />
+        <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.6} roughness={0.05} />
       </mesh>
-      <pointLight position={[0, 3.0, -7]} intensity={1.2} color="#00f0ff" distance={12} />
+      <pointLight position={[0, 3.0, -7]} intensity={1.2} color="#0F766E" distance={12} />
 
       {/* Door */}
       <group position={[8.5, 0, 2.5]}>
         <mesh position={[0, 1.15, 0]} castShadow>
           <boxGeometry args={[0.12, 2.3, 1.1]} />
-          <meshStandardMaterial color="#1a0521" roughness={0.6} />
+          <meshStandardMaterial color="#A0522D" roughness={0.6} />
         </mesh>
         <mesh position={[0.1, 1.0, 0.42]}>
           <sphereGeometry args={[0.07, 8, 8]} />
-          <meshStandardMaterial color="#ffea00" metalness={0.9} roughness={0.08} />
+          <meshStandardMaterial color="#D4AF37" metalness={0.9} roughness={0.08} />
         </mesh>
       </group>
 
@@ -171,22 +173,22 @@ export default function NewHomeScene() {
       {([-9.9, 9.9] as number[]).map((x) => (
         <mesh key={x} position={[x, 0.08, 0]} castShadow>
           <boxGeometry args={[0.1, 0.16, 15.8]} />
-          <meshStandardMaterial color="#ff007f" roughness={0.8} />
+          <meshStandardMaterial color="#1E3A8A" roughness={0.8} />
         </mesh>
       ))}
 
       {/* Crown molding */}
       <mesh position={[0, 4.92, -7.9]}>
         <boxGeometry args={[20, 0.16, 0.12]} />
-        <meshStandardMaterial color="#ff007f" roughness={0.8} />
+        <meshStandardMaterial color="#1E3A8A" roughness={0.8} />
       </mesh>
 
       {/* ── Decor: moving-day warmth ── */}
       {/* Curtains framing the back windows (windows at z=-7.85) */}
-      <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#ff007f" />
-      <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#ff007f" />
+      <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#1E3A8A" />
+      <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#1E3A8A" />
       {/* Wall art on right wall (faces -x), away from door/slots */}
-      <WallArt position={[9.85, 2.9, -3]} rotation={[0, -Math.PI / 2, 0]} color="#00f0ff" w={1.3} h={0.95} />
+      <WallArt position={[9.85, 2.9, -3]} rotation={[0, -Math.PI / 2, 0]} color="#0F766E" w={1.3} h={0.95} />
       {/* Welcoming plants in corners */}
       <TallPlant position={[-8.5, 0, -6.5]} scale={1.0} />
       <PottedPlant position={[8.5, 0, -6.5]} scale={1.05} />
@@ -200,12 +202,12 @@ export default function NewHomeScene() {
           <group key={i}>
             <mesh position={b.p} castShadow>
               <boxGeometry args={b.s} />
-              <meshStandardMaterial color="#1a0521" roughness={0.95} />
+              <meshStandardMaterial color="#A0522D" roughness={0.95} />
             </mesh>
             {/* Tape strip */}
             <mesh position={[b.p[0], b.p[1] + b.s[1] / 2 + 0.001, b.p[2]]} rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[0.1, b.s[2]]} />
-              <meshStandardMaterial color="#ffea00" roughness={0.9} />
+              <meshStandardMaterial color="#D4AF37" roughness={0.9} />
             </mesh>
           </group>
         ))}
@@ -224,41 +226,43 @@ export default function NewHomeScene() {
             ) : (
               <mesh position={[0, 0.06, 0]} onPointerDown={(e) => { e.stopPropagation(); if (activeSlot !== slot.id) getAudioEngine().play('click'); setActiveSlot(activeSlot === slot.id ? null : slot.id); }} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = 'auto'; }}>
                 <boxGeometry args={[slot.size[0] + 0.2, 0.12, slot.size[2] + 0.2]} />
-                <meshStandardMaterial color="#ffea00" transparent opacity={0.45} emissive="#ffea00" emissiveIntensity={0.8} roughness={0.5} />
+                <meshStandardMaterial color="#D4AF37" transparent opacity={0.45} emissive="#D4AF37" emissiveIntensity={0.8} roughness={0.5} />
               </mesh>
             )}
             <Html position={[0, placed ? slot.size[1] + 0.55 : 0.55, 0]} center distanceFactor={10}>
               <div onPointerDown={(e) => { e.stopPropagation(); if (!placed) { if (activeSlot !== slot.id) getAudioEngine().play('click'); setActiveSlot(activeSlot === slot.id ? null : slot.id); } }} style={{
-                background: placed ? '#00f0ff' : '#ffea00',
-                color: placed ? '#fff' : '#09070a',
-                fontSize: 10, padding: '3px 10px', borderRadius: 0,
+                background: placed ? '#0F766E' : '#D4AF37',
+                color: placed ? '#fff' : '#F8FAFC',
+                fontSize: 10, padding: '3px 10px', borderRadius: 'var(--glass-radius)',
                 whiteSpace: 'nowrap', fontWeight: 700,
                 cursor: placed ? 'default' : 'pointer', fontFamily: 'Inter, sans-serif',
+                display: 'flex', alignItems: 'center', gap: 6
               }}>
-                {placed ? `✓ ${placed.name}` : `+ Add ${slot.label}`}
+                <GameIcon name={placed ? 'check' : 'furniture'} size={12} />
+                {placed ? placed.name : `Add ${slot.label}`}
               </div>
             </Html>
             {activeSlot === slot.id && !placed && (
               <Html position={[0, 1.8, 0]} center distanceFactor={10}>
                 <div style={{
-                  background: 'rgba(9,7,10,0.97)', borderRadius: 0, padding: '14px 18px',
+                  background: 'rgba(9,7,10,0.97)', borderRadius: 'var(--glass-radius)', padding: '14px 18px',
                   minWidth: 230, color: '#fff', fontFamily: 'var(--display-font)',
                   boxShadow: '0 8px 32px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.12)',
                 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 12, color: '#ffea00' }}>Choose {slot.label}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 12, color: '#D4AF37' }}>Choose {slot.label}</div>
                   {slot.options.map((opt) => (
                     <div key={opt.id} style={{
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                       marginBottom: 8, padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.08)',
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div style={{ width: 14, height: 14, borderRadius: 0, background: opt.color, flexShrink: 0 }} />
+                        <div style={{ width: 14, height: 14, borderRadius: 'var(--glass-radius)', background: opt.color, flexShrink: 0 }} />
                         <span style={{ fontSize: 12 }}>{opt.name}</span>
                       </div>
                       <button onClick={() => handleBuy(slot.id, opt.id, opt.price)} disabled={cash < opt.price} style={{
-                        padding: '5px 12px', borderRadius: 0,
-                        background: cash >= opt.price ? '#ffea00' : 'rgba(255,255,255,0.08)',
-                        color: cash >= opt.price ? '#09070a' : 'rgba(255,255,255,0.35)',
+                        padding: '5px 12px', borderRadius: 'var(--glass-radius)',
+                        background: cash >= opt.price ? '#D4AF37' : 'rgba(255,255,255,0.08)',
+                        color: cash >= opt.price ? '#F8FAFC' : 'rgba(255,255,255,0.35)',
                         border: 'none', cursor: cash >= opt.price ? 'pointer' : 'default',
                         fontWeight: 700, fontSize: 11, fontFamily: 'Inter, sans-serif', flexShrink: 0,
                       }}>
@@ -280,16 +284,18 @@ export default function NewHomeScene() {
       {/* Welcome banner */}
       <Html position={[0, 5.2, -4]} center distanceFactor={18}>
         {!welcomeOpen ? (
-          <ScenePanelReopen onOpen={() => setWelcomeOpen(true)} label="🏡 Welcome Info" />
+          <ScenePanelReopen onOpen={() => setWelcomeOpen(true)} label="Welcome Info" icon="home" />
         ) : (
         <div style={{
           position: 'relative',
-          background: 'rgba(255,234,0,0.95)', borderRadius: 0, padding: '12px 28px',
-          color: '#09070a', fontFamily: 'var(--display-font)', textAlign: 'center',
+          background: 'rgba(212,175,55,0.95)', borderRadius: 'var(--glass-radius)', padding: '12px 28px',
+          color: '#0F172A', fontFamily: 'var(--display-font)', textAlign: 'center',
           boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
         }}>
           <ScenePanelClose onClose={() => setWelcomeOpen(false)} title="Hide Welcome" />
-          <div style={{ fontSize: 18, fontWeight: 800 }}>🏡 Welcome Home!</div>
+          <div style={{ fontSize: 18, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+            <GameIcon name="home" size={20} /> Welcome Home!
+          </div>
           <div style={{ fontSize: 12, marginTop: 4, fontWeight: 600 }}>
             Budget: <strong>${cash.toLocaleString()}</strong> | Click golden spots to furnish
           </div>
@@ -309,20 +315,21 @@ export default function NewHomeScene() {
           }}
           style={{
             padding: '14px 32px',
-            borderRadius: 0,
-            background: 'linear-gradient(135deg, #ffea00 0%, #F5C842 100%)',
-            color: '#09070a',
+            borderRadius: 'var(--glass-radius)',
+            background: 'linear-gradient(135deg, var(--gold) 0%, #F5C842 100%)',
+            color: '#0F172A',
             fontWeight: 800,
             fontSize: 15,
             border: 'none',
             cursor: 'pointer',
             fontFamily: 'Inter, sans-serif',
-            boxShadow: '0 8px 32px rgba(255,234,0,0.55)',
+            boxShadow: '0 8px 32px rgba(212,175,55,0.55)',
             whiteSpace: 'nowrap',
             letterSpacing: '0.02em',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
           }}
         >
-          🏡 Begin Home Life →
+          <GameIcon name="home" size={16} /> Begin Home Life →
         </motion.button>
       </Html>
 
@@ -335,20 +342,21 @@ export default function NewHomeScene() {
           onClick={() => setShowResultsCard(true)}
           style={{
             padding: '12px 28px',
-            borderRadius: 0,
-            background: 'linear-gradient(135deg, #00f0ff 0%, #09070a 100%)',
+            borderRadius: 'var(--glass-radius)',
+            background: 'linear-gradient(135deg, var(--teal) 0%, #0F172A 100%)',
             color: '#fff',
             fontWeight: 800,
             fontSize: 14,
-            border: '2px solid rgba(255,234,0,0.7)',
+            border: '2px solid rgba(212,175,55,0.7)',
             cursor: 'pointer',
             fontFamily: 'Inter, sans-serif',
             boxShadow: '0 8px 28px rgba(0,0,0,0.45)',
             whiteSpace: 'nowrap',
             letterSpacing: '0.02em',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8
           }}
         >
-          🏆 View Your Journey
+          <GameIcon name="sparkles" size={16} /> View Your Journey
         </motion.button>
       </Html>
 
@@ -356,12 +364,14 @@ export default function NewHomeScene() {
       {tip && (
         <Html position={[0, 4.2, 5]} center distanceFactor={16}>
           <div style={{
-            background: 'rgba(0,240,255,0.95)', borderRadius: 0, padding: '12px 18px',
+            background: 'rgba(15,118,110,0.95)', borderRadius: 'var(--glass-radius)', padding: '12px 18px',
             maxWidth: 300, color: '#fff', fontFamily: 'var(--display-font)',
             boxShadow: '0 8px 32px rgba(0,0,0,0.3)', textAlign: 'center',
             fontSize: 12, lineHeight: 1.5,
           }}>
-            <div style={{ fontWeight: 700, marginBottom: 4, color: '#ffea00' }}>💡 Financial Tip</div>
+            <div style={{ fontWeight: 700, marginBottom: 4, color: '#D4AF37', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+              <GameIcon name="lightbulb" size={14} /> Financial Tip
+            </div>
             {tip}
           </div>
         </Html>

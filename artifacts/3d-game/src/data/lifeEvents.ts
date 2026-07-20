@@ -1,3 +1,5 @@
+import { GameIconName } from '@/components/ui/GameIcon';
+
 export interface LifeEventEffect {
   type: 'cash' | 'savings' | 'income' | 'expenses' | 'credit';
   delta: number;
@@ -5,7 +7,7 @@ export interface LifeEventEffect {
 
 export interface LifeEvent {
   id: string;
-  icon: string;
+  icon: GameIconName;
   title: string;
   description: string;
   effect: LifeEventEffect;
@@ -15,7 +17,7 @@ export interface LifeEvent {
 export const lifeEvents: LifeEvent[] = [
   {
     id: 'car_repair',
-    icon: '🚗',
+    icon: 'car',
     title: 'Unexpected Car Repair',
     description: 'Your transmission went out. The mechanic says it\'ll cost $450 to fix — you need it to get to work.',
     effect: { type: 'cash', delta: -450 },
@@ -23,7 +25,7 @@ export const lifeEvents: LifeEvent[] = [
   },
   {
     id: 'small_raise',
-    icon: '📈',
+    icon: 'trend-up',
     title: 'You Got a Raise!',
     description: 'Your manager recognized your hard work. Starting next month, you\'ll earn an extra $150/month.',
     effect: { type: 'income', delta: 150 },
@@ -31,7 +33,7 @@ export const lifeEvents: LifeEvent[] = [
   },
   {
     id: 'medical_copay',
-    icon: '💊',
+    icon: 'pill',
     title: 'Medical Co-Pay',
     description: 'A routine checkup turned into unexpected tests. Your insurance covered most of it, but you owe $300.',
     effect: { type: 'cash', delta: -300 },
@@ -39,7 +41,7 @@ export const lifeEvents: LifeEvent[] = [
   },
   {
     id: 'friend_repaid',
-    icon: '🤝',
+    icon: 'handshake',
     title: 'Friend Paid You Back',
     description: 'Remember that $600 you lent your friend last year? They finally paid you back — in cash.',
     effect: { type: 'cash', delta: 600 },
@@ -47,7 +49,7 @@ export const lifeEvents: LifeEvent[] = [
   },
   {
     id: 'rent_increase',
-    icon: '🏠',
+    icon: 'home',
     title: 'Rent Increased',
     description: 'Your landlord sent a notice: rent goes up $80/month starting next month. "Market rates," he says.',
     effect: { type: 'expenses', delta: 80 },
@@ -55,7 +57,7 @@ export const lifeEvents: LifeEvent[] = [
   },
   {
     id: 'credit_card_interest',
-    icon: '💳',
+    icon: 'credit-card',
     title: 'Credit Card Interest Hit',
     description: 'You carried a balance this month. $180 disappeared to interest charges — money that built no equity.',
     effect: { type: 'savings', delta: -180 },
@@ -63,7 +65,7 @@ export const lifeEvents: LifeEvent[] = [
   },
   {
     id: 'side_gig',
-    icon: '🛵',
+    icon: 'scooter',
     title: 'Side Gig Pays Off',
     description: 'You picked up some weekend delivery shifts. Extra hustle = $350 straight to your pocket.',
     effect: { type: 'cash', delta: 350 },
@@ -71,7 +73,7 @@ export const lifeEvents: LifeEvent[] = [
   },
   {
     id: 'utility_spike',
-    icon: '⚡',
+    icon: 'lightning',
     title: 'Utility Bill Spike',
     description: 'A heatwave hit Newport News. Your electric bill was $220 higher than normal this month.',
     effect: { type: 'cash', delta: -220 },
@@ -79,7 +81,7 @@ export const lifeEvents: LifeEvent[] = [
   },
   {
     id: 'tax_refund',
-    icon: '📬',
+    icon: 'mail',
     title: 'Tax Refund Arrived',
     description: 'The IRS processed your return faster than expected. $780 landed in your account today.',
     effect: { type: 'savings', delta: 780 },
@@ -87,7 +89,7 @@ export const lifeEvents: LifeEvent[] = [
   },
   {
     id: 'grocery_savings',
-    icon: '🛒',
+    icon: 'cart',
     title: 'Grocery Savings',
     description: 'You started meal planning and used coupons strategically. Saved $120 compared to last month.',
     effect: { type: 'cash', delta: 120 },
@@ -95,7 +97,7 @@ export const lifeEvents: LifeEvent[] = [
   },
   {
     id: 'subscription_creep',
-    icon: '📺',
+    icon: 'tv',
     title: 'Subscription Creep',
     description: 'You noticed 4 streaming services you forgot to cancel. That\'s $75/month going nowhere.',
     effect: { type: 'cash', delta: -75 },
@@ -103,7 +105,7 @@ export const lifeEvents: LifeEvent[] = [
   },
   {
     id: 'credit_boost',
-    icon: '🌟',
+    icon: 'star',
     title: 'On-Time Payments Paid Off',
     description: 'Six months of on-time payments. Your credit bureau report updated — score ticked up.',
     effect: { type: 'credit', delta: 12 },

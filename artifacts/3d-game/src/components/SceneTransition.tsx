@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useGameStore } from '@/store/gameStore';
+import { GameIcon, GameIconName } from '@/components/ui/GameIcon';
 
 const STAGE_NAMES = [
   '',
@@ -25,7 +26,7 @@ const STAGE_SUBTITLES = [
   'Build equity and grow your wealth',
 ];
 
-const STAGE_ICONS = ['', '🏠', '📋', '🏘️', '🤝', '🏦', '🎉', '🛋️', '🏡'];
+const STAGE_ICONS: GameIconName[] = ['warning', 'home', 'documents', 'neighborhood', 'handshake', 'bank', 'celebration', 'furniture', 'sparkles'];
 
 export function SceneTransition() {
   const { transitioning, stage } = useGameStore();
@@ -56,13 +57,13 @@ export function SceneTransition() {
             transition={{ delay: 0.25, duration: 0.4 }}
             style={{ textAlign: 'center' }}
           >
-            <div style={{ fontSize: 56, marginBottom: 16 }}>{STAGE_ICONS[stage]}</div>
+            <div style={{ fontSize: 56, marginBottom: 16, display: 'flex', justifyContent: 'center' }}><GameIcon name={STAGE_ICONS[stage] || 'warning'} size={64} color="#fff" /></div>
             <div
               style={{
                 fontSize: 12,
                 fontWeight: 700,
-                color: '#ffea00',
-                textTransform: 'uppercase',
+                color: 'var(--gold)',
+                
                 letterSpacing: 3,
                 marginBottom: 12,
               }}
@@ -83,7 +84,7 @@ export function SceneTransition() {
                   key={i}
                   animate={{ opacity: [0.3, 1, 0.3] }}
                   transition={{ repeat: Infinity, duration: 1.2, delay: i * 0.2 }}
-                  style={{ width: 8, height: 8, borderRadius: '50%', background: '#ffea00' }}
+                  style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--gold)' }}
                 />
               ))}
             </div>

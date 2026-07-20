@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useGameStore } from '@/store/gameStore';
 import { resolveWalkTarget } from '@/lib/obstacles';
+import { cameraDrag } from '@/lib/cameraDrag';
 
 interface GroundPlaneProps {
   size?: number;
@@ -60,11 +61,11 @@ function ClickFeedback() {
     <>
       <mesh ref={rippleRef} rotation={[-Math.PI / 2, 0, 0]} visible={false}>
         <ringGeometry args={[0.28, 0.38, 32]} />
-        <meshBasicMaterial color="#ffea00" transparent opacity={0} depthWrite={false} />
+        <meshBasicMaterial color="#D4AF37" transparent opacity={0} depthWrite={false} />
       </mesh>
       <mesh ref={markerRef} rotation={[-Math.PI / 2, 0, 0]} visible={false}>
         <ringGeometry args={[0.3, 0.42, 32]} />
-        <meshBasicMaterial color="#00f0ff" transparent opacity={0.85} depthWrite={false} />
+        <meshBasicMaterial color="#38BDF8" transparent opacity={0.85} depthWrite={false} />
       </mesh>
     </>
   );
@@ -78,8 +79,14 @@ export function GroundPlane({ size = 60 }: GroundPlaneProps) {
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, 0.005, 0]}
-        onPointerDown={(e) => {
+        // Resolve movement on pointer-UP so we can suppress clicks that were
+        // actually the end of a camera orbit/pan drag (see cameraDrag.moved).
+        onPointerUp={(e) => {
           e.stopPropagation();
+          // Only left-clicks move the player; ignore right/middle (orbit) buttons.
+          if (e.button !== 0) return;
+          // If the pointer travelled past the drag threshold, this was a drag.
+          if (cameraDrag.moved) return;
           // Snap the click to the nearest legal walk target (outside obstacles, in bounds)
           const [x, z] = resolveWalkTarget(e.point.x, e.point.z);
           setPlayerTarget([x, 0, z]);

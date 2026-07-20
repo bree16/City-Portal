@@ -8,9 +8,10 @@ import { useGameStore } from '@/store/gameStore';
 import { homes } from '@/data/homes';
 import { Bush, FlowerBed, TallPlant } from '@/components/decor/DecorKit';
 import { ScenePanelClose, ScenePanelReopen } from '@/components/ui/ScenePanelChrome';
+import { GameIcon } from '@/components/ui/GameIcon';
 
-const HOUSE_COLORS = ['#110e15', '#2b0a3d', '#1a0521', '#1a0a2a'];
-const ROOF_COLORS = ['#ff007f', '#00f0ff', '#ffea00', '#ff007f'];
+const HOUSE_COLORS = ['#E2E8F0', '#64748B', '#A0522D', '#8B5A2B'];
+const ROOF_COLORS = ['#1E3A8A', '#0F766E', '#D4AF37', '#1E3A8A'];
 
 const AGENTS: Array<Omit<NPCDef, 'position' | 'rotation'>> = [
   { id: 'agent_h', name: 'Agent Maya', role: 'Realtor', skinTone: '#FDBCB4', hairColor: '#1a0a00', shirtColor: '#D4A843', pantsColor: '#2C2C2C' },
@@ -50,23 +51,23 @@ export default function NeighborhoodScene() {
       {/* Grass — PBR */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[60, 22]} />
-        <meshStandardMaterial color="#09070a" roughness={0.95} metalness={0} />
+        <meshStandardMaterial color="#F8FAFC" roughness={0.95} metalness={0} />
       </mesh>
       {/* Sidewalk */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 3.5]} receiveShadow>
         <planeGeometry args={[60, 3]} />
-        <meshStandardMaterial color="#110e15" roughness={0.85} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.85} />
       </mesh>
       {/* Road */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.008, 7]} receiveShadow>
         <planeGeometry args={[60, 5]} />
-        <meshStandardMaterial color="#1a0a2a" roughness={0.9} />
+        <meshStandardMaterial color="#8B5A2B" roughness={0.9} />
       </mesh>
       {/* Road lines */}
       {[-15, -5, 5, 15].map((x) => (
         <mesh key={x} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.015, 7]} receiveShadow>
           <planeGeometry args={[2.5, 0.18]} />
-          <meshStandardMaterial color="#00f0ff" roughness={0.6} emissive="#00f0ff" emissiveIntensity={0.5} />
+          <meshStandardMaterial color="#0F766E" roughness={0.6} emissive="#0F766E" emissiveIntensity={0.5} />
         </mesh>
       ))}
 
@@ -74,34 +75,34 @@ export default function NeighborhoodScene() {
       {([[-20, -4], [-10, -5], [0, -4.5], [10, -5], [20, -4], [-5, 1], [15, 1]] as [number, number][]).map(([x, z], i) => (
         <mesh key={`gp-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.006, z]} receiveShadow>
           <circleGeometry args={[1.2 + (i % 3) * 0.4, 14]} />
-          <meshStandardMaterial color={i % 2 ? '#1a0521' : '#2b0a3d'} roughness={1} />
+          <meshStandardMaterial color={i % 2 ? '#A0522D' : '#64748B'} roughness={1} />
         </mesh>
       ))}
 
       {/* Corner bushes between the lots along the sidewalk verge */}
       {([-20, -10, 0, 10, 20] as number[]).map((x, i) => (
-        <Bush key={`vb-${x}`} position={[x, 0, 1.6]} scale={0.7 + (i % 3) * 0.15} color={i % 2 ? '#ff007f' : '#00f0ff'} />
+        <Bush key={`vb-${x}`} position={[x, 0, 1.6]} scale={0.7 + (i % 3) * 0.15} color={i % 2 ? '#1E3A8A' : '#0F766E'} />
       ))}
 
       {/* Sky backdrop */}
       <mesh position={[0, 8, -25]}>
         <planeGeometry args={[80, 24]} />
-        <meshStandardMaterial color="#09070a" roughness={1} side={2} />
+        <meshStandardMaterial color="#F8FAFC" roughness={1} side={2} />
       </mesh>
       {/* Clouds */}
       {[[-12, 10, -20], [8, 12, -22], [20, 9, -18]].map(([x, y, z], i) => (
         <group key={i} position={[x, y, z]}>
           <mesh>
             <sphereGeometry args={[1.5, 10, 10]} />
-            <meshStandardMaterial color="#1a0a2a" roughness={1} />
+            <meshStandardMaterial color="#8B5A2B" roughness={1} />
           </mesh>
           <mesh position={[1.2, 0.3, 0]}>
             <sphereGeometry args={[1.1, 10, 10]} />
-            <meshStandardMaterial color="#1a0a2a" roughness={1} />
+            <meshStandardMaterial color="#8B5A2B" roughness={1} />
           </mesh>
           <mesh position={[-1.0, 0.2, 0]}>
             <sphereGeometry args={[1.0, 10, 10]} />
-            <meshStandardMaterial color="#1a0a2a" roughness={1} />
+            <meshStandardMaterial color="#8B5A2B" roughness={1} />
           </mesh>
         </group>
       ))}
@@ -125,62 +126,62 @@ export default function NeighborhoodScene() {
             {/* Front door */}
             <mesh position={[0, 0.7, 2.26]} castShadow>
               <boxGeometry args={[1.0, 1.4, 0.1]} />
-              <meshStandardMaterial color="#2b0a3d" roughness={0.6} />
+              <meshStandardMaterial color="#64748B" roughness={0.6} />
             </mesh>
             <mesh position={[0.38, 0.7, 2.32]}>
               <sphereGeometry args={[0.06, 8, 8]} />
-              <meshStandardMaterial color="#00f0ff" metalness={0.85} roughness={0.1} />
+              <meshStandardMaterial color="#0F766E" metalness={0.85} roughness={0.1} />
             </mesh>
             {/* Front windows — glowing warm */}
             {[-1.8, 1.8].map((wx) => (
               <mesh key={wx} position={[wx, 1.5, 2.28]} castShadow>
                 <boxGeometry args={[1.0, 0.85, 0.1]} />
-                <meshStandardMaterial color="#09070a" emissive="#ffea00" emissiveIntensity={0.5} roughness={0.1} />
+                <meshStandardMaterial color="#F8FAFC" emissive="#D4AF37" emissiveIntensity={0.5} roughness={0.1} />
               </mesh>
             ))}
             {/* Side window */}
             <mesh position={[2.76, 1.5, 0]} castShadow>
               <boxGeometry args={[0.1, 0.8, 0.9]} />
-              <meshStandardMaterial color="#09070a" emissive="#00f0ff" emissiveIntensity={0.3} roughness={0.1} />
+              <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.3} roughness={0.1} />
             </mesh>
             {/* Window glow */}
-            <pointLight position={[0, 1.8, 2.5]} intensity={0.4} color="#ffea00" distance={3} />
+            <pointLight position={[0, 1.8, 2.5]} intensity={0.4} color="#D4AF37" distance={3} />
             {/* Chimney */}
             <mesh position={[1.8, 3.0, -0.5]} castShadow>
               <boxGeometry args={[0.45, 1.2, 0.45]} />
-              <meshStandardMaterial color="#1a0a2a" roughness={0.8} />
+              <meshStandardMaterial color="#8B5A2B" roughness={0.8} />
             </mesh>
             {/* Tree */}
             <group position={[-3.2, 0, 0.5]}>
               <mesh position={[0, 0.7, 0]} castShadow>
                 <cylinderGeometry args={[0.14, 0.2, 1.4, 6]} />
-                <meshStandardMaterial color="#1a0521" roughness={0.8} />
+                <meshStandardMaterial color="#A0522D" roughness={0.8} />
               </mesh>
               <mesh position={[0, 1.8, 0]} castShadow>
                 <sphereGeometry args={[0.9, 10, 10]} />
-                <meshStandardMaterial color="#00f0ff" roughness={0.9} />
+                <meshStandardMaterial color="#0F766E" roughness={0.9} />
               </mesh>
             </group>
             {/* Mailbox */}
             <group position={[3.5, 0, 2.5]}>
               <mesh position={[0, 0.5, 0]} castShadow>
                 <cylinderGeometry args={[0.04, 0.04, 1.0, 6]} />
-                <meshStandardMaterial color="#ff007f" metalness={0.6} roughness={0.3} />
+                <meshStandardMaterial color="#1E3A8A" metalness={0.6} roughness={0.3} />
               </mesh>
               <mesh position={[0, 0.9, 0]} castShadow>
                 <boxGeometry args={[0.28, 0.18, 0.18]} />
-                <meshStandardMaterial color="#2b0a3d" roughness={0.5} metalness={0.2} />
+                <meshStandardMaterial color="#64748B" roughness={0.5} metalness={0.2} />
               </mesh>
               {/* Red flag */}
               <mesh position={[0.16, 0.95, 0]} castShadow>
                 <boxGeometry args={[0.04, 0.14, 0.02]} />
-                <meshStandardMaterial color="#00f0ff" roughness={0.6} />
+                <meshStandardMaterial color="#0F766E" roughness={0.6} />
               </mesh>
             </group>
 
             {/* Foundation shrubs flanking the front door (small, off walkway) */}
-            <Bush position={[-1.5, 0, 2.5]} scale={0.75} color={idx % 2 ? '#ff007f' : '#ffea00'} />
-            <Bush position={[1.5, 0, 2.5]} scale={0.75} color={idx % 2 ? '#ffea00' : '#ff007f'} />
+            <Bush position={[-1.5, 0, 2.5]} scale={0.75} color={idx % 2 ? '#1E3A8A' : '#D4AF37'} />
+            <Bush position={[1.5, 0, 2.5]} scale={0.75} color={idx % 2 ? '#D4AF37' : '#1E3A8A'} />
 
             {/* Flower beds under the front windows */}
             <FlowerBed position={[-1.8, 0, 2.55]} w={1.3} d={0.5} />
@@ -193,7 +194,7 @@ export default function NeighborhoodScene() {
             {[3.2, 4.0, 4.8, 5.6].map((z, i) => (
               <mesh key={`path-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.012, z]} receiveShadow>
                 <circleGeometry args={[0.45, 12]} />
-                <meshStandardMaterial color="#ffea00" roughness={0.9} />
+                <meshStandardMaterial color="#D4AF37" roughness={0.9} />
               </mesh>
             ))}
 
@@ -201,38 +202,38 @@ export default function NeighborhoodScene() {
             {viewingHome === home.id && (
               <Html position={[0, 5.5, 0]} center distanceFactor={13}>
                 <div style={{
-                  background: '#fff', borderRadius: 0, padding: '16px', minWidth: 210,
+                  background: '#fff', borderRadius: 'var(--glass-radius)', padding: '16px', minWidth: 210,
                   boxShadow: '0 8px 32px rgba(0,0,0,0.25)', fontFamily: 'var(--display-font)',
-                  border: '2px solid #09070a',
+                  border: '2px solid #0F172A',
                 }}>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: '#09070a', marginBottom: 2 }}>{home.name}</div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: '#0F172A', marginBottom: 2 }}>{home.name}</div>
                   <div style={{ fontSize: 11, color: '#777', marginBottom: 10 }}>{home.neighborhood}</div>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: '#00f0ff', marginBottom: 8 }}>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: '#0F766E', marginBottom: 8 }}>
                     ${home.price.toLocaleString()}
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 8px', fontSize: 11, marginBottom: 10 }}>
-                    <span>🛏 {home.beds} beds</span>
-                    <span>🚿 {home.baths} baths</span>
-                    <span>📐 {home.sqft} sqft</span>
-                    <span>🚗 {home.commute} min</span>
-                    <span>🏫 {home.schools}★</span>
-                    <span>🚶 {home.walkability}/100</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="bed" size={12} /> {home.beds} beds</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="bath" size={12} /> {home.baths} baths</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="ruler" size={12} /> {home.sqft} sqft</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="car" size={12} /> {home.commute} min</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="school" size={12} /> {home.schools} <GameIcon name="star" size={10} color="#D4AF37" /></span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GameIcon name="walk" size={12} /> {home.walkability}/100</span>
                   </div>
                   <div style={{ fontSize: 11, color: '#555', marginBottom: 12 }}>
                     Est. payment: <strong>${home.monthlyPayment}/mo</strong>
                   </div>
                   <button onClick={() => handleStartTour(home.id)} style={{
-                    width: '100%', padding: '9px', borderRadius: 0,
-                    background: '#00f0ff', color: '#fff', border: 'none',
+                    width: '100%', padding: '9px', borderRadius: 'var(--glass-radius)',
+                    background: '#0F766E', color: '#fff', border: 'none',
                     cursor: 'pointer', fontWeight: 800, fontSize: 12, fontFamily: 'Inter, sans-serif',
-                    marginBottom: 6,
+                    marginBottom: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
                   }}>
-                    🏠 Schedule Tour →
+                    <GameIcon name="home" size={14} /> Schedule Tour →
                   </button>
                   <button onClick={() => handleSelectHome(home.id)} style={{
-                    width: '100%', padding: '7px', borderRadius: 0,
-                    background: 'rgba(255,234,0,0.15)', color: '#ffea00',
-                    border: '1px solid rgba(255,234,0,0.4)',
+                    width: '100%', padding: '7px', borderRadius: 'var(--glass-radius)',
+                    background: 'rgba(212,175,55,0.15)', color: '#D4AF37',
+                    border: '1px solid rgba(212,175,55,0.4)',
                     cursor: 'pointer', fontWeight: 700, fontSize: 11, fontFamily: 'Inter, sans-serif',
                   }}>
                     Skip Tour — Make an Offer
@@ -265,16 +266,16 @@ export default function NeighborhoodScene() {
       {/* Instructions */}
       <Html position={[0, 5, 8]} center distanceFactor={16}>
         {!instructionsOpen ? (
-          <ScenePanelReopen onOpen={() => setInstructionsOpen(true)} label="❓ Instructions" />
+          <ScenePanelReopen onOpen={() => setInstructionsOpen(true)} label="Instructions" icon="question" />
         ) : (
         <div style={{
           position: 'relative',
-          background: 'rgba(9,7,10,0.88)', borderRadius: 0, padding: '12px 20px',
+          background: 'rgba(9,7,10,0.88)', borderRadius: 'var(--glass-radius)', padding: '12px 20px',
           color: '#fff', fontFamily: 'var(--display-font)', fontSize: 12,
           textAlign: 'center', backdropFilter: 'blur(8px)',
         }}>
           <ScenePanelClose onClose={() => setInstructionsOpen(false)} title="Hide Instructions" />
-          <div style={{ fontWeight: 700, color: '#ffea00', marginBottom: 4 }}>House Hunting!</div>
+          <div style={{ fontWeight: 700, color: '#D4AF37', marginBottom: 4 }}>House Hunting!</div>
           <div style={{ color: 'rgba(255,255,255,0.7)' }}>Click the real estate agents to view each listing</div>
         </div>
         )}

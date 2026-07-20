@@ -5,6 +5,7 @@ import { useGameStore } from '@/store/gameStore';
 import { buildings, buildingRequiredStage } from '@/data/buildings';
 import type { BuildingDef } from '@/data/buildings';
 import { Bush, FlowerBed } from '@/components/decor/DecorKit';
+import { GameIcon } from '@/components/ui/GameIcon';
 
 /* ── Reusable primitives ──────────────────────────────────────── */
 
@@ -13,7 +14,7 @@ function Tree({ position }: { position: [number, number, number] }) {
     <group position={position}>
       <mesh position={[0, 0.6, 0]} castShadow>
         <cylinderGeometry args={[0.14, 0.18, 1.2, 6]} />
-        <meshStandardMaterial color="#1a0a2a" roughness={0.9} />
+        <meshStandardMaterial color="#8B5A2B" roughness={0.9} />
       </mesh>
       <mesh position={[0, 1.9, 0]} castShadow>
         <sphereGeometry args={[0.7, 8, 7]} />
@@ -21,7 +22,7 @@ function Tree({ position }: { position: [number, number, number] }) {
       </mesh>
       <mesh position={[0, 2.5, 0]} castShadow>
         <sphereGeometry args={[0.45, 8, 7]} />
-        <meshStandardMaterial color="#00f0ff" roughness={0.8} />
+        <meshStandardMaterial color="#0F766E" roughness={0.8} />
       </mesh>
     </group>
   );
@@ -32,17 +33,17 @@ function StreetLight({ position }: { position: [number, number, number] }) {
     <group position={position}>
       <mesh castShadow>
         <cylinderGeometry args={[0.06, 0.08, 4.5, 6]} />
-        <meshStandardMaterial color="#110e15" roughness={0.5} metalness={0.4} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.5} metalness={0.4} />
       </mesh>
       <mesh position={[0.5, 2.0, 0]} rotation={[0, 0, Math.PI / 2]}>
         <cylinderGeometry args={[0.04, 0.04, 1.0, 5]} />
-        <meshStandardMaterial color="#110e15" metalness={0.5} />
+        <meshStandardMaterial color="#E2E8F0" metalness={0.5} />
       </mesh>
       <mesh position={[1.0, 2.0, 0]} castShadow>
         <sphereGeometry args={[0.14, 8, 8]} />
-        <meshStandardMaterial color="#ffffff" emissive="#ffea00" emissiveIntensity={1.5} />
+        <meshStandardMaterial color="#ffffff" emissive="#D4AF37" emissiveIntensity={1.5} />
       </mesh>
-      <pointLight position={[1.0, 2.0, 0]} intensity={0.5} color="#ffea00" distance={8} decay={2} />
+      <pointLight position={[1.0, 2.0, 0]} intensity={0.5} color="#D4AF37" distance={8} decay={2} />
     </group>
   );
 }
@@ -63,7 +64,7 @@ function ParkedCar({ position, color, rotation = 0 }: { position: [number, numbe
         ([-0.42, 0.42] as number[]).map((z) => (
           <mesh key={`${x}${z}`} position={[x, 0.12, z]} rotation={[Math.PI / 2, 0, 0]}>
             <cylinderGeometry args={[0.14, 0.14, 0.1, 8]} />
-            <meshStandardMaterial color="#09070a" roughness={0.9} />
+            <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
           </mesh>
         ))
       )}
@@ -76,16 +77,16 @@ function Bench({ position }: { position: [number, number, number] }) {
     <group position={position}>
       <mesh position={[0, 0.35, 0]} castShadow>
         <boxGeometry args={[1.2, 0.1, 0.35]} />
-        <meshStandardMaterial color="#2b0a3d" roughness={0.7} />
+        <meshStandardMaterial color="#64748B" roughness={0.7} />
       </mesh>
       <mesh position={[0, 0.55, -0.14]} castShadow>
         <boxGeometry args={[1.2, 0.35, 0.08]} />
-        <meshStandardMaterial color="#ff007f" roughness={0.7} />
+        <meshStandardMaterial color="#1E3A8A" roughness={0.7} />
       </mesh>
       {[-0.5, 0.5].map((x) => (
         <mesh key={x} position={[x, 0.18, 0]} castShadow>
           <boxGeometry args={[0.07, 0.36, 0.32]} />
-          <meshStandardMaterial color="#1a0a2a" roughness={0.8} />
+          <meshStandardMaterial color="#8B5A2B" roughness={0.8} />
         </mesh>
       ))}
     </group>
@@ -143,8 +144,8 @@ function BuildingExterior({ b, status, onEnter }: {
         <FlowerBed position={[-1.6, 0, 3.3]} w={1.8} d={0.6} />
         <FlowerBed position={[1.6, 0, 3.3]} w={1.8} d={0.6} />
         <Html position={[0, 3.5, 0]} center distanceFactor={14}>
-          <div style={{ background: 'rgba(9,7,10,0.88)', padding: '4px 10px', borderRadius: 0, fontSize: 11, fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', fontFamily: 'var(--display-font)' }}>
-            {b.icon} {b.name}
+          <div style={{ background: 'rgba(9,7,10,0.88)', padding: '4px 10px', borderRadius: 'var(--glass-radius)', fontSize: 11, fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', fontFamily: 'var(--display-font)', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <GameIcon name={b.icon} size={14} /> {b.name}
           </div>
         </Html>
       </group>
@@ -214,22 +215,23 @@ function BuildingExterior({ b, status, onEnter }: {
         <div
           onPointerDown={(e) => { e.stopPropagation(); if (!isLocked && b.hasInterior) onEnter(b.id); }}
           style={{
-            background: isLocked ? 'rgba(40,40,40,0.9)' : isCurrent ? 'rgba(255,234,0,0.95)' : 'rgba(9,7,10,0.9)',
+            background: isLocked ? 'rgba(40,40,40,0.9)' : isCurrent ? 'rgba(212,175,55,0.95)' : 'rgba(9,7,10,0.9)',
             padding: '5px 12px',
-            borderRadius: 0,
+            borderRadius: 'var(--glass-radius)',
             fontSize: 11,
             fontWeight: 700,
-            color: isLocked ? '#888' : isCurrent ? '#09070a' : '#fff',
+            color: isLocked ? '#888' : isCurrent ? '#F8FAFC' : '#fff',
             whiteSpace: 'nowrap',
             fontFamily: 'Inter,sans-serif',
             border: `1px solid ${isLocked ? '#555' : isCurrent ? '#F0C050' : 'rgba(255,255,255,0.2)'}`,
             boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
             cursor: isLocked ? 'not-allowed' : b.hasInterior ? 'pointer' : 'default',
+            display: 'flex', alignItems: 'center', gap: 6
           }}
         >
-          {b.icon} {b.name}
-          {isLocked && ' 🔒'}
-          {isCurrent && ' ★'}
+          <GameIcon name={b.icon} size={14} /> {b.name}
+          {isLocked && <GameIcon name="lock" size={12} />}
+          {isCurrent && <GameIcon name="star" size={12} />}
         </div>
       </Html>
 
@@ -303,20 +305,20 @@ export default function CityMapScene() {
       {/* Main E-W road (z = -1 to 1, i.e. 5 units wide) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, -0.5]} receiveShadow>
         <planeGeometry args={[66, 5]} />
-        <meshStandardMaterial color="#09070a" roughness={0.8} />
+        <meshStandardMaterial color="#F8FAFC" roughness={0.8} />
       </mesh>
 
       {/* N-S road (x = -0.5, 4 wide) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, 0.01, 0]} receiveShadow>
         <planeGeometry args={[4, 66]} />
-        <meshStandardMaterial color="#09070a" roughness={0.8} />
+        <meshStandardMaterial color="#F8FAFC" roughness={0.8} />
       </mesh>
 
       {/* Center line markings — E-W road */}
       {([-24, -16, -8, 0, 8, 16, 24] as number[]).map((x) => (
         <mesh key={`ew-${x}`} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.02, -0.5]}>
           <planeGeometry args={[3.5, 0.2]} />
-          <meshStandardMaterial color="#ffea00" roughness={0.9} />
+          <meshStandardMaterial color="#D4AF37" roughness={0.9} />
         </mesh>
       ))}
 
@@ -324,19 +326,19 @@ export default function CityMapScene() {
       {/* North sidewalk */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, -4]} receiveShadow>
         <planeGeometry args={[66, 2]} />
-        <meshStandardMaterial color="#1a0521" roughness={0.85} />
+        <meshStandardMaterial color="#A0522D" roughness={0.85} />
       </mesh>
       {/* South sidewalk */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 3]} receiveShadow>
         <planeGeometry args={[66, 2]} />
-        <meshStandardMaterial color="#1a0521" roughness={0.85} />
+        <meshStandardMaterial color="#A0522D" roughness={0.85} />
       </mesh>
 
       {/* Crosswalk stripes at center */}
       {([-2, -1, 0, 1, 2] as number[]).map((i) => (
         <mesh key={`cw-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, 0.025, i * 0.8 - 0.5]}>
           <planeGeometry args={[0.6, 0.55]} />
-          <meshStandardMaterial color="#ff007f" roughness={0.9} transparent opacity={0.7} />
+          <meshStandardMaterial color="#1E3A8A" roughness={0.9} transparent opacity={0.7} />
         </mesh>
       ))}
 
@@ -346,10 +348,10 @@ export default function CityMapScene() {
       ))}
 
       {/* ─── Parked cars ─── */}
-      <ParkedCar position={[-22, 0, -3.2]} color="#ff007f" />
-      <ParkedCar position={[-14, 0, -3.2]} color="#00f0ff" />
-      <ParkedCar position={[10, 0, 2.2]} color="#ffea00" rotation={Math.PI} />
-      <ParkedCar position={[20, 0, 2.2]} color="#110e15" rotation={Math.PI} />
+      <ParkedCar position={[-22, 0, -3.2]} color="#1E3A8A" />
+      <ParkedCar position={[-14, 0, -3.2]} color="#0F766E" />
+      <ParkedCar position={[10, 0, 2.2]} color="#D4AF37" rotation={Math.PI} />
+      <ParkedCar position={[20, 0, 2.2]} color="#E2E8F0" rotation={Math.PI} />
 
       {/* ─── Trees alongside sidewalks and grass areas ─── */}
       {([-26, -20, -12, 2, 14, 22, 28] as number[]).map((x) => (

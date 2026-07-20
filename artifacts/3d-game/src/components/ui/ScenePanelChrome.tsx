@@ -1,7 +1,8 @@
 import { getAudioEngine } from '@/hooks/useGameAudio';
+import { GameIcon, GameIconName } from './GameIcon';
 
 /**
- * Small comic-styled close (✕) button docked to the top-right corner of an
+ * Small close (✕) button docked to the top-right corner of an
  * in-world scene panel. The parent panel must be `position: relative`.
  */
 export function ScenePanelClose({ onClose, title = 'Close' }: { onClose: () => void; title?: string }) {
@@ -16,33 +17,38 @@ export function ScenePanelClose({ onClose, title = 'Close' }: { onClose: () => v
         top: -10,
         right: -10,
         zIndex: 5,
-        width: 22,
-        height: 22,
+        width: 24,
+        height: 24,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: '#ff007f',
+        background: 'var(--navy)',
         color: '#fff',
-        border: '2px solid #09070a',
-        borderRadius: 0,
-        boxShadow: '2px 2px 0px #ffea00',
+        border: '1px solid rgba(255,255,255,0.2)',
+        borderRadius: '50%',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
         cursor: 'pointer',
-        fontFamily: 'var(--display-font)',
-        fontWeight: 800,
-        fontSize: 12,
-        lineHeight: 1,
+        transition: 'all 0.2s var(--glass-ease)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'scale(1.1)';
+        e.currentTarget.style.background = 'var(--navy-dark)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'scale(1)';
+        e.currentTarget.style.background = 'var(--navy)';
       }}
     >
-      ✕
+      <GameIcon name="close" size={14} />
     </button>
   );
 }
 
 /**
  * Compact reopen chip shown in place of a closed in-world panel so the panel
- * is always reachable again. Comic UI theme.
+ * is always reachable again.
  */
-export function ScenePanelReopen({ onOpen, label }: { onOpen: () => void; label: string }) {
+export function ScenePanelReopen({ onOpen, label, icon }: { onOpen: () => void; label: string; icon?: GameIconName }) {
   return (
     <div
       onPointerDown={(e) => { e.stopPropagation(); }}
@@ -52,20 +58,28 @@ export function ScenePanelReopen({ onOpen, label }: { onOpen: () => void; label:
         alignItems: 'center',
         gap: 6,
         padding: '6px 12px',
-        background: '#09070a',
+        background: 'var(--navy-glass)',
+        backdropFilter: 'var(--glass-blur)',
         color: '#fff',
-        border: '2px solid #ffea00',
-        borderRadius: 0,
-        boxShadow: '3px 3px 0px #ffea00',
+        border: '1px solid rgba(255,255,255,0.15)',
+        borderRadius: '9999px',
+        boxShadow: 'var(--glass-shadow)',
         cursor: 'pointer',
         fontFamily: 'var(--display-font)',
-        fontWeight: 800,
-        fontSize: 11,
-        textTransform: 'uppercase',
-        letterSpacing: 0.5,
-        whiteSpace: 'nowrap',
+        fontWeight: 600,
+        fontSize: 12,
+        transition: 'all 0.2s var(--glass-ease)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = 'var(--teal)';
+        e.currentTarget.style.transform = 'translateY(-1px)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = 'var(--navy-glass)';
+        e.currentTarget.style.transform = 'translateY(0)';
       }}
     >
+      {icon && <GameIcon name={icon} size={14} color="var(--gold)" />}
       {label}
     </div>
   );

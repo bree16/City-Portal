@@ -10,12 +10,11 @@ interface AchievementToastProps {
 
 export function AchievementToast({ isVisible, title, onClose }: AchievementToastProps) {
   useEffect(() => {
-    if (isVisible) {
-      const timer = setTimeout(() => {
-        onClose();
-      }, 4000);
-      return () => clearTimeout(timer);
-    }
+    if (!isVisible) return;
+    const timer = setTimeout(() => {
+      onClose();
+    }, 4000);
+    return () => clearTimeout(timer);
   }, [isVisible, onClose]);
 
   return (
@@ -33,7 +32,7 @@ export function AchievementToast({ isVisible, title, onClose }: AchievementToast
             <Trophy className="w-5 h-5" />
           </div>
           <div>
-            <p style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: 1 }}>Achievement Unlocked</p>
+            <p style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', letterSpacing: 1 }}>Achievement Unlocked</p>
             <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--glass-text)' }}>{title}</p>
           </div>
         </motion.div>

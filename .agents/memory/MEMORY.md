@@ -1,2 +1,3 @@
 - [Visual assets phase](visual-assets-phase.md) — 19+ custom images generated; all pages have real photography heroes; image paths and import conventions documented.
 - [3d-game interaction pattern](3d-game-interaction-pattern.md) — in-world interactables must use onPointerDown + stopPropagation or the ground steals clicks for movement.
+- [3d-game save vs session flags](3d-game-save-flags.md) — gameStarted is session-only; detect a resumable save from stage/careerId, not gameStarted.

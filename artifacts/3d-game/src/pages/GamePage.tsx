@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { useGameStore } from '@/store/gameStore';
+import { GameIcon, GameIconName } from '@/components/ui/GameIcon';
 import { GameHUD } from '@/components/GameHUD';
 import { SpeechBubble } from '@/components/SpeechBubble';
 import { SceneTransition } from '@/components/SceneTransition';
@@ -147,12 +148,12 @@ const INTERIOR_CFG: Record<string, LightCfg> = {
 // ── Tour checklist overlay ────────────────────────────────────────
 
 const TOUR_ROOMS = ['entry', 'living', 'kitchen', 'bedroom', 'backyard'] as const;
-const TOUR_ROOM_LABELS: Record<string, string> = {
-  entry:    '🚪 Entry Hallway',
-  living:   '🛋️ Living Room',
-  kitchen:  '🍳 Kitchen',
-  bedroom:  '🛏️ Bedroom',
-  backyard: '🌿 Backyard',
+const TOUR_ROOM_LABELS: Record<string, { text: string; icon: GameIconName }> = {
+  entry:    { text: 'Entry Hallway', icon: 'home' },
+  living:   { text: 'Living Room', icon: 'furniture' },
+  kitchen:  { text: 'Kitchen', icon: 'kitchen' },
+  bedroom:  { text: 'Bedroom', icon: 'bed' },
+  backyard: { text: 'Backyard', icon: 'leaf' },
 };
 
 function TourChecklist() {
@@ -184,11 +185,12 @@ function TourChecklist() {
       fontFamily: 'Inter, sans-serif', minWidth: 178,
       marginTop: 4,
     }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color: '#ffea00', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
-        🏠 Tour Checklist
+      <div style={{ fontSize: 10, fontWeight: 700, color: '#ffea00', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <GameIcon name="search-home" size={14} /> Tour Checklist
       </div>
       {TOUR_ROOMS.map((room) => {
         const seen = visited.includes(room);
+        const label = TOUR_ROOM_LABELS[room];
         return (
           <div key={room} style={{
             display: 'flex', alignItems: 'center', gap: 8,
@@ -196,8 +198,12 @@ function TourChecklist() {
             color: seen ? '#4ade80' : 'rgba(255,255,255,0.45)',
             fontWeight: seen ? 700 : 400,
           }}>
-            <span style={{ width: 14, textAlign: 'center' }}>{seen ? '✅' : '○'}</span>
-            {TOUR_ROOM_LABELS[room]}
+            <span style={{ width: 14, textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+              <GameIcon name={seen ? 'check' : 'uncheck'} size={12} color={seen ? '#4ade80' : 'rgba(255,255,255,0.3)'} />
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <GameIcon name={label.icon} size={12} /> {label.text}
+            </span>
           </div>
         );
       })}
@@ -207,8 +213,9 @@ function TourChecklist() {
           background: 'rgba(10,143,126,0.18)',
           border: '1px solid rgba(10,143,126,0.4)',
           fontSize: 10, fontWeight: 700, color: '#00f0ff', textAlign: 'center',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4
         }}>
-          ✨ Fully Inspected!
+          <GameIcon name="sparkles" size={12} /> Fully Inspected!
         </div>
       )}
       <button onClick={handleOffer} style={{
@@ -216,8 +223,9 @@ function TourChecklist() {
         background: '#ffea00', color: '#09070a', border: 'none',
         cursor: 'pointer', fontWeight: 800, fontSize: 11,
         fontFamily: 'Inter, sans-serif',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
       }}>
-        {allDone ? '🏡 Make an Offer →' : 'Make an Offer →'}
+        {allDone ? <><GameIcon name="home" size={12} /> Make an Offer →</> : 'Make an Offer →'}
       </button>
       {!allDone && (
         <div style={{ marginTop: 6, fontSize: 9, color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>

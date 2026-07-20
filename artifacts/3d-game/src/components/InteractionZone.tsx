@@ -5,6 +5,7 @@ import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { useGameStore } from '@/store/gameStore';
 import { getAudioEngine } from '@/hooks/useGameAudio';
+import { GameIcon } from '@/components/ui/GameIcon';
 
 interface InteractionZoneProps {
   /** Local position within the parent group (world position is computed automatically). */
@@ -131,9 +132,12 @@ export function InteractionZone({
               boxShadow: `0 0 20px ${color}77`,
               transform: 'scale(1.08)',
               transition: 'transform 0.15s ease-out',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6
             }}
           >
-            👆 {prompt}
+            <GameIcon name="search" size={14} /> {prompt}
           </div>
         </Html>
       )}

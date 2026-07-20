@@ -1,12 +1,13 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '@/store/gameStore';
+import { GameIcon, GameIconName } from '@/components/ui/GameIcon';
 
-const EFFECT_LABELS: Record<string, string> = {
-  cash: '💰 Cash',
-  savings: '🏦 Savings',
-  income: '📈 Monthly Income',
-  expenses: '📉 Monthly Expenses',
-  credit: '📊 Credit Score',
+const EFFECT_LABELS: Record<string, { label: string; icon: GameIconName }> = {
+  cash: { label: 'Cash', icon: 'budget' },
+  savings: { label: 'Savings', icon: 'bank' },
+  income: { label: 'Monthly Income', icon: 'trend-up' },
+  expenses: { label: 'Monthly Expenses', icon: 'trend-down' },
+  credit: { label: 'Credit Score', icon: 'chart' },
 };
 
 export function LifeEventModal() {
@@ -53,15 +54,15 @@ export function LifeEventModal() {
             }}>
               {/* Icon + title */}
               <div style={{ textAlign: 'center', marginBottom: 20 }}>
-                <div style={{ fontSize: 52, marginBottom: 10, lineHeight: 1 }}>
-                  {pendingLifeEvent.icon}
+                <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'center', color: 'var(--gold)' }}>
+                  <GameIcon name={pendingLifeEvent.icon} size={64} color="currentColor" />
                 </div>
                 <div className="glass-chip" style={{
                   display: 'inline-block',
                   padding: '3px 12px',
                   border: 'var(--glass-border-gold)',
                   fontSize: 10, fontWeight: 700, color: 'var(--gold)',
-                  textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10,
+                  letterSpacing: 1, marginBottom: 10,
                 }}>
                   Life Event
                 </div>
@@ -87,8 +88,9 @@ export function LifeEventModal() {
                   : 'rgba(248,113,113,0.12)',
                 border: `1px solid ${pendingLifeEvent.effect.delta >= 0 ? 'rgba(74,222,128,0.3)' : 'rgba(248,113,113,0.3)'}`,
               }}>
-                <div style={{ fontSize: 11, color: 'var(--glass-text-dim)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.6 }}>
-                  {EFFECT_LABELS[pendingLifeEvent.effect.type] || 'Effect'}
+                <div style={{ fontSize: 11, color: 'var(--glass-text-dim)', fontWeight: 600, letterSpacing: 0.6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <GameIcon name={EFFECT_LABELS[pendingLifeEvent.effect.type]?.icon || 'warning'} size={14} />
+                  {EFFECT_LABELS[pendingLifeEvent.effect.type]?.label || 'Effect'}
                 </div>
                 <div style={{
                   fontSize: 22, fontWeight: 900,
@@ -104,11 +106,11 @@ export function LifeEventModal() {
               {/* Lesson */}
               <div style={{
                 padding: '12px 14px', borderRadius: 0, marginBottom: 22,
-                background: 'rgba(255,234,0,0.1)',
+                background: 'rgba(212,168,67,0.1)',
                 border: 'var(--glass-border-gold)',
               }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.8 }}>
-                  💡 Financial Tip
+                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', marginBottom: 4, letterSpacing: 0.8, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <GameIcon name="lightbulb" size={12} /> Financial Tip
                 </div>
                 <p style={{ fontSize: 12, color: 'var(--glass-text-dim)', lineHeight: 1.5, margin: 0 }}>
                   {pendingLifeEvent.lesson}

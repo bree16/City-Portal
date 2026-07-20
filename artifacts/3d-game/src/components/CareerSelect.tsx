@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { careers } from '@/data/careers';
 import type { Career } from '@/data/careers';
 import { useGameStore } from '@/store/gameStore';
+import { GameIcon } from '@/components/ui/GameIcon';
 
 export function CareerSelect() {
   const { setCareer, characterAppearance } = useGameStore();
@@ -38,7 +39,7 @@ export function CareerSelect() {
       >
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <div style={{ fontSize: 38, marginBottom: 6 }}>💼</div>
+          <div style={{ fontSize: 38, marginBottom: 6, display: 'flex', justifyContent: 'center' }}><GameIcon name="briefcase" size={48} /></div>
           <h1 style={{ fontSize: 24, fontWeight: 800, color: '#fff', margin: 0 }}>
             What's Your Career, {playerName}?
           </h1>
@@ -64,20 +65,22 @@ export function CareerSelect() {
                   alignItems: 'flex-start',
                   textAlign: 'left',
                   padding: '18px 16px',
-                  borderRadius: 0,
-                  border: isSelected ? '2px solid #ffea00' : '2px solid rgba(255,255,255,0.1)',
+                  borderRadius: 'var(--glass-radius-btn)',
+                  border: isSelected ? '2px solid var(--gold)' : '2px solid rgba(255,255,255,0.1)',
                   background: isSelected
-                    ? 'rgba(255,234,0,0.12)'
+                    ? 'rgba(212,168,67,0.12)'
                     : 'rgba(255,255,255,0.06)',
                   cursor: 'pointer',
                   fontFamily: 'Inter, sans-serif',
                   backdropFilter: 'blur(8px)',
-                  boxShadow: isSelected ? '0 0 0 3px rgba(255,234,0,0.25)' : 'none',
+                  boxShadow: isSelected ? '0 0 0 3px rgba(212,168,67,0.25)' : 'none',
                   transition: 'border-color 0.15s, background 0.15s, box-shadow 0.15s',
                 }}
               >
-                <div style={{ fontSize: 32, marginBottom: 10 }}>{career.icon}</div>
-                <div style={{ fontSize: 15, fontWeight: 800, color: isSelected ? '#ffea00' : '#fff', marginBottom: 4 }}>
+                <div style={{ fontSize: 32, marginBottom: 10, color: isSelected ? 'var(--gold)' : 'rgba(255,255,255,0.8)' }}>
+                  <GameIcon name={career.icon} size={40} color="currentColor" />
+                </div>
+                <div style={{ fontSize: 15, fontWeight: 800, color: isSelected ? 'var(--gold)' : '#fff', marginBottom: 4 }}>
                   {career.name}
                 </div>
                 <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', lineHeight: 1.45, marginBottom: 12, minHeight: 40 }}>
@@ -87,13 +90,13 @@ export function CareerSelect() {
                 {/* Income + bonus */}
                 <div style={{ width: '100%', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: 0.8 }}>Monthly Income</span>
+                    <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: 0.8 }}>Monthly Income</span>
                     <span style={{ fontSize: 14, fontWeight: 800, color: '#4ade80' }}>
                       ${career.monthlyIncome.toLocaleString()}
                     </span>
                   </div>
-                  <div style={{ fontSize: 10, color: '#ffea00', fontWeight: 600 }}>
-                    🎁 {career.startingBonus.label}
+                  <div style={{ fontSize: 10, color: 'var(--gold)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <GameIcon name="gift" size={12} /> {career.startingBonus.label}
                   </div>
                 </div>
 
@@ -105,10 +108,11 @@ export function CareerSelect() {
                 {isSelected && (
                   <div style={{
                     marginTop: 10, width: '100%', textAlign: 'center',
-                    fontSize: 11, fontWeight: 800, color: '#ffea00',
-                    background: 'rgba(255,234,0,0.15)', borderRadius: 0, padding: '4px 0',
+                    fontSize: 11, fontWeight: 800, color: 'var(--gold)',
+                    background: 'rgba(212,168,67,0.15)', borderRadius: 'var(--glass-radius-btn)', padding: '4px 0',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4
                   }}>
-                    ✓ Selected
+                    <GameIcon name="check" size={12} /> Selected
                   </div>
                 )}
               </motion.button>
@@ -125,15 +129,15 @@ export function CareerSelect() {
             disabled={!selected}
             style={{
               padding: '15px 48px',
-              borderRadius: 0,
-              background: selected ? '#ffea00' : 'rgba(255,255,255,0.1)',
+              borderRadius: 'var(--glass-radius-btn)',
+              background: selected ? 'var(--gold)' : 'rgba(255,255,255,0.1)',
               color: selected ? '#09070a' : 'rgba(255,255,255,0.3)',
               border: 'none',
               cursor: selected ? 'pointer' : 'default',
               fontWeight: 800,
               fontSize: 16,
               fontFamily: 'Inter, sans-serif',
-              boxShadow: selected ? '0 4px 24px rgba(255,234,0,0.4)' : 'none',
+              boxShadow: selected ? '0 4px 24px rgba(212,168,67,0.4)' : 'none',
               transition: 'all 0.2s',
               minWidth: 260,
             }}

@@ -6,59 +6,60 @@ import { useGameStore } from '@/store/gameStore';
 import { PottedPlant, TallPlant, WallArt, Curtains, Rug, Bookshelf, FloorLamp, SideTable, BookRow } from '@/components/decor/DecorKit';
 import { homes } from '@/data/homes';
 import { selectMaintenanceEvent, shouldMaintenanceFire } from '@/data/maintenanceEvents';
+import { GameIcon, GameIconName } from '@/components/ui/GameIcon';
 
 // ── Improvement projects ──────────────────────────────────────────
 
-const IMPROVEMENTS = [
+const IMPROVEMENTS: { id: string; label: string; icon: GameIconName; cost: number; valuePct: number; desc: string; pos: [number, number, number]; color: string; rgba: string }[] = [
   {
-    id: 'kitchen_remodel', label: 'Kitchen Remodel', icon: '🍳',
+    id: 'kitchen_remodel', label: 'Kitchen Remodel', icon: 'kitchen',
     cost: 8000, valuePct: 0.05,
     desc: 'Modern counters, appliances, and updated cabinets.',
-    pos: [-5, 0.1, -1] as [number, number, number],
-    color: '#ffea00',
-    rgba: '255,234,0',
+    pos: [-5, 0.1, -1],
+    color: '#D4AF37',
+    rgba: '212,175,55',
   },
   {
-    id: 'new_flooring', label: 'New Flooring', icon: '🪵',
+    id: 'new_flooring', label: 'New Flooring', icon: 'wood',
     cost: 3500, valuePct: 0.02,
     desc: 'Hardwood throughout the main living area.',
-    pos: [0, 0.1, -1] as [number, number, number],
-    color: '#ff007f',
-    rgba: '255,0,127',
+    pos: [0, 0.1, -1],
+    color: '#1E3A8A',
+    rgba: '30,58,138',
   },
   {
-    id: 'landscaping', label: 'Landscaping', icon: '🌿',
+    id: 'landscaping', label: 'Landscaping', icon: 'leaf',
     cost: 2200, valuePct: 0.03,
     desc: 'Professional landscaping with new plants and mulch.',
-    pos: [5.5, 0.1, 2] as [number, number, number],
-    color: '#00f0ff',
-    rgba: '0,240,255',
+    pos: [5.5, 0.1, 2],
+    color: '#0F766E',
+    rgba: '15,118,110',
   },
   {
-    id: 'solar_panels', label: 'Solar Panels', icon: '☀️',
+    id: 'solar_panels', label: 'Solar Panels', icon: 'sun',
     cost: 12000, valuePct: 0.04,
     desc: 'Cuts energy bills and boosts eco-friendly home value.',
-    pos: [-5, 0.1, 2] as [number, number, number],
-    color: '#7b00ff',
-    rgba: '123,0,255',
+    pos: [-5, 0.1, 2],
+    color: '#047857',
+    rgba: '4,120,87',
   },
-] as const;
+];
 
 // ── Equity milestone messages ─────────────────────────────────────
 
-const MILESTONES: Record<number, { icon: string; title: string; tip: string }> = {
+const MILESTONES: Record<number, { icon: GameIconName; title: string; tip: string }> = {
   10: {
-    icon: '🏠',
+    icon: 'home',
     title: '10% Equity Reached!',
     tip: "With 10% equity, you may qualify to remove PMI — saving $100–200/month on your mortgage.",
   },
   20: {
-    icon: '💰',
+    icon: 'budget',
     title: '20% Equity Built!',
     tip: "At 20% equity you can refinance at better rates or open a HELOC — a credit line backed by your home.",
   },
   30: {
-    icon: '📈',
+    icon: 'chart',
     title: '30% Equity Milestone!',
     tip: "30% equity is serious wealth. You can leverage it for investments, education, or a down payment on your dream home.",
   },
@@ -80,7 +81,7 @@ export default function HomeLifeScene() {
   const [dashboardOpen, setDashboardOpen] = useState(true);
   const [listingOpen, setListingOpen] = useState(false);
   const [activeImp, setActiveImp] = useState<string | null>(null);
-  const [milestoneToast, setMilestoneToast] = useState<{ pct: number; icon: string; title: string; tip: string } | null>(null);
+  const [milestoneToast, setMilestoneToast] = useState<{ pct: number; icon: GameIconName; title: string; tip: string } | null>(null);
   const shownMilestones = useRef<Set<number>>(new Set());
   const monthsAdvanced = useRef(0);
 
@@ -129,32 +130,32 @@ export default function HomeLifeScene() {
       {/* ── FLOOR ── */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[20, 16]} />
-        <meshStandardMaterial color="#2b0a3d" roughness={0.42} metalness={0.05} />
+        <meshStandardMaterial color="#64748B" roughness={0.42} metalness={0.05} />
       </mesh>
-      <gridHelper args={[20, 40, '#ff007f', '#ff007f']} position={[0, 0.005, 0]} />
+      <gridHelper args={[20, 40, '#1E3A8A', '#1E3A8A']} position={[0, 0.005, 0]} />
       {/* Rug */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-1, 0.01, 0]} receiveShadow>
         <planeGeometry args={[6, 5]} />
-        <meshStandardMaterial color="#00f0ff" roughness={0.95} />
+        <meshStandardMaterial color="#0F766E" roughness={0.95} />
       </mesh>
 
       {/* ── WALLS ── */}
       <mesh position={[0, 2.5, -8]} receiveShadow>
         <boxGeometry args={[20, 5, 0.2]} />
-        <meshStandardMaterial color="#09070a" roughness={0.9} />
+        <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
       </mesh>
       <mesh position={[-10, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#110e15" roughness={0.9} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
       </mesh>
       <mesh position={[10, 2.5, 0]} receiveShadow>
         <boxGeometry args={[0.2, 5, 16]} />
-        <meshStandardMaterial color="#110e15" roughness={0.9} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
       </mesh>
       {/* Ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 5, 0]}>
         <planeGeometry args={[20, 16]} />
-        <meshStandardMaterial color="#09070a" roughness={1} />
+        <meshStandardMaterial color="#F8FAFC" roughness={1} />
       </mesh>
 
       {/* ── LIGHTS ── */}
@@ -162,85 +163,85 @@ export default function HomeLifeScene() {
         <group key={x}>
           <mesh position={[x, 4.88, 0]}>
             <boxGeometry args={[1.4, 0.05, 0.5]} />
-            <meshStandardMaterial color="#ffffff" emissive="#ffea00" emissiveIntensity={1.4} />
+            <meshStandardMaterial color="#ffffff" emissive="#D4AF37" emissiveIntensity={1.4} />
           </mesh>
-          <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#ffea00" distance={10} decay={2} />
+          <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#D4AF37" distance={10} decay={2} />
         </group>
       ))}
 
       {/* ── WINDOWS ── */}
       <mesh position={[-2, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#09070a" emissive="#00f0ff" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[3.5, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#09070a" emissive="#00f0ff" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
-      <pointLight position={[0, 3.0, -7]} intensity={1.4} color="#00f0ff" distance={14} decay={2} />
+      <pointLight position={[0, 3.0, -7]} intensity={1.4} color="#0F766E" distance={14} decay={2} />
 
       {/* ── FURNITURE (static — already furnished) ── */}
       {/* Sofa */}
       <mesh position={[-2.5, 0.45, -2.5]} castShadow>
         <boxGeometry args={[2.2, 0.9, 1.0]} />
-        <meshStandardMaterial color="#ff007f" roughness={0.8} />
+        <meshStandardMaterial color="#1E3A8A" roughness={0.8} />
       </mesh>
       {/* Coffee table */}
       <mesh position={[-1.5, 0.3, -0.8]} castShadow>
         <boxGeometry args={[1.6, 0.08, 0.9]} />
-        <meshStandardMaterial color="#1a0521" roughness={0.4} metalness={0.05} />
+        <meshStandardMaterial color="#A0522D" roughness={0.4} metalness={0.05} />
       </mesh>
       {/* TV stand + TV */}
       <mesh position={[2.5, 0.3, -2.5]} castShadow>
         <boxGeometry args={[2.5, 0.6, 0.5]} />
-        <meshStandardMaterial color="#2b0a3d" roughness={0.5} />
+        <meshStandardMaterial color="#64748B" roughness={0.5} />
       </mesh>
       <mesh position={[2.5, 1.2, -2.6]} castShadow>
         <boxGeometry args={[2.0, 1.2, 0.09]} />
-        <meshStandardMaterial color="#09070a" roughness={0.2} metalness={0.6} />
+        <meshStandardMaterial color="#F8FAFC" roughness={0.2} metalness={0.6} />
       </mesh>
       {/* Dining table */}
       <mesh position={[0, 0.5, 2.5]} castShadow>
         <boxGeometry args={[1.8, 0.1, 1.0]} />
-        <meshStandardMaterial color="#110e15" roughness={0.5} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.5} />
       </mesh>
       {/* Desk area */}
       <mesh position={[-5.5, 0.5, 2.5]} castShadow>
         <boxGeometry args={[1.5, 0.1, 0.75]} />
-        <meshStandardMaterial color="#1a0a2a" roughness={0.6} />
+        <meshStandardMaterial color="#8B5A2B" roughness={0.6} />
       </mesh>
       {/* Plant */}
       <group position={[7.5, 0, -5]}>
         <mesh position={[0, 0.4, 0]} castShadow>
           <cylinderGeometry args={[0.28, 0.22, 0.8, 8]} />
-          <meshStandardMaterial color="#ffea00" roughness={0.7} />
+          <meshStandardMaterial color="#D4AF37" roughness={0.7} />
         </mesh>
         <mesh position={[0, 1.0, 0]} castShadow>
           <sphereGeometry args={[0.55, 10, 10]} />
-          <meshStandardMaterial color="#00f0ff" roughness={0.9} />
+          <meshStandardMaterial color="#0F766E" roughness={0.9} />
         </mesh>
       </group>
 
       {/* ── DECOR: fully lived-in home ── */}
       {/* Living-room rug under sofa/coffee table */}
-      <Rug position={[-2, 0.008, -1.6]} w={4.2} d={3.2} color="#00f0ff" border="#ff007f" />
+      <Rug position={[-2, 0.008, -1.6]} w={4.2} d={3.2} color="#0F766E" border="#1E3A8A" />
       {/* Bookshelf in far corner (behind sofa area, against left wall) */}
-      <Bookshelf position={[-8.6, 0, -4]} rotation={[0, Math.PI / 2, 0]} color="#1a0521" />
+      <Bookshelf position={[-8.6, 0, -4]} rotation={[0, Math.PI / 2, 0]} color="#A0522D" />
       {/* Floor lamp beside the sofa */}
-      <FloorLamp position={[-4.2, 0, -3.2]} shadeColor="#ffea00" lightColor="#ffea00" />
+      <FloorLamp position={[-4.2, 0, -3.2]} shadeColor="#D4AF37" lightColor="#D4AF37" />
       {/* Side table with mug near sofa */}
-      <SideTable position={[-4.2, 0, -1.6]} color="#2b0a3d" />
+      <SideTable position={[-4.2, 0, -1.6]} color="#64748B" />
       {/* Tall plant by the dining area corner */}
       <TallPlant position={[8.5, 0, 5]} scale={1.05} />
       {/* Potted plant near the desk */}
       <PottedPlant position={[-8.5, 0, 4] } scale={1.05} />
       {/* Curtains framing the back windows (windows at z=-7.85) */}
-      <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#ffea00" />
-      <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#ffea00" />
+      <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#D4AF37" />
+      <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#D4AF37" />
       {/* Wall art on right wall (faces -x) */}
-      <WallArt position={[9.85, 2.9, 4]} rotation={[0, -Math.PI / 2, 0]} color="#ff007f" w={1.3} h={0.95} />
+      <WallArt position={[9.85, 2.9, 4]} rotation={[0, -Math.PI / 2, 0]} color="#1E3A8A" w={1.3} h={0.95} />
       {/* Wall art on left wall (faces +x), above bookshelf area */}
-      <WallArt position={[-9.85, 3.0, 1.5]} rotation={[0, Math.PI / 2, 0]} color="#00f0ff" w={1.2} h={0.9} />
+      <WallArt position={[-9.85, 3.0, 1.5]} rotation={[0, Math.PI / 2, 0]} color="#0F766E" w={1.2} h={0.9} />
       {/* Books + clutter on coffee table */}
       <BookRow position={[-1.9, 0.34, -0.8]} count={4} rotation={[0, 0.3, 0]} />
 
@@ -249,17 +250,17 @@ export default function HomeLifeScene() {
         {/* Counter run along right wall */}
         <mesh position={[0.6, 0.45, 0]} castShadow>
           <boxGeometry args={[1.0, 0.9, 4.2]} />
-          <meshStandardMaterial color="#1a0a2a" roughness={0.7} />
+          <meshStandardMaterial color="#8B5A2B" roughness={0.7} />
         </mesh>
         {/* Countertop */}
         <mesh position={[0.6, 0.92, 0]} castShadow>
           <boxGeometry args={[1.1, 0.06, 4.3]} />
-          <meshStandardMaterial color="#2b0a3d" roughness={0.3} metalness={0.15} />
+          <meshStandardMaterial color="#64748B" roughness={0.3} metalness={0.15} />
         </mesh>
         {/* Upper cabinets */}
         <mesh position={[0.75, 2.1, 0]} castShadow>
           <boxGeometry args={[0.7, 0.85, 4.0]} />
-          <meshStandardMaterial color="#1a0521" roughness={0.7} />
+          <meshStandardMaterial color="#A0522D" roughness={0.7} />
         </mesh>
         {/* Stove top with burners */}
         <mesh position={[0.55, 0.96, 1.4]} castShadow>
@@ -269,17 +270,17 @@ export default function HomeLifeScene() {
         {([[-0.18, 1.22], [0.18, 1.22], [-0.18, 1.58], [0.18, 1.58]] as [number, number][]).map(([bx, bz], i) => (
           <mesh key={i} position={[0.55 + bx, 0.99, bz]}>
             <cylinderGeometry args={[0.11, 0.11, 0.015, 12]} />
-            <meshStandardMaterial color="#09070a" roughness={0.5} />
+            <meshStandardMaterial color="#F8FAFC" roughness={0.5} />
           </mesh>
         ))}
         {/* Fridge at end of counter */}
         <mesh position={[0.55, 1.05, -2.4]} castShadow>
           <boxGeometry args={[0.9, 2.1, 0.9]} />
-          <meshStandardMaterial color="#2b0a3d" roughness={0.35} metalness={0.5} />
+          <meshStandardMaterial color="#64748B" roughness={0.35} metalness={0.5} />
         </mesh>
         <mesh position={[0.1, 1.55, -2.4]}>
           <boxGeometry args={[0.03, 0.5, 0.05]} />
-          <meshStandardMaterial color="#09070a" metalness={0.6} roughness={0.3} />
+          <meshStandardMaterial color="#F8FAFC" metalness={0.6} roughness={0.3} />
         </mesh>
       </group>
 
@@ -295,18 +296,18 @@ export default function HomeLifeScene() {
       </mesh>
       <Html position={[0, 2.8, -7.6]} center distanceFactor={14}>
         {!dashboardOpen ? (
-          <ScenePanelReopen onOpen={() => setDashboardOpen(true)} label="🏠 Home Dashboard" />
+          <ScenePanelReopen onOpen={() => setDashboardOpen(true)} label="Home Dashboard" icon="home" />
         ) : (
         <div style={{
           position: 'relative',
           width: 320, padding: '14px 18px',
-          background: 'rgba(10,18,40,0.98)', border: '1px solid rgba(255,234,0,0.25)',
-          borderRadius: 0, fontFamily: 'var(--display-font)', color: '#fff',
+          background: 'rgba(10,18,40,0.98)', border: '1px solid rgba(212,175,55,0.25)',
+          borderRadius: 'var(--glass-radius)', fontFamily: 'var(--display-font)', color: '#fff',
           boxShadow: '0 0 30px rgba(10,18,40,0.8)',
         }}>
           <ScenePanelClose onClose={() => setDashboardOpen(false)} title="Hide Dashboard" />
-          <div style={{ fontSize: 9, fontWeight: 700, color: '#ffea00', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 10, textAlign: 'center' }}>
-            🏠 Home Dashboard — {home.name}
+          <div style={{ fontSize: 9, fontWeight: 700, color: '#D4AF37', letterSpacing: 2, marginBottom: 10, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            <GameIcon name="home" size={10} /> Home Dashboard — {home.name}
           </div>
 
           {/* Key metrics row */}
@@ -314,9 +315,9 @@ export default function HomeLifeScene() {
             {[
               { label: 'Home Value', value: `$${homeValue.toLocaleString()}`, color: '#4ade80' },
               { label: 'Mortgage Left', value: `$${mortgageBalance.toLocaleString()}`, color: '#f87171' },
-              { label: 'Equity', value: `${equityPct.toFixed(1)}%`, color: '#ffea00' },
+              { label: 'Equity', value: `${equityPct.toFixed(1)}%`, color: '#D4AF37' },
             ].map((m) => (
-              <div key={m.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 0, padding: '6px 8px', textAlign: 'center' }}>
+              <div key={m.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 'var(--glass-radius)', padding: '6px 8px', textAlign: 'center' }}>
                 <div style={{ fontSize: 14, fontWeight: 800, color: m.color }}>{m.value}</div>
                 <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{m.label}</div>
               </div>
@@ -329,14 +330,14 @@ export default function HomeLifeScene() {
               <span>Equity built: ${equityValue.toLocaleString()}</span>
               <span>{equityPct.toFixed(1)}%</span>
             </div>
-            <div style={{ height: 6, background: 'rgba(255,255,255,0.08)', borderRadius: 0, overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${Math.min(100, equityPct)}%`, background: 'linear-gradient(90deg, #ffea00, #4ade80)', borderRadius: 0, transition: 'width 0.8s ease' }} />
+            <div style={{ height: 6, background: 'rgba(255,255,255,0.08)', borderRadius: 'var(--glass-radius)', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${Math.min(100, equityPct)}%`, background: 'linear-gradient(90deg, var(--gold), #4ade80)', borderRadius: 'var(--glass-radius)', transition: 'width 0.8s ease' }} />
             </div>
           </div>
 
           {/* Monthly breakdown */}
-          <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 0, padding: '8px 10px', marginBottom: 12 }}>
-            <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>Monthly Payment — ${home.monthlyPayment}/mo</div>
+          <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 'var(--glass-radius)', padding: '8px 10px', marginBottom: 12 }}>
+            <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: 6, letterSpacing: 1 }}>Monthly Payment — ${home.monthlyPayment}/mo</div>
             {[
               { label: 'Principal', value: principal, color: '#4ade80' },
               { label: 'Interest',  value: interestPortion, color: '#f87171' },
@@ -354,30 +355,32 @@ export default function HomeLifeScene() {
             onClick={handlePassMonth}
             disabled={!!pendingMaintenance}
             style={{
-              width: '100%', padding: '9px', borderRadius: 0,
-              background: pendingMaintenance ? 'rgba(255,255,255,0.08)' : '#00f0ff',
+              width: '100%', padding: '9px', borderRadius: 'var(--glass-radius)',
+              background: pendingMaintenance ? 'rgba(255,255,255,0.08)' : '#0F766E',
               color: pendingMaintenance ? 'rgba(255,255,255,0.35)' : '#fff',
               border: 'none', cursor: pendingMaintenance ? 'default' : 'pointer',
               fontWeight: 800, fontSize: 12, fontFamily: 'Inter, sans-serif',
               marginBottom: 6, transition: 'background 0.15s',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
             }}
           >
-            {pendingMaintenance ? '⚠️ Resolve Maintenance First' : '⏩ Pass a Month →'}
+            {pendingMaintenance ? <><GameIcon name="close" size={12} /> Resolve Maintenance First</> : <>Pass a Month →</>}
           </button>
 
           {equityPct >= 15 && (
             <button
               onClick={() => setListingOpen(true)}
               style={{
-                width: '100%', padding: '8px', borderRadius: 0,
-                background: 'linear-gradient(135deg, #ffea00, #F5C842)',
-                color: '#09070a', border: 'none', cursor: 'pointer',
+                width: '100%', padding: '8px', borderRadius: 'var(--glass-radius)',
+                background: 'linear-gradient(135deg, var(--gold), #F5C842)',
+                color: '#0F172A', border: 'none', cursor: 'pointer',
                 fontWeight: 800, fontSize: 11, fontFamily: 'Inter, sans-serif',
-                boxShadow: '0 0 16px rgba(255,234,0,0.5)',
+                boxShadow: '0 0 16px rgba(212,175,55,0.5)',
                 animation: 'pulse 2s infinite',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
               }}
             >
-              🏡 List My Home →
+              <GameIcon name="home" size={14} /> List My Home →
             </button>
           )}
         </div>
@@ -407,25 +410,26 @@ export default function HomeLifeScene() {
             </mesh>
             <Html position={[0, 0.7, 0]} center distanceFactor={12}>
               <div onClick={() => { if (!owned) setActiveImp(isActive ? null : imp.id); }} style={{
-                background: owned ? 'rgba(0,240,255,0.9)' : `rgba(${imp.rgba},0.88)`,
-                color: '#fff', padding: '4px 10px', borderRadius: 0,
+                background: owned ? 'rgba(15,118,110,0.9)' : `rgba(${imp.rgba},0.88)`,
+                color: '#fff', padding: '4px 10px', borderRadius: 'var(--glass-radius)',
                 fontSize: 10, fontWeight: 700, fontFamily: 'Inter,sans-serif',
                 whiteSpace: 'nowrap', cursor: owned ? 'default' : 'pointer',
-                border: '1px solid rgba(255,255,255,0.2)',
+                border: '1px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', gap: 6
               }}>
-                {owned ? `✅ ${imp.label} Installed` : `${imp.icon} ${imp.label}`}
+                <GameIcon name={owned ? 'check' : imp.icon} size={12} />
+                {owned ? `${imp.label} Installed` : imp.label}
               </div>
             </Html>
             {isActive && !owned && (
               <Html position={[0, 2.2, 0]} center distanceFactor={11}>
                 <div style={{
-                  background: 'rgba(9,7,10,0.97)', border: '1px solid rgba(255,234,0,0.4)',
-                  borderRadius: 0, padding: '14px 18px', minWidth: 220,
+                  background: 'rgba(9,7,10,0.97)', border: '1px solid rgba(212,175,55,0.4)',
+                  borderRadius: 'var(--glass-radius)', padding: '14px 18px', minWidth: 220,
                   fontFamily: 'var(--display-font)', color: '#fff',
                   boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
                 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: '#ffea00', marginBottom: 4 }}>
-                    {imp.icon} {imp.label}
+                  <div style={{ fontSize: 13, fontWeight: 800, color: '#D4AF37', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <GameIcon name={imp.icon} size={14} /> {imp.label}
                   </div>
                   <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginBottom: 8, lineHeight: 1.4 }}>
                     {imp.desc}
@@ -442,9 +446,9 @@ export default function HomeLifeScene() {
                     onClick={() => { buyImprovement(imp.id, imp.cost, imp.valuePct); setActiveImp(null); }}
                     disabled={cash < imp.cost}
                     style={{
-                      width: '100%', padding: '9px', borderRadius: 0,
-                      background: cash >= imp.cost ? '#ffea00' : 'rgba(255,255,255,0.08)',
-                      color: cash >= imp.cost ? '#09070a' : 'rgba(255,255,255,0.35)',
+                      width: '100%', padding: '9px', borderRadius: 'var(--glass-radius)',
+                      background: cash >= imp.cost ? '#D4AF37' : 'rgba(255,255,255,0.08)',
+                      color: cash >= imp.cost ? '#F8FAFC' : 'rgba(255,255,255,0.35)',
                       border: 'none', cursor: cash >= imp.cost ? 'pointer' : 'default',
                       fontWeight: 800, fontSize: 12, fontFamily: 'Inter,sans-serif',
                     }}
@@ -466,39 +470,40 @@ export default function HomeLifeScene() {
         <Html position={[0, 3.5, 5.5]} center distanceFactor={14}>
           <div style={{
             background: 'rgba(9,7,10,0.98)', border: '2px solid rgba(248,113,113,0.5)',
-            borderRadius: 0, padding: '22px 26px', minWidth: 340,
+            borderRadius: 'var(--glass-radius)', padding: '22px 26px', minWidth: 340,
             fontFamily: 'var(--display-font)', color: '#fff',
             boxShadow: '0 20px 60px rgba(0,0,0,0.7)', textAlign: 'center',
           }}>
-            <div style={{ fontSize: 42, marginBottom: 10 }}>{pendingMaintenance.icon}</div>
+            <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'center', color: '#f87171' }}><GameIcon name={pendingMaintenance.icon} size={42} /></div>
             <div style={{ fontSize: 16, fontWeight: 800, color: '#f87171', marginBottom: 6 }}>
               {pendingMaintenance.title}
             </div>
             <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', marginBottom: 14, lineHeight: 1.5 }}>
               {pendingMaintenance.description}
             </div>
-            <div style={{ background: 'rgba(248,113,113,0.1)', borderRadius: 0, padding: '8px 12px', marginBottom: 16, fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>
-              💡 {pendingMaintenance.tip}
+            <div style={{ background: 'rgba(248,113,113,0.1)', borderRadius: 'var(--glass-radius)', padding: '8px 12px', marginBottom: 16, fontSize: 11, color: 'rgba(255,255,255,0.6)', display: 'flex', gap: 6, textAlign: 'left' }}>
+              <div style={{ flexShrink: 0, color: '#D4AF37' }}><GameIcon name="lightbulb" size={14} /></div> 
+              <div>{pendingMaintenance.tip}</div>
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <button
                 onClick={() => applyMaintenance(true)}
                 disabled={cash < pendingMaintenance.cost}
                 style={{
-                  flex: 1, padding: '12px', borderRadius: 0,
+                  flex: 1, padding: '12px', borderRadius: 'var(--glass-radius)',
                   background: cash >= pendingMaintenance.cost ? '#4ade80' : 'rgba(255,255,255,0.08)',
-                  color: cash >= pendingMaintenance.cost ? '#09070a' : 'rgba(255,255,255,0.35)',
+                  color: cash >= pendingMaintenance.cost ? '#F8FAFC' : 'rgba(255,255,255,0.35)',
                   border: 'none', cursor: cash >= pendingMaintenance.cost ? 'pointer' : 'default',
                   fontWeight: 800, fontSize: 12, fontFamily: 'Inter,sans-serif',
                 }}
               >
-                🔧 Fix Now<br />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}><GameIcon name="wrench" size={12} /> Fix Now</div>
                 <span style={{ fontSize: 10, fontWeight: 600 }}>${pendingMaintenance.cost.toLocaleString()}</span>
               </button>
               <button
                 onClick={() => applyMaintenance(false)}
                 style={{
-                  flex: 1, padding: '12px', borderRadius: 0,
+                  flex: 1, padding: '12px', borderRadius: 'var(--glass-radius)',
                   background: 'rgba(248,113,113,0.15)', color: '#f87171',
                   border: '1px solid rgba(248,113,113,0.35)',
                   cursor: 'pointer', fontWeight: 800, fontSize: 12, fontFamily: 'Inter,sans-serif',
@@ -516,13 +521,13 @@ export default function HomeLifeScene() {
       {listingOpen && (
         <Html position={[0, 3.5, 5.5]} center distanceFactor={14}>
           <div style={{
-            background: 'rgba(9,7,10,0.98)', border: '2px solid rgba(255,234,0,0.5)',
-            borderRadius: 0, padding: '22px 26px', minWidth: 340,
+            background: 'rgba(9,7,10,0.98)', border: '2px solid rgba(212,175,55,0.5)',
+            borderRadius: 'var(--glass-radius)', padding: '22px 26px', minWidth: 340,
             fontFamily: 'var(--display-font)', color: '#fff',
             boxShadow: '0 20px 60px rgba(0,0,0,0.7)', textAlign: 'center',
           }}>
-            <div style={{ fontSize: 40, marginBottom: 8 }}>🏡</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: '#ffea00', marginBottom: 4 }}>Ready to Sell?</div>
+            <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'center', color: '#4ade80' }}><GameIcon name="home" size={40} /></div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: '#D4AF37', marginBottom: 4 }}>Ready to Sell?</div>
             <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 18 }}>Estimated Sale Breakdown</div>
 
             {[
@@ -539,28 +544,31 @@ export default function HomeLifeScene() {
               </div>
             ))}
 
-            <div style={{ marginTop: 14, padding: '12px', background: estProfit > 0 ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)', borderRadius: 0, marginBottom: 14 }}>
+            <div style={{ marginTop: 14, padding: '12px', background: estProfit > 0 ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)', borderRadius: 'var(--glass-radius)', marginBottom: 14 }}>
               <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>Estimated Profit</div>
               <div style={{ fontSize: 24, fontWeight: 800, color: estProfit > 0 ? '#4ade80' : '#f87171' }}>
                 {estProfit >= 0 ? '+' : ''}${estProfit.toLocaleString()}
               </div>
             </div>
 
-            <div style={{ background: 'rgba(255,234,0,0.1)', borderRadius: 0, padding: '10px 12px', marginBottom: 16, fontSize: 11, color: 'rgba(255,255,255,0.7)', lineHeight: 1.4 }}>
-              🌟 <strong style={{ color: '#ffea00' }}>Dream Home Ahead!</strong><br />
+            <div style={{ background: 'rgba(212,175,55,0.1)', borderRadius: 'var(--glass-radius)', padding: '10px 12px', marginBottom: 16, fontSize: 11, color: 'rgba(255,255,255,0.7)', lineHeight: 1.4 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, justifyContent: 'center' }}>
+                <GameIcon name="sparkles" size={14} color="#D4AF37" />
+                <strong style={{ color: '#D4AF37' }}>Dream Home Ahead!</strong>
+              </div>
               Your equity could fund a larger Newport News home — start your journey toward your forever home!
             </div>
 
             <button
               onClick={() => setListingOpen(false)}
               style={{
-                width: '100%', padding: '11px', borderRadius: 0,
+                width: '100%', padding: '11px', borderRadius: 'var(--glass-radius)',
                 background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)',
                 border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 12,
-                fontFamily: 'Inter,sans-serif',
+                fontFamily: 'Inter,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
               }}
             >
-              ✕ Keep Building Equity
+              <GameIcon name="close" size={10} /> Keep Building Equity
             </button>
           </div>
         </Html>
@@ -578,14 +586,14 @@ export default function HomeLifeScene() {
               transition={{ duration: 0.4, type: 'spring', stiffness: 200, damping: 20 }}
               onAnimationComplete={() => setTimeout(() => setMilestoneToast(null), 4500)}
               style={{
-                background: '#09070a', border: '2px solid #ffea00',
-                borderRadius: 0, padding: '14px 18px', minWidth: 260,
+                background: '#F8FAFC', border: '2px solid var(--gold)',
+                borderRadius: 'var(--glass-radius)', padding: '14px 18px', minWidth: 260,
                 fontFamily: 'Inter,sans-serif', pointerEvents: 'none',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
               }}
             >
-              <div style={{ fontSize: 28, marginBottom: 6, textAlign: 'center' }}>{milestoneToast.icon}</div>
-              <div style={{ fontSize: 13, fontWeight: 800, color: '#ffea00', marginBottom: 4, textAlign: 'center' }}>
+              <div style={{ marginBottom: 6, display: 'flex', justifyContent: 'center', color: '#D4AF37' }}><GameIcon name={milestoneToast.icon} size={28} /></div>
+              <div style={{ fontSize: 13, fontWeight: 800, color: '#D4AF37', marginBottom: 4, textAlign: 'center' }}>
                 {milestoneToast.title}
               </div>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.75)', lineHeight: 1.45, textAlign: 'center' }}>

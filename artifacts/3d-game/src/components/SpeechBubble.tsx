@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useGameStore } from '@/store/gameStore';
 import { stageDialogue } from '@/data/dialogue';
 import { getAudioEngine } from '@/hooks/useGameAudio';
+import { GameIcon } from '@/components/ui/GameIcon';
 
 /** Replace {name} and {pronoun}/{pronouns} tokens in dialogue text with the player's values. */
 function interpolate(text: string, name: string, pronouns: string): string {
@@ -106,7 +107,7 @@ export function SpeechBubble() {
             </div>
 
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: line.speaker === 'You' ? 'var(--gold)' : 'var(--teal)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.6 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: line.speaker === 'You' ? 'var(--gold)' : 'var(--teal)', marginBottom: 4, letterSpacing: 0.6 }}>
                 {line.speaker === 'You' ? playerName : line.speaker}
               </div>
               <p style={{ fontSize: 14, color: 'var(--glass-text)', lineHeight: 1.55, margin: 0 }}>
@@ -118,14 +119,17 @@ export function SpeechBubble() {
                     marginTop: 10,
                     padding: '8px 12px',
                     borderRadius: 0,
-                    background: 'rgba(255,234,0,0.12)',
+                    background: 'rgba(212,168,67,0.12)',
                     border: 'var(--glass-border-gold)',
                     fontSize: 12,
                     color: 'var(--gold)',
                     lineHeight: 1.4,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6
                   }}
                 >
-                  💡 {displayTip}
+                  <GameIcon name="lightbulb" size={14} /> {displayTip}
                 </div>
               )}
             </div>

@@ -1,6 +1,8 @@
+import { GameIconName } from '@/components/ui/GameIcon';
+
 export interface MaintenanceEvent {
   id: string;
-  icon: string;
+  icon: GameIconName;
   title: string;
   description: string;
   cost: number;
@@ -12,7 +14,7 @@ export interface MaintenanceEvent {
 export const MAINTENANCE_EVENTS: MaintenanceEvent[] = [
   {
     id: 'roof_leak',
-    icon: '🏚️',
+    icon: 'wrench',
     title: 'Roof Leak Detected',
     description: 'Water stains appeared on the ceiling. A roofing contractor confirmed a small leak that needs repair before winter.',
     cost: 2800,
@@ -21,7 +23,7 @@ export const MAINTENANCE_EVENTS: MaintenanceEvent[] = [
   },
   {
     id: 'water_heater',
-    icon: '🚿',
+    icon: 'droplet',
     title: 'Water Heater Failure',
     description: 'No hot water this morning! Your 12-year-old water heater gave out. Replacement is needed ASAP.',
     cost: 1200,
@@ -30,7 +32,7 @@ export const MAINTENANCE_EVENTS: MaintenanceEvent[] = [
   },
   {
     id: 'hvac_service',
-    icon: '🌡️',
+    icon: 'wrench',
     title: 'HVAC Annual Service',
     description: 'Your HVAC technician recommends a full service — filter replacement, refrigerant check, and duct cleaning.',
     cost: 400,
@@ -39,7 +41,7 @@ export const MAINTENANCE_EVENTS: MaintenanceEvent[] = [
   },
   {
     id: 'lawn_care',
-    icon: '🌿',
+    icon: 'leaf',
     title: 'Lawn & Landscaping',
     description: "The front yard's getting overgrown. Neighbors' HOA-adjacent pressure is building — time for upkeep.",
     cost: 120,
@@ -48,7 +50,7 @@ export const MAINTENANCE_EVENTS: MaintenanceEvent[] = [
   },
   {
     id: 'pest_inspection',
-    icon: '🐛',
+    icon: 'search',
     title: 'Pest Inspection Required',
     description: "You found signs of termite activity near the foundation. A licensed inspector confirmed it's early but needs treatment.",
     cost: 200,

@@ -1,0 +1,282 @@
+1. The art style is all over the place.
+
+You've got:
+
+Cyberpunk colors
+Roblox character
+Emoji icons
+PS2 model
+Modern UI
+Neon pink borders
+
+It feels like five different games combined into one.
+
+Everything needs one consistent design language.
+
+2. The hot pink borders
+
+These have got to go.
+
+They scream:
+
+"This is a prototype."
+
+Instead use:
+
+soft white borders
+subtle gradients
+glassmorphism
+navy blue
+teal
+gold accents
+
+to match the Housing Hub website.
+
+3. The typography
+
+It looks like an arcade game.
+
+Your website is elegant.
+
+The simulator should match the website.
+
+Use the exact same fonts.
+
+The same button style.
+
+The same spacing.
+
+The same colors.
+
+It should feel like part of the Housing Hub—not a completely different product.
+
+4. The emojis 😭
+
+The haircut literally has 🎵 for locs.
+
+😂😂😂
+
+That absolutely has to be replaced.
+
+5. The preview model
+
+I don't even know where to begin lol.
+
+The proportions are still way off.
+
+The arms are noodles.
+
+The torso disappears.
+
+The body build slider doesn't really change anything meaningful.
+
+THIS is what I'd tell Replit.
+Simulator Visual Consistency Pass (High Priority)
+
+The simulator has grown significantly in functionality, but the overall presentation now feels inconsistent.
+
+Different parts of the interface appear to come from different games and design systems.
+
+The goal is to unify everything into one polished experience that feels like a natural extension of the Newport News Housing Hub.
+
+Match the Website
+
+The simulator should inherit the visual identity of the Housing Hub website.
+
+Use the same:
+
+typography
+colors
+spacing
+border radius
+shadows
+buttons
+gradients
+iconography
+
+The simulator should feel like another page of the website rather than a completely separate application.
+
+Remove Prototype Styling
+
+Remove visual elements that make the simulator feel unfinished.
+
+Examples include:
+
+bright neon pink borders
+inconsistent outlines
+placeholder graphics
+mismatched colors
+oversized outlines
+
+Replace these with cleaner, more refined UI components.
+
+Replace Emojis
+
+The current interface uses emoji characters as icons.
+
+These reduce the overall quality of the simulator.
+
+Replace every emoji with custom-designed SVG icons or a cohesive icon set.
+
+Examples include:
+
+Hair
+
+Smile
+
+Wave
+
+Look
+
+Glasses
+
+Hat
+
+Earrings
+
+Budget
+
+Savings
+
+Mortgage
+
+Credit
+
+House
+
+Keys
+
+Furniture
+
+Utilities
+
+Pets
+
+Documents
+
+Achievements
+
+Every icon should belong to the same design system.
+
+Redesign the Character Creator
+
+Keep the current functionality but redesign the presentation.
+
+Use:
+
+cleaner spacing
+larger preview
+better lighting
+modern cards
+softer shadows
+smoother animations
+
+Avoid making the interface feel crowded.
+
+The preview character should be the focal point.
+
+Improve the Character Model
+
+The character still appears to be built from disconnected geometric primitives.
+
+Instead of visible cylinders and spheres, create a continuous stylized humanoid mesh.
+
+Improve:
+
+anatomy
+shoulders
+arms
+hands
+torso
+neck
+proportions
+clothing
+
+The character should look like one connected person rather than separate shapes attached together.
+
+Replace Neon Borders
+
+The current bright pink borders distract from the experience.
+
+Instead use:
+
+soft white borders
+subtle shadows
+glassmorphism
+navy accents
+teal accents
+gold highlights
+
+Use pink only if it is part of a very small accent—not as the primary framing color.
+
+Modernize the Color Palette
+
+Keep the Housing Hub branding consistent.
+
+Primary:
+
+Navy
+
+Teal
+
+White
+
+Accent:
+
+Gold
+
+Sky Blue
+
+Emerald
+
+Avoid overly saturated neon colors that compete for attention.
+
+Better Buttons
+
+Buttons should match the website.
+
+Rounded corners.
+
+Hover animations.
+
+Consistent sizing.
+
+Professional typography.
+
+No oversized outlines.
+
+Better Preview Area
+
+The character preview should feel like a premium showcase.
+
+Use:
+
+neutral studio lighting
+subtle shadows
+simple rotating platform
+smooth camera orbit
+
+Avoid bright colored platforms that distract from the character.
+
+Overall Art Direction
+
+The desired style is:
+
+modern
+clean
+polished
+stylized
+approachable
+
+The quality should feel similar to modern stylized simulation games.
+
+Avoid:
+
+Roblox
+Minecraft
+block-based characters
+emoji interfaces
+placeholder UI
+inconsistent art styles
+
+Everything should feel like one professionally designed product.

@@ -1,3 +1,4 @@
+import { GameIcon, GameIconName } from '@/components/ui/GameIcon';
 import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
@@ -13,6 +14,7 @@ import { homes } from '@/data/homes';
 
 interface FeatureProp {
   pos: [number, number, number];
+  icon: import('@/components/ui/GameIcon').GameIconName;
   label: string;
   tip: string;
 }
@@ -30,98 +32,98 @@ interface HomeTheme {
 
 const HOME_THEMES: Record<number, HomeTheme> = {
   1: {
-    wallColor: '#09070a', floorColor: '#2b0a3d', bedroomFloorColor: '#1a0521',
-    accentColor: '#ff007f', ceilingColor: '#09070a',
+    wallColor: '#F8FAFC', floorColor: '#64748B', bedroomFloorColor: '#A0522D',
+    accentColor: '#1E3A8A', ceilingColor: '#F8FAFC',
     hasFireplace: true, hasKitchenIsland: false,
     features: {
-      entry: [{ pos: [-4, 0.6, 7], label: '🪟 Crown Molding', tip: 'Original 1940s crown molding — a sign of quality craftsmanship that adds character and value.' }],
+      entry: [{ pos: [-4, 0.6, 7], icon: 'home', label: 'Crown Molding', tip: 'Original 1940s crown molding — a sign of quality craftsmanship that adds character and value.' }],
       living: [
-        { pos: [-2, 0.3, 2.5], label: '🔥 Brick Fireplace', tip: 'Wood-burning fireplace, fully functional. A working fireplace can add $1,000–$5,000 to home value.' },
-        { pos: [1.5, 0.1, 1], label: '🪵 Hardwood Floors', tip: 'Original solid oak hardwood throughout. Refinishable and adds 2.5% to resale value on average.' },
+        { pos: [-2, 0.3, 2.5], icon: 'kitchen', label: 'Brick Fireplace', tip: 'Wood-burning fireplace, fully functional. A working fireplace can add $1,000–$5,000 to home value.' },
+        { pos: [1.5, 0.1, 1], icon: 'wood', label: 'Hardwood Floors', tip: 'Original solid oak hardwood throughout. Refinishable and adds 2.5% to resale value on average.' },
       ],
       kitchen: [
-        { pos: [5.5, 1.0, 0.5], label: '🔧 Updated Appliances', tip: 'Stainless steel appliances replaced in 2022. Energy Star rated saves ~$100/year on utilities.' },
-        { pos: [5, 0.9, -1.5], label: '🪨 Granite Counters', tip: 'Durable granite countertops resist scratches and can add $2,000–$5,000 to resale value.' },
+        { pos: [5.5, 1.0, 0.5], icon: 'wrench', label: 'Updated Appliances', tip: 'Stainless steel appliances replaced in 2022. Energy Star rated saves ~$100/year on utilities.' },
+        { pos: [5, 0.9, -1.5], icon: 'kitchen', label: 'Granite Counters', tip: 'Durable granite countertops resist scratches and can add $2,000–$5,000 to resale value.' },
       ],
       bedroom: [
-        { pos: [-5.5, 1.0, 0], label: '🪟 East-Facing Windows', tip: 'Double-pane east windows. Morning sun reduces winter heating costs naturally.' },
-        { pos: [-4, 0.5, -1.5], label: '🚪 Large Closet', tip: 'Walk-in closet potential. Storage ranks #1 on buyer wishlists nationwide.' },
+        { pos: [-5.5, 1.0, 0], icon: 'sun', label: 'East-Facing Windows', tip: 'Double-pane east windows. Morning sun reduces winter heating costs naturally.' },
+        { pos: [-4, 0.5, -1.5], icon: 'furniture', label: 'Large Closet', tip: 'Walk-in closet potential. Storage ranks #1 on buyer wishlists nationwide.' },
       ],
       backyard: [
-        { pos: [0.5, 0.1, -5.5], label: '🌳 Mature Oak Trees', tip: 'Mature trees add 10–15% to property value and cut cooling costs by up to 25%.' },
-        { pos: [2.5, 0.5, -5], label: '🏡 Privacy Fence', tip: '6-foot privacy fencing adds security, reduces noise, and increases buyer appeal.' },
+        { pos: [0.5, 0.1, -5.5], icon: 'leaf', label: 'Mature Oak Trees', tip: 'Mature trees add 10–15% to property value and cut cooling costs by up to 25%.' },
+        { pos: [2.5, 0.5, -5], icon: 'lock', label: 'Privacy Fence', tip: '6-foot privacy fencing adds security, reduces noise, and increases buyer appeal.' },
       ],
     },
   },
   2: {
-    wallColor: '#110e15', floorColor: '#1a0a2a', bedroomFloorColor: '#2b0a3d',
-    accentColor: '#00f0ff', ceilingColor: '#110e15',
+    wallColor: '#E2E8F0', floorColor: '#8B5A2B', bedroomFloorColor: '#64748B',
+    accentColor: '#0F766E', ceilingColor: '#E2E8F0',
     hasFireplace: false, hasKitchenIsland: false,
     features: {
-      entry: [{ pos: [-4, 0.6, 7], label: '🏡 Ranch Layout', tip: 'Single-level ranch homes are fully accessible — perfect for long-term aging in place.' }],
+      entry: [{ pos: [-4, 0.6, 7], icon: 'home', label: 'Ranch Layout', tip: 'Single-level ranch homes are fully accessible — perfect for long-term aging in place.' }],
       living: [
-        { pos: [1.5, 0.1, 2], label: '🧶 Neutral Carpet', tip: 'Low-maintenance carpet throughout. Easy to replace or upgrade to hardwood later for under $3,000.' },
-        { pos: [-1.5, 1.2, 3], label: '🪟 Picture Window', tip: 'Large front window floods the room with natural light, reducing daytime electricity costs.' },
+        { pos: [1.5, 0.1, 2], icon: 'furniture', label: 'Neutral Carpet', tip: 'Low-maintenance carpet throughout. Easy to replace or upgrade to hardwood later for under $3,000.' },
+        { pos: [-1.5, 1.2, 3], icon: 'sun', label: 'Picture Window', tip: 'Large front window floods the room with natural light, reducing daytime electricity costs.' },
       ],
       kitchen: [
-        { pos: [5.5, 0.9, 0.5], label: '🍽️ Breakfast Bar', tip: 'Space-efficient breakfast bar — perfect for small families or busy morning routines.' },
-        { pos: [5, 0.9, -1.5], label: '📦 Built-In Pantry', tip: 'Built-in pantry storage — one of the most-requested kitchen features by homebuyers.' },
+        { pos: [5.5, 0.9, 0.5], icon: 'kitchen', label: 'Breakfast Bar', tip: 'Space-efficient breakfast bar — perfect for small families or busy morning routines.' },
+        { pos: [5, 0.9, -1.5], icon: 'furniture', label: 'Built-In Pantry', tip: 'Built-in pantry storage — one of the most-requested kitchen features by homebuyers.' },
       ],
       bedroom: [
-        { pos: [-5.5, 0.5, 0], label: '🛏️ Plush Carpet', tip: 'Premium carpet in bedrooms — warm underfoot and provides excellent noise insulation.' },
-        { pos: [-4, 1.0, -1.5], label: '💡 Ceiling Fan', tip: 'Energy-efficient ceiling fans can reduce AC use by 40% in summer months.' },
+        { pos: [-5.5, 0.5, 0], icon: 'bed', label: 'Plush Carpet', tip: 'Premium carpet in bedrooms — warm underfoot and provides excellent noise insulation.' },
+        { pos: [-4, 1.0, -1.5], icon: 'lightbulb', label: 'Ceiling Fan', tip: 'Energy-efficient ceiling fans can reduce AC use by 40% in summer months.' },
       ],
       backyard: [
-        { pos: [0, 0.1, -5.5], label: '🌿 Quarter-Acre Lot', tip: 'Flat quarter-acre lot — room to add a garage, shed, or deck in the future.' },
-        { pos: [-2, 0.3, -5], label: '🌸 Garden Beds', tip: 'Existing raised garden beds — food gardens can save a family $1,200/year in groceries.' },
+        { pos: [0, 0.1, -5.5], icon: 'leaf', label: 'Quarter-Acre Lot', tip: 'Flat quarter-acre lot — room to add a garage, shed, or deck in the future.' },
+        { pos: [-2, 0.3, -5], icon: 'leaf', label: 'Garden Beds', tip: 'Existing raised garden beds — food gardens can save a family $1,200/year in groceries.' },
       ],
     },
   },
   3: {
-    wallColor: '#09070a', floorColor: '#1a0521', bedroomFloorColor: '#110e15',
-    accentColor: '#ffea00', ceilingColor: '#09070a',
+    wallColor: '#F8FAFC', floorColor: '#A0522D', bedroomFloorColor: '#E2E8F0',
+    accentColor: '#D4AF37', ceilingColor: '#F8FAFC',
     hasFireplace: false, hasKitchenIsland: true,
     features: {
-      entry: [{ pos: [-4, 0.6, 7], label: '🏙️ Modern Finishes', tip: 'Contemporary design with clean lines throughout — highly attractive to modern buyers.' }],
+      entry: [{ pos: [-4, 0.6, 7], icon: 'sparkles', label: 'Modern Finishes', tip: 'Contemporary design with clean lines throughout — highly attractive to modern buyers.' }],
       living: [
-        { pos: [1, 0.1, 2], label: '✨ Luxury Vinyl Plank', tip: 'Waterproof luxury vinyl — more durable than hardwood and costs 50% less to install.' },
-        { pos: [-2.5, 1.5, 1], label: '🪟 Floor-to-Ceiling Glass', tip: 'Dramatic natural light with UV-coating. Energy-efficient double-glazed panels.' },
+        { pos: [1, 0.1, 2], icon: 'wood', label: 'Luxury Vinyl Plank', tip: 'Waterproof luxury vinyl — more durable than hardwood and costs 50% less to install.' },
+        { pos: [-2.5, 1.5, 1], icon: 'sun', label: 'Floor-to-Ceiling Glass', tip: 'Dramatic natural light with UV-coating. Energy-efficient double-glazed panels.' },
       ],
       kitchen: [
-        { pos: [4.5, 1.0, 0.5], label: '🏝️ Quartz Island', tip: '6-foot quartz island with bar seating. Open-plan kitchens add 3–7% to resale value.' },
-        { pos: [5.5, 0.9, -1.5], label: '📱 Smart Appliances', tip: 'WiFi-connected appliances. Smart home features attract premium buyers and renters.' },
+        { pos: [4.5, 1.0, 0.5], icon: 'kitchen', label: 'Quartz Island', tip: '6-foot quartz island with bar seating. Open-plan kitchens add 3–7% to resale value.' },
+        { pos: [5.5, 0.9, -1.5], icon: 'phone', label: 'Smart Appliances', tip: 'WiFi-connected appliances. Smart home features attract premium buyers and renters.' },
       ],
       bedroom: [
-        { pos: [-5.5, 1.5, 0], label: '🛁 En Suite Bath', tip: 'Private en suite bathroom. Homes with master en suites sell 12% faster on average.' },
-        { pos: [-3.5, 0.5, -1.5], label: '🌅 Oyster Point View', tip: 'Elevated position overlooking Oyster Point. Location is the #1 driver of home value.' },
+        { pos: [-5.5, 1.5, 0], icon: 'bath', label: 'En Suite Bath', tip: 'Private en suite bathroom. Homes with master en suites sell 12% faster on average.' },
+        { pos: [-3.5, 0.5, -1.5], icon: 'map', label: 'Oyster Point View', tip: 'Elevated position overlooking Oyster Point. Location is the #1 driver of home value.' },
       ],
       backyard: [
-        { pos: [0, 0.5, -5], label: '🏗️ Composite Deck', tip: 'Low-maintenance composite deck. Decks add up to 65% of their cost back at resale.' },
-        { pos: [-2, 0.3, -5.5], label: '🌊 Water Feature', tip: 'Small water feature creates a relaxing outdoor living area — boosts lifestyle appeal.' },
+        { pos: [0, 0.5, -5], icon: 'wood', label: 'Composite Deck', tip: 'Low-maintenance composite deck. Decks add up to 65% of their cost back at resale.' },
+        { pos: [-2, 0.3, -5.5], icon: 'droplet', label: 'Water Feature', tip: 'Small water feature creates a relaxing outdoor living area — boosts lifestyle appeal.' },
       ],
     },
   },
   4: {
-    wallColor: '#110e15', floorColor: '#2b0a3d', bedroomFloorColor: '#1a0a2a',
-    accentColor: '#00f0ff', ceilingColor: '#110e15',
+    wallColor: '#E2E8F0', floorColor: '#64748B', bedroomFloorColor: '#8B5A2B',
+    accentColor: '#0F766E', ceilingColor: '#E2E8F0',
     hasFireplace: false, hasKitchenIsland: false,
     features: {
-      entry: [{ pos: [-4, 0.6, 7], label: '💰 Equity Opportunity', tip: 'At $168k — 30% below neighborhood median — strong appreciation potential as the area develops.' }],
+      entry: [{ pos: [-4, 0.6, 7], icon: 'trend-up', label: 'Equity Opportunity', tip: 'At $168k — 30% below neighborhood median — strong appreciation potential as the area develops.' }],
       living: [
-        { pos: [1, 0.1, 2], label: '🏠 Efficient Layout', tip: 'Compact 980sqft means lower heating/cooling costs and easier maintenance year-round.' },
-        { pos: [-2, 1.0, 3], label: '🖼️ Bay Window Nook', tip: 'Bay windows add architectural character and natural light — makes small spaces feel larger.' },
+        { pos: [1, 0.1, 2], icon: 'ruler', label: 'Efficient Layout', tip: 'Compact 980sqft means lower heating/cooling costs and easier maintenance year-round.' },
+        { pos: [-2, 1.0, 3], icon: 'sun', label: 'Bay Window Nook', tip: 'Bay windows add architectural character and natural light — makes small spaces feel larger.' },
       ],
       kitchen: [
-        { pos: [5.5, 0.9, 0.5], label: '🔄 Reno Potential', tip: "Small kitchen is a blank canvas — budget $15k–$25k for a full modern remodel with strong ROI." },
-        { pos: [5, 0.9, -1.5], label: '🧊 Efficient Size', tip: "Smaller kitchens mean faster cleanup and less wasted food. Great for solo buyers or couples." },
+        { pos: [5.5, 0.9, 0.5], icon: 'wrench', label: 'Reno Potential', tip: "Small kitchen is a blank canvas — budget $15k–$25k for a full modern remodel with strong ROI." },
+        { pos: [5, 0.9, -1.5], icon: 'kitchen', label: 'Efficient Size', tip: "Smaller kitchens mean faster cleanup and less wasted food. Great for solo buyers or couples." },
       ],
       bedroom: [
-        { pos: [-5.5, 0.5, 0], label: '🌙 Quiet Street', tip: "Southeast cul-de-sac location — minimal traffic, low noise, ideal for peaceful living." },
-        { pos: [-4, 1.0, -1.5], label: '📦 Storage Nook', tip: "Built-in storage nook — small homes benefit hugely from smart built-in storage solutions." },
+        { pos: [-5.5, 0.5, 0], icon: 'neighborhood', label: 'Quiet Street', tip: "Southeast cul-de-sac location — minimal traffic, low noise, ideal for peaceful living." },
+        { pos: [-4, 1.0, -1.5], icon: 'furniture', label: 'Storage Nook', tip: "Built-in storage nook — small homes benefit hugely from smart built-in storage solutions." },
       ],
       backyard: [
-        { pos: [0, 0.1, -5.5], label: '🐕 Fenced Yard', tip: "Fully fenced yard — perfect for pets or children. Fenced yards increase buyer interest by 18%." },
-        { pos: [2, 0.3, -5], label: '🌻 South-Facing', tip: "South-facing yard gets full sun — ideal for a vegetable garden saving $1,200+/year in food." },
+        { pos: [0, 0.1, -5.5], icon: 'paw', label: 'Fenced Yard', tip: "Fully fenced yard — perfect for pets or children. Fenced yards increase buyer interest by 18%." },
+        { pos: [2, 0.3, -5], icon: 'sun', label: 'South-Facing', tip: "South-facing yard gets full sun — ideal for a vegetable garden saving $1,200+/year in food." },
       ],
     },
   },
@@ -138,7 +140,7 @@ const TOUR_NPCS: Record<number, Omit<NPCDef, 'position' | 'rotation'>> = {
 
 // ── Clickable feature props ──────────────────────────────────────
 
-function ClickableProp({ pos, label, tip }: FeatureProp) {
+function ClickableProp({ pos, icon, label, tip }: FeatureProp) {
   const [open, setOpen] = useState(false);
   return (
     <group position={pos}>
@@ -159,14 +161,14 @@ function ClickableProp({ pos, label, tip }: FeatureProp) {
       >
         <sphereGeometry args={[0.16, 8, 8]} />
         <meshStandardMaterial
-          color={open ? '#ffea00' : '#00f0ff'}
-          emissive={open ? '#ffea00' : '#00f0ff'}
+          color={open ? '#D4AF37' : '#0F766E'}
+          emissive={open ? '#D4AF37' : '#0F766E'}
           emissiveIntensity={open ? 1.0 : 0.5}
         />
       </mesh>
       {!open && (
         <Html position={[0, 0.42, 0]} center distanceFactor={10}>
-          <div onPointerDown={(e) => { e.stopPropagation(); setOpen(true); }} style={{ background: 'rgba(0,240,255,0.85)', color: '#fff', borderRadius: 0, padding: '2px 7px', fontSize: 9, fontWeight: 700, fontFamily: 'var(--display-font)', whiteSpace: 'nowrap', cursor: 'pointer' }}>
+          <div onPointerDown={(e) => { e.stopPropagation(); setOpen(true); }} style={{ background: 'rgba(15,118,110,0.85)', color: '#fff', borderRadius: 'var(--glass-radius)', padding: '2px 7px', fontSize: 9, fontWeight: 700, fontFamily: 'var(--display-font)', whiteSpace: 'nowrap', cursor: 'pointer' }}>
             ● Inspect
           </div>
         </Html>
@@ -174,15 +176,15 @@ function ClickableProp({ pos, label, tip }: FeatureProp) {
       {open && (
         <Html position={[0, 1.4, 0]} center distanceFactor={10}>
           <div style={{
-            background: 'rgba(9,7,10,0.96)', border: '1px solid rgba(255,234,0,0.45)',
-            borderRadius: 0, padding: '10px 14px', maxWidth: 210,
+            background: 'rgba(9,7,10,0.96)', border: '1px solid rgba(212,175,55,0.45)',
+            borderRadius: 'var(--glass-radius)', padding: '10px 14px', maxWidth: 210,
             boxShadow: '0 6px 24px rgba(0,0,0,0.5)', fontFamily: 'var(--display-font)',
           }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#ffea00', marginBottom: 5 }}>{label}</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#D4AF37', marginBottom: 5, display: 'flex', alignItems: 'center', gap: 6 }}><GameIcon name={icon as GameIconName} size={14} /> {label}</div>
             <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.82)', lineHeight: 1.45 }}>{tip}</div>
             <button onClick={(e) => { e.stopPropagation(); setOpen(false); }}
-              style={{ marginTop: 8, fontSize: 10, color: 'rgba(255,255,255,0.4)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--display-font)' }}>
-              ✕ Close
+              style={{ marginTop: 8, fontSize: 10, color: 'rgba(255,255,255,0.4)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--display-font)', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <GameIcon name="close" size={10} /> Close
             </button>
           </div>
         </Html>
@@ -229,7 +231,7 @@ function ZoneTracker({ homeId }: { homeId: string }) {
 function RoomLabel({ pos, text }: { pos: [number, number, number]; text: string }) {
   return (
     <Html position={pos} center distanceFactor={16} style={{ pointerEvents: 'none' }}>
-      <div style={{ background: 'rgba(9,7,10,0.65)', borderRadius: 0, padding: '3px 9px', fontSize: 9, color: 'rgba(255,255,255,0.55)', fontFamily: 'var(--display-font)', fontWeight: 700, backdropFilter: 'blur(4px)', whiteSpace: 'nowrap' }}>
+      <div style={{ background: 'rgba(9,7,10,0.65)', borderRadius: 'var(--glass-radius)', padding: '3px 9px', fontSize: 9, color: 'rgba(255,255,255,0.55)', fontFamily: 'var(--display-font)', fontWeight: 700, backdropFilter: 'blur(4px)', whiteSpace: 'nowrap' }}>
         {text}
       </div>
     </Html>
@@ -279,8 +281,8 @@ export default function HomeInteriorScene() {
 
       {/* Home name card */}
       <Html position={[0, 3.5, 8.5]} center distanceFactor={18}>
-        <div style={{ background: 'rgba(9,7,10,0.9)', borderRadius: 0, padding: '6px 14px', fontFamily: 'var(--display-font)', textAlign: 'center', border: '1px solid rgba(255,234,0,0.35)' }}>
-          <div style={{ fontSize: 12, fontWeight: 800, color: '#ffea00' }}>{home.name}</div>
+        <div style={{ background: 'rgba(9,7,10,0.9)', borderRadius: 'var(--glass-radius)', padding: '6px 14px', fontFamily: 'var(--display-font)', textAlign: 'center', border: '1px solid rgba(212,175,55,0.35)' }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: '#D4AF37' }}>{home.name}</div>
           <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)' }}>{home.neighborhood} · ${home.price.toLocaleString()}</div>
         </div>
       </Html>
@@ -397,40 +399,40 @@ export default function HomeInteriorScene() {
       {/* Sofa */}
       <mesh position={[-1.5, 0.45, 0.5]} castShadow>
         <boxGeometry args={[3.5, 0.9, 1.2]} />
-        <meshStandardMaterial color="#1a0521" roughness={0.8} />
+        <meshStandardMaterial color="#A0522D" roughness={0.8} />
       </mesh>
       <mesh position={[-1.5, 0.88, -0.1]} castShadow>
         <boxGeometry args={[3.5, 0.44, 0.16]} />
-        <meshStandardMaterial color="#2b0a3d" roughness={0.8} />
+        <meshStandardMaterial color="#64748B" roughness={0.8} />
       </mesh>
       {/* Cushions */}
       {([-2, -0.5, 1] as number[]).map((cx) => (
         <mesh key={cx} position={[cx, 0.95, 0.38]} castShadow>
           <boxGeometry args={[0.88, 0.16, 0.86]} />
-          <meshStandardMaterial color="#00f0ff" roughness={0.9} />
+          <meshStandardMaterial color="#0F766E" roughness={0.9} />
         </mesh>
       ))}
       {/* Coffee table */}
       <mesh position={[-1.5, 0.28, 2.2]} castShadow>
         <boxGeometry args={[2.2, 0.08, 1.0]} />
-        <meshStandardMaterial color="#110e15" roughness={0.4} metalness={0.05} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.4} metalness={0.05} />
       </mesh>
       {([-0.9, 0.9] as number[]).map((lx) =>
         ([-0.35, 0.35] as number[]).map((lz) => (
           <mesh key={`${lx}${lz}`} position={[lx - 1.5, 0.14, lz + 2.2]} castShadow>
             <cylinderGeometry args={[0.05, 0.05, 0.28, 6]} />
-            <meshStandardMaterial color="#ffea00" roughness={0.6} />
+            <meshStandardMaterial color="#D4AF37" roughness={0.6} />
           </mesh>
         ))
       )}
       {/* TV + stand */}
       <mesh position={[2.5, 0.35, 2]} castShadow>
         <boxGeometry args={[2.4, 0.7, 0.5]} />
-        <meshStandardMaterial color="#2b0a3d" roughness={0.5} metalness={0.1} />
+        <meshStandardMaterial color="#64748B" roughness={0.5} metalness={0.1} />
       </mesh>
       <mesh position={[2.5, 1.3, 2.1]} castShadow>
         <boxGeometry args={[2.0, 1.3, 0.09]} />
-        <meshStandardMaterial color="#09070a" roughness={0.2} metalness={0.6} />
+        <meshStandardMaterial color="#F8FAFC" roughness={0.2} metalness={0.6} />
       </mesh>
 
       {/* Fireplace (home 1 only) */}
@@ -438,111 +440,111 @@ export default function HomeInteriorScene() {
         <group position={[-4.7, 0, 3]}>
           <mesh position={[0, 1.0, 0.09]} castShadow>
             <boxGeometry args={[2.2, 2.0, 0.2]} />
-            <meshStandardMaterial color="#1a0a2a" roughness={0.8} />
+            <meshStandardMaterial color="#8B5A2B" roughness={0.8} />
           </mesh>
           <mesh position={[0, 0.6, 0.2]} castShadow>
             <boxGeometry args={[1.4, 1.2, 0.2]} />
-            <meshStandardMaterial color="#09070a" roughness={0.9} />
+            <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
           </mesh>
-          <pointLight position={[0, 0.8, 0.5]} intensity={1.2} color="#ff007f" distance={5} decay={2} />
+          <pointLight position={[0, 0.8, 0.5]} intensity={1.2} color="#1E3A8A" distance={5} decay={2} />
         </group>
       )}
 
       {/* ── KITCHEN FURNITURE ── */}
       <mesh position={[6.5, 0.45, 0]} castShadow>
         <boxGeometry args={[1.2, 0.9, 5]} />
-        <meshStandardMaterial color="#110e15" roughness={0.7} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.7} />
       </mesh>
       <mesh position={[6.5, 0.95, 0]} castShadow>
         <boxGeometry args={[1.3, 0.08, 5.2]} />
-        <meshStandardMaterial color={homeId === 1 ? '#00f0ff' : homeId === 3 ? '#ffea00' : '#ff007f'} roughness={0.3} metalness={0.1} />
+        <meshStandardMaterial color={homeId === 1 ? '#0F766E' : homeId === 3 ? '#D4AF37' : '#1E3A8A'} roughness={0.3} metalness={0.1} />
       </mesh>
       <mesh position={[6.5, 2.1, 0]} castShadow>
         <boxGeometry args={[1.0, 0.9, 4.8]} />
-        <meshStandardMaterial color="#1a0521" roughness={0.7} />
+        <meshStandardMaterial color="#A0522D" roughness={0.7} />
       </mesh>
       {/* Stove */}
       <mesh position={[6.5, 0.95, 1.2]} castShadow>
         <boxGeometry args={[0.7, 0.08, 0.65]} />
-        <meshStandardMaterial color="#09070a" roughness={0.3} metalness={0.5} />
+        <meshStandardMaterial color="#F8FAFC" roughness={0.3} metalness={0.5} />
       </mesh>
       {/* Kitchen island (home 3) */}
       {theme.hasKitchenIsland && (
         <mesh position={[4.5, 0.52, 0]} castShadow>
           <boxGeometry args={[1.6, 1.04, 3.0]} />
-          <meshStandardMaterial color="#2b0a3d" roughness={0.4} metalness={0.05} />
+          <meshStandardMaterial color="#64748B" roughness={0.4} metalness={0.05} />
         </mesh>
       )}
 
       {/* ── BEDROOM FURNITURE ── */}
       <mesh position={[-5.5, 0.25, -1.5]} castShadow>
         <boxGeometry args={[3.2, 0.5, 2.5]} />
-        <meshStandardMaterial color="#1a0a2a" roughness={0.7} />
+        <meshStandardMaterial color="#8B5A2B" roughness={0.7} />
       </mesh>
       <mesh position={[-5.5, 0.6, -1.5]} castShadow>
         <boxGeometry args={[3.0, 0.4, 2.3]} />
-        <meshStandardMaterial color="#110e15" roughness={0.95} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.95} />
       </mesh>
       <mesh position={[-5.5, 0.85, -2.3]} castShadow>
         <boxGeometry args={[1.8, 0.2, 0.5]} />
-        <meshStandardMaterial color="#ff007f" roughness={0.95} />
+        <meshStandardMaterial color="#1E3A8A" roughness={0.95} />
       </mesh>
       <mesh position={[-5.5, 1.0, -2.85]} castShadow>
         <boxGeometry args={[3.2, 1.4, 0.16]} />
-        <meshStandardMaterial color="#1a0a2a" roughness={0.7} />
+        <meshStandardMaterial color="#8B5A2B" roughness={0.7} />
       </mesh>
       {/* Nightstand */}
       <mesh position={[-4.0, 0.38, -2.1]} castShadow>
         <boxGeometry args={[0.7, 0.76, 0.6]} />
-        <meshStandardMaterial color="#2b0a3d" roughness={0.6} />
+        <meshStandardMaterial color="#64748B" roughness={0.6} />
       </mesh>
       {/* Dresser */}
       <mesh position={[-7.2, 0.6, 0.5]} castShadow>
         <boxGeometry args={[0.55, 1.2, 2.0]} />
-        <meshStandardMaterial color="#2b0a3d" roughness={0.6} metalness={0.04} />
+        <meshStandardMaterial color="#64748B" roughness={0.6} metalness={0.04} />
       </mesh>
 
       {/* ── BACKYARD / PATIO ── */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.04, -4.5]} receiveShadow>
         <planeGeometry args={[6, 2]} />
-        <meshStandardMaterial color="#110e15" roughness={0.9} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.9} />
       </mesh>
       {/* Patio chairs */}
       {([-1.5, 1.5] as number[]).map((px) => (
         <group key={px} position={[px, 0, -5.5]}>
           <mesh position={[0, 0.3, 0]} castShadow>
             <boxGeometry args={[0.6, 0.1, 0.6]} />
-            <meshStandardMaterial color="#1a0521" roughness={0.7} />
+            <meshStandardMaterial color="#A0522D" roughness={0.7} />
           </mesh>
           <mesh position={[0, 0.65, -0.24]} castShadow>
             <boxGeometry args={[0.6, 0.65, 0.08]} />
-            <meshStandardMaterial color="#00f0ff" roughness={0.7} />
+            <meshStandardMaterial color="#0F766E" roughness={0.7} />
           </mesh>
         </group>
       ))}
       {/* Patio table */}
       <mesh position={[0, 0.36, -5.5]} castShadow>
         <cylinderGeometry args={[0.04, 0.04, 0.72, 6]} />
-        <meshStandardMaterial color="#110e15" roughness={0.5} metalness={0.3} />
+        <meshStandardMaterial color="#E2E8F0" roughness={0.5} metalness={0.3} />
       </mesh>
       <mesh position={[0, 0.4, -5.5]} castShadow>
         <cylinderGeometry args={[0.5, 0.5, 0.08, 12]} />
-        <meshStandardMaterial color="#ffea00" roughness={0.6} metalness={0.1} />
+        <meshStandardMaterial color="#D4AF37" roughness={0.6} metalness={0.1} />
       </mesh>
       {/* Fence posts */}
       {([-4, -2, 0, 2, 4] as number[]).map((fx) => (
         <mesh key={fx} position={[fx, 0.75, -8]} castShadow>
           <boxGeometry args={[0.08, 1.5, 0.08]} />
-          <meshStandardMaterial color="#110e15" roughness={0.8} />
+          <meshStandardMaterial color="#E2E8F0" roughness={0.8} />
         </mesh>
       ))}
       <mesh position={[0, 1.2, -8]} castShadow>
         <boxGeometry args={[8, 0.08, 0.08]} />
-        <meshStandardMaterial color="#1a0521" roughness={0.8} />
+        <meshStandardMaterial color="#A0522D" roughness={0.8} />
       </mesh>
       <mesh position={[0, 0.5, -8]} castShadow>
         <boxGeometry args={[8, 0.08, 0.08]} />
-        <meshStandardMaterial color="#1a0521" roughness={0.8} />
+        <meshStandardMaterial color="#A0522D" roughness={0.8} />
       </mesh>
 
       {/* ── CEILING LIGHTS ── */}
@@ -550,13 +552,13 @@ export default function HomeInteriorScene() {
         <group key={`l${lx}`}>
           <mesh position={[lx, 2.85, lz]}>
             <cylinderGeometry args={[0.18, 0.22, 0.16, 10]} />
-            <meshStandardMaterial color="#09070a" roughness={0.3} metalness={0.6} />
+            <meshStandardMaterial color="#F8FAFC" roughness={0.3} metalness={0.6} />
           </mesh>
           <mesh position={[lx, 2.78, lz]}>
             <cylinderGeometry args={[0.15, 0.15, 0.04, 10]} />
-            <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={1.5} />
+            <meshStandardMaterial color="#0F766E" emissive="#0F766E" emissiveIntensity={1.5} />
           </mesh>
-          <pointLight position={[lx, 2.5, lz]} intensity={0.7} color="#00f0ff" distance={8} decay={2} />
+          <pointLight position={[lx, 2.5, lz]} intensity={0.7} color="#0F766E" distance={8} decay={2} />
         </group>
       ))}
 
@@ -580,16 +582,16 @@ export default function HomeInteriorScene() {
       {theme.hasFireplace ? (
         <Bookshelf position={[-4.7, 0, 5]} rotation={[0, 0, 0]} color={theme.accentColor} />
       ) : (
-        <PottedPlant position={[-4.5, 0, 5.4]} scale={1.15} leafColor="#00f0ff" />
+        <PottedPlant position={[-4.5, 0, 5.4]} scale={1.15} leafColor="#0F766E" />
       )}
       {/* Home 3 (modern): sleek accent plant on the kitchen island end */}
       {theme.hasKitchenIsland && (
-        <PottedPlant position={[4.5, 1.04, 1.2]} scale={0.7} potColor="#ffea00" leafColor="#ff007f" />
+        <PottedPlant position={[4.5, 1.04, 1.2]} scale={0.7} potColor="#D4AF37" leafColor="#1E3A8A" />
       )}
       {/* Backyard greenery — flowers + bushes vary by theme */}
       <FlowerBed position={[3.5, 0.04, -5]} w={1.6} d={0.6} />
-      <Bush position={[-3.5, 0, -6.5]} scale={1.1} color="#ff007f" />
-      <Bush position={[-2.2, 0, -6.6]} scale={0.85} color="#00f0ff" />
+      <Bush position={[-3.5, 0, -6.5]} scale={1.1} color="#1E3A8A" />
+      <Bush position={[-2.2, 0, -6.6]} scale={0.85} color="#0F766E" />
 
       {/* ── CLICKABLE FEATURE PROPS ── */}
       {Object.entries(theme.features).flatMap(([, props]) =>
