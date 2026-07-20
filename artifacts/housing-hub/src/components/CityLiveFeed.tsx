@@ -504,11 +504,8 @@ export function CityLiveFeed() {
 
   return (
     <>
-      {/* Drone and balloon only on the home page */}
-      {isHome && <DroneScene   color={data.color} />}
-      {isHome && <BalloonScene color={data.color} accent={data.accent} />}
-      <BusScene     ticker={data.ticker} />
-      <NewsTicker   items={data.ticker} />
+      <BusScene   ticker={data.ticker} />
+      <NewsTicker items={data.ticker} />
     </>
   );
 }

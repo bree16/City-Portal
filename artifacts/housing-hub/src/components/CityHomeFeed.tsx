@@ -590,11 +590,5 @@ export function CityHomeFeed() {
   const path = location.split('?')[0];
   if (path !== '/') return null;
 
-  return (
-    <>
-      <PoliceChaseScene />
-      <AmbulanceScene />
-      <CharacterParadeScene />
-    </>
-  );
+  return <CharacterParadeScene />;
 }
