@@ -174,6 +174,24 @@ export interface GameState {
   setSellNegotiation: (state: SellNegotiationState | null) => void;
   quitToMenu: () => void;
   resetGame: () => void;
+
+  /** End-game */
+  showEndGame: boolean;
+  homeSold: boolean;
+  saleProceeds: number;
+  totalInterestPaid: number;
+  /** Dev mode: unlocked by "2005" on title screen; exposes in-game money cheat panel */
+  devMode: boolean;
+  /** Events collected during a passYear call — shown in year-end summary modal */
+  yearSummaryEvents: string[];
+  setShowEndGame: (v: boolean) => void;
+  /** Pay off mortgage from sale price, add net proceeds to cash, trigger end game */
+  sellHome: (salePrice: number) => void;
+  /** Advance 12 months at once, collecting a summary of events */
+  passYear: () => void;
+  setDevCash: (amount: number) => void;
+  setDevMode: (v: boolean) => void;
+  clearYearSummary: () => void;
 }
 
 export const DEFAULT_APPEARANCE: CharacterAppearance = {
