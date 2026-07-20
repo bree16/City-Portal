@@ -53,10 +53,10 @@ type LightCfg = {
 
 const CITY_CFG: LightCfg = {
   ambient: 0.75, ambientColor: '#E8F4FF',
-  keyColor: '#FFF8E1', keyIntensity: 2.0, keyPos: [30, 28, 20],
-  fillColor: '#C8E8FF', fillIntensity: 0.8,
+  keyColor: '#FFFBF0', keyIntensity: 2.0, keyPos: [30, 28, 20],
+  fillColor: '#E0F0FF', fillIntensity: 0.8,
   rimColor: '#FFD700', rimIntensity: 0.35,
-  fogColor: '#D4E8F8', fogNear: 45, fogFar: 100,
+  fogColor: '#87CEEB', fogNear: 45, fogFar: 100,
   envPreset: 'park',
   accentColor: '#FFE680', accentPos: [0, 14, -10],
 };
@@ -82,10 +82,10 @@ const INTERIOR_CFG: Record<string, LightCfg> = {
   },
   realestate: {
     ambient: 0.7, ambientColor: '#E8F4FF',
-    keyColor: '#FFF8E1', keyIntensity: 2.2, keyPos: [20, 22, 15],
-    fillColor: '#C8E8FF', fillIntensity: 0.8,
+    keyColor: '#FFFBF0', keyIntensity: 2.2, keyPos: [20, 22, 15],
+    fillColor: '#E0F0FF', fillIntensity: 0.8,
     rimColor: '#FFD700', rimIntensity: 0.4,
-    fogColor: '#D0E8FF', fogNear: 40, fogFar: 90,
+    fogColor: '#87CEEB', fogNear: 40, fogFar: 90,
     envPreset: 'park',
     accentColor: '#FFE680', accentPos: [0, 12, -10],
   },
@@ -329,7 +329,7 @@ export default function GamePage() {
         width: '100vw',
         height: '100dvh',
         overflow: 'hidden',
-        background: '#09070a',
+        background: '#87CEEB',
         position: 'relative',
       }}
     >

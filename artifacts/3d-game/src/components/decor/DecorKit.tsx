@@ -63,7 +63,7 @@ export function TallPlant({ position, scale = 1 }: { position: V3; scale?: numbe
 
 /* ── Wall decor ───────────────────────────────────────────────── */
 
-export function WallArt({ position, rotation = [0, 0, 0], color = '#0F766E', w = 1.1, h = 0.8, frame = '#3E2723' }: {
+export function WallArt({ position, rotation = [0, 0, 0], color = '#8FBC8F', w = 1.1, h = 0.8, frame = '#3E2723' }: {
   position: V3; rotation?: V3; color?: string; w?: number; h?: number; frame?: string;
 }) {
   return (
@@ -79,11 +79,11 @@ export function WallArt({ position, rotation = [0, 0, 0], color = '#0F766E', w =
       {/* Simple abstract shapes on the canvas */}
       <mesh position={[-w * 0.18, h * 0.1, 0.045]}>
         <circleGeometry args={[h * 0.22, 12]} />
-        <meshStandardMaterial color="#D4AF37" roughness={0.9} />
+        <meshStandardMaterial color="#BDB76B" roughness={0.9} />
       </mesh>
       <mesh position={[w * 0.22, -h * 0.15, 0.045]}>
         <planeGeometry args={[w * 0.3, h * 0.3]} />
-        <meshStandardMaterial color="#1E3A8A" roughness={0.9} />
+        <meshStandardMaterial color="#CD853F" roughness={0.9} />
       </mesh>
     </group>
   );
@@ -94,7 +94,7 @@ export function WallClock({ position, rotation = [0, 0, 0] }: { position: V3; ro
     <group position={position} rotation={rotation}>
       <mesh castShadow>
         <cylinderGeometry args={[0.28, 0.28, 0.05, 20]} />
-        <meshStandardMaterial color="#1E3A8A" roughness={0.4} metalness={0.3} />
+        <meshStandardMaterial color="#7fb2d9" roughness={0.4} metalness={0.3} />
       </mesh>
       <mesh position={[0, 0.028, 0]}>
         <cylinderGeometry args={[0.24, 0.24, 0.01, 20]} />
@@ -106,7 +106,7 @@ export function WallClock({ position, rotation = [0, 0, 0] }: { position: V3; ro
       </mesh>
       <mesh position={[0.05, 0.04, 0]} rotation={[0, Math.PI / 2, 0]}>
         <boxGeometry args={[0.02, 0.005, 0.1]} />
-        <meshStandardMaterial color="#D4AF37" />
+        <meshStandardMaterial color="#B8860B" />
       </mesh>
     </group>
   );
@@ -142,7 +142,7 @@ export function Curtains({ position, width = 2.6, height = 2.4, color = '#F5F5DC
 
 /* ── Furniture & clutter ──────────────────────────────────────── */
 
-export function Rug({ position, w = 3.5, d = 2.6, color = '#1E3A8A', border = '#D4AF37' }: {
+export function Rug({ position, w = 3.5, d = 2.6, color = '#A0522D', border = '#CD853F' }: {
   position: V3; w?: number; d?: number; color?: string; border?: string;
 }) {
   return (
@@ -159,7 +159,7 @@ export function Rug({ position, w = 3.5, d = 2.6, color = '#1E3A8A', border = '#
   );
 }
 
-const BOOK_COLORS = ['#1E3A8A', '#0D9488', '#D4AF37', '#10B981', '#38BDF8', '#8B4513', '#5F9EA0'];
+const BOOK_COLORS = ['#8B0000', '#2F4F4F', '#B8860B', '#556B2F', '#4682B4', '#8B4513', '#5F9EA0'];
 
 export function BookRow({ position, count = 5, rotation = [0, 0, 0] }: { position: V3; count?: number; rotation?: V3 }) {
   return (

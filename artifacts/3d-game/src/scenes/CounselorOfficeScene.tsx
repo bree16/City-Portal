@@ -62,7 +62,7 @@ export default function CounselorOfficeScene() {
       {/* Carpet */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
         <planeGeometry args={[10, 8]} />
-        <meshStandardMaterial color="#1E3A8A" roughness={0.95} />
+        <meshStandardMaterial color="#4682B4" roughness={0.95} />
       </mesh>
 
       {/* Walls */}
@@ -90,18 +90,18 @@ export default function CounselorOfficeScene() {
         <group key={x}>
           <mesh position={[x, 4.88, 0]}>
             <boxGeometry args={[1.0, 0.05, 0.5]} />
-            <meshStandardMaterial color="#ffffff" emissive="#D4AF37" emissiveIntensity={1.2} />
+            <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={1.2} />
           </mesh>
-          <pointLight position={[x, 4.5, 0]} intensity={0.5} color="#D4AF37" distance={10} />
+          <pointLight position={[x, 4.5, 0]} intensity={0.5} color="#D2B48C" distance={10} />
         </group>
       ))}
 
       {/* Desk window — light source */}
       <mesh position={[6, 2.3, -6.88]}>
         <boxGeometry args={[2.5, 1.6, 0.08]} />
-        <meshStandardMaterial color="#1E3A8A" emissive="#0F766E" emissiveIntensity={0.6} roughness={0.1} />
+        <meshStandardMaterial color="#4682B4" emissive="#E0F0FF" emissiveIntensity={0.6} roughness={0.1} />
       </mesh>
-      <pointLight position={[6, 2.5, -6]} intensity={0.8} color="#0F766E" distance={7} />
+      <pointLight position={[6, 2.5, -6]} intensity={0.8} color="#5F9EA0" distance={7} />
 
       {/* Counselor desk */}
       <group position={[2, 0, -3]}>
@@ -113,20 +113,20 @@ export default function CounselorOfficeScene() {
           ([-0.45, 0.45] as number[]).map((z) => (
             <mesh key={`${x}-${z}`} position={[x + 2, 0.23, z + -3]} castShadow>
               <boxGeometry args={[0.09, 0.92, 0.09]} />
-              <meshStandardMaterial color="#0F766E" roughness={0.5} />
+              <meshStandardMaterial color="#5F9EA0" roughness={0.5} />
             </mesh>
           ))
         )}
         {/* Monitor */}
         <mesh position={[0.4, 0.55, -0.15]} castShadow>
           <boxGeometry args={[0.55, 0.36, 0.05]} />
-          <meshStandardMaterial color="#E2E8F0" roughness={0.2} metalness={0.4} emissive="#1E3A8A" emissiveIntensity={0.6} />
+          <meshStandardMaterial color="#E2E8F0" roughness={0.2} metalness={0.4} emissive="#E0F0FF" emissiveIntensity={0.6} />
         </mesh>
-        <pointLight position={[2.5, 0.8, -2.8]} intensity={0.2} color="#1E3A8A" distance={2} />
+        <pointLight position={[2.5, 0.8, -2.8]} intensity={0.2} color="#4682B4" distance={2} />
         {/* Papers */}
         <mesh position={[-0.4, 0.52, 0]} castShadow>
           <boxGeometry args={[0.4, 0.01, 0.3]} />
-          <meshStandardMaterial color="#D4AF37" roughness={0.9} />
+          <meshStandardMaterial color="#D2B48C" roughness={0.9} />
         </mesh>
       </group>
 
@@ -139,7 +139,7 @@ export default function CounselorOfficeScene() {
           </mesh>
           <mesh position={[0, 0.68, -0.28]} castShadow>
             <boxGeometry args={[0.65, 0.75, 0.08]} />
-            <meshStandardMaterial color="#0F766E" roughness={0.9} />
+            <meshStandardMaterial color="#5F9EA0" roughness={0.9} />
           </mesh>
         </group>
       ))}
@@ -163,7 +163,7 @@ export default function CounselorOfficeScene() {
       </mesh>
       <mesh position={[-3.5, 1.8, -6.78]}>
         <boxGeometry args={[3.1, 1.9, 0.06]} />
-        <meshStandardMaterial color="#0F766E" roughness={0.4} metalness={0.3} wireframe />
+        <meshStandardMaterial color="#5F9EA0" roughness={0.4} metalness={0.3} wireframe />
       </mesh>
       <Html position={[-3.5, 2.95, -6.7]} center distanceFactor={10}>
         <div onPointerDown={(e) => { e.stopPropagation(); openDialogue('whiteboard'); }} style={{
@@ -197,7 +197,7 @@ export default function CounselorOfficeScene() {
         {[0.3, 0.7, 1.1].map((y) => (
           <mesh key={y} position={[0.26, y, 0.3]} castShadow>
             <boxGeometry args={[0.15, 0.04, 0.04]} />
-            <meshStandardMaterial color="#0F766E" metalness={0.7} roughness={0.2} />
+            <meshStandardMaterial color="#5F9EA0" metalness={0.7} roughness={0.2} />
           </mesh>
         ))}
         <Html position={[0, 1.55, 0]} center distanceFactor={10}>
@@ -235,25 +235,25 @@ export default function CounselorOfficeScene() {
       <group position={[7, 0, -5]}>
         <mesh position={[0, 0.3, 0]} castShadow>
           <cylinderGeometry args={[0.2, 0.15, 0.6, 8]} />
-          <meshStandardMaterial color="#D4AF37" roughness={0.7} />
+          <meshStandardMaterial color="#D2B48C" roughness={0.7} />
         </mesh>
         <mesh position={[0, 0.75, 0]} castShadow>
           <sphereGeometry args={[0.4, 10, 10]} />
-          <meshStandardMaterial color="#0F766E" roughness={0.9} />
+          <meshStandardMaterial color="#5F9EA0" roughness={0.9} />
         </mesh>
       </group>
 
       {/* ── Decor: warm, welcoming office ─────────────────────── */}
       {/* Accent rug under the visitor chairs */}
-      <Rug position={[2, 0.02, 0.2]} w={3.2} d={2.4} color="#1E3A8A" border="#0F766E" />
+      <Rug position={[2, 0.02, 0.2]} w={3.2} d={2.4} color="#4682B4" border="#2F4F4F" />
       {/* Tall plant in the far corner */}
       <TallPlant position={[-7, 0, -6] as [number, number, number]} scale={1.05} />
       {/* Extra small plant atop the filing cabinet */}
-      <PottedPlant position={[6, 1.3, -4]} scale={0.5} leafColor="#0F766E" potColor="#D4AF37" />
+      <PottedPlant position={[6, 1.3, -4]} scale={0.5} leafColor="#2E8B57" potColor="#8B5A2B" />
       {/* Framed art on left wall, facing inward */}
-      <WallArt position={[-7.85, 3.0, 1]} rotation={[0, Math.PI / 2, 0]} color="#0F766E" w={1.2} h={0.85} />
+      <WallArt position={[-7.85, 3.0, 1]} rotation={[0, Math.PI / 2, 0]} color="#5F9EA0" w={1.2} h={0.85} />
       {/* Warm floor lamp beside the bookshelf corner */}
-      <FloorLamp position={[-7, 0, -1] as [number, number, number]} shadeColor="#D4AF37" lightColor="#D4AF37" />
+      <FloorLamp position={[-7, 0, -1] as [number, number, number]} shadeColor="#F5F5DC" lightColor="#FFF0D4" />
 
       {/* Counselor NPC */}
       <NPCCharacter npc={COUNSELOR} onClick={() => openDialogue('counselor')} />

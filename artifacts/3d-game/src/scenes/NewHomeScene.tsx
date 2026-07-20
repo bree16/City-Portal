@@ -108,7 +108,7 @@ export default function NewHomeScene() {
       {/* Rug */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-1, 0.01, -1.5]} receiveShadow>
         <planeGeometry args={[5.5, 4.5]} />
-        <meshStandardMaterial color="#0F766E" roughness={0.95} />
+        <meshStandardMaterial color="#5F9EA0" roughness={0.95} />
       </mesh>
 
       {/* Walls */}
@@ -136,26 +136,26 @@ export default function NewHomeScene() {
         <group key={x}>
           <mesh position={[x, 4.88, 0]}>
             <boxGeometry args={[1.4, 0.05, 0.5]} />
-            <meshStandardMaterial color="#ffffff" emissive="#D4AF37" emissiveIntensity={1.4} />
+            <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={1.4} />
           </mesh>
-          <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#D4AF37" distance={10} />
+          <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#D2B48C" distance={10} />
         </group>
       ))}
 
       {/* Windows — warm sunlight */}
       <mesh position={[-2, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#F8FAFC" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[3.5, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#F8FAFC" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[-9.85, 1.8, 1]} castShadow>
         <boxGeometry args={[0.12, 1.5, 2.0]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.6} roughness={0.05} />
+        <meshStandardMaterial color="#F8FAFC" emissive="#E0F0FF" emissiveIntensity={0.6} roughness={0.05} />
       </mesh>
-      <pointLight position={[0, 3.0, -7]} intensity={1.2} color="#0F766E" distance={12} />
+      <pointLight position={[0, 3.0, -7]} intensity={1.2} color="#5F9EA0" distance={12} />
 
       {/* Door */}
       <group position={[8.5, 0, 2.5]}>
@@ -165,7 +165,7 @@ export default function NewHomeScene() {
         </mesh>
         <mesh position={[0.1, 1.0, 0.42]}>
           <sphereGeometry args={[0.07, 8, 8]} />
-          <meshStandardMaterial color="#D4AF37" metalness={0.9} roughness={0.08} />
+          <meshStandardMaterial color="#D2B48C" metalness={0.9} roughness={0.08} />
         </mesh>
       </group>
 
@@ -173,22 +173,22 @@ export default function NewHomeScene() {
       {([-9.9, 9.9] as number[]).map((x) => (
         <mesh key={x} position={[x, 0.08, 0]} castShadow>
           <boxGeometry args={[0.1, 0.16, 15.8]} />
-          <meshStandardMaterial color="#1E3A8A" roughness={0.8} />
+          <meshStandardMaterial color="#4682B4" roughness={0.8} />
         </mesh>
       ))}
 
       {/* Crown molding */}
       <mesh position={[0, 4.92, -7.9]}>
         <boxGeometry args={[20, 0.16, 0.12]} />
-        <meshStandardMaterial color="#1E3A8A" roughness={0.8} />
+        <meshStandardMaterial color="#4682B4" roughness={0.8} />
       </mesh>
 
       {/* ── Decor: moving-day warmth ── */}
       {/* Curtains framing the back windows (windows at z=-7.85) */}
-      <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#1E3A8A" />
-      <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#1E3A8A" />
+      <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#4682B4" />
+      <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#4682B4" />
       {/* Wall art on right wall (faces -x), away from door/slots */}
-      <WallArt position={[9.85, 2.9, -3]} rotation={[0, -Math.PI / 2, 0]} color="#0F766E" w={1.3} h={0.95} />
+      <WallArt position={[9.85, 2.9, -3]} rotation={[0, -Math.PI / 2, 0]} color="#5F9EA0" w={1.3} h={0.95} />
       {/* Welcoming plants in corners */}
       <TallPlant position={[-8.5, 0, -6.5]} scale={1.0} />
       <PottedPlant position={[8.5, 0, -6.5]} scale={1.05} />
@@ -207,7 +207,7 @@ export default function NewHomeScene() {
             {/* Tape strip */}
             <mesh position={[b.p[0], b.p[1] + b.s[1] / 2 + 0.001, b.p[2]]} rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[0.1, b.s[2]]} />
-              <meshStandardMaterial color="#D4AF37" roughness={0.9} />
+              <meshStandardMaterial color="#D2B48C" roughness={0.9} />
             </mesh>
           </group>
         ))}
@@ -226,7 +226,7 @@ export default function NewHomeScene() {
             ) : (
               <mesh position={[0, 0.06, 0]} onPointerDown={(e) => { e.stopPropagation(); if (activeSlot !== slot.id) getAudioEngine().play('click'); setActiveSlot(activeSlot === slot.id ? null : slot.id); }} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = 'auto'; }}>
                 <boxGeometry args={[slot.size[0] + 0.2, 0.12, slot.size[2] + 0.2]} />
-                <meshStandardMaterial color="#D4AF37" transparent opacity={0.45} emissive="#D4AF37" emissiveIntensity={0.8} roughness={0.5} />
+                <meshStandardMaterial color="#D2B48C" transparent opacity={0.45} emissive="#FFF0D4" emissiveIntensity={0.8} roughness={0.5} />
               </mesh>
             )}
             <Html position={[0, placed ? slot.size[1] + 0.55 : 0.55, 0]} center distanceFactor={10}>

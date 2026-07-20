@@ -136,7 +136,7 @@ export default function HomeLifeScene() {
       {/* Rug */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-1, 0.01, 0]} receiveShadow>
         <planeGeometry args={[6, 5]} />
-        <meshStandardMaterial color="#0F766E" roughness={0.95} />
+        <meshStandardMaterial color="#5F9EA0" roughness={0.95} />
       </mesh>
 
       {/* ── WALLS ── */}
@@ -163,28 +163,28 @@ export default function HomeLifeScene() {
         <group key={x}>
           <mesh position={[x, 4.88, 0]}>
             <boxGeometry args={[1.4, 0.05, 0.5]} />
-            <meshStandardMaterial color="#ffffff" emissive="#D4AF37" emissiveIntensity={1.4} />
+            <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={1.4} />
           </mesh>
-          <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#D4AF37" distance={10} decay={2} />
+          <pointLight position={[x, 4.4, 0]} intensity={0.6} color="#D2B48C" distance={10} decay={2} />
         </group>
       ))}
 
       {/* ── WINDOWS ── */}
       <mesh position={[-2, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#F8FAFC" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
       <mesh position={[3.5, 2.1, -7.85]} castShadow>
         <boxGeometry args={[2.8, 1.8, 0.12]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#F8FAFC" emissive="#E0F0FF" emissiveIntensity={0.9} roughness={0.05} />
       </mesh>
-      <pointLight position={[0, 3.0, -7]} intensity={1.4} color="#0F766E" distance={14} decay={2} />
+      <pointLight position={[0, 3.0, -7]} intensity={1.4} color="#5F9EA0" distance={14} decay={2} />
 
       {/* ── FURNITURE (static — already furnished) ── */}
       {/* Sofa */}
       <mesh position={[-2.5, 0.45, -2.5]} castShadow>
         <boxGeometry args={[2.2, 0.9, 1.0]} />
-        <meshStandardMaterial color="#1E3A8A" roughness={0.8} />
+        <meshStandardMaterial color="#4682B4" roughness={0.8} />
       </mesh>
       {/* Coffee table */}
       <mesh position={[-1.5, 0.3, -0.8]} castShadow>
@@ -214,21 +214,21 @@ export default function HomeLifeScene() {
       <group position={[7.5, 0, -5]}>
         <mesh position={[0, 0.4, 0]} castShadow>
           <cylinderGeometry args={[0.28, 0.22, 0.8, 8]} />
-          <meshStandardMaterial color="#D4AF37" roughness={0.7} />
+          <meshStandardMaterial color="#D2B48C" roughness={0.7} />
         </mesh>
         <mesh position={[0, 1.0, 0]} castShadow>
           <sphereGeometry args={[0.55, 10, 10]} />
-          <meshStandardMaterial color="#0F766E" roughness={0.9} />
+          <meshStandardMaterial color="#5F9EA0" roughness={0.9} />
         </mesh>
       </group>
 
       {/* ── DECOR: fully lived-in home ── */}
       {/* Living-room rug under sofa/coffee table */}
-      <Rug position={[-2, 0.008, -1.6]} w={4.2} d={3.2} color="#0F766E" border="#1E3A8A" />
+      <Rug position={[-2, 0.008, -1.6]} w={4.2} d={3.2} color="#5F9EA0" border="#2F4F4F" />
       {/* Bookshelf in far corner (behind sofa area, against left wall) */}
       <Bookshelf position={[-8.6, 0, -4]} rotation={[0, Math.PI / 2, 0]} color="#A0522D" />
       {/* Floor lamp beside the sofa */}
-      <FloorLamp position={[-4.2, 0, -3.2]} shadeColor="#D4AF37" lightColor="#D4AF37" />
+      <FloorLamp position={[-4.2, 0, -3.2]} shadeColor="#F5F5DC" lightColor="#FFF0D4" />
       {/* Side table with mug near sofa */}
       <SideTable position={[-4.2, 0, -1.6]} color="#64748B" />
       {/* Tall plant by the dining area corner */}
@@ -236,12 +236,12 @@ export default function HomeLifeScene() {
       {/* Potted plant near the desk */}
       <PottedPlant position={[-8.5, 0, 4] } scale={1.05} />
       {/* Curtains framing the back windows (windows at z=-7.85) */}
-      <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#D4AF37" />
-      <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#D4AF37" />
+      <Curtains position={[-2, 1.2, -7.7]} width={3.2} height={2.0} color="#D2B48C" />
+      <Curtains position={[3.5, 1.2, -7.7]} width={3.2} height={2.0} color="#D2B48C" />
       {/* Wall art on right wall (faces -x) */}
-      <WallArt position={[9.85, 2.9, 4]} rotation={[0, -Math.PI / 2, 0]} color="#1E3A8A" w={1.3} h={0.95} />
+      <WallArt position={[9.85, 2.9, 4]} rotation={[0, -Math.PI / 2, 0]} color="#4682B4" w={1.3} h={0.95} />
       {/* Wall art on left wall (faces +x), above bookshelf area */}
-      <WallArt position={[-9.85, 3.0, 1.5]} rotation={[0, Math.PI / 2, 0]} color="#0F766E" w={1.2} h={0.9} />
+      <WallArt position={[-9.85, 3.0, 1.5]} rotation={[0, Math.PI / 2, 0]} color="#5F9EA0" w={1.2} h={0.9} />
       {/* Books + clutter on coffee table */}
       <BookRow position={[-1.9, 0.34, -0.8]} count={4} rotation={[0, 0.3, 0]} />
 

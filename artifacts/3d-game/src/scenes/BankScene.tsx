@@ -98,9 +98,9 @@ export default function BankScene() {
         <group key={x}>
           <mesh position={[x, 4.88, 0]}>
             <boxGeometry args={[1.5, 0.05, 0.4]} />
-            <meshStandardMaterial color="#ffffff" emissive="#0F766E" emissiveIntensity={1.8} />
+            <meshStandardMaterial color="#ffffff" emissive="#E0F0FF" emissiveIntensity={1.8} />
           </mesh>
-          <pointLight position={[x, 4.4, 0]} intensity={0.7} color="#0F766E" distance={10} />
+          <pointLight position={[x, 4.4, 0]} intensity={0.7} color="#5F9EA0" distance={10} />
         </group>
       ))}
 
@@ -117,28 +117,28 @@ export default function BankScene() {
       {/* Counter glass divider */}
       <mesh position={[0, 1.7, -2.25]}>
         <boxGeometry args={[12, 0.7, 0.04]} />
-        <meshStandardMaterial color="#0F766E" transparent opacity={0.25} roughness={0.05} metalness={0.2} />
+        <meshStandardMaterial color="#5F9EA0" transparent opacity={0.25} roughness={0.05} metalness={0.2} />
       </mesh>
 
       {/* Teller window dividers */}
       {[-4, 0, 4].map((x) => (
         <mesh key={x} position={[x, 1.8, -2.2]} castShadow>
           <boxGeometry args={[0.06, 1.0, 0.5]} />
-          <meshStandardMaterial color="#1E3A8A" metalness={0.5} roughness={0.3} />
+          <meshStandardMaterial color="#4682B4" metalness={0.5} roughness={0.3} />
         </mesh>
       ))}
 
       {/* Bank sign on back wall — glowing */}
       <mesh position={[0, 3.6, -7.85]} castShadow>
         <boxGeometry args={[6.5, 0.75, 0.12]} />
-        <meshStandardMaterial color="#F8FAFC" emissive="#0F766E" emissiveIntensity={0.3} roughness={0.5} />
+        <meshStandardMaterial color="#F8FAFC" emissive="#a8cfe8" emissiveIntensity={0.1} roughness={0.5} />
       </mesh>
       <Html position={[0, 3.6, -7.7]} center distanceFactor={16}>
         <div style={{ color: '#D4AF37', fontWeight: 800, fontSize: 14, whiteSpace: 'nowrap', fontFamily: 'var(--display-font)', display: 'flex', alignItems: 'center', gap: 6 }}>
           <GameIcon name="bank" size={16} /> Newport News Community Bank
         </div>
       </Html>
-      <pointLight position={[0, 4.0, -7]} intensity={0.6} color="#0F766E" distance={5} />
+      <pointLight position={[0, 4.0, -7]} intensity={0.6} color="#5F9EA0" distance={5} />
 
       {/* Waiting chairs */}
       {[-5, -3, 3, 5].map((x) => (
@@ -149,7 +149,7 @@ export default function BankScene() {
           </mesh>
           <mesh position={[0, 0.68, -0.3]} castShadow>
             <boxGeometry args={[0.7, 0.72, 0.09]} />
-            <meshStandardMaterial color="#1E3A8A" roughness={0.9} />
+            <meshStandardMaterial color="#4682B4" roughness={0.9} />
           </mesh>
         </group>
       ))}
@@ -162,9 +162,9 @@ export default function BankScene() {
         </mesh>
         <mesh position={[0, 1.2, 0.26]} castShadow>
           <boxGeometry args={[0.5, 0.35, 0.05]} />
-          <meshStandardMaterial color="#111" emissive="#0F766E" emissiveIntensity={0.8} roughness={0.1} metalness={0.3} />
+          <meshStandardMaterial color="#111" emissive="#E0F0FF" emissiveIntensity={0.8} roughness={0.1} metalness={0.3} />
         </mesh>
-        <pointLight position={[-8, 1.4, -4.5]} intensity={0.4} color="#0F766E" distance={2} />
+        <pointLight position={[-8, 1.4, -4.5]} intensity={0.4} color="#5F9EA0" distance={2} />
       </group>
 
       {/* Potted plants */}
@@ -176,7 +176,7 @@ export default function BankScene() {
           </mesh>
           <mesh position={[0, 1.0, 0]} castShadow>
             <sphereGeometry args={[0.5, 10, 10]} />
-            <meshStandardMaterial color="#0F766E" roughness={0.9} />
+            <meshStandardMaterial color="#5F9EA0" roughness={0.9} />
           </mesh>
         </group>
       ))}
@@ -190,7 +190,7 @@ export default function BankScene() {
             height={2.0}
             highlightPad={0.6}
             prompt={doc.label}
-            color="#0F766E"
+            color="#5F9EA0"
             onActivate={() => { if (!completedInteractions.includes(doc.id)) completeInteraction(doc.id); }}
           />
           <mesh
@@ -230,8 +230,8 @@ export default function BankScene() {
       <TallPlant position={[-9, 0, 6.5]} scale={1.1} />
       <TallPlant position={[9, 0, 6.5]} scale={1.1} />
       {/* Framed art on side walls, facing inward */}
-      <WallArt position={[-9.85, 3.0, -3]} rotation={[0, Math.PI / 2, 0]} color="#1E3A8A" w={1.3} h={0.9} />
-      <WallArt position={[9.85, 3.0, -3]} rotation={[0, -Math.PI / 2, 0]} color="#0F766E" w={1.3} h={0.9} />
+      <WallArt position={[-9.85, 3.0, -3]} rotation={[0, Math.PI / 2, 0]} color="#4682B4" w={1.3} h={0.9} />
+      <WallArt position={[9.85, 3.0, -3]} rotation={[0, -Math.PI / 2, 0]} color="#5F9EA0" w={1.3} h={0.9} />
       {/* Wall clock above the bank sign area, right of it */}
       <WallClock position={[4.5, 3.6, -7.82]} rotation={[0, 0, 0]} />
       {/* Waiting-area side table with magazines/mug between chairs */}
@@ -239,7 +239,7 @@ export default function BankScene() {
       {/* Magazine on the side table */}
       <mesh position={[-0.08, 0.94, 3.55]} rotation={[-Math.PI / 2, 0, 0.3]} castShadow>
         <boxGeometry args={[0.28, 0.36, 0.02]} />
-        <meshStandardMaterial color="#0F766E" roughness={0.8} />
+        <meshStandardMaterial color="#5F9EA0" roughness={0.8} />
       </mesh>
 
       {/* Loan Officer NPC */}

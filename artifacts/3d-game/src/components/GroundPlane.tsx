@@ -61,11 +61,11 @@ function ClickFeedback() {
     <>
       <mesh ref={rippleRef} rotation={[-Math.PI / 2, 0, 0]} visible={false}>
         <ringGeometry args={[0.28, 0.38, 32]} />
-        <meshBasicMaterial color="#D4AF37" transparent opacity={0} depthWrite={false} />
+        <meshBasicMaterial color="#FFFFFF" transparent opacity={0} depthWrite={false} />
       </mesh>
       <mesh ref={markerRef} rotation={[-Math.PI / 2, 0, 0]} visible={false}>
         <ringGeometry args={[0.3, 0.42, 32]} />
-        <meshBasicMaterial color="#38BDF8" transparent opacity={0.85} depthWrite={false} />
+        <meshBasicMaterial color="#FFFFFF" transparent opacity={0.85} depthWrite={false} />
       </mesh>
     </>
   );

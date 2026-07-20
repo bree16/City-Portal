@@ -18,11 +18,11 @@ function Tree({ position }: { position: [number, number, number] }) {
       </mesh>
       <mesh position={[0, 1.9, 0]} castShadow>
         <sphereGeometry args={[0.7, 8, 7]} />
-        <meshStandardMaterial color="#00a8b5" roughness={0.8} />
+        <meshStandardMaterial color="#4A8F3C" roughness={0.8} />
       </mesh>
       <mesh position={[0, 2.5, 0]} castShadow>
         <sphereGeometry args={[0.45, 8, 7]} />
-        <meshStandardMaterial color="#0F766E" roughness={0.8} />
+        <meshStandardMaterial color="#3A7A3A" roughness={0.8} />
       </mesh>
     </group>
   );
@@ -41,9 +41,9 @@ function StreetLight({ position }: { position: [number, number, number] }) {
       </mesh>
       <mesh position={[1.0, 2.0, 0]} castShadow>
         <sphereGeometry args={[0.14, 8, 8]} />
-        <meshStandardMaterial color="#ffffff" emissive="#D4AF37" emissiveIntensity={1.5} />
+        <meshStandardMaterial color="#ffffff" emissive="#FFF0D4" emissiveIntensity={1.5} />
       </mesh>
-      <pointLight position={[1.0, 2.0, 0]} intensity={0.5} color="#D4AF37" distance={8} decay={2} />
+      <pointLight position={[1.0, 2.0, 0]} intensity={0.5} color="#D2B48C" distance={8} decay={2} />
     </group>
   );
 }
@@ -77,11 +77,11 @@ function Bench({ position }: { position: [number, number, number] }) {
     <group position={position}>
       <mesh position={[0, 0.35, 0]} castShadow>
         <boxGeometry args={[1.2, 0.1, 0.35]} />
-        <meshStandardMaterial color="#64748B" roughness={0.7} />
+        <meshStandardMaterial color="#2F4F4F" roughness={0.7} />
       </mesh>
       <mesh position={[0, 0.55, -0.14]} castShadow>
         <boxGeometry args={[1.2, 0.35, 0.08]} />
-        <meshStandardMaterial color="#1E3A8A" roughness={0.7} />
+        <meshStandardMaterial color="#8B5A2B" roughness={0.7} />
       </mesh>
       {[-0.5, 0.5].map((x) => (
         <mesh key={x} position={[x, 0.18, 0]} castShadow>
@@ -139,7 +139,7 @@ function BuildingExterior({ b, status, onEnter }: {
         </mesh>
         {/* Bushes & flower beds around the park edges */}
         {([[-4, -3.5], [4, -3.5], [-4, 3.5], [4, 3.5]] as [number, number][]).map(([x, z], i) => (
-          <Bush key={`pb-${i}`} position={[x, 0, z]} scale={1.1 + (i % 2) * 0.2} color={i % 2 ? '#3A7A3A' : '#4A8C4A'} />
+          <Bush key={`pb-${i}`} position={[x, 0, z]} scale={1.1 + (i % 2) * 0.2} color={i % 2 ? '#228B22' : '#2E8B57'} />
         ))}
         <FlowerBed position={[-1.6, 0, 3.3]} w={1.8} d={0.6} />
         <FlowerBed position={[1.6, 0, 3.3]} w={1.8} d={0.6} />
@@ -299,26 +299,26 @@ export default function CityMapScene() {
       {/* Main grass base */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[70, 70]} />
-        <meshStandardMaterial color="#0f2420" roughness={0.95} />
+        <meshStandardMaterial color="#5aa04a" roughness={0.95} />
       </mesh>
 
       {/* Main E-W road (z = -1 to 1, i.e. 5 units wide) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, -0.5]} receiveShadow>
         <planeGeometry args={[66, 5]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.8} />
+        <meshStandardMaterial color="#333333" roughness={0.8} />
       </mesh>
 
       {/* N-S road (x = -0.5, 4 wide) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, 0.01, 0]} receiveShadow>
         <planeGeometry args={[4, 66]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.8} />
+        <meshStandardMaterial color="#333333" roughness={0.8} />
       </mesh>
 
       {/* Center line markings — E-W road */}
       {([-24, -16, -8, 0, 8, 16, 24] as number[]).map((x) => (
         <mesh key={`ew-${x}`} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.02, -0.5]}>
           <planeGeometry args={[3.5, 0.2]} />
-          <meshStandardMaterial color="#D4AF37" roughness={0.9} />
+          <meshStandardMaterial color="#D2B48C" roughness={0.9} />
         </mesh>
       ))}
 
@@ -326,19 +326,19 @@ export default function CityMapScene() {
       {/* North sidewalk */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, -4]} receiveShadow>
         <planeGeometry args={[66, 2]} />
-        <meshStandardMaterial color="#A0522D" roughness={0.85} />
+        <meshStandardMaterial color="#A0A0A0" roughness={0.85} />
       </mesh>
       {/* South sidewalk */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 3]} receiveShadow>
         <planeGeometry args={[66, 2]} />
-        <meshStandardMaterial color="#A0522D" roughness={0.85} />
+        <meshStandardMaterial color="#A0A0A0" roughness={0.85} />
       </mesh>
 
       {/* Crosswalk stripes at center */}
       {([-2, -1, 0, 1, 2] as number[]).map((i) => (
         <mesh key={`cw-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, 0.025, i * 0.8 - 0.5]}>
           <planeGeometry args={[0.6, 0.55]} />
-          <meshStandardMaterial color="#1E3A8A" roughness={0.9} transparent opacity={0.7} />
+          <meshStandardMaterial color="#F8FAFC" roughness={0.9} transparent opacity={0.7} />
         </mesh>
       ))}
 
@@ -348,10 +348,10 @@ export default function CityMapScene() {
       ))}
 
       {/* ─── Parked cars ─── */}
-      <ParkedCar position={[-22, 0, -3.2]} color="#1E3A8A" />
-      <ParkedCar position={[-14, 0, -3.2]} color="#0F766E" />
-      <ParkedCar position={[10, 0, 2.2]} color="#D4AF37" rotation={Math.PI} />
-      <ParkedCar position={[20, 0, 2.2]} color="#E2E8F0" rotation={Math.PI} />
+      <ParkedCar position={[-22, 0, -3.2]} color="#B22222" />
+      <ParkedCar position={[-14, 0, -3.2]} color="#3A7A3A" />
+      <ParkedCar position={[10, 0, 2.2]} color="#2F4F4F" rotation={Math.PI} />
+      <ParkedCar position={[20, 0, 2.2]} color="#4682B4" rotation={Math.PI} />
 
       {/* ─── Trees alongside sidewalks and grass areas ─── */}
       {([-26, -20, -12, 2, 14, 22, 28] as number[]).map((x) => (
@@ -367,10 +367,10 @@ export default function CityMapScene() {
 
       {/* ─── Bushes lining the grass verge between sidewalk and trees ─── */}
       {([-24, -18, -6, 8, 18, 26] as number[]).map((x, i) => (
-        <Bush key={`bn-${x}`} position={[x, 0, -5.5]} scale={0.9 + (i % 3) * 0.15} color={i % 2 ? '#3A7A3A' : '#4A8C4A'} />
+        <Bush key={`bn-${x}`} position={[x, 0, -5.5]} scale={0.9 + (i % 3) * 0.15} color={i % 2 ? '#228B22' : '#2E8B57'} />
       ))}
       {([-24, -18, -6, 8, 18, 26] as number[]).map((x, i) => (
-        <Bush key={`bs-${x}`} position={[x, 0, 4.9]} scale={0.9 + ((i + 1) % 3) * 0.15} color={i % 2 ? '#4A8C4A' : '#3A7A3A'} />
+        <Bush key={`bs-${x}`} position={[x, 0, 4.9]} scale={0.9 + ((i + 1) % 3) * 0.15} color={i % 2 ? '#2E8B57' : '#228B22'} />
       ))}
 
       {/* ─── Flower beds brightening the verges ─── */}
@@ -383,7 +383,7 @@ export default function CityMapScene() {
       {([[-28, -11], [-19, 10], [24, -12], [15, 11], [-6, -12], [29, 9]] as [number, number][]).map(([x, z], i) => (
         <mesh key={`gp-${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0.008, z]} receiveShadow>
           <circleGeometry args={[1.4 + (i % 3) * 0.5, 14]} />
-          <meshStandardMaterial color={i % 2 ? '#162e29' : '#0c1a17'} roughness={1} />
+          <meshStandardMaterial color={i % 2 ? '#4a8f3c' : '#3e7a32'} roughness={1} />
         </mesh>
       ))}
 

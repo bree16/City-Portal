@@ -409,7 +409,7 @@ export default function HomeInteriorScene() {
       {([-2, -0.5, 1] as number[]).map((cx) => (
         <mesh key={cx} position={[cx, 0.95, 0.38]} castShadow>
           <boxGeometry args={[0.88, 0.16, 0.86]} />
-          <meshStandardMaterial color="#0F766E" roughness={0.9} />
+          <meshStandardMaterial color="#5F9EA0" roughness={0.9} />
         </mesh>
       ))}
       {/* Coffee table */}
@@ -421,7 +421,7 @@ export default function HomeInteriorScene() {
         ([-0.35, 0.35] as number[]).map((lz) => (
           <mesh key={`${lx}${lz}`} position={[lx - 1.5, 0.14, lz + 2.2]} castShadow>
             <cylinderGeometry args={[0.05, 0.05, 0.28, 6]} />
-            <meshStandardMaterial color="#D4AF37" roughness={0.6} />
+            <meshStandardMaterial color="#D2B48C" roughness={0.6} />
           </mesh>
         ))
       )}
@@ -446,7 +446,7 @@ export default function HomeInteriorScene() {
             <boxGeometry args={[1.4, 1.2, 0.2]} />
             <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
           </mesh>
-          <pointLight position={[0, 0.8, 0.5]} intensity={1.2} color="#1E3A8A" distance={5} decay={2} />
+          <pointLight position={[0, 0.8, 0.5]} intensity={1.2} color="#4682B4" distance={5} decay={2} />
         </group>
       )}
 
@@ -457,7 +457,7 @@ export default function HomeInteriorScene() {
       </mesh>
       <mesh position={[6.5, 0.95, 0]} castShadow>
         <boxGeometry args={[1.3, 0.08, 5.2]} />
-        <meshStandardMaterial color={homeId === 1 ? '#0F766E' : homeId === 3 ? '#D4AF37' : '#1E3A8A'} roughness={0.3} metalness={0.1} />
+        <meshStandardMaterial color={homeId === 1 ? '#4682B4' : homeId === 3 ? '#8B5A2B' : '#708090'} roughness={0.3} metalness={0.1} />
       </mesh>
       <mesh position={[6.5, 2.1, 0]} castShadow>
         <boxGeometry args={[1.0, 0.9, 4.8]} />
@@ -487,7 +487,7 @@ export default function HomeInteriorScene() {
       </mesh>
       <mesh position={[-5.5, 0.85, -2.3]} castShadow>
         <boxGeometry args={[1.8, 0.2, 0.5]} />
-        <meshStandardMaterial color="#1E3A8A" roughness={0.95} />
+        <meshStandardMaterial color="#4682B4" roughness={0.95} />
       </mesh>
       <mesh position={[-5.5, 1.0, -2.85]} castShadow>
         <boxGeometry args={[3.2, 1.4, 0.16]} />
@@ -518,7 +518,7 @@ export default function HomeInteriorScene() {
           </mesh>
           <mesh position={[0, 0.65, -0.24]} castShadow>
             <boxGeometry args={[0.6, 0.65, 0.08]} />
-            <meshStandardMaterial color="#0F766E" roughness={0.7} />
+            <meshStandardMaterial color="#5F9EA0" roughness={0.7} />
           </mesh>
         </group>
       ))}
@@ -529,7 +529,7 @@ export default function HomeInteriorScene() {
       </mesh>
       <mesh position={[0, 0.4, -5.5]} castShadow>
         <cylinderGeometry args={[0.5, 0.5, 0.08, 12]} />
-        <meshStandardMaterial color="#D4AF37" roughness={0.6} metalness={0.1} />
+        <meshStandardMaterial color="#D2B48C" roughness={0.6} metalness={0.1} />
       </mesh>
       {/* Fence posts */}
       {([-4, -2, 0, 2, 4] as number[]).map((fx) => (
@@ -556,9 +556,9 @@ export default function HomeInteriorScene() {
           </mesh>
           <mesh position={[lx, 2.78, lz]}>
             <cylinderGeometry args={[0.15, 0.15, 0.04, 10]} />
-            <meshStandardMaterial color="#0F766E" emissive="#0F766E" emissiveIntensity={1.5} />
+            <meshStandardMaterial color="#5F9EA0" emissive="#E0F0FF" emissiveIntensity={1.5} />
           </mesh>
-          <pointLight position={[lx, 2.5, lz]} intensity={0.7} color="#0F766E" distance={8} decay={2} />
+          <pointLight position={[lx, 2.5, lz]} intensity={0.7} color="#5F9EA0" distance={8} decay={2} />
         </group>
       ))}
 
@@ -582,16 +582,16 @@ export default function HomeInteriorScene() {
       {theme.hasFireplace ? (
         <Bookshelf position={[-4.7, 0, 5]} rotation={[0, 0, 0]} color={theme.accentColor} />
       ) : (
-        <PottedPlant position={[-4.5, 0, 5.4]} scale={1.15} leafColor="#0F766E" />
+        <PottedPlant position={[-4.5, 0, 5.4]} scale={1.15} leafColor="#2E8B57" />
       )}
       {/* Home 3 (modern): sleek accent plant on the kitchen island end */}
       {theme.hasKitchenIsland && (
-        <PottedPlant position={[4.5, 1.04, 1.2]} scale={0.7} potColor="#D4AF37" leafColor="#1E3A8A" />
+        <PottedPlant position={[4.5, 1.04, 1.2]} scale={0.7} potColor="#D2B48C" leafColor="#228B22" />
       )}
       {/* Backyard greenery — flowers + bushes vary by theme */}
       <FlowerBed position={[3.5, 0.04, -5]} w={1.6} d={0.6} />
-      <Bush position={[-3.5, 0, -6.5]} scale={1.1} color="#1E3A8A" />
-      <Bush position={[-2.2, 0, -6.6]} scale={0.85} color="#0F766E" />
+      <Bush position={[-3.5, 0, -6.5]} scale={1.1} color="#4682B4" />
+      <Bush position={[-2.2, 0, -6.6]} scale={0.85} color="#5F9EA0" />
 
       {/* ── CLICKABLE FEATURE PROPS ── */}
       {Object.entries(theme.features).flatMap(([, props]) =>

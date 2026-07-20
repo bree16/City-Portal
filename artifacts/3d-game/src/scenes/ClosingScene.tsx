@@ -125,20 +125,20 @@ export default function ClosingScene() {
       {/* Chandelier — glowing warm gold */}
       <mesh position={[0, 4.7, 0]}>
         <cylinderGeometry args={[0.35, 0.35, 0.18, 16]} />
-        <meshStandardMaterial color="#D4AF37" metalness={0.7} roughness={0.2} emissive="#D4AF37" emissiveIntensity={0.3} />
+        <meshStandardMaterial color="#D2B48C" metalness={0.7} roughness={0.2} emissive="#FFF0D4" emissiveIntensity={0.3} />
       </mesh>
       {[0, Math.PI / 2, Math.PI, Math.PI * 1.5].map((angle, i) => (
         <mesh key={i} position={[Math.cos(angle) * 0.4, 4.55, Math.sin(angle) * 0.4]}>
           <sphereGeometry args={[0.06, 8, 8]} />
-          <meshStandardMaterial color="#D4AF37" emissive="#D4AF37" emissiveIntensity={2.0} />
+          <meshStandardMaterial color="#D2B48C" emissive="#FFF0D4" emissiveIntensity={2.0} />
         </mesh>
       ))}
-      <pointLight position={[0, 4.2, 0]} intensity={1.2} color="#D4AF37" distance={12} />
+      <pointLight position={[0, 4.2, 0]} intensity={1.2} color="#D2B48C" distance={12} />
 
       {/* Carpet */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
         <planeGeometry args={[10, 7]} />
-        <meshStandardMaterial color="#1E3A8A" roughness={0.95} />
+        <meshStandardMaterial color="#4682B4" roughness={0.95} />
       </mesh>
 
       {/* Conference table */}
@@ -150,7 +150,7 @@ export default function ClosingScene() {
         ([-1.0, 1.0] as number[]).map((z) => (
           <mesh key={`${x}-${z}`} position={[x, 0.24, z]} castShadow>
             <cylinderGeometry args={[0.08, 0.08, 0.97, 8]} />
-            <meshStandardMaterial color="#0F766E" roughness={0.5} metalness={0.08} />
+            <meshStandardMaterial color="#5F9EA0" roughness={0.5} metalness={0.08} />
           </mesh>
         ))
       )}
@@ -171,7 +171,7 @@ export default function ClosingScene() {
       {/* Pen */}
       <mesh position={[2.5, 0.52, 0.5]} rotation={[0, 0.3, 0]} castShadow>
         <cylinderGeometry args={[0.04, 0.035, 1.2, 8]} />
-        <meshStandardMaterial color="#0F766E" metalness={0.6} roughness={0.2} />
+        <meshStandardMaterial color="#5F9EA0" metalness={0.6} roughness={0.2} />
       </mesh>
 
       {/* Chairs */}
@@ -183,7 +183,7 @@ export default function ClosingScene() {
           </mesh>
           <mesh position={[0, 0.68, -0.28]} castShadow>
             <boxGeometry args={[0.65, 0.75, 0.09]} />
-            <meshStandardMaterial color="#1E3A8A" roughness={0.85} />
+            <meshStandardMaterial color="#4682B4" roughness={0.85} />
           </mesh>
         </group>
       ))}
@@ -192,15 +192,15 @@ export default function ClosingScene() {
       <group position={[7, 0, -5.5]}>
         <mesh position={[0, 2.2, 0]} castShadow>
           <cylinderGeometry args={[0.05, 0.05, 4.4, 6]} />
-          <meshStandardMaterial color="#D4AF37" metalness={0.5} roughness={0.3} />
+          <meshStandardMaterial color="#D2B48C" metalness={0.5} roughness={0.3} />
         </mesh>
         <mesh position={[0.7, 3.7, 0]} castShadow>
           <boxGeometry args={[1.4, 0.8, 0.05]} />
-          <meshStandardMaterial color="#1E3A8A" roughness={0.9} />
+          <meshStandardMaterial color="#4682B4" roughness={0.9} />
         </mesh>
         <mesh position={[0.7, 3.4, 0]} castShadow>
           <boxGeometry args={[1.4, 0.22, 0.05]} />
-          <meshStandardMaterial color="#0F766E" roughness={0.9} />
+          <meshStandardMaterial color="#5F9EA0" roughness={0.9} />
         </mesh>
       </group>
 
@@ -211,7 +211,7 @@ export default function ClosingScene() {
       </mesh>
       <mesh position={[-3.5, 2.2, -6.78]}>
         <boxGeometry args={[2.3, 1.7, 0.06]} />
-        <meshStandardMaterial color="#D4AF37" roughness={0.5} metalness={0.1} wireframe />
+        <meshStandardMaterial color="#D2B48C" roughness={0.5} metalness={0.1} wireframe />
       </mesh>
       <Html position={[-3.5, 2.2, -6.7]} center distanceFactor={14}>
         <div style={{ fontFamily: 'var(--display-font)', fontSize: 12, fontWeight: 700, color: '#0F766E', textAlign: 'center' }}>
@@ -228,7 +228,7 @@ export default function ClosingScene() {
         {[0.4, 0.7, 1.0, 1.3, 1.6, 1.9].map((y, i) => (
           <mesh key={i} position={[i % 2 === 0 ? -0.2 : 0.2, y, 0.1]} castShadow>
             <boxGeometry args={[0.3, 0.24, 0.15]} />
-            <meshStandardMaterial color={['#1E3A8A', '#0F766E', '#D4AF37', '#047857', '#D4AF37', '#38BDF8'][i]} roughness={0.85} />
+            <meshStandardMaterial color={['#8B0000', '#2F4F4F', '#B8860B', '#556B2F', '#A0522D', '#4682B4'][i]} roughness={0.85} />
           </mesh>
         ))}
       </group>
@@ -237,9 +237,9 @@ export default function ClosingScene() {
       {/* Wall clock on back wall (faces +z) */}
       <WallClock position={[3.5, 3.0, -6.85]} rotation={[Math.PI / 2, 0, 0]} />
       {/* Wall art on left wall (faces +x) */}
-      <WallArt position={[-8.85, 3.0, 2]} rotation={[0, Math.PI / 2, 0]} color="#1E3A8A" w={1.4} h={1.0} />
+      <WallArt position={[-8.85, 3.0, 2]} rotation={[0, Math.PI / 2, 0]} color="#4682B4" w={1.4} h={1.0} />
       {/* Wall art on right wall (faces -x) */}
-      <WallArt position={[8.85, 3.0, -2]} rotation={[0, -Math.PI / 2, 0]} color="#0F766E" w={1.3} h={1.0} />
+      <WallArt position={[8.85, 3.0, -2]} rotation={[0, -Math.PI / 2, 0]} color="#5F9EA0" w={1.3} h={1.0} />
       {/* Tall plants flanking corners */}
       <TallPlant position={[-7.8, 0, 5.5]} scale={1.05} />
       <TallPlant position={[7.8, 0, 5.5]} scale={1.05} />
