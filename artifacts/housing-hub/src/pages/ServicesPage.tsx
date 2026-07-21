@@ -87,21 +87,26 @@ export default function ServicesPage() {
   return (
     <div className="flex flex-col min-h-screen bg-muted/30 pt-20">
       {/* Hero Section */}
-      <section className="relative bg-primary text-white py-16 lg:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0D2B5E] to-accent/90 opacity-90 z-0"></div>
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 z-0"></div>
-        
+      <section className="relative bg-[#060d1a] text-white py-20 lg:py-28 overflow-hidden">
+        {/* Glows */}
+        <div className="absolute top-[-15%] left-[-8%] w-[500px] h-[500px] bg-primary rounded-full blur-[160px] opacity-25 pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-accent rounded-full blur-[140px] opacity-20 pointer-events-none" />
+        <div className="absolute top-[40%] right-[30%] w-[260px] h-[260px] bg-secondary rounded-full blur-[100px] opacity-12 pointer-events-none" />
+
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center space-y-6">
-            <Badge className="bg-white/20 hover:bg-white/30 text-white border-none backdrop-blur-md px-4 py-1.5 text-sm mb-2 rounded-full">
-              Resident Services Hub
-            </Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">
-              Welcome to Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-[#F9D47D]">Newport News</span>
-            </h1>
-            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-              Everyday city services, resources, and community connections without leaving the site.
-            </p>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              <Badge className="bg-white/10 hover:bg-white/15 text-white border border-white/20 backdrop-blur-md px-4 py-1.5 text-xs font-bold uppercase tracking-widest mb-4 rounded-full">
+                Resident Services Hub
+              </Badge>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-5">
+                Your City,{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-accent to-[#00C2D4]">One Place</span>
+              </h1>
+              <p className="text-xl text-white/65 max-w-2xl mx-auto leading-relaxed">
+                Utilities, transportation, permits, schools, and more — every Newport News service at your fingertips.
+              </p>
+            </motion.div>
 
             {/* Search Bar */}
             <div className="mt-10 relative max-w-2xl mx-auto">

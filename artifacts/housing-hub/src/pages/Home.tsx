@@ -363,67 +363,131 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Life in Newport News — Lifestyle Photo Band */}
-      <section className="py-20 bg-white overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-12" variant="fadeUp">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
-              Real People. Real Community.
+      {/* Life in Newport News — Cinematic Mosaic */}
+      <section className="relative bg-[#060d1a] overflow-hidden py-24">
+        {/* Ambient glows */}
+        <div className="absolute top-0 left-[-10%] w-[500px] h-[500px] bg-accent rounded-full blur-[180px] opacity-[0.12] pointer-events-none" />
+        <div className="absolute bottom-0 right-[-5%] w-[400px] h-[400px] bg-secondary rounded-full blur-[150px] opacity-[0.10] pointer-events-none" />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Header */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-semibold uppercase tracking-widest text-white/70 mb-5">
+                <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+                Newport News, Virginia
+              </div>
+              <h2 className="text-4xl md:text-6xl font-extrabold text-white leading-[1.05]">
+                Life in{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-accent to-[#00C2D4]">Newport News</span>
+              </h2>
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-white/50 text-lg max-w-sm leading-relaxed lg:text-right"
+            >
+              A waterfront city where military families, young professionals, and lifelong residents all call home.
+            </motion.p>
+          </div>
+
+          {/* Mosaic grid */}
+          <div className="grid grid-cols-12 gap-4" style={{ gridTemplateRows: '300px 280px' }}>
+            {/* Large left — waterfront */}
+            <motion.a
+              href="/neighborhoods"
+              initial={{ opacity: 0, scale: 0.97 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="col-span-12 md:col-span-7 row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer"
+            >
+              <img src={lifestyleWaterfrontDog} alt="Waterfront Newport News" className="w-full h-full object-cover transition-transform duration-[800ms] group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
+              {/* Animated accent line */}
+              <motion.div className="absolute left-8 bottom-28 h-0.5 bg-secondary" initial={{ width: 0 }} whileInView={{ width: 48 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.4 }} />
+              <div className="absolute bottom-8 left-8 right-8">
+                <span className="inline-block text-xs font-bold uppercase tracking-widest text-secondary mb-2">Waterfront City</span>
+                <h3 className="text-3xl md:text-4xl font-extrabold text-white leading-tight mb-2">Where the James River Meets Home</h3>
+                <p className="text-white/65 text-sm">Walk the boardwalk, kayak at sunrise, or dine on the water — Newport News' waterfront is always steps away.</p>
+              </div>
+              {/* Hover arrow */}
+              <div className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <ArrowRight className="w-5 h-5 text-white" />
+              </div>
+            </motion.a>
+
+            {/* Top right — homeowners */}
+            <motion.a
+              href="/buy"
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="col-span-12 md:col-span-5 relative rounded-3xl overflow-hidden group cursor-pointer"
+            >
+              <img src={lifestyleNewHomeowners} alt="First-time homeowners" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/70 to-accent/40" />
+              <div className="absolute inset-0 flex flex-col justify-end p-6">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/15 border border-white/20 text-white text-xs font-semibold mb-2 w-fit">
+                  <Home className="w-3 h-3" /> First-Time Buyers
+                </div>
+                <div className="text-xl font-bold text-white">Young families planting roots</div>
+                <p className="text-white/65 text-sm mt-1">Up to $25K in down payment assistance available →</p>
+              </div>
+            </motion.a>
+
+            {/* Bottom right — 2 side-by-side */}
+            <div className="col-span-12 md:col-span-5 grid grid-cols-2 gap-4">
+              {[
+                { img: lifestyleMilitaryFamily, label: 'Military Families', sub: 'Dedicated programs', href: '/resources', badge: '🎖️' },
+                { img: lifestyleCoffeeShop, label: 'Neighborhood Life', sub: 'Local spots & culture', href: '/neighborhoods', badge: '☕' },
+              ].map((item, i) => (
+                <motion.a
+                  key={i}
+                  href={item.href}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.15 + i * 0.1 }}
+                  className="relative rounded-2xl overflow-hidden group cursor-pointer"
+                >
+                  <img src={item.img} alt={item.label} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <div className="text-lg mb-0.5">{item.badge}</div>
+                    <div className="text-white font-bold text-sm leading-tight">{item.label}</div>
+                    <div className="text-white/55 text-xs">{item.sub}</div>
+                  </div>
+                </motion.a>
+              ))}
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary">Life in Newport News</h2>
-            <div className="h-1 w-16 bg-accent rounded-full mx-auto mt-4 mb-3" />
-            <p className="text-muted-foreground mt-3 text-lg max-w-xl mx-auto">A city where military families, first-time buyers, young professionals, and lifelong residents all call home.</p>
-          </AnimatedSection>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
-            {[
-              { img: lifestyleNewHomeowners, caption: "First-Time Homeowners", sub: "Young families planting roots in Newport News", href: "/buy" },
-              { img: lifestyleMilitaryFamily, caption: "Military Families Welcome", sub: "Dedicated programs for veterans and active duty", href: "/resources" },
-              { img: lifestyleCommunityFestival, caption: "Community at the Heart", sub: "Festivals, farmers markets, and neighborhood events", href: "/neighborhoods" },
-            ].map((item, i) => (
-              <motion.a
-                key={i}
-                href={item.href}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.12 }}
-                className="block group relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 cursor-pointer"
-                style={{ height: '340px' }}
-              >
-                <img src={item.img} alt={item.caption} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <div className="text-lg font-bold leading-snug">{item.caption}</div>
-                  <div className="text-sm text-white/75 mt-1">{item.sub}</div>
-                </div>
-              </motion.a>
-            ))}
           </div>
-          {/* Second row — 2-column wider photos */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6 mt-5">
+
+          {/* Newport News vitals strip */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 rounded-2xl overflow-hidden"
+          >
             {[
-              { img: lifestyleWaterfrontDog, caption: "Waterfront Living", sub: "Walk the James River boardwalk any morning of the week" },
-              { img: lifestyleCoffeeShop, caption: "Neighborhood Gems", sub: "Local coffee shops, restaurants, and boutiques on every block" },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.12 }}
-                className="relative rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 group"
-                style={{ height: '260px' }}
-              >
-                <img src={item.img} alt={item.caption} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/10 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <div className="text-lg font-bold">{item.caption}</div>
-                  <div className="text-sm text-white/75 mt-1">{item.sub}</div>
-                </div>
-              </motion.div>
+              { value: '~180K', label: 'Residents', sub: 'And growing' },
+              { value: '$235K', label: 'Median Home Price', sub: 'Below VA average' },
+              { value: '35mi', label: 'of Waterfront', sub: 'James River & Bay' },
+              { value: 'Top 10', label: 'Military City', sub: 'USA, Military Times' },
+            ].map((stat, i) => (
+              <div key={i} className="bg-white/[0.04] px-6 py-5 text-center hover:bg-white/[0.08] transition-colors">
+                <div className="text-2xl font-extrabold text-white mb-0.5">{stat.value}</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-white/50">{stat.label}</div>
+                <div className="text-xs text-white/35 mt-0.5">{stat.sub}</div>
+              </div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -459,12 +523,20 @@ export default function HomePage() {
       </section>
 
       {/* 3. Affordability Calculator */}
-      <section id="calculator" className="py-24 bg-gradient-to-br from-white to-muted relative overflow-hidden">
+      <section id="calculator" className="py-24 bg-gradient-to-br from-[#f0f4ff] via-white to-muted/60 relative overflow-hidden">
+        {/* Decorative blobs */}
+        <div className="absolute -top-32 -left-32 w-72 h-72 bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute -bottom-32 -right-24 w-80 h-80 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Affordability Calculator</h2>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/8 border border-primary/15 text-sm font-semibold text-primary mb-4">
+              <Calculator className="w-4 h-4" aria-hidden="true" /> Affordability Calculator
+            </div>
+            <h2 className="text-3xl md:text-5xl font-extrabold text-primary mb-4 tracking-tight">
+              What Can You <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-primary/80">Actually Afford?</span>
+            </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Plan your budget and see what housing options are within your reach in Newport News.
+              Plug in your numbers. See your real monthly payment, DTI, and which Newport News assistance programs match your situation.
             </p>
           </div>
 
@@ -661,45 +733,101 @@ export default function HomePage() {
       </section>
 
       {/* 4. Neighborhood Highlights */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 bg-white relative overflow-hidden">
+        {/* Subtle grid texture */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzBhMjU0MDA4IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-60 pointer-events-none" />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
             <AnimatedSection className="max-w-2xl" variant="slideLeft">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">Explore Neighborhoods</h2>
-              <div className="h-1 w-14 bg-accent rounded-full mb-4" />
-              <p className="text-muted-foreground text-lg">Discover the unique character and offerings of communities across Newport News.</p>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-bold uppercase tracking-widest mb-4">
+                <MapPin className="w-3.5 h-3.5" /> Six Neighborhoods
+              </div>
+              <h2 className="text-3xl md:text-5xl font-extrabold text-primary mb-2 tracking-tight">Find Your <span className="text-accent">Neighborhood</span></h2>
+              <div className="h-1 w-14 bg-gradient-to-r from-accent to-primary/40 rounded-full mb-4" />
+              <p className="text-muted-foreground text-lg">From historic Hilton Village to master-planned Kiln Creek — every community has its own personality.</p>
             </AnimatedSection>
             <AnimatedSection variant="slideRight">
-              <Button asChild variant="ghost" className="text-accent hover:text-accent hover:bg-accent/10 group">
+              <Button asChild className="rounded-full bg-primary hover:bg-primary/90 text-white px-6 gap-2 group h-11">
                 <Link href="/neighborhoods">
-                  View all neighborhoods <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  Explore all neighborhoods <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
             </AnimatedSection>
           </div>
 
-          <StaggerSection className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" speed="normal">
+          <StaggerSection className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" speed="normal">
             {[
-              { name: "Hilton Village", img: hiltonImage, desc: "Historic charm, walkable streets, and artisan shops.", price: "$320k" },
-              { name: "Denbigh", img: denbighImage, desc: "Spacious lots, great parks, and suburban feel.", price: "$285k" },
-              { name: "Oyster Point", img: oysterImage, desc: "Modern condos, bustling commerce, and dining.", price: "$350k" },
-              { name: "Southeast", img: southeastImage, desc: "Rich heritage, waterfront views, and community focus.", price: "$210k" }
+              { name: "Hilton Village", img: hiltonImage, desc: "Historic charm, walkable streets, and artisan shops.", price: "$320k", vibe: "🎨 Historic", walkScore: 8 },
+              { name: "Denbigh", img: denbighImage, desc: "Spacious lots, great parks, and suburban feel.", price: "$285k", vibe: "🌳 Suburban", walkScore: 5 },
+              { name: "Oyster Point", img: oysterImage, desc: "Modern condos, bustling commerce, and dining.", price: "$350k", vibe: "🏙️ Modern", walkScore: 7 },
+              { name: "Southeast", img: southeastImage, desc: "Rich heritage, waterfront views, and community focus.", price: "$210k", vibe: "💧 Waterfront", walkScore: 6 }
             ].map((hood) => (
               <StaggerItem key={hood.name} variant="scaleGentle">
-                <Link href="/neighborhoods" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-md group-hover:shadow-2xl transition-all duration-500">
+                <Link href="/neighborhoods" className="block group h-full">
+                  <div className="relative rounded-3xl overflow-hidden aspect-[3/4] shadow-lg group-hover:shadow-2xl transition-all duration-500">
                     <img src={hood.img} alt={hood.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                      <div className="inline-block px-2.5 py-1 bg-secondary text-primary text-xs font-bold rounded-md mb-3">Avg: {hood.price}</div>
-                      <h3 className="text-2xl font-bold mb-2">{hood.name}</h3>
-                      <p className="text-white/80 text-sm line-clamp-2">{hood.desc}</p>
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
+                    {/* Vibe tag top */}
+                    <div className="absolute top-4 left-4">
+                      <span className="inline-block px-2.5 py-1 bg-white/15 backdrop-blur-sm border border-white/20 text-white text-xs font-semibold rounded-full">{hood.vibe}</span>
                     </div>
+                    {/* Content bottom */}
+                    <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+                      {/* Avg price badge */}
+                      <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-secondary text-primary text-xs font-extrabold rounded-md mb-3">
+                        <DollarSign className="w-3 h-3" />Avg {hood.price}
+                      </div>
+                      <h3 className="text-xl font-extrabold mb-1.5 leading-tight">{hood.name}</h3>
+                      <p className="text-white/70 text-xs leading-relaxed line-clamp-2 mb-3">{hood.desc}</p>
+                      {/* Walk score bar */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-white/50">Walkability</span>
+                        <div className="flex-1 h-1.5 bg-white/15 rounded-full overflow-hidden">
+                          <motion.div
+                            className="h-full bg-secondary rounded-full"
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${hood.walkScore * 10}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                          />
+                        </div>
+                        <span className="text-xs font-bold text-secondary">{hood.walkScore}/10</span>
+                      </div>
+                    </div>
+                    {/* Arrow hover */}
+                    <motion.div
+                      className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/15 border border-white/25 flex items-center justify-center"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileHover={{ opacity: 1, scale: 1 }}
+                    >
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </motion.div>
                   </div>
                 </Link>
               </StaggerItem>
             ))}
           </StaggerSection>
+
+          {/* Match prompt */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 p-6 rounded-2xl bg-gradient-to-r from-primary/5 to-accent/5 border border-primary/10"
+          >
+            <div className="text-center sm:text-left">
+              <div className="font-bold text-primary">Not sure which neighborhood fits you?</div>
+              <div className="text-sm text-muted-foreground">Our interactive map shows schools, prices, and walkability side-by-side.</div>
+            </div>
+            <Button asChild className="shrink-0 rounded-full bg-accent hover:bg-accent/90 text-white gap-2 h-10 px-5">
+              <Link href="/neighborhoods">
+                Open the Map <MapPin className="w-4 h-4" />
+              </Link>
+            </Button>
+          </motion.div>
         </div>
       </section>
 

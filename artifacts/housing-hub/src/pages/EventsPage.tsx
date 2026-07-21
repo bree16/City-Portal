@@ -129,147 +129,193 @@ export default function EventsPage() {
     ? upcoming
     : upcoming.filter(e => e.type === activeFilter);
 
+  // Type color map
+  const typeColors: Record<string, { bg: string; text: string; badge: string }> = {
+    Workshop: { bg: 'from-blue-600 to-blue-400', text: 'text-blue-700', badge: 'bg-blue-50 border-blue-200 text-blue-700' },
+    Education: { bg: 'from-teal-600 to-teal-400', text: 'text-teal-700', badge: 'bg-teal-50 border-teal-200 text-teal-700' },
+    Community: { bg: 'from-violet-600 to-violet-400', text: 'text-violet-700', badge: 'bg-violet-50 border-violet-200 text-violet-700' },
+  };
+
+  const featuredEvent = filteredEvents[0];
+  const remainingEvents = filteredEvents.slice(1);
+
   return (
-    <div className="flex flex-col w-full pt-20 min-h-screen bg-muted/20">
-      {/* Hero */}
-      <section className="bg-primary text-white py-20 lg:py-28 text-center px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0B2146] via-primary to-accent/50 z-0" />
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_70%_30%,_#D4A843_0%,_transparent_60%)] z-0 pointer-events-none" />
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="container mx-auto max-w-4xl relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-6 backdrop-blur-md">
-            <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
-            Newport News Community
-          </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Community Events & Workshops</h1>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto">
-            Connect, learn, and grow. Join us for workshops on homebuying, financial literacy, and community building.
-          </p>
-        </motion.div>
+    <div className="flex flex-col w-full pt-20 min-h-screen bg-[#f5f7fc]">
+      {/* ── Hero ── */}
+      <section className="relative bg-[#060d1a] text-white py-24 lg:py-32 overflow-hidden">
+        {/* Ambient glows */}
+        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary rounded-full blur-[160px] opacity-30 pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] bg-accent rounded-full blur-[140px] opacity-20 pointer-events-none" />
+        <div className="absolute top-[30%] right-[20%] w-[280px] h-[280px] bg-secondary rounded-full blur-[120px] opacity-15 pointer-events-none" />
+
+        <div className="container mx-auto max-w-5xl px-4 relative z-10 text-center">
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm font-semibold mb-7 backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+              Newport News Community Calendar
+            </div>
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight leading-[1.05]">
+              Happening in{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-accent to-[#00C2D4]">Newport News</span>
+            </h1>
+            <p className="text-xl text-white/65 max-w-2xl mx-auto leading-relaxed">
+              Workshops on homebuying, financial literacy classes, and community events — all in one place.
+            </p>
+          </motion.div>
+
+          {/* Quick filter tabs in hero */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-wrap gap-3 justify-center mt-10"
+          >
+            {(['All', 'Workshop', 'Education', 'Community'] as FilterType[]).map((type) => {
+              const colors = typeColors[type] ?? {};
+              return (
+                <button
+                  key={type}
+                  onClick={() => setActiveFilter(type)}
+                  className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 border ${
+                    activeFilter === type
+                      ? 'bg-white text-primary border-white shadow-lg scale-105'
+                      : 'bg-white/10 text-white/80 border-white/15 hover:bg-white/20 hover:border-white/25'
+                  }`}
+                >
+                  {type}
+                </button>
+              );
+            })}
+          </motion.div>
+        </div>
+
+        {/* Wave bottom */}
+        <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
+          <svg viewBox="0 0 1440 56" className="w-full" preserveAspectRatio="none" style={{ height: 56 }}>
+            <path d="M0,56 C360,0 1080,0 1440,56 L1440,56 L0,56 Z" fill="#f5f7fc" />
+          </svg>
+        </div>
       </section>
 
-      <section className="py-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="grid lg:grid-cols-3 gap-8">
-            
-            {/* Left Column: Filters + Calendar */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="lg:col-span-1 space-y-8"
-            >
-              {/* Filter Pills */}
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-border">
-                <h3 className="font-bold text-primary mb-4">Filter by Type</h3>
-                <div className="flex flex-wrap gap-2">
-                  {['All', 'Workshop', 'Education', 'Community'].map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => setActiveFilter(type as FilterType)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                        activeFilter === type 
-                          ? 'bg-primary text-white' 
-                          : 'bg-muted text-foreground hover:bg-border/50'
-                      }`}
-                    >
-                      {type}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Decorative Calendar */}
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-border hidden lg:block">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold text-primary">August 2026</h3>
-                </div>
-                <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-muted-foreground mb-2">
-                  <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
-                </div>
-                <div className="grid grid-cols-7 gap-1 text-center text-sm">
-                  <div className="p-2 text-muted-foreground/30">26</div>
-                  <div className="p-2 text-muted-foreground/30">27</div>
-                  <div className="p-2 text-muted-foreground/30">28</div>
-                  <div className="p-2 text-muted-foreground/30">29</div>
-                  <div className="p-2 text-muted-foreground/30">30</div>
-                  <div className="p-2 text-muted-foreground/30">31</div>
-                  {[...Array(31)].map((_, i) => {
-                    const day = i + 1;
-                    const hasEvent = day === 8 || day === 15;
-                    return (
-                      <div key={day} className="relative p-2 aspect-square flex items-center justify-center rounded-md hover:bg-muted transition-colors cursor-pointer">
-                        <span className={hasEvent ? 'font-bold text-primary' : 'text-foreground'}>{day}</span>
-                        {hasEvent && (
-                          <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-accent"></div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right Column: Events */}
-            <div className="lg:col-span-2 space-y-6">
-              {filteredEvents.map((evt, i) => (
-                <motion.div
-                  key={evt.id}
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.45, delay: i * 0.08 }}
-                  whileHover={{ x: 4, transition: { duration: 0.15 } }}
-                >
-                  <Card className="overflow-hidden border-border/50 shadow-sm hover:shadow-md transition-shadow bg-white flex flex-col sm:flex-row group">
-                    <div className={`${evt.color ?? (evt.type === 'Education' ? 'bg-accent' : 'bg-primary')} text-white p-6 flex flex-col items-center justify-center min-w-[120px] shrink-0 text-center`}>
-                      {evt.dateStr.includes(' ') ? (
-                        <>
-                          <span className="text-sm font-bold uppercase tracking-wider mb-1 opacity-90">{evt.dateStr.split(' ')[0]}</span>
-                          <span className="text-4xl font-extrabold">{evt.dateStr.split(' ')[1]}</span>
-                        </>
-                      ) : (
-                        <span className="text-sm font-extrabold uppercase tracking-widest">{evt.dateStr}</span>
-                      )}
-                    </div>
-                    <CardContent className="p-6 flex-1 flex flex-col">
-                      <div className="mb-2">
-                        <Badge variant="outline" className={`${
-                          evt.type === 'Workshop' ? 'text-blue-600 border-blue-200 bg-blue-50' :
-                          evt.type === 'Education' ? 'text-teal-600 border-teal-200 bg-teal-50' :
-                          'text-indigo-600 border-indigo-200 bg-indigo-50'
-                        }`}>
-                          {evt.type}
-                        </Badge>
-                      </div>
-                      <h3 className="text-xl font-bold text-primary mb-3">{evt.title}</h3>
-                      <div className="space-y-2 text-sm text-muted-foreground font-medium mb-4 flex-1">
-                        <div className="flex items-center gap-2">
-                          <CalendarIcon className="w-4 h-4 text-accent" /> {evt.fullDate} • {evt.time}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-accent" /> {evt.location}
-                        </div>
-                      </div>
-                      <p className="text-foreground/80 text-sm mb-6 leading-relaxed">{evt.desc}</p>
-                      <div className="mt-auto">
-                        <Button asChild className="bg-primary hover:bg-primary/90 text-white font-semibold">
-                          <a href={evt.url} target="_blank" rel="noopener noreferrer">Register</a>
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-
-              {filteredEvents.length === 0 && (
-                <div className="text-center py-20 text-muted-foreground bg-white rounded-2xl border border-border">
-                  No events found for this category.
-                </div>
-              )}
+      {/* ── Featured Event ── */}
+      {featuredEvent && (
+        <section className="py-12 px-4">
+          <div className="container mx-auto max-w-6xl">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4 flex items-center gap-2">
+              <span className="w-6 h-px bg-accent inline-block" /> Featured Event
             </div>
+            <motion.a
+              href={featuredEvent.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className={`block group relative overflow-hidden rounded-3xl bg-gradient-to-br ${
+                typeColors[featuredEvent.type]?.bg ?? 'from-primary to-primary/80'
+              } text-white shadow-2xl hover:shadow-3xl hover:-translate-y-1 transition-all duration-300`}
+            >
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIi8+PC9zdmc+')] opacity-40 pointer-events-none" />
+              <div className="relative z-10 p-8 md:p-12 flex flex-col md:flex-row gap-8 items-start md:items-center">
+                {/* Date block */}
+                <div className="shrink-0 text-center bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-4 min-w-[100px]">
+                  {featuredEvent.dateStr.includes(' ') ? (
+                    <>
+                      <div className="text-xs font-bold uppercase tracking-widest opacity-80">{featuredEvent.dateStr.split(' ')[0]}</div>
+                      <div className="text-5xl font-extrabold leading-none my-1">{featuredEvent.dateStr.split(' ')[1]}</div>
+                    </>
+                  ) : (
+                    <div className="text-lg font-extrabold uppercase tracking-widest">{featuredEvent.dateStr}</div>
+                  )}
+                  <div className="text-xs opacity-70 mt-1">2026</div>
+                </div>
 
+                <div className="flex-1">
+                  <Badge className="bg-white/20 text-white border-none mb-3 text-xs font-bold uppercase tracking-wider">{featuredEvent.type}</Badge>
+                  <h2 className="text-2xl md:text-3xl font-extrabold mb-3 leading-tight">{featuredEvent.title}</h2>
+                  <div className="flex flex-wrap gap-4 text-sm text-white/80 mb-4">
+                    <span className="flex items-center gap-1.5"><CalendarIcon className="w-4 h-4" />{featuredEvent.fullDate} • {featuredEvent.time}</span>
+                    <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4" />{featuredEvent.location}</span>
+                  </div>
+                  <p className="text-white/75 leading-relaxed max-w-2xl">{featuredEvent.desc}</p>
+                </div>
+
+                <div className="shrink-0">
+                  <span className="inline-flex items-center gap-2 bg-white text-primary font-bold px-6 py-3 rounded-full shadow-lg group-hover:shadow-xl transition-shadow text-sm">
+                    Register Now <CalendarIcon className="w-4 h-4" />
+                  </span>
+                </div>
+              </div>
+            </motion.a>
           </div>
+        </section>
+      )}
+
+      {/* ── Event Cards Grid ── */}
+      <section className="pb-16 px-4">
+        <div className="container mx-auto max-w-6xl">
+          {remainingEvents.length > 0 && (
+            <>
+              <div className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-6 flex items-center gap-2">
+                <span className="w-6 h-px bg-muted-foreground inline-block" /> All Events
+              </div>
+              <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {remainingEvents.map((evt, i) => {
+                  const colors = typeColors[evt.type] ?? typeColors['Community'];
+                  return (
+                    <motion.a
+                      key={evt.id}
+                      href={evt.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      initial={{ opacity: 0, y: 24 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '-40px' }}
+                      transition={{ duration: 0.45, delay: i * 0.06 }}
+                      className="group block bg-white rounded-2xl border border-border/60 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 overflow-hidden"
+                    >
+                      {/* Colored top stripe */}
+                      <div className={`h-1.5 w-full bg-gradient-to-r ${colors.bg}`} />
+                      <div className="p-6 flex flex-col h-full">
+                        <div className="flex items-start justify-between gap-3 mb-4">
+                          {/* Date pill */}
+                          <div className={`shrink-0 px-3 py-1.5 rounded-xl bg-gradient-to-br ${colors.bg} text-white text-center min-w-[56px]`}>
+                            {evt.dateStr.includes(' ') ? (
+                              <>
+                                <div className="text-[9px] font-bold uppercase tracking-wider opacity-80">{evt.dateStr.split(' ')[0]}</div>
+                                <div className="text-xl font-extrabold leading-tight">{evt.dateStr.split(' ')[1]}</div>
+                              </>
+                            ) : (
+                              <div className="text-[9px] font-extrabold uppercase tracking-widest">{evt.dateStr}</div>
+                            )}
+                          </div>
+                          <Badge variant="outline" className={`text-xs ${colors.badge} shrink-0`}>{evt.type}</Badge>
+                        </div>
+                        <h3 className="font-bold text-primary text-base leading-snug mb-3 group-hover:text-accent transition-colors">{evt.title}</h3>
+                        <div className="space-y-1.5 text-xs text-muted-foreground mb-3">
+                          <div className="flex items-center gap-1.5"><CalendarIcon className="w-3.5 h-3.5 text-accent shrink-0" />{evt.fullDate} · {evt.time}</div>
+                          <div className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-accent shrink-0" />{evt.location}</div>
+                        </div>
+                        <p className="text-sm text-foreground/70 leading-relaxed flex-1 line-clamp-3 mb-4">{evt.desc}</p>
+                        <div className="flex items-center gap-1.5 text-sm font-bold text-accent group-hover:gap-2.5 transition-all mt-auto">
+                          Register <CalendarIcon className="w-3.5 h-3.5" />
+                        </div>
+                      </div>
+                    </motion.a>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+          {filteredEvents.length === 0 && (
+            <div className="text-center py-24 text-muted-foreground bg-white rounded-3xl border border-border">
+              <CalendarIcon className="w-10 h-10 mx-auto mb-3 opacity-30" />
+              <div className="font-bold text-lg">No events in this category right now.</div>
+              <button onClick={() => setActiveFilter('All')} className="mt-4 text-sm text-accent font-semibold hover:underline">Show all events</button>
+            </div>
+          )}
         </div>
       </section>
 
