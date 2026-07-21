@@ -26,7 +26,6 @@ import lifestyleNewHomeowners from '@assets/generated_images/lifestyle_new_homeo
 import lifestyleMilitaryFamily from '@assets/generated_images/lifestyle_military_family.jpg';
 import lifestyleCommunityFestival from '@assets/generated_images/lifestyle_community_festival.jpg';
 import lifestyleWaterfrontDog from '@assets/generated_images/lifestyle_waterfront_dog.jpg';
-import waterfrontVideo from '@assets/generated_videos/hp_waterfront_walk_4.mp4';
 import lifestyleCoffeeShop from '@assets/generated_images/lifestyle_coffee_shop.jpg';
 
 export default function HomePage() {
@@ -405,7 +404,7 @@ export default function HomePage() {
               transition={{ duration: 0.7 }}
               className="col-span-12 md:col-span-7 row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer"
             >
-              <video src={waterfrontVideo} autoPlay muted loop playsInline className="w-full h-full object-cover" />
+              <img src={lifestyleWaterfrontDog} alt="Waterfront Newport News" className="w-full h-full object-cover living-photo-5" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
               {/* Animated accent line */}
