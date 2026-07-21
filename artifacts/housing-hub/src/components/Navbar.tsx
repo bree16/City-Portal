@@ -87,10 +87,12 @@ export function Navbar() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 z-50 mr-8 lg:mr-16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md" data-testid="link-home" aria-label="Newport News Housing Hub — go to homepage">
+            <Link href="/" className="flex items-center gap-3 z-50 mr-8 lg:mr-16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md" data-testid="link-home" aria-label="Newport News Housing Hub — go to homepage">
               <AnimatedLogo isLight={isScrolled || !isHomepage || isMobileMenuOpen} />
-              <span className={`font-bold text-lg whitespace-nowrap tracking-tight transition-colors ${
-                isScrolled || !isHomepage || isMobileMenuOpen ? 'bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent' : 'bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent'
+              <span className={`font-bold text-base whitespace-nowrap tracking-tight transition-colors border-l pl-3 ${
+                isScrolled || !isHomepage || isMobileMenuOpen
+                  ? 'border-primary/20 text-primary'
+                  : 'border-white/30 text-white'
               }`}>
                 Housing Hub
               </span>

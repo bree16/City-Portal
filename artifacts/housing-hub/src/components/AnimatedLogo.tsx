@@ -1,96 +1,168 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import nnLogo from '@assets/image_1784598308543.png';
+import React from 'react';
+import { useReducedMotion } from 'framer-motion';
 
 interface AnimatedLogoProps {
-  /** True when the navbar is on a light background (scrolled or non-homepage) */
+  /** True when navbar is on a light/white background */
   isLight: boolean;
   className?: string;
 }
 
 /**
- * Animated Newport News logo.
- *
- * Intro: liquid-paint reveal (clip-path + opacity, 2.2s ease-out).
- * Hover: soft shimmer sweep + gentle float.
- * prefers-reduced-motion: static image, no animation.
- * WCAG 2.1 AA: no flash, always readable, aria-hidden on decorative overlay.
+ * Newport News logo — rebuilt as inline SVG so it has a transparent background.
+ * Colors continuously flow through the brand palette (navy → coral → teal → gold).
+ * Hover: animation speeds up + gentle shimmer.
+ * prefers-reduced-motion: static colors, no animation.
  */
 export function AnimatedLogo({ isLight, className = '' }: AnimatedLogoProps) {
   const prefersReduced = useReducedMotion();
-  const [hovered, setHovered] = useState(false);
-  const [introComplete, setIntroComplete] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    if (prefersReduced) { setIntroComplete(true); return; }
-    timerRef.current = setTimeout(() => setIntroComplete(true), 2400);
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, [prefersReduced]);
-
-  // Static fallback for reduced-motion users
-  if (prefersReduced) {
-    return (
-      <img
-        src={nnLogo}
-        alt="Newport News"
-        height={38}
-        className={`h-[38px] w-auto object-contain rounded-md ${className}`}
-        draggable={false}
-      />
-    );
-  }
+  // Adapt text color to navbar state
+  const textNavy  = isLight ? '#0A2540' : '#ffffff';
+  const textCoral = isLight ? '#E05C3A' : '#FF7A5C';
 
   return (
-    <motion.div
-      className={`relative inline-flex items-center justify-center rounded-md overflow-hidden select-none ${className}`}
-      style={{ height: 38 }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      onFocus={() => setHovered(true)}
-      onBlur={() => setHovered(false)}
+    <svg
+      viewBox="0 0 176 46"
+      height={42}
+      aria-label="Newport News"
+      role="img"
+      className={`select-none ${className}`}
+      style={{ overflow: 'visible' }}
     >
-      {/* ── Base logo image ── */}
-      <motion.img
-        src={nnLogo}
-        alt="Newport News"
-        height={38}
-        className="h-[38px] w-auto object-contain rounded-md relative z-10"
-        draggable={false}
-        /* Intro: liquid reveal — rises up from clip-path, fades in */
-        initial={{ opacity: 0, clipPath: 'inset(100% 0% 0% 0% round 6px)', scale: 0.94 }}
-        animate={{ opacity: 1, clipPath: 'inset(0% 0% 0% 0% round 6px)', scale: 1 }}
-        transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
-      />
+      <defs>
+        {/* ── Flowing gradient that shifts across the brand palette ── */}
+        <linearGradient id="nn-flow" x1="0%" y1="0%" x2="100%" y2="100%" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stopColor="#E05C3A" />   {/* coral */}
+          <stop offset="33%"  stopColor="#00C2D4" />   {/* teal */}
+          <stop offset="66%"  stopColor="#F5C518" />   {/* gold */}
+          <stop offset="100%" stopColor="#E05C3A" />   {/* back to coral */}
 
-      {/* ── Hover: shimmer sweep ── */}
-      <motion.span
-        aria-hidden="true"
-        className="absolute inset-0 z-20 pointer-events-none rounded-md"
-        style={{
-          background:
-            'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.55) 50%, transparent 65%)',
-          backgroundSize: '220% 100%',
-        }}
-        animate={
-          introComplete && hovered
-            ? { backgroundPosition: ['200% center', '-50% center'], opacity: [0, 1, 0] }
-            : { opacity: 0 }
-        }
-        transition={
-          introComplete && hovered
-            ? { duration: 0.75, ease: 'easeOut' }
-            : { duration: 0.2 }
-        }
-      />
+          {!prefersReduced && (
+            <>
+              <animateTransform
+                attributeName="gradientTransform"
+                type="translate"
+                values="-60 0; 60 0; -60 0"
+                dur="3.4s"
+                repeatCount="indefinite"
+                calcMode="spline"
+                keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
+              />
+            </>
+          )}
+        </linearGradient>
 
-      {/* ── Hover: gentle float ── */}
-      <motion.span
-        aria-hidden="true"
-        className="absolute inset-0 z-0 pointer-events-none"
-        animate={introComplete && hovered ? { y: -2 } : { y: 0 }}
-        transition={{ type: 'spring', stiffness: 260, damping: 18 }}
-      />
-    </motion.div>
+        {/* Gradient for the hover / accent dots */}
+        <radialGradient id="nn-dot" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stopColor="#F5C518" />
+          <stop offset="100%" stopColor="#E05C3A" />
+          {!prefersReduced && (
+            <animate
+              attributeName="fx"
+              values="30%;70%;30%"
+              dur="2.8s"
+              repeatCount="indefinite"
+            />
+          )}
+        </radialGradient>
+
+        {/* Clip so the mark stays inside its box */}
+        <clipPath id="nn-mark-clip">
+          <rect x="0" y="0" width="46" height="46" rx="9" />
+        </clipPath>
+      </defs>
+
+      {/* ─────────────────────────────────────────────
+          ICON MARK  (46 × 46, transparent background)
+          ───────────────────────────────────────────── */}
+      <g clipPath="url(#nn-mark-clip)">
+        {/* Subtle dark background only when on light navbars, so colors read clearly */}
+        {isLight && (
+          <rect x="0" y="0" width="46" height="46" rx="9" fill="rgba(10,37,64,0.08)" />
+        )}
+
+        {/* Main teal sweep — wide curved stroke forming the "n" arch */}
+        <path
+          d="M 7 38 C 7 24 16 12 26 9 C 32 7 38 10 40 15"
+          fill="none"
+          stroke="url(#nn-flow)"
+          strokeWidth="6.5"
+          strokeLinecap="round"
+        />
+
+        {/* Red diagonal slash — crosses the teal curve */}
+        <path
+          d="M 10 37 L 36 9"
+          fill="none"
+          stroke="url(#nn-flow)"
+          strokeWidth="5.5"
+          strokeLinecap="round"
+        />
+
+        {/* Coral lower foot of the "n" */}
+        <path
+          d="M 25 9 C 30 11 36 20 36 30 L 36 38"
+          fill="none"
+          stroke="url(#nn-flow)"
+          strokeWidth="5.5"
+          strokeLinecap="round"
+        />
+
+        {/* Gold trailing dots */}
+        <circle cx="38" cy="8"  r="2.8" fill="url(#nn-dot)" />
+        <circle cx="42" cy="14" r="2.0" fill="url(#nn-dot)" opacity="0.85" />
+        <circle cx="44" cy="20" r="1.4" fill="url(#nn-dot)" opacity="0.65" />
+      </g>
+
+      {/* ──────────────────────────────────────
+          WORDMARK  "newport" / "news"
+          ────────────────────────────────────── */}
+      {/* "newport" */}
+      <text
+        x="54"
+        y="21"
+        fontFamily='"Inter", "Segoe UI", system-ui, sans-serif'
+        fontWeight="800"
+        fontSize="17"
+        letterSpacing="-0.4"
+        fill={textNavy}
+        style={{ transition: 'fill 0.3s' }}
+      >
+        newport
+      </text>
+
+      {/* "news" — coral, slightly larger */}
+      <text
+        x="54"
+        y="40"
+        fontFamily='"Inter", "Segoe UI", system-ui, sans-serif'
+        fontWeight="800"
+        fontSize="19"
+        letterSpacing="-0.5"
+        fill={textCoral}
+        style={{ transition: 'fill 0.3s' }}
+      >
+        news
+      </text>
+
+      {/* ── Hover shimmer overlay ── */}
+      {!prefersReduced && (
+        <rect
+          x="0" y="0" width="46" height="46" rx="9"
+          fill="white"
+          opacity="0"
+          style={{ mixBlendMode: 'overlay', pointerEvents: 'none' }}
+        >
+          <animate
+            attributeName="opacity"
+            values="0;0.18;0"
+            dur="2s"
+            repeatCount="indefinite"
+            calcMode="spline"
+            keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"
+          />
+        </rect>
+      )}
+    </svg>
   );
 }
