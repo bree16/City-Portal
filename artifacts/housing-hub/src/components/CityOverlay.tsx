@@ -3,14 +3,8 @@
  * Zero shared ancestors with the main app, so position:fixed is always
  * pinned to the viewport regardless of any transform in the main tree.
  */
-import { CityStreetLife } from './CityStreetLife';
 import { CityLiveFeed } from './CityLiveFeed';
 
 export function CityOverlay() {
-  return (
-    <>
-      <CityStreetLife />
-      <CityLiveFeed />
-    </>
-  );
+  return <CityLiveFeed />;
 }
