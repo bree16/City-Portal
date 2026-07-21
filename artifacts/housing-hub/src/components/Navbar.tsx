@@ -44,22 +44,23 @@ export function Navbar() {
   }, [location]);
 
   const moreLinks = [
-    { label: 'Why Newport News', href: '/why-newport-news', icon: Sparkles, desc: 'Life in the city' },
+    { label: 'Build', href: '/build', icon: Hammer, desc: 'Build from the ground up' },
+    { label: 'Simulator', href: '/simulator', icon: Gamepad2, desc: 'Learn through play' },
     { label: 'Services', href: '/services', icon: HeartHandshake, desc: 'Resident services' },
     { label: 'Success Stories', href: '/success-stories', icon: Trophy, desc: 'Real neighbors, real results' },
     { label: 'First-Time Buyer Checklist', href: '/checklist', icon: ClipboardCheck, desc: 'Step-by-step guide' },
     { label: 'SHIP Housing Plan', href: '/ship', icon: Landmark, desc: "The city's roadmap" },
-    { label: 'Resources', href: '/resources', icon: BookOpen, desc: 'Programs & helpful links' },
   ];
 
+  // Core top-level links — high-frequency, decision-driving pages
   const navLinks = [
     { label: 'Buy', href: '/buy' },
     { label: 'Rent', href: '/rent' },
     { label: 'Neighborhoods', href: '/neighborhoods' },
+    { label: 'Why Newport News', href: '/why-newport-news' },
     { label: 'Journey', href: '/journey' },
-    { label: 'Build', href: '/build' },
-    { label: 'Simulator', href: '/simulator' },
     { label: 'Events', href: '/events' },
+    { label: 'Resources', href: '/resources' },
     { label: 'Contact', href: '/contact' },
   ];
 
