@@ -1,0 +1,280 @@
+Final Expansion – Interactive Learning Experiences & Build Your Own Home
+
+The website is now functionally complete. This final phase is about creating memorable educational experiences that increase engagement while teaching practical housing concepts.
+
+The objective is not to gamify the entire website. Instead, embed optional, bite-sized interactive learning experiences throughout the site that reinforce important housing lessons.
+
+These experiences should feel like hidden discoveries users can choose to engage with as they explore.
+
+Interactive Learning Cards
+
+Rather than using obvious "Play Game" buttons, create Interactive Learning Cards that naturally blend into the page.
+
+They should:
+
+Match the website's overall design language.
+Use rounded corners, soft shadows, and subtle gradients.
+Feel like premium educational widgets rather than arcade games.
+Lift slightly and animate when hovered.
+Display a subtle prompt such as:
+"Try a 30-second challenge"
+"Test your knowledge"
+"Interactive scenario"
+"Can you make the right decision?"
+
+The interaction should happen inline or in a lightweight modal without taking users away from the page.
+
+Use clean SVG illustrations and soft motion. Avoid the visual style of the main simulator.
+
+Mini-Game 1: Hot Market Challenge
+
+Location: Buying a Home page
+
+Purpose: Teach users that desirable homes can receive offers almost immediately.
+
+Scenario:
+
+A home listing appears as a stylized property card.
+
+Information includes:
+
+Price
+Bedrooms
+Bathrooms
+Neighborhood
+Days on market
+Estimated monthly payment
+A few pros and cons
+
+The player has only 10 seconds to evaluate whether to submit an offer.
+
+Buttons:
+
+Make an Offer
+Keep Looking
+
+After the timer ends:
+
+Explain what happened.
+
+Examples:
+
+"Great choice! This home had multiple offers within hours."
+
+or
+
+"This home sold before you made a decision. In competitive markets, preparation matters."
+
+Then provide a short educational takeaway about mortgage pre-approval and being ready to act quickly.
+
+Mini-Game 2: Spot the Hidden Fees
+
+Location: Renting page
+
+Purpose: Teach renters how to carefully review lease agreements.
+
+Present a simplified lease with a mixture of normal and questionable charges.
+
+Examples:
+
+Monthly rent
+Security deposit
+Utilities
+Pet fee
+Pest control
+Trash service
+Duplicate utility charge
+Inflated administrative fee
+Double billing
+Hidden monthly convenience fee
+
+The player must identify the questionable or unexpected charges before signing.
+
+Correct selections explain why users should ask questions before signing a lease.
+
+Mini-Game 3: Home Inspection Decisions
+
+Location: Homeownership Journey
+
+Purpose: Teach users about inspections and protecting themselves during a purchase.
+
+Present realistic situations.
+
+Example:
+
+"The seller recommends using their preferred inspector."
+
+Possible responses:
+
+Accept immediately
+Hire an independent licensed inspector
+Skip the inspection to save money
+
+Explain the consequences of each choice.
+
+Additional scenarios could include:
+
+Mold discovered after purchase
+Roof damage
+Foundation issues
+HVAC failure
+Septic system concerns
+Water well testing
+Underground oil tank
+Electrical problems
+
+Each scenario should include a practical explanation of what a buyer should do.
+
+Mini-Game 4: Build Your Own Home
+
+Create a brand-new page dedicated to building a home from the ground up.
+
+This page should introduce users to an alternative path to homeownership.
+
+Topics should include:
+
+Buying land
+Construction loans
+Site preparation
+Foundation selection
+Utilities
+Septic systems
+Water wells
+Sewer connections
+Electric service
+Solar options
+Driveway installation
+Grading and drainage
+Permits
+Inspections
+Builder selection
+Final walkthrough
+
+Include information about relevant city, state, and federal resources that may assist with financing, permitting, or homeownership.
+
+If Newport News or Virginia offers programs relevant to land development or home construction, include those as resources.
+
+Interactive Builder Challenge
+
+Users are given a construction budget.
+
+They must choose the essential items needed to build a home.
+
+Examples:
+
+Land
+Foundation
+Framing
+Roof
+Plumbing
+Electrical
+Water connection or well
+Septic system (if required)
+Driveway
+HVAC
+Permits
+Inspections
+
+Each selection updates the remaining budget.
+
+When finished:
+
+Display:
+
+Total cost
+Budget remaining
+Items forgotten
+
+Explain why each missing item matters.
+
+Mini-Game 5: Builder Warranty Challenge
+
+Present post-construction scenarios.
+
+Example:
+
+"Three months after moving in, you discover a major foundation crack."
+
+Possible responses:
+
+Contact the builder
+File a warranty claim
+Hire a structural engineer
+Ignore it
+
+Explain which options are appropriate and why.
+
+Additional scenarios:
+
+Roof leak
+Plumbing leak
+Electrical issue
+Drainage problem
+Builder workmanship
+Cosmetic defects
+
+Teach users about warranties, documentation, and when to seek legal or professional assistance.
+
+Educational Value
+
+Every mini-game should conclude with:
+
+"What You Learned"
+
+This should summarize the key lesson in one or two sentences and provide a link to the relevant section of the Housing Hub for additional information.
+
+Remove Floating Town Characters
+
+The decorative SVG townspeople currently behave incorrectly.
+
+As users scroll, they float over content and obscure information.
+
+Remove these floating characters entirely.
+
+If decorative illustrations are retained in the future:
+
+They must be anchored to their section.
+They should scroll naturally with the page.
+They must never overlap content or interfere with readability.
+Improve the Resident Services Section
+
+The current Resident Services section feels static and visually repetitive.
+
+Redesign it to feel more engaging while remaining appropriate for a government website.
+
+Ideas include:
+
+Interactive category tiles
+Soft hover animations
+Expandable service previews
+Animated icons
+Illustrated section headers
+Background depth
+Better spacing
+Visual grouping by category
+Progressive disclosure of information
+
+The goal is to make the section inviting and easy to explore without sacrificing clarity or professionalism.
+
+Accessibility Requirements
+
+All new interactive content must comply with WCAG 2.1 Level AA.
+
+Requirements include:
+
+Full keyboard navigation.
+Visible focus indicators.
+Screen reader labels for interactive elements.
+Sufficient color contrast.
+Support for prefers-reduced-motion.
+No flashing or strobing effects.
+Ability to pause or disable non-essential animations.
+All games fully playable without relying solely on a mouse.
+Clear instructions before each interaction.
+Time-limited challenges should allow users to extend or disable the timer when accessibility settings require it.
+
+The experience should remain fully usable even if animations are disabled.
+
+Overall Vision
+
+The final website should feel less like a collection of pages and more like an interactive digital learning platform. Every interactive element should reinforce practical housing knowledge, reward curiosity, and help first-time renters and homebuyers build confidence. The result should be a polished, accessible, and engaging civic experience that demonstrates how modern government websites can educate, delight, and empower their communities.

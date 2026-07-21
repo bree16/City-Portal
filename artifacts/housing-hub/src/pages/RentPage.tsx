@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, BedDouble, Bath, Info, Search, ShieldCheck, Home, AlertCircle, Maximize, ExternalLink } from 'lucide-react';
+import { MapPin, BedDouble, Bath, Info, Search, ShieldCheck, Home, AlertCircle, Maximize, ExternalLink, AlertTriangle } from 'lucide-react';
+import { SpotHiddenFees } from '@/components/games/SpotHiddenFees';
 import { RENTALS, ZILLOW_ALL_RENTALS, CITY_MARKET } from '@/data/market';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -338,6 +339,20 @@ export default function RentPage() {
           </Button>
         </div>
       </AnimatedSection>
+
+      {/* Spot the Hidden Fees */}
+      <section className="py-16 bg-white border-t border-border/40">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-100 text-sm font-semibold text-rose-600 mb-3">
+              <AlertTriangle className="w-4 h-4" aria-hidden="true" /> Lease Review Challenge
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary mb-2">Can You Spot the Hidden Fees?</h2>
+            <p className="text-muted-foreground">Before you sign any lease, know what you're actually paying for.</p>
+          </div>
+          <SpotHiddenFees />
+        </div>
+      </section>
 
       {/* Partners */}
       <section className="py-16 bg-muted/10">

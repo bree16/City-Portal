@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, ChevronDown, DollarSign, Key, FileText, BadgePercent, Home, Users, CreditCard, BookOpen, Landmark, ArrowRight, ExternalLink } from 'lucide-react';
+import { CheckCircle2, ChevronDown, DollarSign, Key, FileText, BadgePercent, Home, Users, CreditCard, BookOpen, Landmark, ArrowRight, ExternalLink, Zap } from 'lucide-react';
+import { HotMarketChallenge } from '@/components/games/HotMarketChallenge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -212,6 +213,20 @@ export default function BuyPage() {
               ))}
             </Accordion>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Hot Market Challenge */}
+      <section className="py-16 bg-muted/20 border-t border-border/40">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-sm font-semibold text-accent mb-3">
+              <Zap className="w-4 h-4" aria-hidden="true" /> Test Your Knowledge
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary mb-2">Are You Ready for a Hot Market?</h2>
+            <p className="text-muted-foreground">Newport News moves fast. Practice your decision-making before it counts.</p>
+          </div>
+          <HotMarketChallenge />
         </div>
       </section>
 

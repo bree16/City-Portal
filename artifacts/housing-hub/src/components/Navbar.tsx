@@ -33,6 +33,7 @@ export function Navbar() {
     { label: 'Rent', href: '/rent' },
     { label: 'Neighborhoods', href: '/neighborhoods' },
     { label: 'Journey', href: '/journey' },
+    { label: 'Build', href: '/build' },
     { label: 'Why Newport News', href: '/why-newport-news' },
     { label: 'Simulator', href: '/simulator' },
     { label: 'Events', href: '/events' },

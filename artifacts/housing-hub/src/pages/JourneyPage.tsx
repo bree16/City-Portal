@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { Building2, Home, Landmark, Hammer, AlertTriangle, ArrowRight, Sparkles } from 'lucide-react';
+import { Building2, Home, Landmark, Hammer, AlertTriangle, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
+import { HomeInspectionGame } from '@/components/games/HomeInspectionGame';
 import journeyRenting from '@assets/generated_images/journey_renting.jpg';
 import journeyBuying from '@assets/generated_images/journey_buying.jpg';
 import journeyOwning from '@assets/generated_images/journey_owning.jpg';
@@ -130,6 +131,20 @@ export default function JourneyPage() {
               </div>
             </Link>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Home Inspection Game */}
+      <section className="py-16 bg-white border-t border-border/40">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-sm font-semibold text-teal-700 mb-3">
+              <ShieldCheck className="w-4 h-4" aria-hidden="true" /> Interactive Scenario
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary mb-2">Home Inspection Decisions</h2>
+            <p className="text-muted-foreground">Three real situations. What would you do? Every choice has real consequences.</p>
+          </div>
+          <HomeInspectionGame />
         </div>
       </section>
 

@@ -30,6 +30,7 @@ import NotFound from '@/pages/not-found';
 import ServicesPage from '@/pages/ServicesPage';
 import ChecklistPage from '@/pages/ChecklistPage';
 import ShipPage from '@/pages/ShipPage';
+import BuildPage from '@/pages/BuildPage';
 import { HelpLineStrip } from '@/components/HelpLineStrip';
 import { AccessibilityWidget } from '@/components/AccessibilityWidget';
 
@@ -193,6 +194,7 @@ function Router() {
             <Route path="/success-stories" component={SuccessStoriesPage} />
             <Route path="/checklist" component={ChecklistPage} />
             <Route path="/ship" component={ShipPage} />
+            <Route path="/build" component={BuildPage} />
             <Route path="/contact" component={ContactPage} />
             {/* REQUIRED — "/sign-in/*?" and "/sign-up/*?" verbatim for Clerk OAuth sub-paths */}
             <Route path="/sign-in/*?" component={SignInPage} />
