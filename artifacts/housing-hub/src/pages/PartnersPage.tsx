@@ -45,7 +45,7 @@ export default function PartnersPage() {
     <div className="flex flex-col min-h-screen bg-muted/30">
       {/* Hero — photo background */}
       <section className="relative pt-32 pb-24 text-white text-center overflow-hidden">
-        <img src={partnersHero} alt="Newport News community partners" className="absolute inset-0 w-full h-full object-cover z-0" />
+        <img src={partnersHero} alt="Newport News community partners" className="absolute inset-0 w-full h-full object-cover z-0 living-photo-2" />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/80 to-accent/45 z-10" />
         <div className="container mx-auto px-4 max-w-3xl relative z-20">
           <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.6}}>

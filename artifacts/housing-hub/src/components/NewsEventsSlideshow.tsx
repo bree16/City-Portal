@@ -128,7 +128,7 @@ export function NewsEventsSlideshow() {
                 transition={{ duration: 0.6 }}
                 className="absolute inset-0"
               >
-                <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
+                <img src={slide.image} alt={slide.title} className="w-full h-full object-cover living-photo-3" />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/50 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-10 text-white">
                   <Badge className={slide.kind === 'News' ? "bg-accent text-white border-none mb-3" : "bg-secondary text-primary border-none mb-3"}>

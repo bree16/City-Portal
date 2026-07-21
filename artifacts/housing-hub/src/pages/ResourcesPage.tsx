@@ -47,7 +47,7 @@ export default function ResourcesPage() {
     <div className="flex flex-col w-full pt-20 bg-muted/20 min-h-screen">
       {/* Hero */}
       <section className="relative text-white py-20 lg:py-32 text-center px-4 overflow-hidden">
-        <img src={resourcesHero} alt="Community members meeting with housing counselor" className="absolute inset-0 w-full h-full object-cover z-0" />
+        <img src={resourcesHero} alt="Community members meeting with housing counselor" className="absolute inset-0 w-full h-full object-cover z-0 living-photo-5" />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/92 via-primary/80 to-accent/50 z-10" />
         <div className="container mx-auto max-w-4xl relative z-20">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>

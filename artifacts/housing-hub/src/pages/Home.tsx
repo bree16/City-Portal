@@ -158,7 +158,7 @@ export default function HomePage() {
                 <img 
                   src={heroIllustration} 
                   alt="Newport News City Skyline Illustration" 
-                  className="w-full h-full object-contain filter drop-shadow-2xl"
+                  className="w-full h-full object-contain filter drop-shadow-2xl living-photo-3"
                   loading="eager"
                 />
               </div>
@@ -404,7 +404,7 @@ export default function HomePage() {
               transition={{ duration: 0.7 }}
               className="col-span-12 md:col-span-7 row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer"
             >
-              <img src={lifestyleWaterfrontDog} alt="Waterfront Newport News" className="w-full h-full object-cover transition-transform duration-[800ms] group-hover:scale-105" />
+              <img src={lifestyleWaterfrontDog} alt="Waterfront Newport News" className="w-full h-full object-cover transition-transform duration-[800ms] group-hover:scale-105 living-photo-5" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
               {/* Animated accent line */}
@@ -429,7 +429,7 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="col-span-12 md:col-span-5 relative rounded-3xl overflow-hidden group cursor-pointer"
             >
-              <img src={lifestyleNewHomeowners} alt="First-time homeowners" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src={lifestyleNewHomeowners} alt="First-time homeowners" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 living-photo" />
               <div className="absolute inset-0 bg-gradient-to-br from-primary/70 to-accent/40" />
               <div className="absolute inset-0 flex flex-col justify-end p-6">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/15 border border-white/20 text-white text-xs font-semibold mb-2 w-fit">
@@ -455,7 +455,7 @@ export default function HomePage() {
                   transition={{ duration: 0.5, delay: 0.15 + i * 0.1 }}
                   className="relative rounded-2xl overflow-hidden group cursor-pointer"
                 >
-                  <img src={item.img} alt={item.label} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <img src={item.img} alt={item.label} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 living-photo-2" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-3">
                     <div className="text-lg mb-0.5">{item.badge}</div>
@@ -766,7 +766,7 @@ export default function HomePage() {
               <StaggerItem key={hood.name} variant="scaleGentle">
                 <Link href="/neighborhoods" className="block group h-full">
                   <div className="relative rounded-3xl overflow-hidden aspect-[3/4] shadow-lg group-hover:shadow-2xl transition-all duration-500">
-                    <img src={hood.img} alt={hood.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <img src={hood.img} alt={hood.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 living-photo-4" />
                     {/* Gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
                     {/* Vibe tag top */}
@@ -888,7 +888,7 @@ export default function HomePage() {
         <img
           src={lifestyleCommunityFestival}
           alt="Newport News community"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover living-photo"
         />
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/80 to-accent/70 z-10" />

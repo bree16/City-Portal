@@ -188,7 +188,7 @@ export default function SuccessStoriesPage() {
                     <div className="flex items-center gap-4 mb-8 pb-8 border-b border-border">
                       <div className="w-16 h-16 rounded-full overflow-hidden shadow-md shrink-0 ring-2 ring-border">
                         {story.photo ? (
-                          <img src={story.photo} alt={story.name} className="w-full h-full object-cover" />
+                          <img src={story.photo} alt={story.name} className="w-full h-full object-cover living-photo-4" />
                         ) : (
                           <div className={`w-full h-full flex items-center justify-center text-white text-xl font-bold ${story.color}`}>
                             {story.initials}

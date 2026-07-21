@@ -33,7 +33,7 @@ export default function NeighborhoodsPage() {
     <div className="flex flex-col w-full pt-20 bg-muted/20">
       {/* Hero */}
       <section className="bg-primary text-white py-20 lg:py-32 text-center px-4 relative overflow-hidden">
-        <img src={neighborhoodsHero} alt="Beautiful tree-lined street in Newport News" className="absolute inset-0 w-full h-full object-cover z-0" />
+        <img src={neighborhoodsHero} alt="Beautiful tree-lined street in Newport News" className="absolute inset-0 w-full h-full object-cover z-0 living-photo" />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/75 to-accent/40 z-10" />
         <div className="container mx-auto max-w-4xl relative z-20">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>

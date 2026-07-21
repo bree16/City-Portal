@@ -71,7 +71,7 @@ export default function JourneyPage() {
                   <div className="group bg-white rounded-2xl shadow-sm border border-border/30 hover:shadow-2xl hover:-translate-y-2 transition-all duration-400 cursor-pointer overflow-hidden flex flex-col" data-testid={`card-journey-${i}`}>
                     {/* Photo header */}
                     <div className="relative h-52 overflow-hidden">
-                      <img src={card.img} alt={card.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                      <img src={card.img} alt={card.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 living-photo-2" />
                       <div className="absolute inset-0 bg-gradient-to-t from-primary/75 via-primary/20 to-transparent" />
                       {/* Number badge */}
                       <div className="absolute top-4 left-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-sm font-extrabold text-white flex items-center justify-center">
@@ -107,7 +107,7 @@ export default function JourneyPage() {
               <div className="group bg-white rounded-2xl shadow-sm border border-border/30 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-400 cursor-pointer overflow-hidden flex flex-col md:flex-row" data-testid="card-journey-4">
                 {/* Photo left */}
                 <div className="relative md:w-72 h-52 md:h-auto overflow-hidden shrink-0">
-                  <img src={journeyCards[4].img} alt={journeyCards[4].title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <img src={journeyCards[4].img} alt={journeyCards[4].title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 living-photo-5" />
                   <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-primary/75 via-primary/20 to-transparent" />
                   <div className="absolute top-4 left-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-sm font-extrabold text-white flex items-center justify-center">05</div>
                   <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-red-500 text-white text-xs font-semibold">

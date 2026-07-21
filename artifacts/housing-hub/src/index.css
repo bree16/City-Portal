@@ -640,3 +640,84 @@
 .stagger-4 { animation-delay: 0.20s; }
 .stagger-5 { animation-delay: 0.25s; }
 .stagger-6 { animation-delay: 0.30s; }
+
+/* ════════════════════════════════════════════════
+   HARRY POTTER LIVING PHOTOS
+   Five drift variants — each image gets its own
+   slow, continuous pan+breathe cycle so no two
+   photos move identically.
+   ════════════════════════════════════════════════ */
+
+@keyframes hp-drift-1 {
+  0%   { transform: scale(1.06) translate(0, 0); }
+  20%  { transform: scale(1.08) translate(-1.2%, -0.9%); }
+  45%  { transform: scale(1.05) translate(0.9%, -1.5%); }
+  70%  { transform: scale(1.09) translate(1.1%, 0.7%); }
+  100% { transform: scale(1.06) translate(0, 0); }
+}
+@keyframes hp-drift-2 {
+  0%   { transform: scale(1.07) translate(0, 0); }
+  30%  { transform: scale(1.05) translate(1.4%, -1.1%); }
+  55%  { transform: scale(1.08) translate(-0.9%, -0.6%); }
+  80%  { transform: scale(1.06) translate(-1.3%, 0.9%); }
+  100% { transform: scale(1.07) translate(0, 0); }
+}
+@keyframes hp-drift-3 {
+  0%   { transform: scale(1.05) translate(0, 0); }
+  25%  { transform: scale(1.08) translate(0.6%, 1.2%); }
+  50%  { transform: scale(1.06) translate(-1.1%, 0.9%); }
+  75%  { transform: scale(1.09) translate(1.3%, -0.6%); }
+  100% { transform: scale(1.05) translate(0, 0); }
+}
+@keyframes hp-drift-4 {
+  0%   { transform: scale(1.06) translate(0, 0); }
+  35%  { transform: scale(1.08) translate(-0.9%, 1.3%); }
+  60%  { transform: scale(1.05) translate(1.1%, -0.9%); }
+  85%  { transform: scale(1.07) translate(0.6%, 0.6%); }
+  100% { transform: scale(1.06) translate(0, 0); }
+}
+@keyframes hp-drift-5 {
+  0%   { transform: scale(1.07) translate(0, 0); }
+  40%  { transform: scale(1.05) translate(-1.6%, 0.7%); }
+  65%  { transform: scale(1.08) translate(0.9%, -1.2%); }
+  90%  { transform: scale(1.06) translate(0.4%, 0.9%); }
+  100% { transform: scale(1.07) translate(0, 0); }
+}
+
+/* Shimmer sweep — a soft light that slowly slides across */
+@keyframes hp-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 300% center; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .living-photo   { animation: hp-drift-1 24s ease-in-out infinite; }
+  .living-photo-2 { animation: hp-drift-2 30s ease-in-out infinite; }
+  .living-photo-3 { animation: hp-drift-3 20s ease-in-out infinite; }
+  .living-photo-4 { animation: hp-drift-4 26s ease-in-out infinite; }
+  .living-photo-5 { animation: hp-drift-5 33s ease-in-out infinite; }
+}
+
+/* Shimmer overlay — add to the parent wrapper, not the img */
+.living-photo-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.living-photo-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.07) 50%,
+    transparent 70%
+  );
+  background-size: 300% 100%;
+  animation: hp-shimmer 12s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .living-photo-wrap::after { display: none; }
+}

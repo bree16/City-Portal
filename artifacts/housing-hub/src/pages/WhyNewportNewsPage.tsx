@@ -51,7 +51,7 @@ export default function WhyNewportNewsPage() {
       {/* Hero — full-bleed lifestyle photo */}
       <section className="relative pt-40 pb-32 text-white overflow-hidden min-h-[560px] flex items-center">
         <div className="absolute inset-0 z-0">
-          <img src={heroImage} alt="Newport News Community" className="w-full h-full object-cover" />
+          <img src={heroImage} alt="Newport News Community" className="w-full h-full object-cover living-photo-2" />
           <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/75 to-accent/50"></div>
         </div>
         <div className="container relative z-10 mx-auto px-4 max-w-4xl text-center">
@@ -81,7 +81,7 @@ export default function WhyNewportNewsPage() {
               <motion.div key={card.title} initial={{opacity:0,y:20}} whileInView={{opacity:1,y:0}} transition={{delay: i*0.05}} viewport={{once:true}}
                 className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
                 <div className="h-40 overflow-hidden relative">
-                  <img src={card.image} alt={card.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={card.image} alt={card.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 living-photo-3" />
                   <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm p-2 rounded-lg text-primary">
                     <card.icon className="w-5 h-5" />
                   </div>

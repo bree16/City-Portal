@@ -41,7 +41,7 @@ export default function RentPage() {
     <div className="flex flex-col w-full pt-20 bg-muted/20 min-h-screen">
       {/* Hero */}
       <section className="bg-primary text-white py-16 lg:py-28 text-center px-4 relative overflow-hidden">
-        <img src={rentHero} alt="Young professional in her new apartment" className="absolute inset-0 w-full h-full object-cover z-0" />
+        <img src={rentHero} alt="Young professional in her new apartment" className="absolute inset-0 w-full h-full object-cover z-0 living-photo-4" />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/85 to-accent/50 z-10" />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="container mx-auto max-w-4xl relative z-20">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/25 text-sm font-medium mb-5 backdrop-blur-sm">
@@ -123,7 +123,7 @@ export default function RentPage() {
               >
                 <Card className="overflow-hidden border-border/50 shadow-sm hover:shadow-lg transition-all duration-300 bg-white group flex flex-col h-full">
                   <div className="relative h-56 overflow-hidden">
-                    <img src={listing.img} alt={listing.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <img src={listing.img} alt={listing.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 living-photo" />
                     <div className="absolute top-4 left-4">
                       <Badge className="bg-secondary text-primary hover:bg-secondary font-bold shadow-sm">
                         {listing.hood}

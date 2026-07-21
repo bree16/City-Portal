@@ -16,7 +16,7 @@ export default function BuyPage() {
       {/* Hero — split layout */}
       <section className="bg-primary text-white relative overflow-hidden min-h-[520px] flex items-center">
         <div className="absolute inset-y-0 right-0 w-full lg:w-1/2 z-0">
-          <img src={buyHero} alt="Couple receiving keys to their first home" className="w-full h-full object-cover" />
+          <img src={buyHero} alt="Couple receiving keys to their first home" className="w-full h-full object-cover living-photo-3" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-primary/10 lg:via-primary/60 lg:to-transparent" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-br from-[#0B2146] via-primary to-primary/90 z-0 lg:w-3/5" />
