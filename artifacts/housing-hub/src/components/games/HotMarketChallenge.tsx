@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Home, MapPin, BedDouble, Bath, Zap, BookOpen, ArrowRight, CheckCircle2, XCircle, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 
-const LISTINGS = [
+const ALL_LISTINGS = [
   {
     address: '412 Oyster Point Rd',
     neighborhood: 'Oyster Point',
@@ -16,7 +16,7 @@ const LISTINGS = [
     pros: ['Updated kitchen', 'Corner lot', 'Top-rated school district'],
     cons: ['Busy street', 'Small backyard'],
     offerOutcome: 'Sharp instinct! This home received 6 offers and sold $12,000 over asking. Your quick offer secured the deal.',
-    passOutcome: 'This home sold before the end of the day — 6 competing offers, $12,000 over asking. In hot markets, hesitation costs.',
+    passOutcome: 'This home sold before end of day — 6 competing offers, $12,000 over asking. In hot markets, hesitation costs.',
     lesson: 'In competitive markets, pre-approval isn\'t optional — it\'s your entry ticket. Know your budget before you fall in love with a listing.',
   },
   {
@@ -30,7 +30,7 @@ const LISTINGS = [
     pros: ['New roof (2023)', 'Near transit', 'Quiet cul-de-sac'],
     cons: ['Original HVAC', 'Dated bathrooms'],
     offerOutcome: 'Great move! The seller accepted your offer and the home appraised cleanly. Affordable, move-in-ready homes don\'t wait.',
-    passOutcome: 'The home was under contract by 5 PM. Affordable, move-in-ready homes in Denbigh rarely sit for more than 48 hours.',
+    passOutcome: 'The home was under contract by 5 PM. Affordable, move-in-ready homes in Denbigh rarely sit more than 48 hours.',
     lesson: 'Days on market is your signal. Under 3 days usually means high demand. Have your pre-approval letter ready so you can move without delay.',
   },
   {
@@ -47,18 +47,102 @@ const LISTINGS = [
     passOutcome: 'A backup offer arrived within 2 hours. Historic Hilton Village homes are some of the most sought-after in the city.',
     lesson: 'Some neighborhoods have very limited inventory. Research your target areas deeply so you\'re ready the moment something lists.',
   },
+  {
+    address: '543 W Mercury Blvd',
+    neighborhood: 'Hampton Roads Corridor',
+    price: 179000,
+    beds: 2,
+    baths: 1,
+    dom: 1,
+    monthly: 1097,
+    pros: ['Walking distance to shops', 'Newly remodeled kitchen', 'Low HOA'],
+    cons: ['Busy corridor road', 'No garage'],
+    offerOutcome: 'Smart move! At $179K on Mercury, you locked in exceptional value. The seller had three more inquiries waiting by morning.',
+    passOutcome: 'The listing was pulled from the market by 9 AM — the seller had a full-price cash offer waiting. Entry-level homes move fastest of all.',
+    lesson: 'Entry-priced homes attract the most competition. If a home is priced $10–20K below neighborhood comps, assume multiple offers are coming.',
+  },
+  {
+    address: '2201 Chesapeake Ave',
+    neighborhood: 'Riverside',
+    price: 289000,
+    beds: 4,
+    baths: 2.5,
+    dom: 3,
+    monthly: 1769,
+    pros: ['Water views', 'Updated primary bath', 'Large rear deck'],
+    cons: ['Flood zone — insurance required', 'Agent says roof is "near end of life"'],
+    offerOutcome: 'Bold choice. The water views are stunning, but flood zone insurance can add $2,000–$5,000/year. Make sure that\'s in your budget.',
+    passOutcome: 'The home went under contract the next afternoon — but the buyers discovered flood insurance costs after. A lesson in reading the fine print first.',
+    lesson: 'Waterfront or flood-zone properties carry hidden annual costs. Always factor flood insurance into your monthly payment estimate before falling in love.',
+  },
+  {
+    address: '114 Brandon Ave',
+    neighborhood: 'Beechwood',
+    price: 213000,
+    beds: 3,
+    baths: 2,
+    dom: 0,
+    monthly: 1304,
+    pros: ['Corner lot', 'Finished basement', 'New HVAC (2024)'],
+    cons: ['Listed just hours ago', 'No open house scheduled'],
+    offerOutcome: 'Excellent instincts. A new HVAC and finished basement at $213K in Beechwood is solid value. The listing got 8 inquiries in the first 4 hours.',
+    passOutcome: 'By the time you rescheduled a showing, the sellers had accepted an offer. "Listed today" homes require same-day action in Newport News.',
+    lesson: 'Set up instant listing alerts for your target neighborhoods. The first 24 hours of a new listing are the highest-competition window.',
+  },
+  {
+    address: '708 Main St',
+    neighborhood: 'Downtown Newport News',
+    price: 159500,
+    beds: 2,
+    baths: 1,
+    dom: 4,
+    monthly: 977,
+    pros: ['Near waterfront park', 'Recently painted throughout', 'Priced below recent comps'],
+    cons: ['Small lot', 'No off-street parking'],
+    offerOutcome: 'Nice find. This one sat 4 days because of the parking situation — but you saw the value. The seller was eager and accepted quickly.',
+    passOutcome: 'A first-time buyer scooped it up the next day. At $159K, it was priced to move. The 4 days on market was a parking concern — not a quality concern.',
+    lesson: 'Slightly longer DOM can mean a motivated seller, not a problem home. Investigate why a home has sat before dismissing it.',
+  },
+  {
+    address: '3300 Deep Creek Rd',
+    neighborhood: 'Deep Creek',
+    price: 234000,
+    beds: 4,
+    baths: 2,
+    dom: 2,
+    monthly: 1432,
+    pros: ['Quiet street', 'Two-car garage', 'Recently updated flooring'],
+    cons: ['School ratings average', 'No transit access'],
+    offerOutcome: 'Solid decision. A 4-bed with a two-car garage for $234K is strong value. The sellers accepted within 24 hours — they wanted a quick, clean close.',
+    passOutcome: 'The home sold over the weekend to a family relocating from out of state. They put in an offer sight-unseen after viewing the virtual tour.',
+    lesson: 'Buyers increasingly offer sight-unseen on well-photographed listings. A strong listing with a virtual tour raises the urgency to decide.',
+  },
 ];
+
+/** Fisher-Yates shuffle — returns a new shuffled array */
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 type Phase = 'idle' | 'playing' | 'result';
 type Decision = 'offer' | 'pass' | 'timeout';
 
 export function HotMarketChallenge() {
   const [phase, setPhase] = useState<Phase>('idle');
-  const [listingIdx, setListingIdx] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [decision, setDecision] = useState<Decision | null>(null);
 
-  const listing = LISTINGS[listingIdx];
+  // Shuffle once per mount; re-shuffle on reset via key
+  const [sessionKey, setSessionKey] = useState(0);
+  const [roundIdx, setRoundIdx] = useState(0);
+
+  const shuffled = useMemo(() => shuffle(ALL_LISTINGS), [sessionKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  const listing = shuffled[roundIdx % shuffled.length];
 
   const handleDecision = useCallback((choice: Decision) => {
     setDecision(choice);
@@ -73,16 +157,19 @@ export function HotMarketChallenge() {
   }, [phase, timeLeft, handleDecision]);
 
   const reset = () => {
+    const nextRound = roundIdx + 1;
+    // Re-shuffle after a full cycle through the deck
+    if (nextRound % shuffled.length === 0) setSessionKey(k => k + 1);
+    setRoundIdx(nextRound);
     setPhase('idle');
     setTimeLeft(10);
     setDecision(null);
-    setListingIdx(i => (i + 1) % LISTINGS.length);
   };
 
   const outcome =
     decision === 'offer' ? listing.offerOutcome :
     decision === 'pass'  ? listing.passOutcome  :
-    listing.passOutcome; // timeout same as pass
+    listing.passOutcome;
 
   const won = decision === 'offer';
 
@@ -108,8 +195,11 @@ export function HotMarketChallenge() {
             <div>
               <span className="text-xs font-bold text-accent uppercase tracking-widest">30-Second Challenge</span>
               <h3 className="text-lg font-bold text-primary mt-0.5 mb-1">Hot Market Challenge</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">A home just listed. You have 10 seconds to decide — make an offer or keep looking?</p>
-              <span className="inline-flex items-center gap-1.5 mt-3 text-sm font-semibold text-accent group-hover:underline" aria-hidden="true">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                A home just listed. You have 10 seconds to decide — make an offer or keep looking?{' '}
+                <span className="text-accent font-medium">{ALL_LISTINGS.length} unique listings rotate each round.</span>
+              </p>
+              <span className="inline-flex items-center gap-1.5 mt-3 text-sm font-semibold text-accent" aria-hidden="true">
                 Start challenge <ArrowRight className="w-4 h-4" />
               </span>
             </div>
@@ -154,7 +244,7 @@ export function HotMarketChallenge() {
                     </div>
                     <div className="h-2 bg-white/20 rounded-full overflow-hidden" role="progressbar" aria-valuenow={timeLeft} aria-valuemin={0} aria-valuemax={10}>
                       <motion.div
-                        className="h-full bg-secondary rounded-full origin-left"
+                        className="h-full bg-secondary rounded-full"
                         animate={{ scaleX: timeLeft / 10 }}
                         transition={{ duration: 0.9, ease: 'linear' }}
                         style={{ transformOrigin: 'left' }}

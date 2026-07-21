@@ -3,11 +3,12 @@ import { Link, useLocation } from 'wouter';
 import {
   Home, Menu, X, Phone, ArrowRight,
   Building2, KeyRound, MapPin, Route, Sparkles, Gamepad2, Calendar,
-  HeartHandshake, Mail, BookOpen, Trophy, ClipboardCheck, Landmark
+  HeartHandshake, Mail, BookOpen, Trophy, ClipboardCheck, Landmark, Hammer
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ScrollProgress } from '@/components/ui/ScrollProgress';
+import { AnimatedLogo } from '@/components/AnimatedLogo';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -56,6 +57,7 @@ export function Navbar() {
       links: [
         { label: 'Buyer Checklist', href: '/checklist', icon: ClipboardCheck, desc: 'Step-by-step guide' },
         { label: 'Journey', href: '/journey', icon: Route, desc: 'Your housing path' },
+        { label: 'Build', href: '/build', icon: Hammer, desc: 'Build from the ground up' },
         { label: 'Simulator', href: '/simulator', icon: Gamepad2, desc: 'Learn through play' },
         { label: 'SHIP Housing Plan', href: '/ship', icon: Landmark, desc: "The city's roadmap" },
       ],
@@ -85,11 +87,9 @@ export function Navbar() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 z-50 mr-8 lg:mr-16" data-testid="link-home">
-              <div className={`p-2 rounded-lg ${isScrolled || !isHomepage || isMobileMenuOpen ? 'bg-primary/10 text-primary' : 'bg-white/20 text-white backdrop-blur-sm'}`}>
-                <Home className="w-6 h-6" />
-              </div>
-              <span className={`font-bold text-xl whitespace-nowrap tracking-tight transition-colors ${
+            <Link href="/" className="flex items-center gap-2.5 z-50 mr-8 lg:mr-16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md" data-testid="link-home" aria-label="Newport News Housing Hub — go to homepage">
+              <AnimatedLogo isLight={isScrolled || !isHomepage || isMobileMenuOpen} />
+              <span className={`font-bold text-lg whitespace-nowrap tracking-tight transition-colors ${
                 isScrolled || !isHomepage || isMobileMenuOpen ? 'bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent' : 'bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent'
               }`}>
                 Housing Hub

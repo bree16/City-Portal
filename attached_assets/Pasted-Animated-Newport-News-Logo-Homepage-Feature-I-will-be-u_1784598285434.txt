@@ -1,0 +1,108 @@
+Animated Newport News Logo (Homepage Feature)
+
+I will be uploading the official Newport News logo. Please use that exact logo as the foundation for this animation rather than recreating or redesigning it.
+
+The goal is to transform the existing logo into a premium animated brand element that immediately communicates innovation, community, and Newport News' waterfront identity while remaining professional and appropriate for a government website.
+
+Placement
+
+Use the animated logo in the primary website header/navigation where the Newport News branding already exists (top left).
+
+It should become part of the site's identity rather than feeling like a separate animation.
+
+Overall Style
+
+I want the animation to feel:
+
+Elegant
+Modern
+Organic
+Premium
+Calm
+Memorable
+
+Avoid flashy or gimmicky effects.
+
+The animation should feel like something you would see on an award-winning civic or technology website.
+
+Clay & Water Inspired Motion
+
+Take inspiration from:
+
+Soft clay animation
+Liquid morphing
+Water ripples
+Gentle waves
+Organic motion
+Flowing gradients
+
+The animation should reference Newport News' connection to the waterfront without becoming distracting.
+
+Intro Animation
+
+When someone first visits the homepage:
+
+The logo should animate in over approximately 2–3 seconds.
+
+Ideas include:
+
+Colors flowing into place like liquid paint
+Soft clay-like shapes merging into the logo
+Water ripples revealing the logo
+Gentle wave motion
+Organic morphing transitions
+Smooth easing with no harsh movements
+
+After the animation completes, the logo should remain static.
+
+Hover Interaction
+
+When users hover over the logo:
+
+Create a subtle interactive response.
+
+Possible effects:
+
+Gentle ripple spreading outward
+Soft floating motion
+Slight breathing animation
+Flowing gradient movement
+Small shimmer passing across the logo
+Tiny water ripple beneath it
+
+The hover effect should stop naturally when the cursor leaves.
+
+Color Palette
+
+Use the official Newport News brand colors from the uploaded logo.
+
+Do not invent an entirely new color palette.
+
+If accent colors are needed, derive them from the existing branding.
+
+Performance
+
+The animation should remain lightweight.
+
+Use:
+
+SVG animation
+CSS transforms
+Modern browser animation techniques
+
+Avoid large video files or heavy rendering that slows page performance.
+
+Accessibility
+
+The logo animation must comply with WCAG 2.1 AA.
+
+Requirements:
+
+Respect prefers-reduced-motion.
+If reduced motion is enabled, display the logo without decorative animation.
+No flashing or strobing effects.
+Keep movement smooth and subtle.
+The logo must remain fully readable at all times.
+Overall Goal
+
+The animated Newport News logo should become the visual signature of the Housing Hub. It should create a memorable first impression that feels polished, welcoming, and modern while reinforcing the city's waterfront identity. The animation should be refined enough that visitors immediately notice the attention to detail, but subtle enough that it never distracts from the website's primary purpose of helping residents navigate their housing journey.
