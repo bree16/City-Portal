@@ -22,6 +22,7 @@
     <!-- City overlay: sibling of #root, outside the React app tree.
          position:fixed here so no React transform can ever break child fixed/absolute positioning. -->
     <div id="city-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9960;overflow:visible;"></div>
+    <!-- pointer-events:none stays on the container; the ticker's close button re-enables itself via pointer-events:auto on the button element -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

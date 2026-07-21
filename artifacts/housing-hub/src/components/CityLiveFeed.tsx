@@ -444,6 +444,7 @@ function NewsTicker({ items, onClose }: { items: string[]; onClose: () => void }
         background: 'rgba(6, 18, 42, 0.93)',
         borderTop: '1.5px solid rgba(212,175,55,0.3)',
         backdropFilter: 'blur(6px)',
+        pointerEvents: 'auto',
       }}
     >
       {/* LIVE badge — non-interactive */}
