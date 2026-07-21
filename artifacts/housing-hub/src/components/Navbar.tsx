@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'wouter';
 import {
-  Home, Menu, X, Phone, ArrowRight,
+  Home, Menu, X, Phone, ArrowRight, ChevronDown,
   Building2, KeyRound, MapPin, Route, Sparkles, Gamepad2, Calendar,
   HeartHandshake, Mail, BookOpen, Trophy, ClipboardCheck, Landmark, Hammer
 } from 'lucide-react';
@@ -13,8 +13,21 @@ import { AnimatedLogo } from '@/components/AnimatedLogo';
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
   const [location] = useLocation();
   const isHomepage = location === '/';
+
+  // Close "More" dropdown on outside click
+  useEffect(() => {
+    function handleOutside(e: MouseEvent) {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
+        setMoreOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,10 +37,20 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
+  // Close menus on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    setMoreOpen(false);
   }, [location]);
+
+  const moreLinks = [
+    { label: 'Why Newport News', href: '/why-newport-news', icon: Sparkles, desc: 'Life in the city' },
+    { label: 'Services', href: '/services', icon: HeartHandshake, desc: 'Resident services' },
+    { label: 'Success Stories', href: '/success-stories', icon: Trophy, desc: 'Real neighbors, real results' },
+    { label: 'First-Time Buyer Checklist', href: '/checklist', icon: ClipboardCheck, desc: 'Step-by-step guide' },
+    { label: 'SHIP Housing Plan', href: '/ship', icon: Landmark, desc: "The city's roadmap" },
+    { label: 'Resources', href: '/resources', icon: BookOpen, desc: 'Programs & helpful links' },
+  ];
 
   const navLinks = [
     { label: 'Buy', href: '/buy' },
@@ -35,10 +58,8 @@ export function Navbar() {
     { label: 'Neighborhoods', href: '/neighborhoods' },
     { label: 'Journey', href: '/journey' },
     { label: 'Build', href: '/build' },
-    { label: 'Why Newport News', href: '/why-newport-news' },
     { label: 'Simulator', href: '/simulator' },
     { label: 'Events', href: '/events' },
-    { label: 'Services', href: '/services' },
     { label: 'Contact', href: '/contact' },
   ];
 
@@ -99,15 +120,15 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden xl:flex items-center gap-8 flex-1 justify-between">
-              <div className="flex gap-6 lg:gap-8 items-center">
+            <nav className="hidden xl:flex items-center gap-4 flex-1 justify-between min-w-0">
+              <div className="flex gap-4 items-center min-w-0">
                 {navLinks.map((link) => {
                   const isActive = location === link.href || (link.href === '/resources' && location === '/assistance');
                   return (
                     <Link
                       key={link.href}
                       href={link.href}
-                      className={`text-base whitespace-nowrap transition-colors relative py-1 ${
+                      className={`text-sm whitespace-nowrap transition-colors relative py-1 ${
                         isScrolled || !isHomepage
                           ? isActive ? 'text-accent font-semibold' : 'text-foreground/80 hover:text-accent font-medium'
                           : isActive ? 'text-white font-semibold' : 'text-white/90 hover:text-white font-medium'
@@ -121,8 +142,63 @@ export function Navbar() {
                     </Link>
                   );
                 })}
+
+                {/* More dropdown */}
+                <div className="relative" ref={moreRef}>
+                  <button
+                    onClick={() => setMoreOpen((o) => !o)}
+                    className={`flex items-center gap-1 text-sm font-medium whitespace-nowrap transition-colors py-1 ${
+                      isScrolled || !isHomepage
+                        ? moreLinks.some(l => location === l.href) ? 'text-accent font-semibold' : 'text-foreground/80 hover:text-accent'
+                        : moreLinks.some(l => location === l.href) ? 'text-white font-semibold' : 'text-white/90 hover:text-white'
+                    }`}
+                    aria-haspopup="true"
+                    aria-expanded={moreOpen}
+                  >
+                    More
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${moreOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {moreOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 6, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 6, scale: 0.97 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-border overflow-hidden z-50"
+                      >
+                        {moreLinks.map((link, i) => {
+                          const isActive = location === link.href;
+                          return (
+                            <Link
+                              key={link.href}
+                              href={link.href}
+                              className={`group flex items-center gap-3 px-4 py-3 transition-colors ${
+                                i > 0 ? 'border-t border-border/60' : ''
+                              } ${isActive ? 'bg-accent/5' : 'hover:bg-muted/60'}`}
+                            >
+                              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                                isActive ? 'bg-accent text-white' : 'bg-primary/5 text-primary'
+                              }`}>
+                                <link.icon className="w-4 h-4" />
+                              </div>
+                              <div>
+                                <div className={`text-sm font-semibold leading-tight ${isActive ? 'text-accent' : 'text-foreground'}`}>
+                                  {link.label}
+                                </div>
+                                <div className="text-xs text-muted-foreground">{link.desc}</div>
+                              </div>
+                            </Link>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
-              <Button asChild className="bg-accent hover:bg-accent/90 text-white rounded-full px-6 font-medium shadow-sm transition-transform hover:-translate-y-0.5 whitespace-nowrap">
+
+              <Button asChild className="bg-accent hover:bg-accent/90 text-white rounded-full px-6 font-medium shadow-sm transition-transform hover:-translate-y-0.5 whitespace-nowrap text-sm">
                 <Link href="/buy">Get Started</Link>
               </Button>
             </nav>
