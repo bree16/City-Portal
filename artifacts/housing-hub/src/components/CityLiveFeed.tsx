@@ -525,13 +525,10 @@ const SKIP_PAGES = new Set(['/simulator', '/sign-in', '/sign-up']);
 export function CityLiveFeed() {
   const [location] = useLocation();
   const path = location.split('?')[0];
-  const [tickerDismissed, setTickerDismissed] = useState(
-    () => sessionStorage.getItem('tickerDismissed') === '1'
-  );
+  const [tickerDismissed, setTickerDismissed] = useState(false);
 
   const handleClose = useCallback(() => {
     setTickerDismissed(true);
-    sessionStorage.setItem('tickerDismissed', '1');
   }, []);
 
   if (SKIP_PAGES.has(path)) return null;
