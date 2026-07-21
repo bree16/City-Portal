@@ -431,33 +431,34 @@ function BalloonScene({ color, accent }: { color: string; accent: string }) {
 // CityHallToast removed — was causing unwanted popups
 
 // ─── News Ticker ──────────────────────────────────────────────────────────────
-function NewsTicker({ items }: { items: string[] }) {
+function NewsTicker({ items, onClose }: { items: string[]; onClose: () => void }) {
   const doubled = [...items, ...items, ...items];
   return (
-    <div
-      aria-hidden
+    <motion.div
+      initial={{ y: 0 }}
+      exit={{ y: 40, opacity: 0 }}
+      transition={{ duration: 0.3, ease: 'easeIn' }}
       style={{
         position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9995,
         height: 34, display: 'flex', alignItems: 'stretch', overflow: 'hidden',
         background: 'rgba(6, 18, 42, 0.93)',
         borderTop: '1.5px solid rgba(212,175,55,0.3)',
         backdropFilter: 'blur(6px)',
-        pointerEvents: 'none',
       }}
     >
-      {/* LIVE badge */}
+      {/* LIVE badge — non-interactive */}
       <div style={{
         background: 'linear-gradient(90deg, #D4AF37, #F5C842)',
         color: '#0B2146', padding: '0 12px',
         display: 'flex', alignItems: 'center', gap: 5,
         fontSize: 9, fontWeight: 900, letterSpacing: '0.12em', whiteSpace: 'nowrap',
-        flexShrink: 0, fontFamily: 'Inter, sans-serif',
+        flexShrink: 0, fontFamily: 'Inter, sans-serif', pointerEvents: 'none',
       }}>
         <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#0B2146', display: 'inline-block' }} />
         LIVE
       </div>
-      {/* Scrolling text */}
-      <div style={{ overflow: 'hidden', flex: 1, display: 'flex', alignItems: 'center' }}>
+      {/* Scrolling text — non-interactive */}
+      <div style={{ overflow: 'hidden', flex: 1, display: 'flex', alignItems: 'center', pointerEvents: 'none' }}>
         <motion.div
           style={{ display: 'flex', gap: 64, whiteSpace: 'nowrap' }}
           animate={{ x: [0, -2400] }}
@@ -471,16 +472,43 @@ function NewsTicker({ items }: { items: string[] }) {
           ))}
         </motion.div>
       </div>
-      {/* Right logo */}
+      {/* Right logo — non-interactive */}
       <div style={{
         padding: '0 12px', display: 'flex', alignItems: 'center',
         fontSize: 9, fontWeight: 700, color: 'rgba(212,175,55,0.7)',
         letterSpacing: '0.08em', whiteSpace: 'nowrap', flexShrink: 0,
         fontFamily: 'Inter, sans-serif', borderLeft: '1px solid rgba(212,175,55,0.2)',
+        pointerEvents: 'none',
       }}>
         ⚓ Newport News
       </div>
-    </div>
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        aria-label="Close news ticker"
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: 34, flexShrink: 0,
+          background: 'transparent',
+          border: 'none',
+          borderLeft: '1px solid rgba(212,175,55,0.2)',
+          cursor: 'pointer',
+          color: 'rgba(226,232,240,0.55)',
+          fontSize: 14,
+          transition: 'color 0.15s, background 0.15s',
+        }}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLButtonElement).style.color = '#fff';
+          (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.07)';
+        }}
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLButtonElement).style.color = 'rgba(226,232,240,0.55)';
+          (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
+        }}
+      >
+        ✕
+      </button>
+    </motion.div>
   );
 }
 
@@ -496,16 +524,27 @@ const SKIP_PAGES = new Set(['/simulator', '/sign-in', '/sign-up']);
 export function CityLiveFeed() {
   const [location] = useLocation();
   const path = location.split('?')[0];
+  const [tickerDismissed, setTickerDismissed] = useState(
+    () => sessionStorage.getItem('tickerDismissed') === '1'
+  );
+
+  const handleClose = useCallback(() => {
+    setTickerDismissed(true);
+    sessionStorage.setItem('tickerDismissed', '1');
+  }, []);
 
   if (SKIP_PAGES.has(path)) return null;
 
   const data = getPageData(path);
-  const isHome = path === '/';
 
   return (
     <>
-      <BusScene   ticker={data.ticker} />
-      <NewsTicker items={data.ticker} />
+      <BusScene ticker={data.ticker} />
+      <AnimatePresence>
+        {!tickerDismissed && (
+          <NewsTicker items={data.ticker} onClose={handleClose} />
+        )}
+      </AnimatePresence>
     </>
   );
 }
