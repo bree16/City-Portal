@@ -5,15 +5,10 @@ import { defineConfig } from 'vite';
 
 import runtimeErrorOverlay from '@replit/vite-plugin-runtime-error-modal';
 
-// PORT is only needed for the dev server — not required during a production build.
-const rawPort = process.env.PORT;
-const port = rawPort ? Number(rawPort) : undefined;
+// PORT defaults to 5173 for local development; not required during production builds.
+const port = Number(process.env.PORT || 5173);
 
-if (port !== undefined && (Number.isNaN(port) || port <= 0)) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
-}
-
-// BASE_PATH defaults to '/' so Vercel builds work without the variable set.
+// BASE_PATH defaults to '/' when the environment variable is not set.
 const basePath = process.env.BASE_PATH || '/';
 
 export default defineConfig({
@@ -54,7 +49,8 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    ...(port !== undefined ? { port, strictPort: true } : {}),
+    port,
+    strictPort: true,
     host: '0.0.0.0',
     allowedHosts: true,
     fs: {
@@ -62,7 +58,7 @@ export default defineConfig({
     },
   },
   preview: {
-    ...(port !== undefined ? { port } : {}),
+    port,
     host: '0.0.0.0',
     allowedHosts: true,
   },
