@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self' https://breecityportal-fgtrmmvq2-city-portal.vercel.app https://*.vercel.app"
+        }
+      ]
+    }
+  ]
+}
