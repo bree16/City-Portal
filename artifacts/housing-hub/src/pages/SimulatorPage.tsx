@@ -56,7 +56,7 @@ export default function SimulatorPage() {
           className="rounded-2xl overflow-hidden shadow-2xl border border-border bg-black aspect-video relative -mt-6"
         >
           <iframe
-            src="/3d-game/"
+            src="https://city-portal-3d-game.vercel.app"
             title="Path to Your First Home simulator"
             className="w-full h-full"
             allow="autoplay; fullscreen"
@@ -67,7 +67,7 @@ export default function SimulatorPage() {
             Tip: click inside the game to start. Best experienced with sound on.
           </p>
           <Button asChild variant="outline" size="sm" className="gap-2">
-            <a href="/3d-game/" target="_blank" rel="noopener noreferrer">
+            <a href="https://city-portal-3d-game.vercel.app" target="_blank" rel="noopener noreferrer">
               <ExternalLink className="w-4 h-4" />
               Open Full Screen
             </a>
