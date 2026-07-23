@@ -480,14 +480,17 @@ function Bounce({ children }: { children: React.ReactNode }) {
 // ─── Scheduled sound hook ─────────────────────────────────────────────────────
 function useScheduled(fn: () => void, delayMs: number, repeatMs: number | null) {
   useEffect(() => {
+    let intervalId: ReturnType<typeof setInterval> | null = null;
     const t = setTimeout(() => {
       fn();
       if (repeatMs !== null) {
-        const id = setInterval(fn, repeatMs);
-        return () => clearInterval(id);
+        intervalId = setInterval(fn, repeatMs);
       }
     }, delayMs);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      if (intervalId !== null) clearInterval(intervalId);
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 }
 

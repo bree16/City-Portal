@@ -101,7 +101,7 @@ function CharWrapper({ style, bubbleColor = '#14B8A6', bubbleTexts, showConfetti
   const [clicked, setClicked] = useState(false);
   const [bubble, setBubble] = useState('');
   const [confetti, setConfetti] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const handleClick = useCallback(() => {
     if (clicked) return;

@@ -326,7 +326,7 @@ const DRONE_TOP = 58;
 function DroneScene({ color }: { color: string }) {
   const [phase, setPhase] = useState<'idle'|'entering'|'hovering'|'exiting'>('idle');
   const [cycleCount, setCycleCount] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const runCycle = useCallback(() => {
     setCycleCount(c => c + 1);
@@ -350,6 +350,7 @@ function DroneScene({ color }: { color: string }) {
       const id = setTimeout(runCycle, 22000);
       return () => clearTimeout(id);
     }
+    return undefined;
   }, [phase, runCycle]);
 
   useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
