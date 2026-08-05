@@ -143,6 +143,15 @@ function ClerkQueryClientCacheInvalidator() {
   return null;
 }
 
+/** Scrolls to the top instantly on every route change. */
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [location]);
+  return null;
+}
+
 /** Wraps each page in a smooth fade+slide entrance. */
 function PageTransition({ children }: { children: React.ReactNode }) {
   return (
@@ -175,6 +184,7 @@ function Router() {
   const [location] = useLocation();
   return (
     <Layout>
+      <ScrollToTop />
       <AnimatePresence mode="wait" initial={false}>
         <PageTransition key={location}>
           <Switch location={location}>
