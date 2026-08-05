@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
 import { Switch, Route, Router as WouterRouter, useLocation } from 'wouter';
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
 import { ClerkProvider, SignIn, SignUp, useClerk } from '@clerk/react';
@@ -246,10 +246,22 @@ function ClerkProviderWithRoutes() {
 }
 
 function App() {
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      setReduceMotion((e as CustomEvent<boolean>).detail);
+    };
+    window.addEventListener('a11y:reduceMotion', handler);
+    return () => window.removeEventListener('a11y:reduceMotion', handler);
+  }, []);
+
   return (
-    <WouterRouter base={basePath}>
-      <ClerkProviderWithRoutes />
-    </WouterRouter>
+    <MotionConfig reducedMotion={reduceMotion ? 'always' : 'never'}>
+      <WouterRouter base={basePath}>
+        <ClerkProviderWithRoutes />
+      </WouterRouter>
+    </MotionConfig>
   );
 }
 

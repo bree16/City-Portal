@@ -19,6 +19,9 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Accessibility widget mounts here, outside #root, so CSS filters applied
+         to #root for high-contrast mode never hide or distort the widget. -->
+    <div id="a11y-root"></div>
     <!-- City overlay: sibling of #root, outside the React app tree.
          position:fixed here so no React transform can ever break child fixed/absolute positioning. -->
     <div id="city-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9960;overflow:visible;"></div>

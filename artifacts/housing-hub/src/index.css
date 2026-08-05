@@ -501,8 +501,15 @@
     inset: -1px;
   }
 
-  .high-contrast { filter: contrast(1.5) saturate(0); }
-  .reduce-motion * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  /* Apply filter only to #root so the accessibility widget (in #a11y-root) stays visible */
+  body.high-contrast #root { filter: contrast(1.5) saturate(0); }
+  /* CSS animations — Framer Motion is handled via MotionConfig in App.tsx */
+  body.reduce-motion *, body.reduce-motion *::before, body.reduce-motion *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 /* ════════════════════════════════════════════════
    PREMIUM ANIMATION ADDITIONS

@@ -1,0 +1,86 @@
+Replit AI Prompt
+
+We are preparing this website for a live presentation tomorrow. Please make ONLY the following fixes without changing the overall design, layout, or styling.
+
+1. Accessibility Menu Fixes
+
+The accessibility widget has several bugs that need to be fixed.
+
+High Contrast Mode
+Currently, when High Contrast Mode is enabled, the accessibility widget disappears and there is no way to turn it back off.
+Users should always be able to reopen the accessibility menu after enabling High Contrast.
+High Contrast should toggle ON and OFF correctly without requiring a page refresh.
+The accessibility menu should remain visible at all times.
+Reduce Motion
+The "Reduce Motion" option currently does nothing.
+Make it disable animations, transitions, scrolling animations, hover animations, and any motion effects across the site.
+It should toggle on and off properly.
+Language Selector
+The language selector currently does not work.
+Connect it to a working translation system if possible (Google Translate or another lightweight solution).
+If a full translation API cannot be implemented, make the language selector functional with placeholder translations instead of being non-functional.
+2. AI Housing Assistant
+
+The AI Housing Assistant is currently broken.
+
+No matter what question is asked, it always replies with:
+
+"I'm having trouble answering right now. Please call us..."
+
+This should NOT happen.
+
+Please:
+
+Restore the original AI functionality.
+Make the assistant answer housing-related questions using the site's information.
+Questions about buying, renting, neighborhoods, grants, events, home repairs, first-time buyers, emergency housing, counselors, SHIP, Virginia Housing, Newport News resources, etc. should receive useful responses.
+Only fall back to the contact information if the AI genuinely cannot answer.
+Do not return the same fallback response for every question.
+
+The assistant should behave like a real housing assistant during our presentation.
+
+3. Verify Navigation
+
+Please verify that these pages all load correctly with no errors:
+
+Home
+Buy
+Rent
+Build
+Journey
+Neighborhoods
+Why Newport News
+Simulator
+Resources
+Events
+Services
+Contact
+
+Check for:
+
+broken links
+console errors
+missing assets
+blank pages
+404 errors
+4. Simulator
+
+Please verify the simulator page does not produce intermittent 404 errors after refreshing or navigating directly.
+
+Make routing consistent so refreshing the page never produces a 404.
+
+5. General QA
+
+Perform a full quality assurance pass.
+
+Look for:
+
+broken buttons
+broken forms
+JavaScript errors
+accessibility issues
+layout problems
+responsiveness
+anything that would fail during a live demonstration.
+
+Please preserve the existing UI and design. This is a presentation prototype, so the goal is stability, polish, and reliability—not redesign.

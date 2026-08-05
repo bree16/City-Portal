@@ -193,7 +193,7 @@ router.post("/assistant/chat", async (req, res) => {
     const context = retrieveContext(recentUserText, 6000, 6);
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-5.6-luna",
+      model: "gpt-4o-mini",
       max_completion_tokens: 8192,
       response_format: { type: "json_object" },
       messages: [
